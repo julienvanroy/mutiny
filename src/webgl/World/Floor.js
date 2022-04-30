@@ -1,4 +1,4 @@
-import * as THREE from 'three'
+import {CircleGeometry, sRGBEncoding, RepeatWrapping, MeshStandardMaterial, Mesh} from 'three'
 import Experience from '../Experience.js'
 
 export default class Floor
@@ -17,7 +17,7 @@ export default class Floor
 
     setGeometry()
     {
-        this.geometry = new THREE.CircleGeometry(5, 64)
+        this.geometry = new CircleGeometry(5, 64)
     }
 
     setTextures()
@@ -25,20 +25,20 @@ export default class Floor
         this.textures = {}
 
         this.textures.color = this.resources.items.grassColorTexture
-        this.textures.color.encoding = THREE.sRGBEncoding
+        this.textures.color.encoding = sRGBEncoding
         this.textures.color.repeat.set(1.5, 1.5)
-        this.textures.color.wrapS = THREE.RepeatWrapping
-        this.textures.color.wrapT = THREE.RepeatWrapping
+        this.textures.color.wrapS = RepeatWrapping
+        this.textures.color.wrapT = RepeatWrapping
 
         this.textures.normal = this.resources.items.grassNormalTexture
         this.textures.normal.repeat.set(1.5, 1.5)
-        this.textures.normal.wrapS = THREE.RepeatWrapping
-        this.textures.normal.wrapT = THREE.RepeatWrapping
+        this.textures.normal.wrapS = RepeatWrapping
+        this.textures.normal.wrapT = RepeatWrapping
     }
 
     setMaterial()
     {
-        this.material = new THREE.MeshStandardMaterial({
+        this.material = new MeshStandardMaterial({
             map: this.textures.color,
             normalMap: this.textures.normal
         })
@@ -46,7 +46,7 @@ export default class Floor
 
     setMesh()
     {
-        this.mesh = new THREE.Mesh(this.geometry, this.material)
+        this.mesh = new Mesh(this.geometry, this.material)
         this.mesh.rotation.x = - Math.PI * 0.5
         this.mesh.receiveShadow = true
         this.scene.add(this.mesh)

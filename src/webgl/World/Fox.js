@@ -1,4 +1,4 @@
-import * as THREE from 'three'
+import {Mesh, AnimationMixer} from 'three'
 import Experience from '../Experience.js'
 
 export default class Fox
@@ -32,7 +32,7 @@ export default class Fox
 
         this.model.traverse((child) =>
         {
-            if(child instanceof THREE.Mesh)
+            if(child instanceof Mesh)
             {
                 child.castShadow = true
             }
@@ -42,17 +42,17 @@ export default class Fox
     setAnimation()
     {
         this.animation = {}
-        
+
         // Mixer
-        this.animation.mixer = new THREE.AnimationMixer(this.model)
-        
+        this.animation.mixer = new AnimationMixer(this.model)
+
         // Actions
         this.animation.actions = {}
-        
+
         this.animation.actions.idle = this.animation.mixer.clipAction(this.resource.animations[0])
         this.animation.actions.walking = this.animation.mixer.clipAction(this.resource.animations[1])
         this.animation.actions.running = this.animation.mixer.clipAction(this.resource.animations[2])
-        
+
         this.animation.actions.current = this.animation.actions.idle
         this.animation.actions.current.play()
 
