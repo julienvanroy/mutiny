@@ -1,9 +1,12 @@
 <template>
-  GameView
+  <WebGl/>
 </template>
 
 <script>
+import WebGl from "@/components/WebGl";
+
 export default {
-  name: 'GameView'
+  name: 'GameView',
+  components: {WebGl}
 }
 </script>
