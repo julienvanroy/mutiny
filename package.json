@@ -16,6 +16,8 @@
     "core-js": "^3.8.3",
     "lil-gui": "^0.16.1",
     "three": "^0.140.0",
+    "three-mesh-bvh": "^0.5.10",
+    "three-pathfinding": "^1.1.0",
     "tweakpane": "^3.0.8",
     "vue": "^3.2.13",
     "vue-router": "^4.0.14"
