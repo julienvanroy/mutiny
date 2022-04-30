@@ -1,29 +1,25 @@
-import Experience from '../Experience.js'
 import Environment from './Environment.js'
 import Floor from './Floor.js'
 import Fox from './Fox.js'
+import {component} from "bidello";
+import Experience from "@/webgl/Experience";
 
-export default class World
-{
-    constructor()
-    {
-        this.experience = new Experience()
-        this.scene = this.experience.scene
-        this.resources = this.experience.resources
-
-        // Wait for resources
-        this.resources.on('ready', () =>
-        {
-            // Setup
-            this.floor = new Floor()
-            this.fox = new Fox()
-            this.environment = new Environment()
-        })
+export default class World extends component() {
+    init() {
+        const experience = new Experience()
+        this._renderer = experience.renderer
+        this._scene = experience.scene
+        this._camera = experience.camera
     }
 
-    update()
-    {
-        if(this.fox)
-            this.fox.update()
+    onResourcesIsReady() {
+        console.log('world is ready')
+        this.floor = new Floor()
+        this.fox = new Fox()
+        this.environment = new Environment()
+    }
+
+    onRaf() {
+        this._renderer.render(this._scene, this._camera);
     }
 }

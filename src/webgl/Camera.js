@@ -1,41 +1,43 @@
-import {PerspectiveCamera} from 'three'
-import Experience from './Experience.js'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import {PerspectiveCamera} from "three";
+import Experience from "./Experience.js";
+import {component} from "bidello";
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 
-export default class Camera
-{
-    constructor()
-    {
-        this.experience = new Experience()
-        this.sizes = this.experience.sizes
-        this.scene = this.experience.scene
-        this.canvas = this.experience.canvas
-
-        this.setInstance()
-        this.setControls()
+export default class Camera extends component(PerspectiveCamera) {
+    constructor() {
+        super(35,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            100);
     }
 
-    setInstance()
-    {
-        this.instance = new PerspectiveCamera(35, this.sizes.width / this.sizes.height, 0.1, 100)
-        this.instance.position.set(6, 4, 8)
-        this.scene.add(this.instance)
+    init() {
+        const experience = new Experience();
+        this._scene = experience.scene;
+        this._debug = experience.debug;
+        this._canvas = experience.canvas
+
+        this.position.set(6, 4, 8)
+
+        this._scene.add(this);
+
+        this.onDebug()
     }
 
-    setControls()
-    {
-        this.controls = new OrbitControls(this.instance, this.canvas)
+    onResize({ratio}) {
+        this.aspect = ratio;
+        this.updateProjectionMatrix();
+    }
+
+    onDebug() {
+        if (!this._debug.active) return
+        this.controls = new OrbitControls(this, this._canvas)
         this.controls.enableDamping = true
     }
 
-    resize()
-    {
-        this.instance.aspect = this.sizes.width / this.sizes.height
-        this.instance.updateProjectionMatrix()
-    }
-
-    update()
-    {
+    onRaf() {
+        if (!this._debug.active) return
         this.controls.update()
     }
+
 }
