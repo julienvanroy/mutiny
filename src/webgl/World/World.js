@@ -5,6 +5,7 @@ import Prison from './Prison.js';
 import {component} from "bidello";
 import Experience from "@/webgl/Experience";
 import {GridHelper} from "three";
+import Player from "@/webgl/World/Player";
 
 export default class World extends component() {
     init() {

@@ -22,9 +22,7 @@ export default class Debug extends component() {
 
             this._setupImport();
             this._setupExport();
-
         }
-
     }
 
     onFpsBegin() {

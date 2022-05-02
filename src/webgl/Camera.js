@@ -47,7 +47,6 @@ export default class Camera extends component(PerspectiveCamera) {
             expanded: false,
         });
         folderPosition.addInput(this, 'position');
-
     }
 
     onRaf() {
