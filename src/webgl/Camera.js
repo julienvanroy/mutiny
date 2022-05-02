@@ -17,7 +17,7 @@ export default class Camera extends component(PerspectiveCamera) {
         this._debug = experience.debug;
         this._canvas = experience.canvas
 
-        this.position.set(6, 4, 8)
+        this.position.set(0, 10, 15)
         this.lookAt(this._scene.position)
 
         this._scene.add(this);
@@ -32,8 +32,22 @@ export default class Camera extends component(PerspectiveCamera) {
 
     onDebug() {
         if (!this._debug.active) return
+
+        // OrbitControls
         this.controls = new OrbitControls(this, this._canvas)
         this.controls.enableDamping = true
+
+        // TweakPane
+        const folderDebug = this._debug.pane.addFolder({
+            title: 'Camera',
+            expanded: false,
+        });
+        const folderPosition = folderDebug.addFolder({
+            title: 'Position',
+            expanded: false,
+        });
+        folderPosition.addInput(this, 'position');
+
     }
 
     onRaf() {
