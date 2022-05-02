@@ -1,6 +1,7 @@
 import Environment from './Environment.js'
-import Floor from './Floor.js'
-import Fox from './Fox.js'
+// import Floor from './Floor.js'
+// import Fox from './Fox.js'
+import Prison from './Prison.js';
 import {component} from "bidello";
 import Experience from "@/webgl/Experience";
 
@@ -14,8 +15,9 @@ export default class World extends component() {
 
     onResourcesIsReady() {
         console.log('world is ready')
-        this.floor = new Floor()
-        this.fox = new Fox()
+        // this.floor = new Floor()
+        // this.fox = new Fox()
+        this.prison = new Prison()
         this.environment = new Environment()
     }
 
