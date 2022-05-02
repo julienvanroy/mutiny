@@ -21,6 +21,9 @@ export default class World extends component() {
         // this.fox = new Fox()
         this.prison = new Prison()
         this.environment = new Environment()
+        this.player = new Player();
+        const grid = new GridHelper(20, 20)
+        this._scene.add(grid)
     }
 
     onRaf() {
