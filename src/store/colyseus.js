@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
-import * as Colyseus from "colyseus.js"; // not necessary if included via <script> tag.
+import * as Colyseus from "colyseus.js";
+import router from "@/router";
 
 const useColyseusStore = defineStore("colyseus", {
   state: () => {
@@ -11,6 +12,9 @@ const useColyseusStore = defineStore("colyseus", {
   },
   getters: {},
   actions: {
+    toCurrentRoom() {
+      if (this.currentRoom) router.push(`/room/${this.currentRoom.id}`);
+    },
     async getRooms(roomName) {
       try {
         this.rooms = await this.client.getAvailableRooms(roomName);
@@ -18,12 +22,18 @@ const useColyseusStore = defineStore("colyseus", {
         console.error("get error", e);
       }
     },
-    async createRoom(roomName) {
+    async createRoom(roomName, doEnterRoom = true) {
       try {
         const room = await this.client.create(roomName);
-        this.currentRoom = room;
         this.getRooms(roomName);
-        console.log("joined successfully", room);
+
+        if (doEnterRoom) {
+          this.currentRoom = room;
+          this.toCurrentRoom();
+        } else {
+          // this.currentRoom.leave();
+          this.currentRoom = null;
+        }
       } catch (e) {
         console.error("join error", e);
       }
@@ -31,8 +41,9 @@ const useColyseusStore = defineStore("colyseus", {
     async joinRoom(roomId) {
       try {
         const room = await this.client.joinById(roomId);
+
         this.currentRoom = room;
-        console.log("joined successfully", room);
+        this.toCurrentRoom();
       } catch (e) {
         console.error("join error", e);
       }
