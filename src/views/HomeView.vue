@@ -2,7 +2,7 @@
   <button @click="createRoom">Create Room</button>
   <h1>Rooms</h1>
   <button
-    v-for="(room, roomIndex) in rooms"
+    v-for="(room, roomIndex) in mainStore.rooms"
     :key="roomIndex"
     @click="joinRoom(room.roomId)"
   >
@@ -11,31 +11,23 @@
 </template>
 
 <script>
-import {
-  client,
-  getRooms,
-  createRoom as create,
-  joinRoom as join,
-} from "../colyseus";
+import useColyseusStore from "../store/colyseus";
 
 export default {
   name: "HomeView",
-  data() {
-    return {
-      client: null,
-      rooms: [],
-    };
+  setup() {
+    const mainStore = useColyseusStore();
+    return { mainStore };
   },
   mounted() {
-    this.client = client();
+    this.mainStore.getRooms("my_room");
   },
   methods: {
     async createRoom() {
-      create(this.client, "my_room");
-      this.rooms = await getRooms(this.client, "my_room");
+      this.mainStore.createRoom("my_room");
     },
     joinRoom(roomId) {
-      join(this.client, roomId);
+      this.mainStore.joinRoom(roomId);
     },
   },
 };
