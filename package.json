@@ -17,6 +17,7 @@
   "dependencies": {
     "@tweakpane/plugin-essentials": "^0.1.4",
     "bidello": "^1.0.1",
+    "colyseus.js": "^0.14.13",
     "core-js": "^3.8.3",
     "detect-gpu": "^4.0.19",
     "three": "^0.140.0",
