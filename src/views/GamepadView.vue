@@ -1,0 +1,20 @@
+<template>
+  <game-pad />
+</template>
+
+<script>
+import GamePad from "@/components/GamePad/GamePad.vue";
+import useColyseusStore from "@/store/colyseus";
+
+export default {
+  components: { GamePad },
+  name: "GamepadView",
+  setup() {
+    const colyseus = useColyseusStore();
+    return { colyseus };
+  },
+  unmounted() {
+    this.colyseus.currentRoom?.leave();
+  },
+};
+</script>

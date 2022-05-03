@@ -4,14 +4,14 @@
     <router-link to="/game">Game</router-link>
   </div>
   <div id="view">
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
-}
+  name: "App",
+};
 </script>
 
 <style lang="scss">
