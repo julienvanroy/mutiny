@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import * as Colyseus from "colyseus.js";
 import router from "@/router";
+import { sample } from "@/utils";
 
 const useColyseusStore = defineStore("colyseus", {
   state: () => {
@@ -66,9 +67,11 @@ const useColyseusStore = defineStore("colyseus", {
         console.error("join error", e);
       }
     },
-    async joinRoom(roomId) {
+    async joinRoom(roomId = null) {
       try {
-        const room = await this.client.joinById(roomId);
+        let room;
+        if (roomId) room = await this.client.joinById(roomId);
+        else room = await this.client.joinById(sample(this.rooms).roomId);
 
         this.currentRoom = room;
         this.toCurrentRoom();

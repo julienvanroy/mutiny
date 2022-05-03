@@ -2,6 +2,7 @@
   <button @click="createRoom">Create Room And Join</button>
   <button @click="createRoom(false)">Simply Create A Room</button>
   <h1>Rooms</h1>
+  <button @click="joinRandomRoom">Join random room</button>
   <button
     v-for="(room, roomIndex) in colyseus.rooms"
     :key="roomIndex"
@@ -30,6 +31,9 @@ export default {
     },
     joinRoom(roomId) {
       this.colyseus.joinRoom(roomId);
+    },
+    joinRandomRoom() {
+      this.colyseus.joinRoom();
     },
   },
 };
