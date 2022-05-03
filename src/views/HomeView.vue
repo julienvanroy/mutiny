@@ -7,7 +7,8 @@
     :key="roomIndex"
     @click="joinRoom(room.roomId)"
   >
-    Join Room {{ room.roomId }}
+    Join {{ room.name === "lobby_room" ? "Lobby" : "" }} Room
+    {{ room.roomId }}
   </button>
 </template>
 
@@ -21,7 +22,7 @@ export default {
     return { colyseus };
   },
   mounted() {
-    this.colyseus.getRooms("play_room");
+    this.colyseus.initLobbyRoom();
   },
   methods: {
     createRoom(doJoinRoom = true) {
@@ -33,3 +34,10 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+button {
+  display: block;
+  margin: 8px auto;
+}
+</style>

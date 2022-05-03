@@ -8,33 +8,60 @@ const useColyseusStore = defineStore("colyseus", {
       client: new Colyseus.Client("ws://localhost:2567"),
       rooms: [],
       currentRoom: null,
+      lobbyRoom: null,
     };
   },
   getters: {},
   actions: {
+    async initLobbyRoom() {
+      this.lobbyRoom = await this.client.joinOrCreate("lobby_room");
+
+      this.lobbyRoom.onMessage("rooms", (rooms) => {
+        this.rooms = rooms;
+      });
+
+      this.lobbyRoom.onMessage("+", ([roomId, room]) => {
+        const roomIndex = this.rooms.findIndex(
+          (room) => room.roomId === roomId
+        );
+        if (roomIndex !== -1) {
+          this.rooms[roomIndex] = room;
+        } else {
+          this.rooms.push(room);
+        }
+      });
+
+      this.lobbyRoom.onMessage("-", (roomId) => {
+        this.rooms = this.rooms.filter((room) => room.roomId !== roomId);
+      });
+    },
     toCurrentRoom() {
       if (this.currentRoom) router.push(`/room/${this.currentRoom.id}`);
     },
     async getRooms(roomName) {
       try {
-        this.rooms = await this.client.getAvailableRooms(roomName);
+        const rooms = await this.client.getAvailableRooms(roomName);
+
+        return rooms;
       } catch (e) {
         console.error("get error", e);
       }
     },
     async createRoom(roomName, doJoinRoom = true) {
       try {
-        this.currentRoom = await this.client.create(roomName, {
+        const newRoom = await this.client.create(roomName, {
           autoDispose: doJoinRoom,
         });
-        this.getRooms(roomName);
 
         if (doJoinRoom) {
+          this.currentRoom = newRoom;
           this.toCurrentRoom();
         } else {
-          this.currentRoom.leave();
+          newRoom.leave();
           this.currentRoom = null;
         }
+
+        return newRoom;
       } catch (e) {
         console.error("join error", e);
       }
