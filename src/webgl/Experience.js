@@ -10,6 +10,7 @@ import Resources from './Utils/Resources.js'
 
 import sources from './sources'
 import settings from "./settings";
+import Controls from "./Controls";
 
 let instance = null
 
@@ -35,6 +36,7 @@ export default class Experience {
         this.debug = new Debug()
         this.viewport = new Viewport()
         this.raf = new Raf()
+        this.controls = new Controls()
         this.scene = new Scene()
         this.resources = new Resources(sources)
         this.camera = new Camera()

@@ -4,6 +4,8 @@ import Environment from './Environment.js'
 import Prison from './Prison.js';
 import {component} from "bidello";
 import Experience from "@/webgl/Experience";
+import {GridHelper} from "three";
+import Player from "@/webgl/World/Player";
 
 export default class World extends component() {
     init() {
@@ -19,6 +21,9 @@ export default class World extends component() {
         // this.fox = new Fox()
         this.prison = new Prison()
         this.environment = new Environment()
+        this.player = new Player();
+        const grid = new GridHelper(20, 20)
+        this._scene.add(grid)
     }
 
     onRaf() {
