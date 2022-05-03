@@ -14,7 +14,7 @@ export default {
     return { colyseus };
   },
   unmounted() {
-    this.colyseus.currentRoom.leave()
+    this.colyseus.currentRoom?.leave();
   },
 };
 </script>

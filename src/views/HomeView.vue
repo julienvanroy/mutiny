@@ -21,11 +21,11 @@ export default {
     return { colyseus };
   },
   mounted() {
-    this.colyseus.getRooms("my_room");
+    this.colyseus.getRooms("play_room");
   },
   methods: {
-    createRoom(doEnterRoom = true) {
-      this.colyseus.createRoom("my_room", doEnterRoom);
+    createRoom(doJoinRoom = true) {
+      this.colyseus.createRoom("play_room", doJoinRoom);
     },
     joinRoom(roomId) {
       this.colyseus.joinRoom(roomId);

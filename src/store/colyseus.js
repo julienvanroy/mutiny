@@ -22,16 +22,17 @@ const useColyseusStore = defineStore("colyseus", {
         console.error("get error", e);
       }
     },
-    async createRoom(roomName, doEnterRoom = true) {
+    async createRoom(roomName, doJoinRoom = true) {
       try {
-        const room = await this.client.create(roomName);
+        this.currentRoom = await this.client.create(roomName, {
+          autoDispose: doJoinRoom,
+        });
         this.getRooms(roomName);
 
-        if (doEnterRoom) {
-          this.currentRoom = room;
+        if (doJoinRoom) {
           this.toCurrentRoom();
         } else {
-          // this.currentRoom.leave();
+          this.currentRoom.leave();
           this.currentRoom = null;
         }
       } catch (e) {
