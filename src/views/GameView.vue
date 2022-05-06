@@ -15,7 +15,7 @@ export default {
   components: { WebGl },
   data() {
     return {
-      displayScene: false,
+      displayScene: true,
     };
   },
   setup() {
