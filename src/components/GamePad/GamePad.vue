@@ -2,7 +2,7 @@
   <h1>Manette</h1>
   <p>currentRoom : {{ colyseus.currentRoom.id }}</p>
   <p>playerSessionId : {{ colyseus.currentRoom.sessionId }}</p>
-  <div id="joystick" class="joystick"></div>
+  <div ref="joystick" class="joystick"></div>
 </template>
 
 <script>
@@ -22,7 +22,7 @@ export default {
   },
   mounted() {
     this.joystick = nipplejs.create({
-      zone: document.getElementById("joystick"),
+      zone: this.$refs.joystick,
       size: 50,
       maxNumberOfNipples: 1,
       mode: "dynamic",
