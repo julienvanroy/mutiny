@@ -4,13 +4,27 @@
     <router-link to="/game">Game</router-link>
   </div>
   <div id="view">
-    <router-view />
+    <router-view v-slot="{ Component }">
+      <keep-alive>
+        <component :is="Component" />
+      </keep-alive>
+    </router-view>
   </div>
 </template>
 
 <script>
+import bidello from "bidello";
+
 export default {
   name: "App",
+  watch: {
+    // Display Tweakpane on #debug
+    $route(to) {
+      if (!to.hash.includes("#debug"))
+        document.querySelectorAll(".tp-dfwv").forEach((el) => el.remove());
+      else bidello.trigger({ name: "debug" }, { debugActive: true });
+    },
+  },
 };
 </script>
 
