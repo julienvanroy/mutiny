@@ -1,4 +1,10 @@
-import { Mesh, Group, MeshStandardMaterial } from "three";
+import {
+  Mesh,
+  Group,
+  MeshBasicMaterial,
+  MeshStandardMaterial,
+  Color,
+} from "three";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { MeshBVH, MeshBVHVisualizer } from "three-mesh-bvh";
 import { component } from "bidello";
@@ -8,6 +14,7 @@ export default class Prison extends component() {
   init() {
     const experience = new Experience();
     this._scene = experience.scene;
+    this._debug = experience.debug;
     this._resources = experience.resources;
 
     // Resource
@@ -21,6 +28,7 @@ export default class Prison extends component() {
     };
 
     this._setModelAndCollider();
+    this.onDebug();
   }
 
   _setModelAndCollider() {
@@ -98,18 +106,53 @@ export default class Prison extends component() {
       lazyGeneration: false,
     });
 
-    this.collider = new Mesh(mergedGeometry);
-    this.collider.material.wireframe = true;
-    this.collider.material.opacity = 0.5;
-    this.collider.material.transparent = true;
+    const debugColliderMaterial = new MeshBasicMaterial({
+      wireframe: true,
+      opacity: 0.64,
+      transparent: true,
+      color: new Color("#ffffff"),
+      visible: true,
+    });
+    this.collider = new Mesh(mergedGeometry, debugColliderMaterial);
 
     this.visualizer = new MeshBVHVisualizer(
       this.collider,
       this.params.visualizeDepth
     );
+    this.visualizer.opacity = 0.64;
 
     this._scene.add(this.visualizer);
     this._scene.add(this.collider);
     this._scene.add(this.environment);
+  }
+
+  onDebug() {
+    if (!this._debug.active) return;
+
+    // TweakPane
+    const folderCollision = this._debug.pane.addFolder({
+      title: "Collision",
+      expanded: false,
+    });
+
+    const displayCollider = folderCollision.addInput(
+      this.params,
+      "displayCollider"
+    );
+    const displayBVH = folderCollision.addInput(this.params, "displayBVH");
+
+    displayCollider.on(
+      "change",
+      ({ value }) => (this.params.displayCollider = value)
+    );
+
+    displayBVH.on("change", ({ value }) => (this.params.displayBVH = value));
+  }
+
+  onRaf() {
+    if (this.collider && this._debug.active) {
+      this.collider.visible = this.params.displayCollider;
+      this.visualizer.visible = this.params.displayBVH;
+    }
   }
 }
