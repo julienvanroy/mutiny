@@ -1,5 +1,5 @@
 <template>
-  <WebGl v-if="displayScene" />
+  <!-- <WebGl v-if="displayScene" /> -->
   <div class="players">
     <p>currentRoom : {{ colyseus.currentRoom.id }}</p>
     <p>mainScreenSessionId : {{ colyseus.currentRoom.sessionId }}</p>
@@ -7,12 +7,12 @@
 </template>
 
 <script>
-import WebGl from "@/components/WebGl";
-import useColyseusStore from "@/store/colyseus";
+// import WebGl from '@/components/WebGl';
+import useColyseusStore from '@/store/colyseus';
 
 export default {
-  name: "GameView",
-  components: { WebGl },
+  name: 'GameView',
+  // components: { WebGl },
   data() {
     return {
       displayScene: true,
@@ -21,23 +21,21 @@ export default {
   setup() {
     const colyseus = useColyseusStore();
 
-    colyseus.currentRoom.onMessage("joystick", (message) => {
+    colyseus.currentRoom.onMessage('joystick', (message) => {
       console.log(message);
     });
 
-    colyseus.currentRoom.onMessage("kill", (message) => {
+    colyseus.currentRoom.onMessage('kill', (message) => {
       console.log(message);
     });
 
-    colyseus.currentRoom.onMessage("power", (message) => {
+    colyseus.currentRoom.onMessage('power', (message) => {
       console.log(message);
     });
 
     return { colyseus };
   },
-  mounted() {
-    console.log(this.colyseus.currentRoom);
-  },
+  mounted() {},
 };
 </script>
 

@@ -8,16 +8,16 @@
     :key="roomIndex"
     @click="joinRoom(room.roomId)"
   >
-    Join {{ room.name === "lobby_room" ? "Lobby" : "" }} Room
+    Join {{ room.name === 'lobby_room' ? 'Lobby' : '' }} Room
     {{ room.roomId }}
   </button>
 </template>
 
 <script>
-import useColyseusStore from "@/store/colyseus";
+import useColyseusStore from '@/store/colyseus';
 
 export default {
-  name: "HomeView",
+  name: 'HomeView',
   setup() {
     const colyseus = useColyseusStore();
     return { colyseus };
@@ -25,9 +25,12 @@ export default {
   mounted() {
     this.colyseus.initLobbyRoom();
   },
+  unmounted() {
+    this.colyseus.currentRoom?.leave();
+  },
   methods: {
     createRoom(doJoinRoom = true) {
-      this.colyseus.createRoom("play_room", doJoinRoom);
+      this.colyseus.createRoom('play_room', doJoinRoom);
     },
     joinRoom(roomId) {
       this.colyseus.joinRoom(roomId);

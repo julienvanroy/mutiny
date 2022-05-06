@@ -1,16 +1,22 @@
 <template>
-  <canvas ref="canvas"/>
+  <canvas ref="canvas" />
 </template>
 
 <script>
-import Experience from '../webgl/Experience'
+import useWebglStore from '@/store/webgl';
+import Experience from '../webgl/Experience';
 
 export default {
-  name: "WebGl",
+  name: 'WebGl',
+  setup() {
+    const webgl = new useWebglStore();
+    return { webgl };
+  },
   mounted() {
-    new Experience(this.$refs.canvas)
-  }
-}
+    this.webgl.experience = new Experience(this.$refs.canvas);
+  },
+  unmounted() {},
+};
 </script>
 
 <style lang="scss" scoped>
