@@ -3,6 +3,8 @@
   <p>currentRoom : {{ colyseus.currentRoom.id }}</p>
   <p>playerSessionId : {{ colyseus.currentRoom.sessionId }}</p>
   <div ref="joystick" class="joystick"></div>
+  <button ref="kill" @click='sendData("kill", true)'>kill</button>
+  <button ref="power" @click='sendData("power", true)'>power</button>
 </template>
 
 <script>
@@ -28,15 +30,15 @@ export default {
       mode: "dynamic",
     });
     this.joystick.on("move", (e, data) => {
-      this.sendData(data.position);
+      this.sendData("joystick", data.position);
     });
   },
   unmounted() {
     this.joystick.destroy();
   },
   methods: {
-    sendData(value) {
-      this.colyseus.currentRoom.send("joystickMove", value);
+    sendData(type, value) {
+      this.colyseus.currentRoom.send(type, value);
     },
   },
 };

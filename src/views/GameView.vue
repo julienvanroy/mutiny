@@ -21,9 +21,18 @@ export default {
   setup() {
     const colyseus = useColyseusStore();
 
-    colyseus.currentRoom.onMessage("joystickPos", (message) => {
+    colyseus.currentRoom.onMessage("joystick", (message) => {
       console.log(message);
     });
+
+    colyseus.currentRoom.onMessage("kill", (message) => {
+      console.log(message);
+    });
+
+    colyseus.currentRoom.onMessage("power", (message) => {
+      console.log(message);
+    });
+
     return { colyseus };
   },
   mounted() {
