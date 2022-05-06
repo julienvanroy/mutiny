@@ -18,7 +18,7 @@ export default class Prison extends component() {
     this._resources = experience.resources;
 
     // Resource
-    this.resource = this._resources.items.mapModel;
+    this.resource = this._resources.items.appartmentModel;
 
     // Collision
     this.params = {

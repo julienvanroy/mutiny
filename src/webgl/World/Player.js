@@ -32,7 +32,7 @@ export default class Player extends component() {
         playerSpeed: 6.4,
       },
       capsuleInfo: {
-        radius: 0.5,
+        radius: 0.2,
         segment: new Line3(new Vector3(), new Vector3(0, 0.0, 0.0)),
       },
     };

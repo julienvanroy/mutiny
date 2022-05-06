@@ -32,8 +32,8 @@ export default [
     path: "models/Prison/prison.gltf",
   },
   {
-    name: "mapModel",
+    name: "appartmentModel",
     type: "gltfModel",
-    path: "models/Map/fnaf 1 map without ceiling.glb",
+    path: "models/Appartment/appartment.gltf",
   },
 ];
