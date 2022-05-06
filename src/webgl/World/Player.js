@@ -28,7 +28,7 @@ export default class Player extends component() {
       playerIsOnGround: false,
       playerVelocity: new Vector3(),
       params: {
-        gravity: -64,
+        gravity: -32,
         playerSpeed: 10,
         physicsSteps: 5,
       },
