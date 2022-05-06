@@ -57,8 +57,10 @@ export default class Player extends component() {
 
     if (this._controls.actions.up && this._controls.actions.down)
       this._vectorControls.y = 0;
-    else if (this._controls.actions.up) this._vectorControls.y = -1;
-    else if (this._controls.actions.down) this._vectorControls.y = 1;
+    else if (this._controls.actions.up)
+      this._vectorControls.y = -this.collision.params.playerSpeed;
+    else if (this._controls.actions.down)
+      this._vectorControls.y = this.collision.params.playerSpeed;
     else this._vectorControls.y = 0;
 
     if (this._controls.actions.right && this._controls.actions.left)
