@@ -29,11 +29,10 @@ export default class Player extends component() {
       playerVelocity: new Vector3(),
       params: {
         gravity: -32,
-        playerSpeed: 10,
-        physicsSteps: 5,
+        playerSpeed: 6.4,
       },
       capsuleInfo: {
-        radius: 0.1,
+        radius: 0.5,
         segment: new Line3(new Vector3(), new Vector3(0, 0.0, 0.0)),
       },
     };
@@ -42,7 +41,8 @@ export default class Player extends component() {
   }
 
   _initMesh() {
-    const geometry = new BoxGeometry(0.2, 0.2, 0.2);
+    const geomSize = this.collision.capsuleInfo.radius * 2;
+    const geometry = new BoxGeometry(geomSize, geomSize, geomSize);
     const material = new MeshBasicMaterial();
 
     this.mesh = new Mesh(geometry, material);
@@ -63,8 +63,10 @@ export default class Player extends component() {
 
     if (this._controls.actions.right && this._controls.actions.left)
       this._vectorControls.x = 0;
-    else if (this._controls.actions.right) this._vectorControls.x = 1;
-    else if (this._controls.actions.left) this._vectorControls.x = -1;
+    else if (this._controls.actions.right)
+      this._vectorControls.x = this.collision.params.playerSpeed;
+    else if (this._controls.actions.left)
+      this._vectorControls.x = -this.collision.params.playerSpeed;
     else this._vectorControls.x = 0;
   }
 
@@ -168,7 +170,7 @@ export default class Player extends component() {
     }
 
     // if the player has fallen too far below the level reset their position to the start
-    if (this.mesh.position.y < -25) {
+    if (this.mesh.position.y < 0) {
       this._reset();
     }
   }
@@ -185,6 +187,7 @@ export default class Player extends component() {
       this.mesh.position.x += this._vectorControls.x * delta;
     }
     this._rotation(delta);
+
     this._updatePlayerCollision(delta);
   }
 }

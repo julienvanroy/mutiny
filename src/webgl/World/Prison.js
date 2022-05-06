@@ -18,7 +18,7 @@ export default class Prison extends component() {
     this._resources = experience.resources;
 
     // Resource
-    this.resource = this._resources.items.prisonModel;
+    this.resource = this._resources.items.mapModel;
 
     // Collision
     this.params = {
@@ -33,7 +33,7 @@ export default class Prison extends component() {
 
   _setModelAndCollider() {
     this.model = this.resource.scene;
-    this.model.scale.set(0.02, 0.02, 0.02);
+    this.model.position.set(0, 0, 0);
 
     this.model.updateMatrixWorld(true);
 
