@@ -1,5 +1,4 @@
 <template>
-  <WebGl v-if="displayScene" />
   <div class="players">
     <p>currentRoom : {{ colyseus.currentRoom.id }}</p>
     <p>mainScreenSessionId : {{ colyseus.currentRoom.sessionId }}</p>
@@ -7,17 +6,10 @@
 </template>
 
 <script>
-import WebGl from "@/components/WebGl";
 import useColyseusStore from "@/store/colyseus";
 
 export default {
   name: "GameView",
-  components: { WebGl },
-  data() {
-    return {
-      displayScene: true,
-    };
-  },
   setup() {
     const colyseus = useColyseusStore();
 

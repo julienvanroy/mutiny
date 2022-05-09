@@ -1,7 +1,5 @@
 <template>
-  <keep-alive>
-    <canvas ref="canvas" />
-  </keep-alive>
+  <canvas ref="canvas" />
 </template>
 
 <script>
@@ -15,7 +13,7 @@ export default {
     return { webgl };
   },
   mounted() {
-    this.webgl.xp = new Experience(this.$refs.canvas);
+    this.webgl.experience = new Experience(this.$refs.canvas);
   },
 };
 </script>

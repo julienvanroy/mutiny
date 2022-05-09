@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 const useWebglStore = defineStore("webgl", {
   state: () => {
     return {
-      xp: null,
+      experience: null,
     };
   },
   getters: {},
