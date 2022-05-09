@@ -28,7 +28,7 @@ export default class Camera extends component(PerspectiveCamera) {
   }
 
   onDebug() {
-    if (!this._debug.active || !this._debug.pane) return;
+    if (!this._debug.active) return;
 
     // OrbitControls
     this.controls = new OrbitControls(this, this._canvas);

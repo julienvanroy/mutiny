@@ -7,7 +7,21 @@ export default class Debug extends component() {
     this.active =
       window.location.hash === "#debug" || process.env.debug === true;
 
-    this.onDebug();
+    this.pane = new Pane({
+      title: "Parameters",
+      expanded: true,
+    });
+    this.pane.registerPlugin(EssentialsPlugin);
+
+    this._fpsGraph = this.pane.addBlade({
+      view: "fpsgraph",
+      label: "fpsgraph",
+    });
+
+    this.pane.addSeparator();
+
+    this._setupImport();
+    this._setupExport();
   }
 
   onFpsBegin() {
@@ -16,27 +30,6 @@ export default class Debug extends component() {
 
   onFpsEnd() {
     this.active && this._fpsGraph?.end();
-  }
-
-  onDebug(params) {
-    if (params && !!params.debugActive) this.active = params.debugActive;
-    if (this.active) {
-      this.pane = new Pane({
-        title: "Parameters",
-        expanded: true,
-      });
-      this.pane.registerPlugin(EssentialsPlugin);
-
-      this._fpsGraph = this.pane.addBlade({
-        view: "fpsgraph",
-        label: "fpsgraph",
-      });
-
-      this.pane.addSeparator();
-
-      this._setupImport();
-      this._setupExport();
-    }
   }
 
   _setupImport() {

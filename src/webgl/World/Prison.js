@@ -127,7 +127,7 @@ export default class Prison extends component() {
   }
 
   onDebug() {
-    if (!this._debug.active || !this._debug.pane) return;
+    if (!this._debug.active) return;
 
     // TweakPane
     const folderCollision = this._debug.pane.addFolder({
