@@ -79,6 +79,9 @@ const useColyseusStore = defineStore("colyseus", {
         console.error("join error", e);
       }
     },
+    sendData(type, value) {
+      this.currentRoom.send(type, value);
+    },
   },
 });
 
