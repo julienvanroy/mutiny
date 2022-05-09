@@ -74,6 +74,9 @@ const useColyseusStore = defineStore("colyseus", {
         else room = await this.client.joinById(sample(this.rooms).roomId);
 
         this.currentRoom = room;
+
+        this.sendData("addPlayer");
+
         this.toCurrentRoom();
       } catch (e) {
         console.error("join error", e);

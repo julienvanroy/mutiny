@@ -7,7 +7,11 @@ const useWebglStore = defineStore("webgl", {
     };
   },
   getters: {},
-  actions: {},
+  actions: {
+    addPlayer(playerId) {
+      this.experience.world.addPlayer(playerId);
+    },
+  },
 });
 
 export default useWebglStore;
