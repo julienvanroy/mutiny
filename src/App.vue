@@ -1,7 +1,10 @@
 <template>
   <div id="nav">
     <router-link to="/">Home</router-link> |
-    <router-link to="/game">Game</router-link>
+    <router-link to="/game">Game</router-link> |
+    <button @click="!!isFullscreen ? closeFullscreen() : goFullscreen()">
+      {{ !!isFullscreen ? "close fullscreen" : "go fullscreen" }}
+    </button>
   </div>
   <div id="view">
     <router-view/>
@@ -21,7 +24,24 @@ export default {
 
     const path = computed(() =>route.path)
     return {path}
-  }
+  },
+  data() {
+    return {
+      isFullscreen: false,
+      isFullscreenEnabled: false,
+    };
+  },
+  methods: {
+    goFullscreen() {
+      let container = document.getElementById("app");
+      container.requestFullscreen();
+      this.isFullscreen = true;
+    },
+    closeFullscreen() {
+      document.exitFullscreen();
+      this.isFullscreen = false;
+    },
+  },
 };
 </script>
 
