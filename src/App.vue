@@ -4,13 +4,24 @@
     <router-link to="/game">Game</router-link>
   </div>
   <div id="view">
-    <router-view />
+    <router-view/>
+    <WebGl v-show="path === '/game'"/>
   </div>
 </template>
 
 <script>
+import WebGl from "@/components/WebGl";
+import {useRoute} from "vue-router";
+import {computed} from "vue";
 export default {
   name: "App",
+  components: {WebGl},
+  setup(){
+    const route=useRoute();
+
+    const path = computed(() =>route.path)
+    return {path}
+  }
 };
 </script>
 
