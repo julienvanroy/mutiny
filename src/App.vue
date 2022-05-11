@@ -1,40 +1,40 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/game">Game</router-link> |
-    <button @click="!!isFullscreen ? closeFullscreen() : goFullscreen()">
-      {{ !!isFullscreen ? "close fullscreen" : "go fullscreen" }}
-    </button>
-  </div>
-  <div id="view">
-    <router-view/>
-    <WebGl v-show="path === '/game'"/>
+  <div ref="fullscreenContainer">
+    <div id="nav">
+      <router-link to="/">Home</router-link> |
+      <router-link to="/game">Game</router-link> |
+      <button @click="!!isFullscreen ? closeFullscreen() : goFullscreen()">
+        {{ !!isFullscreen ? "close fullscreen" : "go fullscreen" }}
+      </button>
+    </div>
+    <div id="view">
+      <router-view />
+      <WebGl v-show="path === '/game'" />
+    </div>
   </div>
 </template>
 
 <script>
 import WebGl from "@/components/WebGl";
-import {useRoute} from "vue-router";
-import {computed} from "vue";
+import { useRoute } from "vue-router";
+import { computed } from "vue";
 export default {
   name: "App",
-  components: {WebGl},
-  setup(){
-    const route=useRoute();
+  components: { WebGl },
+  setup() {
+    const route = useRoute();
 
-    const path = computed(() =>route.path)
-    return {path}
+    const path = computed(() => route.path);
+    return { path };
   },
   data() {
     return {
       isFullscreen: false,
-      isFullscreenEnabled: false,
     };
   },
   methods: {
     goFullscreen() {
-      let container = document.getElementById("app");
-      container.requestFullscreen();
+      this.$refs.fullscreenContainer.requestFullscreen();
       this.isFullscreen = true;
     },
     closeFullscreen() {
