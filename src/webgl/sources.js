@@ -36,4 +36,9 @@ export default [
     type: "gltfModel",
     path: "models/Appartment/appartment.gltf",
   },
+  {
+    name: "robotModel",
+    type: "gltfModel",
+    path: "models/Robot/robot.gltf",
+  },
 ];

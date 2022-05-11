@@ -1,8 +1,8 @@
 import { component } from "bidello";
 import {
-  BoxGeometry,
+  // BoxGeometry,
   Mesh,
-  MeshBasicMaterial,
+  // MeshBasicMaterial,
   Quaternion,
   Vector2,
   Vector3,
@@ -21,11 +21,15 @@ export default class Player extends component() {
   init() {
     const experience = new Experience();
     this._scene = experience.scene;
+    this._resources = experience.resources
     this._controls = experience.controls;
 
     this._vectorControls = new Vector2();
     this._targetQuaternion = new Quaternion();
     this._speedRotation = 10;
+
+    // Resource
+    this.resource = this._resources.items.robotModel
 
     // Collision
     this.environment = experience.world.prison;
@@ -42,19 +46,32 @@ export default class Player extends component() {
       },
     };
 
-    this._initMesh();
+    // this._initMesh();
+    this._setModel();
   }
 
-  _initMesh() {
-    const geomSize = this.collision.capsuleInfo.radius * 2;
-    const geometry = new BoxGeometry(geomSize, geomSize, geomSize);
-    const material = new MeshBasicMaterial();
+  // _initMesh() {
+  //   const geomSize = this.collision.capsuleInfo.radius * 2;
+  //   const geometry = new BoxGeometry(geomSize, geomSize, geomSize);
+  //   const material = new MeshBasicMaterial();
 
-    this.mesh = new Mesh(geometry, material);
-    this.mesh.position.y = 0.5;
-    this._scene.add(this.mesh);
+  //   this.mesh = new Mesh(geometry, material);
+  //   this.mesh.position.y = 0.5;
+  //   this._scene.add(this.mesh);
 
-    this._reset();
+  //   this._reset();
+  // }
+
+  _setModel() {
+    this.mesh = this.resource.scene
+    this.mesh.scale.set(0.08, 0.08, 0.08)
+    this._scene.add(this.mesh)
+
+    this.mesh.traverse((child) => {
+      if (child instanceof Mesh) {
+        child.castShadow = true
+      }
+    })
   }
 
   _keyboard() {
@@ -63,9 +80,9 @@ export default class Player extends component() {
     if (this._controls.actions.up && this._controls.actions.down)
       this._vectorControls.y = 0;
     else if (this._controls.actions.up)
-      this._vectorControls.y = -this.collision.params.playerSpeed;
-    else if (this._controls.actions.down)
       this._vectorControls.y = this.collision.params.playerSpeed;
+    else if (this._controls.actions.down)
+      this._vectorControls.y = -this.collision.params.playerSpeed;
     else this._vectorControls.y = 0;
 
     if (this._controls.actions.right && this._controls.actions.left)
@@ -190,7 +207,7 @@ export default class Player extends component() {
   onRaf({ delta }) {
     this._keyboard();
     if (this._controls.isPressed) {
-      this.mesh.position.z += this._vectorControls.y * delta;
+      this.mesh.position.z -= this._vectorControls.y * delta;
       this.mesh.position.x += this._vectorControls.x * delta;
     }
     this._rotation(delta);
