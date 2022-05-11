@@ -7,11 +7,17 @@
 
 <script>
 import useColyseusStore from "@/store/colyseus";
+import useWebglStore from "@/store/webgl";
 
 export default {
   name: "GameView",
   setup() {
     const colyseus = useColyseusStore();
+    const webgl = useWebglStore();
+
+    colyseus.currentRoom.onMessage("addPlayer", ({ playerSessionId }) => {
+      playerSessionId && webgl.addPlayer(playerSessionId);
+    });
 
     colyseus.currentRoom.onMessage("joystick", (message) => {
       console.log(message);
@@ -25,7 +31,7 @@ export default {
       console.log(message);
     });
 
-    return { colyseus };
+    return { colyseus, webgl };
   },
   mounted() {
     console.log(this.colyseus.currentRoom);
