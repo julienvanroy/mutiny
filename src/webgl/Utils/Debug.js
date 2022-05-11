@@ -4,24 +4,25 @@ import { component } from "bidello";
 
 export default class Debug extends component() {
   init() {
-    this.active =
-      window.location.hash === "#debug" || process.env.debug === true;
+    this.active = process.env.VUE_APP_DEBUG === 'true';
 
-    this.pane = new Pane({
-      title: "Parameters",
-      expanded: true,
-    });
-    this.pane.registerPlugin(EssentialsPlugin);
+    if(this.active) {
+      this.pane = new Pane({
+        title: "Parameters",
+        expanded: true,
+      });
+      this.pane.registerPlugin(EssentialsPlugin);
 
-    this._fpsGraph = this.pane.addBlade({
-      view: "fpsgraph",
-      label: "fpsgraph",
-    });
+      this._fpsGraph = this.pane.addBlade({
+        view: "fpsgraph",
+        label: "fpsgraph",
+      });
 
-    this.pane.addSeparator();
+      this.pane.addSeparator();
 
-    this._setupImport();
-    this._setupExport();
+      this._setupImport();
+      this._setupExport();
+    }
   }
 
   onFpsBegin() {
