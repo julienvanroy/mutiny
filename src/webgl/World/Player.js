@@ -63,7 +63,7 @@ export default class Player extends component() {
   // }
 
   _setModel() {
-    this.mesh = this.resource.scene
+    this.mesh = this.resource.scene.clone()
     this.mesh.scale.set(0.08, 0.08, 0.08)
     this._scene.add(this.mesh)
 

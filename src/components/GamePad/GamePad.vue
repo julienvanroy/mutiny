@@ -29,7 +29,7 @@ export default {
       maxNumberOfNipples: 1,
       mode: "dynamic",
     });
-    this.joystick.on("move", (data) => {
+    this.joystick.on("move", (e, data) => {
       this.colyseus.sendData("joystick", data.vector);
     });
     this.joystick.on("end", () => {
