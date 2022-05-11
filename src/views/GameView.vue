@@ -20,7 +20,7 @@ export default {
     });
 
     colyseus.currentRoom.onMessage("joystick", (message) => {
-      console.log(message);
+      webgl.movePlayer(message.playerSessionId, message.playerPosition);
     });
 
     colyseus.currentRoom.onMessage("kill", (message) => {
