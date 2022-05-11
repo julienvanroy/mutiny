@@ -18,8 +18,6 @@ export default class Prison extends component() {
   _setModelAndCollider() {
     this.model = this.resource.scene;
 
-    this.model.position.set(0, 0, 0);
-
     this.model.updateMatrixWorld(true);
 
     this.bvh = new BVHMaker(this.model);
