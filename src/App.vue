@@ -2,7 +2,10 @@
   <div ref="fullscreenContainer">
     <div id="nav">
       <router-link to="/">Home</router-link> |
+      <router-link to="/connection">Connection</router-link> |
+      <router-link to="/rules">Rules</router-link> |
       <router-link to="/game">Game</router-link> |
+      <router-link to="/end-game">End Game</router-link> |
       <button @click="!!isFullscreen ? closeFullscreen() : goFullscreen()">
         {{ !!isFullscreen ? "close fullscreen" : "go fullscreen" }}
       </button>
