@@ -7,7 +7,7 @@
       <router-link to="/game">Game</router-link> |
       <router-link to="/end-game">End Game</router-link> |
       <button
-        v-if="!showFullscreenBtn"
+        v-if="showFullscreenBtn"
         @click="!!isFullscreen ? closeFullscreen() : goFullscreen()"
       >
         {{ !!isFullscreen ? "close fullscreen" : "go fullscreen" }}
@@ -24,7 +24,6 @@
 import WebGl from "@/components/WebGl";
 import { useRoute } from "vue-router";
 import { computed } from "vue";
-import { isMobile, isIOS } from "mobile-device-detect";
 
 export default {
   name: "App",
@@ -37,7 +36,7 @@ export default {
   },
   data() {
     return {
-      showFullscreenBtn: isMobile && isIOS,
+      showFullscreenBtn: !(/iPhone|iPad|iPod/i.test(navigator.userAgent) || /^((?!chrome|android).)*safari/i.test(navigator.userAgent)),
       isFullscreen: false,
     };
   },
