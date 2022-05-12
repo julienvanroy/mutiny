@@ -12,7 +12,7 @@
     </div>
     <div id="view">
       <router-view />
-      <WebGl v-show="path === '/game'" />
+      <WebGl v-show="path === ('/game' || '/game#debug')" />
     </div>
   </div>
 </template>

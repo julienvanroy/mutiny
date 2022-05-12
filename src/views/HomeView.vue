@@ -4,12 +4,6 @@
   <router-link to="/credits">Crédits</router-link>
 </template>
 
-<script>
-export default {
-  name: "HomeView",
-};
-</script>
-
 <style lang="scss" scoped>
 button {
   display: block;
