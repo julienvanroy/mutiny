@@ -3,17 +3,12 @@
 </template>
 
 <script>
-import useWebglStore from "@/store/webgl";
 import Experience from "../webgl/Experience";
 
 export default {
   name: "WebGl",
-  setup() {
-    const webgl = useWebglStore();
-    return { webgl };
-  },
   mounted() {
-    this.webgl.experience = new Experience(this.$refs.canvas);
+    new Experience(this.$refs.canvas)
   },
 };
 </script>
