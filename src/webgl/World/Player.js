@@ -63,7 +63,7 @@ export default class Player extends component() {
   // }
 
   _setModel() {
-    this.mesh = this.resource.scene
+    this.mesh = this.resource.scene.clone()
     this.mesh.scale.set(0.08, 0.08, 0.08)
     this._scene.add(this.mesh)
 
@@ -74,8 +74,16 @@ export default class Player extends component() {
     })
   }
 
+  set vectorControls(value) {
+    this._vectorControls = new Vector2(value.x, value.y)
+  }
+
+  get isMoving() {
+    return this._vectorControls.x !== 0 || this._vectorControls.y !== 0 ;
+  }
+
   _keyboard() {
-    if (!this._controls.isPressed) return;
+    if (!this._controls.isPressed) return
 
     if (this._controls.actions.up && this._controls.actions.down)
       this._vectorControls.y = 0;
@@ -94,8 +102,15 @@ export default class Player extends component() {
     else this._vectorControls.x = 0;
   }
 
+  _move(delta) {
+    if(this.isMoving) {
+      this.mesh.position.z -= this._vectorControls.y * delta;
+      this.mesh.position.x += this._vectorControls.x * delta;
+    }
+  }
+
   _rotation(delta) {
-    if (this._controls.isPressed)
+    if (this.isMoving)
       this._targetQuaternion.setFromAxisAngle(
         new Vector3(0, 1, 0),
         this._vectorControls.angle()
@@ -206,10 +221,8 @@ export default class Player extends component() {
 
   onRaf({ delta }) {
     this._keyboard();
-    if (this._controls.isPressed) {
-      this.mesh.position.z -= this._vectorControls.y * delta;
-      this.mesh.position.x += this._vectorControls.x * delta;
-    }
+
+    this._move(delta);
     this._rotation(delta);
 
     this._updatePlayerCollision(delta);

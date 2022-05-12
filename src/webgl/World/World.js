@@ -29,7 +29,7 @@ export default class World extends component() {
   }
 
   addPlayer(playerId) {
-    this.players.push(new Player(playerId));
+    this.players[playerId] = new Player(playerId);
     console.log(this.players);
   }
 }

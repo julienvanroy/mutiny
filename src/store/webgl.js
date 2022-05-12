@@ -11,6 +11,9 @@ const useWebglStore = defineStore("webgl", {
     addPlayer(playerId) {
       this.experience.world.addPlayer(playerId);
     },
+    movePlayer(playerId, vector) {
+      this.experience.world.players[playerId].vectorControls = vector
+    }
   },
 });
 

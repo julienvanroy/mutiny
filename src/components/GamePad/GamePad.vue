@@ -30,7 +30,10 @@ export default {
       mode: "dynamic",
     });
     this.joystick.on("move", (e, data) => {
-      this.colyseus.sendData("joystick", data.position);
+      this.colyseus.sendData("joystick", data.vector);
+    });
+    this.joystick.on("end", () => {
+      this.colyseus.sendData("joystick", { x: 0, y: 0 });
     });
   },
   unmounted() {
