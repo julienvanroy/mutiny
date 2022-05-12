@@ -56,7 +56,7 @@ const useColyseusStore = defineStore("colyseus", {
 
         if (doJoinRoom) {
           this.currentRoom = newRoom;
-          router.push(`/game#debug`);
+          router.push('/rules')
         } else {
           newRoom.leave();
           this.currentRoom = null;
