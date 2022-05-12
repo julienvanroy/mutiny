@@ -13,9 +13,10 @@ import {
 import Experience from "../Experience";
 
 export default class Player extends component() {
-  constructor(playerId) {
+  constructor(playerId, playerName) {
     super();
     this.id = playerId;
+    this.name = playerName;
   }
 
   init() {
