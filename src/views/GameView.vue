@@ -7,20 +7,19 @@
 
 <script>
 import useColyseusStore from "@/store/colyseus";
-import useWebglStore from "@/store/webgl";
+import bidello from "bidello";
 
 export default {
   name: "GameView",
   setup() {
     const colyseus = useColyseusStore();
-    const webgl = useWebglStore();
 
     colyseus.currentRoom.onMessage("addPlayer", ({ playerSessionId }) => {
-      playerSessionId && webgl.addPlayer(playerSessionId);
+      playerSessionId && bidello.trigger({ name: "addPlayer" }, {playerId: playerSessionId});
     });
 
-    colyseus.currentRoom.onMessage("joystick", (message) => {
-      webgl.movePlayer(message.playerSessionId, message.playerPosition);
+    colyseus.currentRoom.onMessage("joystick", ({playerSessionId, playerPosition}) => {
+      bidello.trigger({ name: "movePlayer" }, {playerId: playerSessionId, vector2: playerPosition});
     });
 
     colyseus.currentRoom.onMessage("kill", (message) => {
@@ -31,7 +30,7 @@ export default {
       console.log(message);
     });
 
-    return { colyseus, webgl };
+    return { colyseus };
   },
     data() {
     return {
