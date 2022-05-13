@@ -6,6 +6,11 @@ import Player from "@/webgl/World/Player";
 import Item from "@/webgl/World/Item";
 import BoxCollision from "@/webgl/Collision/BoxCollision";
 import MapLevel from "./MapLevel.js";
+import { Pathfinding } from "three-pathfinding";
+import { uuid } from "@/utils/index.js";
+import Bot from "./Bot.js";
+
+let BOT_COUNTS = 32;
 
 export default class World extends component() {
     init() {
@@ -18,6 +23,18 @@ export default class World extends component() {
 
         this._isLoaded = false;
     }
+  onResourcesIsReady() {
+    console.log("world is ready");
+    this.environment = new Environment();
+    this.map = new Map();
+
+    this._initPathfinding();
+    this._initBots();
+    this._initPlayers();
+
+    const grid = new GridHelper(20, 20);
+    this._scene.add(grid);
+  }
 
     onResourcesIsReady() {
         console.log("world is ready");
@@ -29,6 +46,31 @@ export default class World extends component() {
         this.boxCollision = new BoxCollision()
         const grid = new GridHelper(20, 20);
         this._scene.add(grid);
+  _initPathfinding() {
+    this.pathfinding = new Pathfinding();
+    this.pathfinding.zone = "map";
+    this.pathfinding.setZoneData(
+      this.pathfinding.zone,
+      Pathfinding.createZone(this.map.navMesh.geometry)
+    );
+  }
+
+  _initBots() {
+    this.bots = {};
+
+    for (let i = 0; i < BOT_COUNTS; i++) {
+      const botId = uuid();
+      this.bots[botId] = new Bot(botId);
+    }
+  }
+
+  _initPlayers() {
+    this.players = {};
+  }
+
+  onRaf() {
+    this._renderer.render(this._scene, this._camera);
+  }
 
         this.onDebug()
         this._isLoaded = true;

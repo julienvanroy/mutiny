@@ -8,6 +8,8 @@ import {
     Vector3,
 } from "three";
 import Experience from "../Experience";
+import { component } from "bidello";
+import Mover from "./Mover";
 
 export default class Player extends component() {
     constructor(collider) {
@@ -163,4 +165,10 @@ export default class Player extends component() {
         this._rotation(delta);
         this._updateCollision(delta)
     }
+export default class Player extends component(Mover) {
+  constructor(playerId) {
+    super();
+    super.init();
+    this.id = playerId;
+  }
 }

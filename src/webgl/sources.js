@@ -41,4 +41,9 @@ export default [
     type: "gltfModel",
     path: "models/Robot/robot.gltf",
   },
+  {
+    name: "mapModel",
+    type: "gltfModel",
+    path: "models/Map/hextile.glb",
+  },
 ];
