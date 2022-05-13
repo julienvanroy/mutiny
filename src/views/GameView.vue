@@ -2,6 +2,11 @@
   <div class="players">
     <p>currentRoom : {{ colyseus.currentRoom.id }}</p>
     <p>mainScreenSessionId : {{ colyseus.currentRoom.sessionId }}</p>
+    <ul>
+      <li v-for="player in this.players" :key="player.id">
+        {{ player.id }} {{ player.name }} {{ player.points }}
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -15,31 +20,35 @@ export default {
     const colyseus = useColyseusStore();
     const webgl = useWebglStore();
 
-    colyseus.currentRoom.onMessage("addPlayer", ({ playerSessionId }) => {
-      playerSessionId && webgl.addPlayer(playerSessionId);
-    });
-
-    colyseus.currentRoom.onMessage("joystick", (message) => {
-      webgl.movePlayer(message.playerSessionId, message.playerPosition);
-    });
-
-    colyseus.currentRoom.onMessage("kill", (message) => {
-      console.log(message);
-    });
-
-    colyseus.currentRoom.onMessage("power", (message) => {
-      console.log(message);
-    });
-
     return { colyseus, webgl };
   },
-    data() {
+  data() {
     return {
       players: [],
     };
   },
   mounted() {
-    console.log(this.colyseus.currentRoom);
+    this.colyseus.currentRoom.onMessage("addPlayer", ({ playerSessionId }) => {
+      playerSessionId && this.webgl.addPlayer(playerSessionId);
+      this.colyseus.getAllPlayers();
+    });
+
+    this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
+      delete players[this.colyseus.currentRoom.sessionId];
+      this.players = players;
+    });
+
+    this.colyseus.currentRoom.onMessage("joystick", (message) => {
+      this.webgl.movePlayer(message.playerSessionId, message.playerPosition);
+    });
+
+    this.colyseus.currentRoom.onMessage("kill", (message) => {
+      console.log(message);
+    });
+
+    this.colyseus.currentRoom.onMessage("power", (message) => {
+      console.log(message);
+    });
   },
 };
 </script>
