@@ -67,11 +67,11 @@ const useColyseusStore = defineStore("colyseus", {
         console.error("join error", e);
       }
     },
-    async joinRoom(roomId = null) {
+    async joinRoom(roomId = null, playerName) {
       try {
         let room;
-        if (roomId) room = await this.client.joinById(roomId);
-        else room = await this.client.joinById(sample(this.rooms).roomId);
+        if (roomId) room = await this.client.joinById(roomId, { name: playerName });
+        else room = await this.client.joinById(sample(this.rooms).roomId, { name: playerName });
 
         this.currentRoom = room;
 
@@ -85,6 +85,12 @@ const useColyseusStore = defineStore("colyseus", {
     sendData(type, value) {
       this.currentRoom.send(type, value);
     },
+    getAllPlayers() {
+      this.sendData("getAllPlayers");
+    },
+    getPlayer(playerId) {
+      this.sendData("getPlayer", playerId);
+    }
   },
 });
 
