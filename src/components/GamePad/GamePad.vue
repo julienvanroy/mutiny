@@ -25,9 +25,9 @@ export default {
     };
   },
   mounted() {
-    this.colyseus.getAllPlayers()
-    this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
-      this.currentPlayer = players[this.colyseus.currentRoom.sessionId].name
+    this.colyseus.getPlayer(this.colyseus.currentRoom.sessionId)
+    this.colyseus.currentRoom.onMessage("getPlayer", (player) => {
+      this.currentPlayer = player.name
     });
 
     this.joystick = nipplejs.create({
