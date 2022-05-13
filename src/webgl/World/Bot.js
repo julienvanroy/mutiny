@@ -6,11 +6,9 @@ import Experience from "../Experience";
 export default class Bot extends component(Mover) {
   constructor(botId) {
     super();
-    this.id = botId;
-  }
-
-  init() {
     super.init();
+
+    this.id = botId;
 
     const experience = new Experience();
     this._pathfinding = experience.world.pathfinding;
@@ -23,7 +21,7 @@ export default class Bot extends component(Mover) {
   }
 
   _initPosition() {
-    this.path = [this.position];
+    this.path = [];
 
     // Random position
     this.position = this._pathfinding.getRandomNode(
@@ -43,7 +41,6 @@ export default class Bot extends component(Mover) {
       this.position,
       32
     );
-
     const groupID = this._pathfinding.getGroup(
       this._pathfinding.zone,
       this.position
@@ -56,11 +53,11 @@ export default class Bot extends component(Mover) {
     );
 
     if (newPath && newPath.length > 0) this.path.push(...newPath);
-    else this._setPath();
+    // else this._setPath();
   }
 
   onRaf({ delta }) {
-    if (this.path.length) {
+    if (this.path && this.path.length) {
       this._helper.reset().setPlayerPosition(this.position).setPath(this.path);
 
       // Steering behavior
@@ -80,7 +77,7 @@ export default class Bot extends component(Mover) {
       this._setPath();
     }
 
-    this.mesh.position.set(this.position.x, 0, this.position.z);
+    this.mesh && this.mesh.position.set(this.position.x, 0, this.position.z);
   }
 
   onPathEnd({ botId }) {
