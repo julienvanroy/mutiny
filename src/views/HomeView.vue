@@ -1,9 +1,7 @@
 <template>
   <div class="homepage">
     <div class="credits">
-      <button class="btn btn-light">
-        <router-link to="/credits">Crédits</router-link>
-      </button>
+      <TheButton label="Crédits" color="light" link="/credits" />
     </div>
 
     <div class="under">
@@ -13,10 +11,8 @@
       <div class="container">
         <h1 class="logo">Titre provisoire</h1>
         <div class="btn-container">
-          <button class="btn btn-dark">
-            <router-link to="/connection">Créer une partie</router-link>
-          </button>
-          <button class="btn btn-dark disabled">Streamer une partie</button>
+          <TheButton label="Créer une partie" color="light" link="/connection" />
+          <TheButton label="Streamer une partie" color="dark" :disabled="true" />
         </div>
         <div class="how-to-play">
           <img src="images/homepage/how-to-play.png" />
@@ -29,6 +25,15 @@
     </div>
   </div>
 </template>
+
+<script>
+import TheButton from "@/components/TheButton.vue";
+
+export default {
+  name: "App",
+  components: { TheButton },
+}
+</script>
 
 <style lang="scss" scoped>
 .homepage {

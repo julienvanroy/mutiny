@@ -9,15 +9,15 @@
     </div> -->
 
     <div class="parameters">
-      <button class="btn btn-light">son</button>
-      <button class="btn btn-light">paramètres</button>
-      <button
-        class="btn btn-light"
+      <!-- TODO: make btns visible when done -->
+      <!-- <TheButton label="Son" color="light" />
+      <TheButton label="Paramètres" color="light" /> -->
+      <TheButton
+        :label="`${!!isFullscreen ? `close fullscreen` : `go fullscreen`}`"
+        color="light"
         v-if="showFullscreenBtn"
         @click="!!isFullscreen ? closeFullscreen() : goFullscreen()"
-      >
-        {{ !!isFullscreen ? "close fullscreen" : "go fullscreen" }}
-      </button>
+      />
     </div>
     <div id="view">
       <router-view />
@@ -27,13 +27,14 @@
 </template>
 
 <script>
+import TheButton from "@/components/TheButton.vue";
 import WebGl from "@/components/WebGl";
 import { useRoute } from "vue-router";
 import { computed } from "vue";
 
 export default {
   name: "App",
-  components: { WebGl },
+  components: { TheButton, WebGl },
   setup() {
     const route = useRoute();
 
@@ -42,7 +43,10 @@ export default {
   },
   data() {
     return {
-      showFullscreenBtn: !(/iPhone|iPad|iPod/i.test(navigator.userAgent) || /^((?!chrome|android).)*safari/i.test(navigator.userAgent)),
+      showFullscreenBtn: !(
+        /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+        /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+      ),
       isFullscreen: false,
     };
   },
