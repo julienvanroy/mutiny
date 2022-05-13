@@ -1,12 +1,18 @@
 <template>
-  <div ref="fullscreenContainer">
-    <div id="nav">
+  <div class="main-container" ref="fullscreenContainer">
+    <!-- <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/connection">Connection</router-link> |
       <router-link to="/rules">Rules</router-link> |
       <router-link to="/game">Game</router-link> |
       <router-link to="/end-game">End Game</router-link> |
+    </div> -->
+
+    <div class="parameters">
+      <button class="btn btn-light">son</button>
+      <button class="btn btn-light">paramètres</button>
       <button
+        class="btn btn-light"
         v-if="showFullscreenBtn"
         @click="!!isFullscreen ? closeFullscreen() : goFullscreen()"
       >
@@ -58,8 +64,25 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  font-family: $ft-body;
+  font-weight: $ft-regular;
+}
+
+.main-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  .parameters {
+    position: absolute;
+    z-index: 10;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    .btn + .btn {
+      margin-left: 10px;
+    }
+  }
 }
 </style>
