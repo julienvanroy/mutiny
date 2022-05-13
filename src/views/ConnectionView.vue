@@ -31,7 +31,8 @@ export default {
       this.colyseus.createRoom("play_room", doJoinRoom);
     },
     joinRoom(roomId) {
-      // TODO in the futur : get user pseudo from input (if not, set random pseudo) and check if random pseudo is already used for another player
+      // TODO in the futur : get user pseudo from input (if not, set random pseudo)
+      // TODO check if random pseudo is already used for another player
       const playerName = PiratesNames[Math.floor(Math.random() * PiratesNames.length)];
       this.colyseus.joinRoom(roomId, playerName);
     },
