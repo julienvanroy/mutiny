@@ -45,8 +45,8 @@ export default {
       console.log(message);
     });
 
-    this.colyseus.currentRoom.onMessage("power", (message) => {
-      console.log(message);
+    colyseus.currentRoom.onMessage("power", ({ playerSessionId }) => {
+      webgl.experience.world.players[playerSessionId].respawn();
     });
   },
 };

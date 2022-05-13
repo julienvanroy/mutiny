@@ -9,6 +9,7 @@ export default class Bot extends component(Mover) {
     super.init();
 
     this.id = botId;
+    this.isPlayer = false;
 
     const experience = new Experience();
     this._pathfinding = experience.world.pathfinding;
@@ -53,34 +54,37 @@ export default class Bot extends component(Mover) {
     );
 
     if (newPath && newPath.length > 0) this.path.push(...newPath);
-    // else this._setPath();
+    // else this._setPath(); // this causes infinite stack.
   }
 
   onRaf({ delta }) {
-    if (this.path && this.path.length) {
-      this._helper.reset().setPlayerPosition(this.position).setPath(this.path);
+    if (!this.isPlayer) {
+      if (this.path && this.path.length) {
+        this._helper
+          .reset()
+          .setPlayerPosition(this.position)
+          .setPath(this.path);
 
-      // Steering behavior
-      // Move from A to B
-      const targetPosition = this.path[0];
-      const velocity = targetPosition.clone().sub(this.position);
+        // Steering behavior
+        // Move from A to B
+        const targetPosition = this.path[0];
+        const velocity = targetPosition.clone().sub(this.position);
 
-      if (velocity.lengthSq() > 0.05 * 0.05) {
-        velocity.normalize();
-        this.position.add(velocity.multiplyScalar(delta * Math.random() * 6.4));
-        this._helper.setPlayerPosition(this.position);
+        if (velocity.lengthSq() > 0.05 * 0.05) {
+          velocity.normalize();
+          this.position.add(
+            velocity.multiplyScalar(delta * Math.random() * 6.4)
+          );
+          this._helper.setPlayerPosition(this.position);
+        } else {
+          // Remove node from the path we calculated
+          this.path.shift();
+        }
       } else {
-        // Remove node from the path we calculated
-        this.path.shift();
+        this._setPath();
       }
-    } else {
-      this._setPath();
+
+      this.mesh && this.mesh.position.set(this.position.x, 0, this.position.z);
     }
-
-    this.mesh && this.mesh.position.set(this.position.x, 0, this.position.z);
-  }
-
-  onPathEnd({ botId }) {
-    console.log(botId);
   }
 }

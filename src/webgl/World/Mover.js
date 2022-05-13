@@ -58,54 +58,6 @@ export default class Mover extends component() {
     });
   }
 
-  set vectorControls(value) {
-    this._vectorControls = new Vector2(value.x, value.y);
-  }
-
-  get isMoving() {
-    return this._vectorControls.x !== 0 || this._vectorControls.y !== 0;
-  }
-
-  _keyboard() {
-    if (!this._controls.isPressed) return;
-
-    if (this._controls.actions.up && this._controls.actions.down)
-      this._vectorControls.y = 0;
-    else if (this._controls.actions.up)
-      this._vectorControls.y = this.collision.params.playerSpeed;
-    else if (this._controls.actions.down)
-      this._vectorControls.y = -this.collision.params.playerSpeed;
-    else this._vectorControls.y = 0;
-
-    if (this._controls.actions.right && this._controls.actions.left)
-      this._vectorControls.x = 0;
-    else if (this._controls.actions.right)
-      this._vectorControls.x = this.collision.params.playerSpeed;
-    else if (this._controls.actions.left)
-      this._vectorControls.x = -this.collision.params.playerSpeed;
-    else this._vectorControls.x = 0;
-  }
-
-  _move(delta) {
-    if (this.isMoving) {
-      this.mesh.position.z -= this._vectorControls.y * delta;
-      this.mesh.position.x += this._vectorControls.x * delta;
-    }
-  }
-
-  _rotation(delta) {
-    if (this.isMoving)
-      this._targetQuaternion.setFromAxisAngle(
-        new Vector3(0, 1, 0),
-        this._vectorControls.angle()
-      );
-
-    if (!this.mesh.quaternion.equals(this._targetQuaternion)) {
-      const step = this._speedRotation * delta;
-      this.mesh.quaternion.rotateTowards(this._targetQuaternion, step);
-    }
-  }
-
   _updatePlayerCollision(delta) {
     let tempVector = new Vector3(),
       tempVector2 = new Vector3(),
@@ -201,14 +153,5 @@ export default class Mover extends component() {
   _reset() {
     this.collision.playerVelocity.set(0, 0, 0);
     this.mesh.position.set(-1, 0, -1);
-  }
-
-  onRaf({ delta }) {
-    this._keyboard();
-
-    this._move(delta);
-    this._rotation(delta);
-
-    // this._updatePlayerCollision(delta);
   }
 }
