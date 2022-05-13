@@ -33,6 +33,11 @@ export default {
 
     return { colyseus, webgl };
   },
+    data() {
+    return {
+      players: [],
+    };
+  },
   mounted() {
     console.log(this.colyseus.currentRoom);
   },
