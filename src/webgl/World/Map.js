@@ -11,7 +11,7 @@ import { MeshBVH, MeshBVHVisualizer } from "three-mesh-bvh";
 import { component } from "bidello";
 import Experience from "../Experience.js";
 
-export default class Prison extends component() {
+export default class Map extends component() {
   init() {
     const experience = new Experience();
     this._scene = experience.scene;
