@@ -4,13 +4,14 @@ import {
   MeshBasicMaterial,
   MeshStandardMaterial,
   Color,
+  DoubleSide,
 } from "three";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { MeshBVH, MeshBVHVisualizer } from "three-mesh-bvh";
 import { component } from "bidello";
 import Experience from "../Experience.js";
 
-export default class Map extends component() {
+export default class Prison extends component() {
   init() {
     const experience = new Experience();
     this._scene = experience.scene;
@@ -138,7 +139,7 @@ export default class Map extends component() {
     this._scene.add(this.environment);
 
     this.navMesh.position.set(0, 0, 0);
-    this.navMesh.scale.set(6.4, 6.4, 6.4);
+    this.navMesh.scale.set(-6.4, 6.4, 6.4);
     this.navMesh.updateMatrixWorld();
     this.navMesh.geometry.applyMatrix4(this.navMesh.matrix);
     // this.navMesh.material = new MeshBasicMaterial({
@@ -152,6 +153,7 @@ export default class Map extends component() {
         color: new Color(0x000000).convertSRGBToLinear().getHex(),
         opacity: 0.75,
         transparent: true,
+        side: DoubleSide,
       })
     );
     this._scene.add(navmesh);
