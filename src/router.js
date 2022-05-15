@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "@/views/HomeView";
 import ConnectionView from "@/views/ConnectionView";
-import RulesView from "@/views/RulesView";
+import SetUpView from "@/views/SetUpView";
 import GameView from "@/views/GameView";
 import GamepadView from "@/views/GamepadView";
 import EndGameView from "@/views/EndGameView";
@@ -22,9 +22,9 @@ export default createRouter({
       component: ConnectionView,
     },
     {
-      path: "/rules",
-      name: "rules",
-      component: RulesView,
+      path: "/setup",
+      name: "setup",
+      component: SetUpView,
     },
     {
       path: "/game",
@@ -38,7 +38,7 @@ export default createRouter({
     },
     {
       path: "/end-game",
-      name:"end-game",
+      name: "end-game",
       component: EndGameView,
     },
     {
