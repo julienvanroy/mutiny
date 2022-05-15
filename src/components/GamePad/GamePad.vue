@@ -2,7 +2,8 @@
   <h1>Manette</h1>
   <p>currentRoom : {{ colyseus.currentRoom.id }}</p>
   <p>playerSessionId : {{ colyseus.currentRoom.sessionId }}</p>
-  <p>playerName : {{ this.currentPlayer }}</p>
+  <p>playerName : {{ this.playerName }}</p>
+  <p>playerPoints : {{ this.playerPoints }}</p>
   <div ref="joystick" class="joystick"></div>
   <button ref="kill" @click="colyseus.sendData('kill', true)">kill</button>
   <button ref="power" @click="colyseus.sendData('power', true)">power</button>
@@ -21,13 +22,15 @@ export default {
   data() {
     return {
       joystick: [],
-      currentPlayer: null,
+      playerName: null,
+      playerPoints: null,
     };
   },
   mounted() {
     this.colyseus.getPlayer(this.colyseus.currentRoom.sessionId)
     this.colyseus.currentRoom.onMessage("getPlayer", (player) => {
-      this.currentPlayer = player.name
+      this.playerName = player.name
+      this.playerPoints = player.points
     });
 
     this.joystick = nipplejs.create({
