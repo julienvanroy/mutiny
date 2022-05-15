@@ -6,7 +6,7 @@ import { sample } from "@/utils";
 const useColyseusStore = defineStore("colyseus", {
   state: () => {
     return {
-      client: new Colyseus.Client("ws://localhost:2567"),
+      client: new Colyseus.Client(process.env.VUE_APP_COLYSEUS),
       rooms: [],
       currentRoom: null,
       lobbyRoom: null,
