@@ -1,11 +1,11 @@
 import Environment from "./Environment.js";
-import Prison from "./Prison.js";
 import {component} from "bidello";
 import Experience from "@/webgl/Experience";
 import {GridHelper, Vector2} from "three";
 import Player from "@/webgl/World/Player";
 import Item from "@/webgl/World/Item";
 import BoxCollision from "@/webgl/Collision/BoxCollision";
+import MapLevel from "./MapLevel.js";
 
 export default class World extends component() {
     init() {
@@ -21,7 +21,7 @@ export default class World extends component() {
 
     onResourcesIsReady() {
         console.log("world is ready");
-        this.prison = new Prison();
+        this.mapLevel = new MapLevel();
         this.environment = new Environment();
         this.players = new Map()
         console.log(typeof this.players)
@@ -29,6 +29,7 @@ export default class World extends component() {
         this.boxCollision = new BoxCollision()
         const grid = new GridHelper(20, 20);
         this._scene.add(grid);
+
         this.onDebug()
         this._isLoaded = true;
     }
@@ -72,8 +73,7 @@ export default class World extends component() {
     }
 
     onAddPlayer({playerId}) {
-        this.players.set(playerId, new Player());
-        console.log(this.players, typeof this.players)
+        this.players.set(playerId, new Player(this.mapLevel.collider));
     }
 
     onMovePlayer({playerId, vector2}) {
