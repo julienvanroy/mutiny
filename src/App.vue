@@ -3,22 +3,25 @@
     <!-- <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/connection">Connection</router-link> |
-      <router-link to="/rules">Rules</router-link> |
+      <router-link to="/setup">SetUp</router-link> |
       <router-link to="/game">Game</router-link> |
       <router-link to="/end-game">End Game</router-link> |
     </div> -->
 
-    <div class="parameters">
-      <!-- TODO: make btns visible when done -->
-      <!-- <TheButton label="Son" color="light" />
-      <TheButton label="Paramètres" color="light" /> -->
-      <TheButton
-        :label="`${!!isFullscreen ? `close fullscreen` : `go fullscreen`}`"
-        color="light"
+    <div class="fullscreen">
+      <button
         v-if="showFullscreenBtn"
         @click="!!isFullscreen ? closeFullscreen() : goFullscreen()"
-      />
+      >
+        <img src="images/icons/fullscreen-on.png" />
+      </button>
     </div>
+
+    <div class="btn-parameters">
+      <button><img src="images/icons/sound-on.png" /></button>
+      <button><img src="images/icons/parameters.png" /></button>
+    </div>
+
     <div id="view">
       <router-view />
       <WebGl v-show="path === ('/game' || '/game#debug')" />
@@ -27,14 +30,13 @@
 </template>
 
 <script>
-import TheButton from "@/components/TheButton.vue";
 import WebGl from "@/components/WebGl";
 import { useRoute } from "vue-router";
 import { computed } from "vue";
 
 export default {
   name: "App",
-  components: { TheButton, WebGl },
+  components: { WebGl },
   setup() {
     const route = useRoute();
 
@@ -65,28 +67,55 @@ export default {
 
 <style lang="scss">
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Montserrat";
+  color: $black;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-family: $ft-body;
   font-weight: $ft-regular;
+  box-sizing: border-box;
 }
 
 .main-container {
   position: relative;
   width: 100%;
   min-height: 100vh;
-  .parameters {
+  overflow: hidden;
+
+  .fullscreen,
+  .btn-parameters {
     position: absolute;
     z-index: 10;
+    button {
+      background: none;
+      border: none;
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      img {
+        width: 100%;
+      }
+      & + button {
+        margin-left: 10px;
+      }
+
+      @media (any-hover: hover) {
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  .fullscreen {
     top: 20px;
+    right: 20px;
+  }
+  .btn-parameters {
+    bottom: 20px;
     right: 20px;
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    .btn + .btn {
-      margin-left: 10px;
-    }
   }
 }
 </style>
