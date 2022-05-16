@@ -22,11 +22,72 @@ export default class World extends component() {
 
         this._isLoaded = false;
     }
+  onResourcesIsReady() {
+    console.log("world is ready");
+    this.environment = new Environment();
+    this.map = new Level();
+
+    this._initPathfinding();
+    this._initBots();
+    this._initPlayers();
+
+    const grid = new GridHelper(20, 20);
+    this._scene.add(grid);
+  }
 
     onResourcesIsReady() {
         console.log("world is ready");
         this.environment = new Environment();
         this.mapLevel = new MapLevel();
+  _initPathfinding() {
+    this.pathfinding = new Pathfinding();
+    this.pathfinding.zone = "map";
+    this.pathfinding.setZoneData(
+      this.pathfinding.zone,
+      Pathfinding.createZone(this.map.navMesh.geometry.clone())
+    );
+  }
+
+  _initBots() {
+    this.bots = {};
+    const initialPositions = [];
+
+    for (let i = 0; i < configs.tempCharacter.count; i++) {
+      let position = this.pathfinding.getRandomNode(
+        this.pathfinding.zone,
+        0,
+        new Vector3(),
+        64
+      );
+
+      while (
+        initialPositions.some(
+          (pos) =>
+            pos.distanceTo(position) < configs.tempCharacter.sizes.radius * 3.2
+        )
+      ) {
+        position = this.pathfinding.getRandomNode(
+          this.pathfinding.zone,
+          0,
+          new Vector3(),
+          64
+        );
+      }
+
+      initialPositions.push(position);
+
+      const botId = uuid();
+      this.bots[botId] = new Bot(botId, position);
+    }
+  }
+
+  _initPlayers() {
+    this.players = new Map();
+  }
+
+  onRaf() {
+    this._renderer.render(this._scene, this._camera);
+  }
 
         this.players = new Map();
         /*
@@ -127,4 +188,60 @@ export default class World extends component() {
         });
         btnAddPlayer.on('click', () => this.onAddPlayer({playerId: 'debug'}));
     }
+  onAddPlayer({ playerId, colyseus }) {
+    this.players.set(playerId, new Player(playerId));
+    this.assignTargets();
+    colyseus.sendData("updatePlayerTarget", {
+      playerId,
+      playerTarget: this.players.get(playerId).target._getTargetData(),
+    });
+  }
+
+  addPlayer(playerId) {
+    this.players[playerId] = new Player(playerId);
+    console.log(this.players);
+  }
+
+  assignTargets() {
+    let singlePlayer,
+      bots,
+      players,
+      unassignedPlayers = [],
+      tempPlayers = new Map();
+
+    switch (this.players.size) {
+      case 0:
+        break;
+
+      case 1:
+        singlePlayer = this.players.values().next().value;
+        bots = Object.values(singlePlayer._botsPool).filter(
+          (bot) => !bot.isPlayer
+        );
+        singlePlayer.target = sample(bots);
+        break;
+
+      default:
+        players = shuffle(this.players);
+        unassignedPlayers = players.map((keyValue) => keyValue[1]);
+
+        players.forEach(([playerId, player]) => {
+          player.target = sample(
+            unassignedPlayers.filter((p) => p.id !== playerId)
+          );
+
+          unassignedPlayers = unassignedPlayers.filter(
+            (p) => p.id !== player.target.id
+          );
+
+          tempPlayers.set(playerId, player);
+
+          console.log(playerId, player.target.id);
+        });
+        this.players = tempPlayers;
+        break;
+    }
+
+    console.log(this.players);
+  }
 }

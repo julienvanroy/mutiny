@@ -7,8 +7,12 @@ import {
     Vector2,
     Vector3,
 } from "three";
+import { component } from "bidello";
+import { Vector2, Vector3 } from "three";
+import Mover from "./Mover";
 import Experience from "../Experience";
 import Mover from "./Mover";
+import { sample } from "@/utils";
 import { sample } from "@/utils";
 
 export default class Player extends component(Mover) {
@@ -17,11 +21,18 @@ export default class Player extends component(Mover) {
         this.id = playerId;
         this._collider = collider
     }
+export default class Player extends component(Mover) {
+  constructor(playerId) {
+    super();
+    super.init();
+    this.id = playerId;
 
     init() {
         const experience = new Experience();
         this._scene = experience.scene;
         this.resource = experience.resources.items.robotModel
+    const experience = new Experience();
+    this._botsPool = experience.world.bots;
 
         this._botsPool = experience.world.bots;
 
@@ -41,6 +52,12 @@ export default class Player extends component(Mover) {
             radius: 0.15,
             segment: new Line3(new Vector3(), new Vector3(0, 0.0, 0.0)),
         };
+    this.bot = sample(
+      Object.values(this._botsPool).filter((bot) => !bot.isPlayer)
+    );
+    this.bot.isPlayer = true;
+    this.bot.mesh.position.set(2, 0, 2);
+  }
 
         this._temp = {
             box: new Box3(),
@@ -70,16 +87,57 @@ export default class Player extends component(Mover) {
         this._vectorControls.x = value.x;
         this._vectorControls.y = value.y
     }
+  set vectorControls(value) {
+    this._vectorControls = new Vector2(value.x, value.y);
+  }
 
     get isMoving() {
         return this._vectorControls.x !== 0 || this._vectorControls.y !== 0;
     }
+  get isMoving() {
+    return this._vectorControls.x !== 0 || this._vectorControls.y !== 0;
+  }
 
     _move(delta) {
         if (this.isMoving) {
             this.mesh.position.z -= this._vectorControls.y * delta;
             this.mesh.position.x += this._vectorControls.x * delta;
         }
+  respawn() {
+    const selectedBot = sample(
+      Object.values(this._botsPool).filter((bot) => !bot.isPlayer)
+    );
+    this.bot.isPlayer = false;
+    console.log(selectedBot, this.bot);
+    this.bot = selectedBot;
+    this.bot.isPlayer = true;
+    this.bot.mesh.position.set(2, 0, 2);
+  }
+
+  _keyboard() {
+    if (!this._controls.isPressed) return;
+
+    if (this._controls.actions.up && this._controls.actions.down)
+      this._vectorControls.y = 0;
+    else if (this._controls.actions.up)
+      this._vectorControls.y = this.collision.params.playerSpeed;
+    else if (this._controls.actions.down)
+      this._vectorControls.y = -this.collision.params.playerSpeed;
+    else this._vectorControls.y = 0;
+
+    if (this._controls.actions.right && this._controls.actions.left)
+      this._vectorControls.x = 0;
+    else if (this._controls.actions.right)
+      this._vectorControls.x = this.collision.params.playerSpeed;
+    else if (this._controls.actions.left)
+      this._vectorControls.x = -this.collision.params.playerSpeed;
+    else this._vectorControls.x = 0;
+  }
+
+  _move(delta) {
+    if (this.isMoving) {
+      this.bot.mesh.position.z -= this._vectorControls.y * delta;
+      this.bot.mesh.position.x += this._vectorControls.x * delta;
     }
 
     _rotation(delta) {
@@ -93,11 +151,17 @@ export default class Player extends component(Mover) {
             const step = this._speedRotation * delta;
             this.mesh.quaternion.rotateTowards(this._targetQuaternion, step);
         }
+    if (!this.bot.mesh.quaternion.equals(this._targetQuaternion)) {
+      const step = this._speedRotation * delta;
+      this.bot.mesh.quaternion.rotateTowards(this._targetQuaternion, step);
     }
 
     _updateCollision(delta) {
         this._velocity.y += this.isOnGround ? 0 : delta * this._gravity;
         this.mesh.position.addScaledVector(this._velocity, delta);
+  onRaf({ delta }) {
+    if (this.bot && this.bot.mesh) {
+      this._keyboard();
 
         this.mesh.updateMatrixWorld();
 
@@ -166,6 +230,8 @@ export default class Player extends component(Mover) {
         if (this.mesh.position.y < 0) {
             this.mesh.position.y = 0
         }
+      this._move(delta);
+      this._rotation(delta);
     }
 
     onRaf({delta}) {
@@ -184,4 +250,5 @@ export default class Player extends component(Mover) {
         this.bot.isPlayer = true;
         this.bot.mesh.position.set(2, 0, 2);
     }
+  }
 }
