@@ -1,14 +1,17 @@
 <template>
   <canvas ref="canvas" />
+  <the-timer />
 </template>
 
 <script>
 import Experience from "../webgl/Experience";
+import TheTimer from "./TheTimer/TheTimer.vue";
 
 export default {
   name: "WebGl",
+  components: { TheTimer },
   mounted() {
-    new Experience(this.$refs.canvas)
+    new Experience(this.$refs.canvas);
   },
 };
 </script>
