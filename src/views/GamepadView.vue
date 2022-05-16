@@ -11,6 +11,11 @@ export default {
   name: "GamepadView",
   setup() {
     const colyseus = useColyseusStore();
+
+    colyseus.currentRoom.onMessage("updatePlayerTarget", (message) => {
+      console.log(message);
+    });
+
     return { colyseus };
   },
   unmounted() {

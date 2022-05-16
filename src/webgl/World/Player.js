@@ -1,12 +1,5 @@
 import {component} from "bidello";
-import {
-    Box3,
-    Line3, Matrix4,
-    Mesh,
-    Quaternion,
-    Vector2,
-    Vector3,
-} from "three";
+import {Box3, Line3, Matrix4, Quaternion, Vector2, Vector3} from "three";
 import Experience from "../Experience";
 import Mover from "./Mover";
 import { sample } from "@/utils";
@@ -21,7 +14,6 @@ export default class Player extends component(Mover) {
     init() {
         const experience = new Experience();
         this._scene = experience.scene;
-        this.resource = experience.resources.items.robotModel
 
         this._botsPool = experience.world.bots;
 
@@ -29,6 +21,7 @@ export default class Player extends component(Mover) {
             Object.values(this._botsPool).filter((bot) => !bot.isPlayer)
         );
         this.bot.isPlayer = true;
+        this.mesh = this.bot.mesh
 
         this._vectorControls = new Vector2();
         this._targetQuaternion = new Quaternion();
@@ -49,21 +42,6 @@ export default class Player extends component(Mover) {
             vector: new Vector3(),
             vector2: new Vector3()
         }
-
-        this._initModel();
-    }
-
-    _initModel() {
-        this.mesh = this.resource.scene
-        this.mesh.scale.set(0.08, 0.08, 0.08)
-
-        this._scene.add(this.mesh)
-
-        this.mesh.traverse((child) => {
-            if (child instanceof Mesh) {
-                child.castShadow = true
-            }
-        })
     }
 
     set vectorControls(value) {
@@ -83,11 +61,7 @@ export default class Player extends component(Mover) {
     }
 
     _rotation(delta) {
-        if (this.isMoving)
-            this._targetQuaternion.setFromAxisAngle(
-                new Vector3(0, 1, 0),
-                this._vectorControls.angle()
-            );
+        if (this.isMoving) this._targetQuaternion.setFromAxisAngle(new Vector3(0, 1, 0), this._vectorControls.angle());
 
         if (!this.mesh.quaternion.equals(this._targetQuaternion)) {
             const step = this._speedRotation * delta;
@@ -182,6 +156,6 @@ export default class Player extends component(Mover) {
         console.log(selectedBot, this.bot);
         this.bot = selectedBot;
         this.bot.isPlayer = true;
-        this.bot.mesh.position.set(2, 0, 2);
+        this.mesh = this.bot.mesh
     }
 }

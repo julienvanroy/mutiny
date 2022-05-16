@@ -1,14 +1,15 @@
 import Environment from "./Environment.js";
 import {component} from "bidello";
 import Experience from "@/webgl/Experience";
-import {GridHelper, Vector2} from "three";
+import {GridHelper, Vector2, Vector3} from "three";
 import Player from "@/webgl/World/Player";
 //import Item from "@/webgl/World/Item";
 //import BoxCollision from "@/webgl/Collision/BoxCollision";
 import {Pathfinding} from "three-pathfinding";
-import {uuid} from "@/utils/index.js";
+import {sample, shuffle, uuid} from "@/utils/index.js";
 import Bot from "./Bot.js";
 import MapLevel from "@/webgl/World/MapLevel";
+import configs from "@/configs";
 
 
 export default class World extends component() {
@@ -55,11 +56,34 @@ export default class World extends component() {
 
     _initBots() {
         this.bots = {};
+        const initialPositions = [];
 
-        const BOT_COUNTS = 32;
-        for (let i = 0; i < BOT_COUNTS; i++) {
+        for (let i = 0; i < configs.tempCharacter.count; i++) {
+            let position = this.pathfinding.getRandomNode(
+                this.pathfinding.zone,
+                0,
+                new Vector3(),
+                64
+            );
+
+            while (
+                initialPositions.some(
+                    (pos) =>
+                        pos.distanceTo(position) < configs.tempCharacter.sizes.radius * 3.2
+                )
+                ) {
+                position = this.pathfinding.getRandomNode(
+                    this.pathfinding.zone,
+                    0,
+                    new Vector3(),
+                    64
+                );
+            }
+
+            initialPositions.push(position);
+
             const botId = uuid();
-      this.bots[botId] = new Bot(botId);
+            this.bots[botId] = new Bot(botId, position);
         }
     }
 
@@ -106,6 +130,7 @@ export default class World extends component() {
 
     onAddPlayer({playerId}) {
         this.players.set(playerId, new Player(playerId, this.mapLevel.collider));
+        this.assignTargets();
     }
 
     onMovePlayer({playerId, vector2}) {
@@ -126,5 +151,48 @@ export default class World extends component() {
             title: 'addPlayer',
         });
         btnAddPlayer.on('click', () => this.onAddPlayer({playerId: 'debug'}));
+    }
+
+    assignTargets() {
+        let singlePlayer,
+            bots,
+            players,
+            unassignedPlayers = [],
+            tempPlayers = new Map();
+
+        switch (this.players.size) {
+            case 0:
+                break;
+
+            case 1:
+                singlePlayer = this.players.values().next().value;
+                bots = Object.values(singlePlayer._botsPool).filter(
+                    (bot) => !bot.isPlayer
+                );
+                singlePlayer.target = sample(bots);
+                break;
+
+            default:
+                players = shuffle(this.players);
+                unassignedPlayers = players.map((keyValue) => keyValue[1]);
+
+                players.forEach(([playerId, player]) => {
+                    player.target = sample(
+                        unassignedPlayers.filter((p) => p.id !== playerId)
+                    );
+
+                    unassignedPlayers = unassignedPlayers.filter(
+                        (p) => p.id !== player.target.id
+                    );
+
+                    tempPlayers.set(playerId, player);
+
+                    console.log(playerId, player.target.id);
+                });
+                this.players = tempPlayers;
+                break;
+        }
+
+        console.log(this.players);
     }
 }

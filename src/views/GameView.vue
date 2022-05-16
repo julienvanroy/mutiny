@@ -28,7 +28,7 @@ export default {
   },
   mounted() {
     this.colyseus.currentRoom.onMessage("addPlayer", ({ playerSessionId }) => {
-      playerSessionId && bidello.trigger({ name: "addPlayer" }, {playerId: playerSessionId});
+      playerSessionId && bidello.trigger({name: "addPlayer"}, {playerId: playerSessionId});
       this.colyseus.getAllPlayers();
     });
 
