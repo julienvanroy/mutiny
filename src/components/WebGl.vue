@@ -8,7 +8,7 @@ import Experience from "../webgl/Experience";
 export default {
   name: "WebGl",
   mounted() {
-    new Experience(this.$refs.canvas)
+    new Experience(this.$refs.canvas);
   },
 };
 </script>

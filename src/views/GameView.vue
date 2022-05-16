@@ -8,14 +8,17 @@
   <router-link to="end-game"
     ><button class="end-btn">END GAME</button></router-link
   >
+  <TheTimer />
 </template>
 
 <script>
 import useColyseusStore from "@/store/colyseus";
 import bidello from "bidello";
+import TheTimer from "@/components/TheTimer/TheTimer";
 
 export default {
   name: "GameView",
+  components: {TheTimer},
   setup() {
     const colyseus = useColyseusStore();
 
@@ -27,9 +30,10 @@ export default {
     };
   },
   mounted() {
+    if(!this.colyseus.currentRoom) return
     this.colyseus.getAllPlayers();
     this.colyseus.currentRoom.onMessage("addPlayer", ({ playerSessionId }) => {
-      playerSessionId && bidello.trigger({name: "addPlayer"}, {playerId: playerSessionId});
+      playerSessionId && bidello.trigger({ name: "addPlayer" }, { playerId: playerSessionId });
       this.colyseus.getAllPlayers();
     });
 
@@ -47,7 +51,7 @@ export default {
     });
 
     this.colyseus.currentRoom.onMessage("power", ({ playerSessionId }) => {
-      bidello.trigger({ name: "respawn" }, {playerId: playerSessionId});
+      bidello.trigger({ name: "respawn" }, { playerId: playerSessionId });
     });
   },
 };

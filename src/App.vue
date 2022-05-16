@@ -9,10 +9,7 @@
     </div> -->
 
     <div class="fullscreen">
-      <button
-        v-if="showFullscreenBtn"
-        @click="!!isFullscreen ? closeFullscreen() : goFullscreen()"
-      >
+      <button v-if="showFullscreenBtn" @click="!!isFullscreen ? closeFullscreen() : goFullscreen()">
         <img src="images/icons/fullscreen-on.png" />
       </button>
     </div>
@@ -52,8 +49,7 @@ export default {
           navigator.userAgent
         ),
       showFullscreenBtn: !(
-        /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
-        /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+        /iPhone|iPad|iPod/i.test(navigator.userAgent) || /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
       ),
       isFullscreen: false,
     };
