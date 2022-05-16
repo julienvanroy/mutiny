@@ -48,6 +48,10 @@ export default {
     this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
       delete players[this.colyseus.currentRoom.sessionId];
       this.players = players;
+      const mapPlayers = new Map(Object.entries(players));
+      mapPlayers.forEach((value, key) => {
+        bidello.trigger({ name: "addPlayer" }, { playerId: key });
+      })
     });
 
     this.colyseus.currentRoom.onMessage(

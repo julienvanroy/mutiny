@@ -12,6 +12,7 @@ export default class Bot extends component(Mover) {
         this.isPlayer = false;
 
         const experience = new Experience();
+        experience.scene.add(this.mesh);
         this._pathfinding = experience.world.pathfinding;
 
         this._helper = new PathfindingHelper();

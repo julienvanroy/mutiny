@@ -1,13 +1,10 @@
 import {ConeGeometry, Group, Mesh, MeshBasicMaterial, Color, BoxGeometry, CylinderGeometry} from "three";
-import Experience from "../Experience";
 import configs from "@/configs";
 import { sampleSize, shuffle } from "@/utils";
 const { colors, sizes } = configs.tempCharacter;
 
 export default class Mover {
   constructor() {
-      const experience = new Experience();
-      this._scene = experience.scene;
       //this.resource = experience.resources.items.robotModel;
       //this._initModel();
 
@@ -63,8 +60,6 @@ export default class Mover {
 
         this.mesh = new Group();
         this.body.forEach((part) => this.mesh.add(part));
-
-        this._scene.add(this.mesh);
     }
 
     _getTargetData() {
