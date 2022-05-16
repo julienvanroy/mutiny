@@ -3,9 +3,7 @@
     <p>currentRoom : {{ colyseus.currentRoom.id }}</p>
     <p>mainScreenSessionId : {{ colyseus.currentRoom.sessionId }}</p>
     <ul>
-      <li v-for="player in this.players" :key="player.id">
-        {{ player.id }} {{ player.name }} {{ player.points }}
-      </li>
+      <li v-for="player in this.players" :key="player.id">{{ player.id }} {{ player.name }} {{ player.points }}</li>
     </ul>
   </div>
 </template>
@@ -28,7 +26,7 @@ export default {
   },
   mounted() {
     this.colyseus.currentRoom.onMessage("addPlayer", ({ playerSessionId }) => {
-      playerSessionId && bidello.trigger({name: "addPlayer"}, {playerId: playerSessionId});
+      playerSessionId && bidello.trigger({ name: "addPlayer" }, { playerId: playerSessionId });
       this.colyseus.getAllPlayers();
     });
 
@@ -38,7 +36,7 @@ export default {
     });
 
     this.colyseus.currentRoom.onMessage("joystick", ({ playerSessionId, playerPosition }) => {
-      bidello.trigger({ name: "movePlayer" }, {playerId: playerSessionId, vector2: playerPosition});
+      bidello.trigger({ name: "movePlayer" }, { playerId: playerSessionId, vector2: playerPosition });
     });
 
     this.colyseus.currentRoom.onMessage("kill", (message) => {
@@ -46,7 +44,7 @@ export default {
     });
 
     this.colyseus.currentRoom.onMessage("power", ({ playerSessionId }) => {
-      bidello.trigger({ name: "respawn" }, {playerId: playerSessionId});
+      bidello.trigger({ name: "respawn" }, { playerId: playerSessionId });
     });
   },
 };
