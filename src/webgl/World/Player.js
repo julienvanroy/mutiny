@@ -8,15 +8,13 @@ import {
     Vector3,
 } from "three";
 import Experience from "../Experience";
-import { component } from "bidello";
-import { Vector2, Vector3 } from "three";
 import Mover from "./Mover";
-import Experience from "../Experience";
 import { sample } from "@/utils";
 
-export default class Player extends component() {
-    constructor(collider) {
+export default class Player extends component(Mover) {
+    constructor(playerId, collider) {
         super()
+        this.id = playerId;
         this._collider = collider
     }
 
@@ -24,6 +22,13 @@ export default class Player extends component() {
         const experience = new Experience();
         this._scene = experience.scene;
         this.resource = experience.resources.items.robotModel
+
+        this._botsPool = experience.world.bots;
+
+        this.bot = sample(
+            Object.values(this._botsPool).filter((bot) => !bot.isPlayer)
+        );
+        this.bot.isPlayer = true;
 
         this._vectorControls = new Vector2();
         this._targetQuaternion = new Quaternion();
@@ -168,87 +173,15 @@ export default class Player extends component() {
         this._rotation(delta);
         this._updateCollision(delta)
     }
-export default class Player extends component(Mover) {
-  constructor(playerId) {
-    super();
-    super.init();
-    this.id = playerId;
 
-    const experience = new Experience();
-    this._botsPool = experience.world.bots;
-
-    this.bot = sample(
-      Object.values(this._botsPool).filter((bot) => !bot.isPlayer)
-    );
-    this.bot.isPlayer = true;
-    this.bot.mesh.position.set(2, 0, 2);
-  }
-
-  set vectorControls(value) {
-    this._vectorControls = new Vector2(value.x, value.y);
-  }
-
-  get isMoving() {
-    return this._vectorControls.x !== 0 || this._vectorControls.y !== 0;
-  }
-
-  respawn() {
-    const selectedBot = sample(
-      Object.values(this._botsPool).filter((bot) => !bot.isPlayer)
-    );
-    this.bot.isPlayer = false;
-    console.log(selectedBot, this.bot);
-    this.bot = selectedBot;
-    this.bot.isPlayer = true;
-    this.bot.mesh.position.set(2, 0, 2);
-  }
-
-  _keyboard() {
-    if (!this._controls.isPressed) return;
-
-    if (this._controls.actions.up && this._controls.actions.down)
-      this._vectorControls.y = 0;
-    else if (this._controls.actions.up)
-      this._vectorControls.y = this.collision.params.playerSpeed;
-    else if (this._controls.actions.down)
-      this._vectorControls.y = -this.collision.params.playerSpeed;
-    else this._vectorControls.y = 0;
-
-    if (this._controls.actions.right && this._controls.actions.left)
-      this._vectorControls.x = 0;
-    else if (this._controls.actions.right)
-      this._vectorControls.x = this.collision.params.playerSpeed;
-    else if (this._controls.actions.left)
-      this._vectorControls.x = -this.collision.params.playerSpeed;
-    else this._vectorControls.x = 0;
-  }
-
-  _move(delta) {
-    if (this.isMoving) {
-      this.bot.mesh.position.z -= this._vectorControls.y * delta;
-      this.bot.mesh.position.x += this._vectorControls.x * delta;
+    respawn() {
+        const selectedBot = sample(
+            Object.values(this._botsPool).filter((bot) => !bot.isPlayer)
+        );
+        this.bot.isPlayer = false;
+        console.log(selectedBot, this.bot);
+        this.bot = selectedBot;
+        this.bot.isPlayer = true;
+        this.bot.mesh.position.set(2, 0, 2);
     }
-  }
-
-  _rotation(delta) {
-    if (this.isMoving)
-      this._targetQuaternion.setFromAxisAngle(
-        new Vector3(0, 1, 0),
-        this._vectorControls.angle()
-      );
-
-    if (!this.bot.mesh.quaternion.equals(this._targetQuaternion)) {
-      const step = this._speedRotation * delta;
-      this.bot.mesh.quaternion.rotateTowards(this._targetQuaternion, step);
-    }
-  }
-
-  onRaf({ delta }) {
-    if (this.bot && this.bot.mesh) {
-      this._keyboard();
-
-      this._move(delta);
-      this._rotation(delta);
-    }
-  }
 }

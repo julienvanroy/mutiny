@@ -6,7 +6,6 @@ import Experience from "../Experience";
 export default class Bot extends component(Mover) {
   constructor(botId) {
     super();
-    super.init();
 
     this.id = botId;
     this.isPlayer = false;

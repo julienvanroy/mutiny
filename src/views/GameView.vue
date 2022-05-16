@@ -45,8 +45,8 @@ export default {
       console.log(message);
     });
 
-    colyseus.currentRoom.onMessage("power", ({ playerSessionId }) => {
-      webgl.experience.world.players[playerSessionId].respawn();
+    this.colyseus.currentRoom.onMessage("power", ({ playerSessionId }) => {
+      bidello.trigger({ name: "respawn" }, {playerId: playerSessionId});
     });
   },
 };
