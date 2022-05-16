@@ -3,14 +3,17 @@
 </template>
 
 <script>
+import bidello from "bidello";
 import Timer from "@/webgl/Utils/Timer";
 import configs from "@/configs";
+
 export default {
   name: "TheTimer",
   data() {
     return {
       time: "00:00",
       timer: new Timer(configs.game.maxTime),
+      isTimeout: false,
     };
   },
   mounted() {
@@ -18,6 +21,13 @@ export default {
 
     setInterval(() => {
       this.time = this.prettify(this.timer._time);
+
+      this.isTimeout = this.timer._time === 0;
+
+      if (this.isTimeout) {
+        this.$emit("levelTimeout");
+        bidello.trigger({ name: "levelTimeout" });
+      }
     }, 1000);
   },
   methods: {

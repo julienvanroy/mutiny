@@ -1,6 +1,6 @@
 <template>
   <canvas ref="canvas" />
-  <the-timer />
+  <the-timer @levelTimeout="onLevelTimeout" />
 </template>
 
 <script>
@@ -12,6 +12,11 @@ export default {
   components: { TheTimer },
   mounted() {
     new Experience(this.$refs.canvas);
+  },
+  methods: {
+    onLevelTimeout() {
+      this.$emit("levelTimeout");
+    },
   },
 };
 </script>

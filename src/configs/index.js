@@ -1,5 +1,5 @@
 export default {
     game: {
-        maxTime: 150,
+        maxTime: 10,
     },
 };
