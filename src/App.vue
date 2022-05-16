@@ -69,6 +69,9 @@ export default {
     this.handleOrientationChange()
     window.addEventListener("orientationchange", this.handleOrientationChange);
   },
+  unmounted() {
+    window.removeEventListener('orientationchange', this.handleOrientationChange);
+  },
   methods: {
     goFullscreen() {
       this.$refs.fullscreenContainer.requestFullscreen();
