@@ -24,7 +24,7 @@
 
     <div id="view">
       <router-view />
-      <WebGl v-show="path === ('/game' || '/game#debug')" />
+      <WebGl v-if="!isMobile" v-show="path === ('/game' || '/game#debug')" />
     </div>
   </div>
 </template>
@@ -45,6 +45,10 @@ export default {
   },
   data() {
     return {
+      isMobile:
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        ),
       showFullscreenBtn: !(
         /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
         /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
