@@ -1,8 +1,15 @@
 <template>
   <ul class="players">
-    <li v-for="player in this.players" :key="player.id" :class="`player ${player.color}`">
-      <div class="points">{{ player.points }}</div>
-      <span>{{ player.name }}</span>
+    <li
+      v-for="player in this.players"
+      :key="player.id"
+      :class="`player ${player.color}`"
+    >
+      <div class="points">
+        <img src="/images/players/points.png" />
+        <span>{{ player.points }}</span>
+      </div>
+      <span class="name">{{ player.name }}</span>
     </li>
   </ul>
   <router-link to="end-game"
@@ -18,7 +25,7 @@ import TheTimer from "@/components/TheTimer/TheTimer";
 
 export default {
   name: "GameView",
-  components: {TheTimer},
+  components: { TheTimer },
   setup() {
     const colyseus = useColyseusStore();
 
@@ -30,10 +37,11 @@ export default {
     };
   },
   mounted() {
-    if(!this.colyseus.currentRoom) return
+    if (!this.colyseus.currentRoom) return;
     this.colyseus.getAllPlayers();
     this.colyseus.currentRoom.onMessage("addPlayer", ({ playerSessionId }) => {
-      playerSessionId && bidello.trigger({ name: "addPlayer" }, { playerId: playerSessionId });
+      playerSessionId &&
+        bidello.trigger({ name: "addPlayer" }, { playerId: playerSessionId });
       this.colyseus.getAllPlayers();
     });
 
@@ -42,8 +50,14 @@ export default {
       this.players = players;
     });
 
-    this.colyseus.currentRoom.onMessage("joystick",({ playerSessionId, playerPosition }) => {
-      bidello.trigger({ name: "movePlayer" },{ playerId: playerSessionId, vector2: playerPosition });}
+    this.colyseus.currentRoom.onMessage(
+      "joystick",
+      ({ playerSessionId, playerPosition }) => {
+        bidello.trigger(
+          { name: "movePlayer" },
+          { playerId: playerSessionId, vector2: playerPosition }
+        );
+      }
     );
 
     this.colyseus.currentRoom.onMessage("kill", (message) => {
@@ -86,8 +100,21 @@ export default {
       background-color: $player-yellow;
     }
     .points {
+      position: relative;
+      img {
+        width: 30px;
+      }
+      span {
+        font-weight: $ft-bold;
+        font-size: 16px;
+        color: $black;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -60%);
+      }
     }
-    span {
+    .name {
       font-weight: $ft-bold;
       font-size: 16px;
       letter-spacing: 0.01em;
