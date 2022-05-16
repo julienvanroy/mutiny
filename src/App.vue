@@ -9,10 +9,7 @@
     </div> -->
 
     <div class="fullscreen">
-      <button
-        v-if="showFullscreenBtn"
-        @click="!!isFullscreen ? closeFullscreen() : goFullscreen()"
-      >
+      <button v-if="showFullscreenBtn" @click="!!isFullscreen ? closeFullscreen() : goFullscreen()">
         <img src="images/icons/fullscreen-on.png" />
       </button>
     </div>
@@ -24,7 +21,7 @@
 
     <div id="view">
       <router-view />
-      <WebGl v-show="path === ('/game' || '/game#debug')" />
+      <WebGl v-show="!this.isEndGame || path === ('/game' || '/game#debug')" @levelTimeout="onLevelTimeout" />
     </div>
   </div>
 </template>
@@ -46,10 +43,10 @@ export default {
   data() {
     return {
       showFullscreenBtn: !(
-        /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
-        /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+        /iPhone|iPad|iPod/i.test(navigator.userAgent) || /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
       ),
       isFullscreen: false,
+      isEndGame: false,
     };
   },
   methods: {
@@ -60,6 +57,10 @@ export default {
     closeFullscreen() {
       document.exitFullscreen();
       this.isFullscreen = false;
+    },
+    onLevelTimeout() {
+      this.isEndGame = true;
+      this.$router.push({ name: "end-game" });
     },
   },
 };

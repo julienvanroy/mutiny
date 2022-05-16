@@ -9,7 +9,7 @@ const configs = {
         speed: 2.4,
     },
     game: {
-        maxTime: 150,
+        maxTime: 10,
     },
 };
 
