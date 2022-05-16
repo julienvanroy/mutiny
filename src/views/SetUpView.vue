@@ -93,20 +93,22 @@
 </template>
 
 <script>
+import useColyseusStore from "@/store/colyseus";
 import TheHexa from "@/components/TheHexa.vue";
 import TheButton from "@/components/TheButton.vue";
 
 export default {
   name: "SetUpView",
   components: { TheHexa, TheButton },
+  setup() {
+    const colyseus = useColyseusStore();
+    return { colyseus };
+  },
   data() {
     return {
       players: [],
       showControls: false,
     };
-  },
-  mounted() {
-    console.log(this.colyseus.currentRoom);
   },
 };
 </script>
