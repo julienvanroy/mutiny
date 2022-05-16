@@ -15,10 +15,20 @@
     </div>
 
     <div class="btn-parameters">
-      <button v-show="!isGamePath"><img src="images/icons/sound-on.png" /></button>
-      <button v-show="!isGamePath"><img src="images/icons/parameters.png" /></button>
-      <button v-show="isGamePath"><img src="images/icons/sound-game-on.png" /></button>
+      <button v-show="!isGamePath">
+        <img src="images/icons/sound-on.png" />
+      </button>
+      <button v-show="!isGamePath">
+        <img src="images/icons/parameters.png" />
+      </button>
+      <button v-show="isGamePath">
+        <img src="images/icons/sound-game-on.png" />
+      </button>
       <button v-show="isGamePath"><img src="images/icons/pause.png" /></button>
+    </div>
+
+    <div v-if="isMobile && !isLandscape" class="modal-landscape">
+      Turn your phone to landscape view !!!
     </div>
 
     <div id="view">
@@ -52,7 +62,12 @@ export default {
         /iPhone|iPad|iPod/i.test(navigator.userAgent) || /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
       ),
       isFullscreen: false,
+      isLandscape: false,
     };
+  },
+  mounted() {
+    this.handleOrientationChange()
+    window.addEventListener("orientationchange", this.handleOrientationChange);
   },
   methods: {
     goFullscreen() {
@@ -63,12 +78,20 @@ export default {
       document.exitFullscreen();
       this.isFullscreen = false;
     },
+    handleOrientationChange() {
+      const orientation = window.screen.orientation.type;
+      if (orientation === "portrait-primary") {
+        this.isLandscape = false;
+      } else if (orientation === "landscape-primary") {
+        this.isLandscape = true;
+      }
+    },
   },
   computed: {
     isGamePath() {
-      return this.path === ('/game' || '/game#debug')
-    }
-  }
+      return this.path === ("/game" || "/game#debug");
+    },
+  },
 };
 </script>
 
@@ -122,6 +145,17 @@ export default {
     right: 20px;
     display: flex;
     justify-content: flex-end;
+    align-items: center;
+  }
+  .modal-landscape {
+    position: absolute;
+    z-index: 12;
+    inset: 0;
+    background-color: $black;
+    color: $white;
+    font-weight: $ft-bold;
+    display: flex;
+    justify-content: center;
     align-items: center;
   }
 }
