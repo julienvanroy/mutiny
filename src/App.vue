@@ -23,7 +23,7 @@
 
     <div id="view">
       <router-view />
-      <WebGl v-show="path === ('/game' || '/game#debug')" />
+      <WebGl v-if="!isMobile" v-show="path === ('/game' || '/game#debug')" />
     </div>
   </div>
 </template>
