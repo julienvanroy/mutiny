@@ -5,7 +5,7 @@
     </div>
 
     <div class="under">
-      <img src="images/homepage/homepage-back.jpg" />
+      <img src="images/background.jpg" />
     </div>
     <div class="over">
       <div class="container">
@@ -78,6 +78,8 @@ export default {
       const playerName =
         PiratesNames[Math.floor(Math.random() * PiratesNames.length)];
       this.colyseus.joinRoom(roomId, playerName);
+
+      this.colyseus.getAllPlayers();
     },
     joinRandomRoom() {
       this.colyseus.joinRoom();

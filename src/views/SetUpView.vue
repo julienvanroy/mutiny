@@ -13,7 +13,8 @@
           <ul>
             <li v-for="player in this.players" :key="player.id">
               <div class="player">
-                <TheHexa color="#7BB985" /><span>{{ player.name }}</span>
+                <img :src="`images/players/${player.color}.png`" />
+                <span>{{ player.name }}</span>
               </div>
               <div class="connection"><img src="images/icons/valid.png" /></div>
             </li>
@@ -82,12 +83,11 @@
 
 <script>
 import useColyseusStore from "@/store/colyseus";
-import TheHexa from "@/components/TheHexa.vue";
 import TheButton from "@/components/TheButton.vue";
 
 export default {
   name: "SetUpView",
-  components: { TheHexa, TheButton },
+  components: { TheButton },
   setup() {
     const colyseus = useColyseusStore();
     return { colyseus };

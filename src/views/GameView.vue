@@ -1,6 +1,6 @@
 <template>
   <ul class="players">
-    <li v-for="player in this.players" :key="player.id" class="player">
+    <li v-for="player in this.players" :key="player.id" :class="`player ${player.color}`">
       <div class="points">{{ player.points }}</div>
       <span>{{ player.name }}</span>
     </li>
@@ -68,8 +68,19 @@ export default {
     justify-content: flex-start;
     align-items: center;
     padding: 12px;
-    background: #c984be;
     border-radius: 14px;
+    &.green {
+      background-color: $player-green;
+    }
+    &.blue {
+      background-color: $player-blue;
+    }
+    &.red {
+      background-color: $player-red;
+    }
+    &.yellow {
+      background-color: $player-yellow;
+    }
     .points {
     }
     span {
