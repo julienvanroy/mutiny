@@ -8,38 +8,28 @@
       <img src="images/background.jpg" />
     </div>
     <div class="over">
-      <div class="container">
-        <img src="images/logo.png" />
-        <div v-if="!isMobile" class="btn-container">
-          <TheButton
-            @click="createRoom"
-            label="Créer une partie"
-            color="dark"
-          />
-          <TheButton
-            label="Streamer une partie"
-            color="light"
-            :disabled="true"
-          />
-        </div>
-        <div v-if="!!isMobile" class="btn-container">
-          <TheButton
-            v-for="(room, roomIndex) in colyseus.rooms"
-            :key="roomIndex"
-            @click="joinRoom(room.roomId)"
-            :label="`Join room ` + room.roomId"
-            color="light"
-          />
-        </div>
-        <div class="how-to-play">
-          <p>
-            {{
-              !!isMobile
-                ? "Rejoignez une partie depuis le jeu sur ordinateur."
-                : "Un téléphone par moussaillon est requis pour contrôler votre personnage"
-            }}
-          </p>
-        </div>
+      <img src="images/logo.png" />
+      <div v-if="!isMobile" class="btn-container">
+        <TheButton @click="createRoom" label="Créer une partie" color="dark" />
+        <TheButton label="Streamer une partie" color="light" :disabled="true" />
+      </div>
+      <div v-if="!!isMobile" class="btn-container">
+        <TheButton
+          v-for="(room, roomIndex) in colyseus.rooms"
+          :key="roomIndex"
+          @click="joinRoom(room.roomId)"
+          :label="`Join room ` + room.roomId"
+          color="light"
+        />
+      </div>
+      <div class="how-to-play">
+        <p>
+          {{
+            !!isMobile
+              ? "Rejoignez une partie depuis le jeu sur ordinateur."
+              : "Un téléphone par moussaillon est requis pour contrôler votre personnage"
+          }}
+        </p>
       </div>
     </div>
   </div>
@@ -99,23 +89,26 @@ export default {
     width: 100%;
     height: 100%;
     display: flex;
+    flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
     img {
-      width: 720px;
+      width: 380px;
+      @media #{$mq-small} {
+        width: 560px;
+      }
     }
     .btn-container {
       display: flex;
       justify-content: center;
       align-items: center;
-      margin: 80px 0;
+      margin: 40px 0;
       .btn + .btn {
         margin-left: 20px;
       }
     }
     .how-to-play {
       max-width: 380px;
-      margin: auto;
       p {
         font-size: 18px;
         text-align: center;

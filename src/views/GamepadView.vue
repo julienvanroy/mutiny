@@ -1,5 +1,6 @@
 <template>
-  <game-pad />
+  <game-pad v-if="!!showGamePad" />
+  <div v-if="!showGamePad" class="modal-waiting">WAITING...</div>
 </template>
 
 <script>
@@ -18,8 +19,32 @@ export default {
 
     return { colyseus };
   },
+  data() {
+    return {
+      showGamePad: false,
+    };
+  },
+  mounted() {
+    this.colyseus.currentRoom.onMessage("startGame", () => {
+      this.showGamePad = true;
+    });
+  },
   unmounted() {
     this.colyseus.currentRoom?.leave();
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.modal-waiting {
+  position: absolute;
+  z-index: 12;
+  inset: 0;
+  background-color: $black;
+  color: $white;
+  font-weight: $ft-bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>
