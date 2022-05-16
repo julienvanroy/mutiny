@@ -18,8 +18,10 @@
     </div>
 
     <div class="btn-parameters">
-      <button><img src="images/icons/sound-on.png" /></button>
-      <button><img src="images/icons/parameters.png" /></button>
+      <button v-show="path !== ('/game' || '/game#debug')"><img src="images/icons/sound-on.png" /></button>
+      <button v-show="path !== ('/game' || '/game#debug')"><img src="images/icons/parameters.png" /></button>
+      <button v-show="path === ('/game' || '/game#debug')"><img src="images/icons/sound-game-on.png" /></button>
+      <button v-show="path === ('/game' || '/game#debug')"><img src="images/icons/pause.png" /></button>
     </div>
 
     <div id="view">
