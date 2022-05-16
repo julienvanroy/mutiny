@@ -18,13 +18,14 @@ export default {
   mounted() {
     this.timer.start();
 
-    setInterval(() => {
+    const timer = setInterval(() => {
       this.time = this.prettify(this.timer._time);
 
       this.isTimeout = this.timer._time === 0;
 
       if (this.isTimeout) {
         this.$router.push('/end-game')
+        clearInterval(timer)
       }
     }, 1000);
   },
