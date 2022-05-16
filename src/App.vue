@@ -23,7 +23,7 @@
 
     <div id="view">
       <router-view />
-      <WebGl v-show="!this.isEndGame || path === ('/game' || '/game#debug')" @levelTimeout="onLevelTimeout" />
+      <WebGl v-show="path === ('/game' || '/game#debug')" />
     </div>
   </div>
 </template>
@@ -52,7 +52,6 @@ export default {
         /iPhone|iPad|iPod/i.test(navigator.userAgent) || /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
       ),
       isFullscreen: false,
-      isEndGame: false,
     };
   },
   methods: {
@@ -63,10 +62,6 @@ export default {
     closeFullscreen() {
       document.exitFullscreen();
       this.isFullscreen = false;
-    },
-    onLevelTimeout() {
-      this.isEndGame = true;
-      this.$router.push({ name: "end-game" });
     },
   },
   computed: {

@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import bidello from "bidello";
 import Timer from "@/webgl/Utils/Timer";
 import configs from "@/configs";
 
@@ -25,8 +24,7 @@ export default {
       this.isTimeout = this.timer._time === 0;
 
       if (this.isTimeout) {
-        this.$emit("levelTimeout");
-        bidello.trigger({ name: "levelTimeout" });
+        this.$router.push('/end-game')
       }
     }, 1000);
   },
