@@ -79,7 +79,7 @@
 
             <div class="actions">
               <TheButton label="Tutorial" color="light" :disabled="true" />
-              <TheButton label="GO !" color="dark" link="/game" />
+              <TheButton label="GO !" color="dark" @click="startGame()" />
             </div>
           </div>
         </div>
@@ -91,6 +91,7 @@
 <script>
 import useColyseusStore from "@/store/colyseus";
 import TheButton from "@/components/TheButton.vue";
+import router from "@/router";
 
 export default {
   name: "SetUpView",
@@ -114,6 +115,12 @@ export default {
       delete players[this.colyseus.currentRoom.sessionId];
       this.players = players;
     });
+  },
+  methods: {
+    startGame() {
+      this.colyseus.sendData("startGame");
+      router.push("/game");
+    },
   },
 };
 </script>
