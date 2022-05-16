@@ -34,7 +34,7 @@ export default class MapLevel extends component() {
         this._scene.add(new Mesh(
             this.navMesh.geometry,
             new MeshBasicMaterial({
-                color: new Color(0x000000).convertSRGBToLinear().getHex(),
+                color: new Color(0xb08968).convertSRGBToLinear().getHex(),
                 opacity: 0.75,
                 transparent: true,
                 side: BackSide,
