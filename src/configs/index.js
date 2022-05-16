@@ -6,7 +6,7 @@ const configs = {
             radius: 0.32,
             height: 0.64,
         },
-        speed: 2.4,
+        speed: 0.6,
     },
     game: {
         maxTime: 150,
