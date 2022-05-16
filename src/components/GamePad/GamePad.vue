@@ -16,11 +16,16 @@
       </div>
       <div ref="joystick" class="joystick"></div>
     </div>
-    <div class="middle">
+    <div class="middle" v-if="this.playerTarget">
       <p>CLUES</p>
-      <div class="clue"></div>
-      <div class="clue"></div>
-      <div class="clue"></div>
+      <div
+        class="clue"
+        :style="`background-color: ${clue.color}`"
+        v-for="clue in this.playerTarget.info"
+        :key="clue.color"
+      >
+        {{ clue.tags[0] }}
+      </div>
     </div>
     <div class="right">
       <button
@@ -52,14 +57,21 @@ export default {
       playerName: null,
       playerPoints: null,
       playerColor: null,
+      playerTarget: null,
     };
   },
   mounted() {
     this.colyseus.getPlayer(this.colyseus.currentRoom.sessionId);
     this.colyseus.currentRoom.onMessage("getPlayer", (player) => {
-      this.playerName = player.name;
-      this.playerPoints = player.points;
-      this.playerColor = player.color;
+      if (player.id === this.colyseus.currentRoom.sessionId) {
+        this.playerName = player.name;
+        this.playerPoints = player.points;
+        this.playerColor = player.color;
+      }
+    });
+
+    this.colyseus.currentRoom.onMessage("updatePlayerTarget", (message) => {
+      this.playerTarget = message.playerTarget;
     });
 
     this.joystick = nipplejs.create({
@@ -155,6 +167,11 @@ export default {
       border-radius: 8px;
       width: 80px;
       height: 80px;
+      color: $white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: $ft-bold;
     }
   }
   .right {

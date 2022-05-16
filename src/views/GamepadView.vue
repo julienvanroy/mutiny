@@ -13,10 +13,6 @@ export default {
   setup() {
     const colyseus = useColyseusStore();
 
-    colyseus.currentRoom.onMessage("updatePlayerTarget", (message) => {
-      console.log(message);
-    });
-
     return { colyseus };
   },
   data() {
