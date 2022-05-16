@@ -1,5 +1,8 @@
 <template>
-  <button :class="`btn btn-${color} ${disabled ? `disabled` : ''}`" :disabled="disabled">
+  <button
+    :class="`btn btn-${color} ${disabled ? `disabled` : ''}`"
+    :disabled="disabled"
+  >
     <router-link v-if="this.link" :to="link">
       {{ this.label }}
     </router-link>
@@ -44,11 +47,12 @@ export default {
   align-items: center;
   padding: 10px 20px;
   min-height: 30px;
-  border: 1px solid #434242;
-  border-radius: 8px;
+  border: 1px solid $grey-5;
+  border-radius: 36px;
   font-family: "Montserrat";
   font-weight: $ft-medium;
-  font-size: 16px;
+  font-size: 18px;
+  color: $black;
   text-align: center;
   letter-spacing: 0.01em;
   a {
@@ -63,19 +67,21 @@ export default {
   }
   &-light {
     background-color: $white;
-    color: $black;
   }
   &-dark {
-    background-color: $grey;
-    color: $black;
+    background-color: $grey-5;
+    color: $white;
+    a {
+      color: $white;
+    }
   }
 
   &.disabled {
-    pointer-events: none;
-    opacity: 0.6;
+    /* pointer-events: none; */
+    opacity: 0.7;
     @media (any-hover: hover) {
       &:hover {
-        cursor: cursor;
+        cursor: not-allowed;
       }
     }
   }

@@ -1,7 +1,7 @@
 <template>
   <div class="homepage">
     <div class="credits">
-      <TheButton label="Crédits" color="light" link="/credits" />
+      <router-link to="/credits">Credits</router-link>
     </div>
 
     <div class="under">
@@ -11,15 +11,22 @@
       <div class="container">
         <h1 class="logo">Titre provisoire</h1>
         <div class="btn-container">
-          <TheButton label="Créer une partie" color="light" link="/connection" />
-          <TheButton label="Streamer une partie" color="dark" :disabled="true" />
+          <TheButton
+            @click="createRoom"
+            label="Créer une partie"
+            color="dark"
+          />
+          <TheButton
+            label="Streamer une partie"
+            color="light"
+            :disabled="true"
+          />
         </div>
         <div class="how-to-play">
-          <img src="images/homepage/how-to-play.png" />
-          <div class="explanations">
-            <h2>Comment jouer ?</h2>
-            <p>Des joueurs autour d’un ordi, chaun avec leurs téléphones.</p>
-          </div>
+          <p>
+            Un téléphone par moussaillon est requis pour contrôler votre
+            personnage
+          </p>
         </div>
       </div>
     </div>
@@ -27,12 +34,36 @@
 </template>
 
 <script>
+import useColyseusStore from "@/store/colyseus";
+import { PiratesNames } from "@/data/pirates-name";
 import TheButton from "@/components/TheButton.vue";
 
 export default {
   name: "App",
   components: { TheButton },
-}
+  setup() {
+    const colyseus = useColyseusStore();
+    return { colyseus };
+  },
+  mounted() {
+    this.colyseus.initLobbyRoom();
+  },
+  methods: {
+    createRoom(doJoinRoom = true) {
+      this.colyseus.createRoom("play_room", doJoinRoom);
+    },
+    joinRoom(roomId) {
+      // TODO in the futur : get user pseudo from input (if not, set random pseudo)
+      // TODO check if random pseudo is already used for another player
+      const playerName =
+        PiratesNames[Math.floor(Math.random() * PiratesNames.length)];
+      this.colyseus.joinRoom(roomId, playerName);
+    },
+    joinRandomRoom() {
+      this.colyseus.joinRoom();
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -56,24 +87,17 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
+      margin: 80px 0;
       .btn + .btn {
         margin-left: 20px;
       }
     }
     .how-to-play {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      .explanations {
-        max-width: 300px;
-        h2 {
-          font-weight: $ft-bold;
-          font-size: 30px;
-          letter-spacing: 0.01em;
-        }
-        p {
-          font-size: 18px;
-        }
+      max-width: 380px;
+      margin: auto;
+      p {
+        font-size: 18px;
+        text-align: center;
       }
     }
   }
@@ -90,7 +114,7 @@ export default {
     &:after {
       content: "";
       display: block;
-      background-color: rgba($white, 0.5);
+      background-color: rgba($white, 0.6);
       position: absolute;
       inset: 0;
     }
@@ -98,8 +122,15 @@ export default {
   .credits {
     position: absolute;
     z-index: 10;
-    top: 20px;
+    bottom: 20px;
     left: 20px;
+    a {
+      color: $black;
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      text-decoration-line: underline;
+    }
   }
 }
 </style>
