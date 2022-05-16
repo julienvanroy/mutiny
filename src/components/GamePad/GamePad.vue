@@ -27,10 +27,10 @@ export default {
     };
   },
   mounted() {
-    this.colyseus.getPlayer(this.colyseus.currentRoom.sessionId)
+    this.colyseus.getPlayer(this.colyseus.currentRoom.sessionId);
     this.colyseus.currentRoom.onMessage("getPlayer", (player) => {
-      this.playerName = player.name
-      this.playerPoints = player.points
+      this.playerName = player.name;
+      this.playerPoints = player.points;
     });
 
     this.joystick = nipplejs.create({

@@ -5,9 +5,7 @@
       <span>{{ player.name }}</span>
     </li>
   </ul>
-  <router-link to="end-game"
-    ><button class="end-btn">END GAME</button></router-link
-  >
+  <router-link to="end-game"><button class="end-btn">END GAME</button></router-link>
 </template>
 
 <script>
@@ -29,7 +27,7 @@ export default {
   mounted() {
     this.colyseus.getAllPlayers();
     this.colyseus.currentRoom.onMessage("addPlayer", ({ playerSessionId }) => {
-      playerSessionId && bidello.trigger({name: "addPlayer"}, {playerId: playerSessionId});
+      playerSessionId && bidello.trigger({ name: "addPlayer" }, { playerId: playerSessionId });
       this.colyseus.getAllPlayers();
     });
 
@@ -38,16 +36,16 @@ export default {
       this.players = players;
     });
 
-    this.colyseus.currentRoom.onMessage("joystick",({ playerSessionId, playerPosition }) => {
-      bidello.trigger({ name: "movePlayer" },{ playerId: playerSessionId, vector2: playerPosition });}
-    );
+    this.colyseus.currentRoom.onMessage("joystick", ({ playerSessionId, playerPosition }) => {
+      bidello.trigger({ name: "movePlayer" }, { playerId: playerSessionId, vector2: playerPosition });
+    });
 
-    this.colyseus.currentRoom.onMessage("kill", (message) => {
-      console.log(message);
+    this.colyseus.currentRoom.onMessage("kill", ({ playerSessionId }) => {
+      bidello.trigger({ name: "kill" }, { playerId: playerSessionId, sendData: this.colyseus.sendData });
     });
 
     this.colyseus.currentRoom.onMessage("power", ({ playerSessionId }) => {
-      bidello.trigger({ name: "respawn" }, {playerId: playerSessionId});
+      bidello.trigger({ name: "respawn" }, { playerId: playerSessionId });
     });
   },
 };
