@@ -11,21 +11,10 @@
         <div class="player-list">
           <h1>Secret sailors</h1>
           <ul>
-            <li>
+            <li v-for="player in this.players" :key="player.id">
               <div class="player">
-                <TheHexa color="#7BB985" /><span>joueur 1</span>
-              </div>
-              <div class="connection"><img src="images/icons/valid.png" /></div>
-            </li>
-            <li>
-              <div class="player">
-                <TheHexa color="#9EDEF2" /><span>joueur 2</span>
-              </div>
-              <div class="connection"><img src="images/icons/valid.png" /></div>
-            </li>
-            <li>
-              <div class="player">
-                <TheHexa color="#E39CA9" /><span>joueur 3</span>
+                <img :src="`images/players/${player.color}.png`" />
+                <span>{{ player.name }}</span>
               </div>
               <div class="connection"><img src="images/icons/valid.png" /></div>
             </li>
@@ -84,7 +73,7 @@
 
           <div class="actions">
             <TheButton label="Tutorial" color="light" :disabled="true" />
-            <TheButton label="GO !" color="dark" link="/end-game" />
+            <TheButton label="GO !" color="dark" link="/game" />
           </div>
         </div>
       </div>
@@ -94,12 +83,11 @@
 
 <script>
 import useColyseusStore from "@/store/colyseus";
-import TheHexa from "@/components/TheHexa.vue";
 import TheButton from "@/components/TheButton.vue";
 
 export default {
   name: "SetUpView",
-  components: { TheHexa, TheButton },
+  components: { TheButton },
   setup() {
     const colyseus = useColyseusStore();
     return { colyseus };
@@ -109,6 +97,16 @@ export default {
       players: [],
       showControls: false,
     };
+  },
+  mounted() {
+    this.colyseus.currentRoom.onMessage("addPlayer", () => {
+      this.colyseus.getAllPlayers();
+    });
+
+    this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
+      delete players[this.colyseus.currentRoom.sessionId];
+      this.players = players;
+    });
   },
 };
 </script>

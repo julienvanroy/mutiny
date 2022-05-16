@@ -18,13 +18,15 @@
     </div>
 
     <div class="btn-parameters">
-      <button><img src="images/icons/sound-on.png" /></button>
-      <button><img src="images/icons/parameters.png" /></button>
+      <button v-show="!isGamePath"><img src="images/icons/sound-on.png" /></button>
+      <button v-show="!isGamePath"><img src="images/icons/parameters.png" /></button>
+      <button v-show="isGamePath"><img src="images/icons/sound-game-on.png" /></button>
+      <button v-show="isGamePath"><img src="images/icons/pause.png" /></button>
     </div>
 
     <div id="view">
       <router-view />
-      <WebGl v-show="path === ('/game' || '/game#debug')" />
+      <WebGl v-if="!isMobile" v-show="path === ('/game' || '/game#debug')" />
     </div>
   </div>
 </template>
@@ -45,6 +47,10 @@ export default {
   },
   data() {
     return {
+      isMobile:
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        ),
       showFullscreenBtn: !(
         /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
         /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
@@ -62,6 +68,11 @@ export default {
       this.isFullscreen = false;
     },
   },
+  computed: {
+    isGamePath() {
+      return this.path === ('/game' || '/game#debug')
+    }
+  }
 };
 </script>
 

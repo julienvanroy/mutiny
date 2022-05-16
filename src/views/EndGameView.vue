@@ -1,21 +1,40 @@
 <template>
   <div class="end-game">
     <div class="under">
-      <img src="images/homepage/homepage-back.jpg" />
+      <img src="images/background.jpg" />
     </div>
     <div class="over">
       <h1>The End</h1>
       <div class="end-container">
         <ul>
-          <li><img src="images/players/win.png" /><span>Joueur n°1</span></li>
-          <li>
-            <img src="images/players/player.png" /><span>Joueur n°2</span>
+          <!-- TODO: replace image, points & name with real players datas -->
+          <li class="winner">
+            <div class="points">
+              <img src="images/players/green-win.png" />
+              <span>12</span>
+            </div>
+            <span class="name">Joueur n°1</span>
           </li>
           <li>
-            <img src="images/players/player.png" /><span>Joueur n°3</span>
+            <div class="points">
+              <img src="images/players/blue.png" />
+              <span>12</span>
+            </div>
+            <span class="name">Joueur n°2</span>
           </li>
           <li>
-            <img src="images/players/player.png" /><span>Joueur n°4</span>
+            <div class="points">
+              <img src="images/players/red.png" />
+              <span>12</span>
+            </div>
+            <span class="name">Joueur n°3</span>
+          </li>
+          <li>
+            <div class="points">
+              <img src="images/players/yellow.png" />
+              <span>12</span>
+            </div>
+            <span class="name">Joueur n°4</span>
           </li>
         </ul>
         <div class="links">
@@ -65,11 +84,23 @@ export default {
           display: flex;
           justify-content: flex-start;
           align-items: center;
-          img {
-            width: 40px;
-            margin: 0 30px;
+          .points {
+            position: relative;
+            img {
+              width: 60px;
+              margin: 0 30px;
+            }
+            span {
+              font-weight: $ft-bold;
+              font-size: 20px;
+              color: $white;
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -60%);
+            }
           }
-          span {
+          .name {
             font-weight: $ft-bold;
             margin-left: 10px;
             font-size: 20px;
@@ -85,6 +116,17 @@ export default {
           }
           & + li {
             margin-top: 20px;
+          }
+
+          &.winner {
+            .points {
+              span {
+                transform: translate(-20%, -30%);
+              }
+            }
+            .name {
+              margin-left: 30px;
+            }
           }
         }
       }

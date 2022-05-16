@@ -5,12 +5,12 @@
     </div>
 
     <div class="under">
-      <img src="images/homepage/homepage-back.jpg" />
+      <img src="images/background.jpg" />
     </div>
     <div class="over">
       <div class="container">
-        <h1 class="logo">Titre provisoire</h1>
-        <div class="btn-container">
+        <img src="images/logo.png" />
+        <div v-if="!isMobile" class="btn-container">
           <TheButton
             @click="createRoom"
             label="Créer une partie"
@@ -22,10 +22,22 @@
             :disabled="true"
           />
         </div>
+        <div v-if="!!isMobile" class="btn-container">
+          <TheButton
+            v-for="(room, roomIndex) in colyseus.rooms"
+            :key="roomIndex"
+            @click="joinRoom(room.roomId)"
+            :label="`Join room ` + room.roomId"
+            color="light"
+          />
+        </div>
         <div class="how-to-play">
           <p>
-            Un téléphone par moussaillon est requis pour contrôler votre
-            personnage
+            {{
+              !!isMobile
+                ? "Rejoignez une partie depuis le jeu sur ordinateur."
+                : "Un téléphone par moussaillon est requis pour contrôler votre personnage"
+            }}
           </p>
         </div>
       </div>
@@ -45,6 +57,14 @@ export default {
     const colyseus = useColyseusStore();
     return { colyseus };
   },
+  data() {
+    return {
+      isMobile:
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        ),
+    };
+  },
   mounted() {
     this.colyseus.initLobbyRoom();
   },
@@ -58,6 +78,8 @@ export default {
       const playerName =
         PiratesNames[Math.floor(Math.random() * PiratesNames.length)];
       this.colyseus.joinRoom(roomId, playerName);
+
+      this.colyseus.getAllPlayers();
     },
     joinRandomRoom() {
       this.colyseus.joinRoom();
@@ -79,9 +101,8 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    .logo {
-      color: $white;
-      text-align: center;
+    img {
+      width: 720px;
     }
     .btn-container {
       display: flex;
