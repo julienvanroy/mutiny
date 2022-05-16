@@ -18,10 +18,10 @@
     </div>
 
     <div class="btn-parameters">
-      <button v-show="path !== ('/game' || '/game#debug')"><img src="images/icons/sound-on.png" /></button>
-      <button v-show="path !== ('/game' || '/game#debug')"><img src="images/icons/parameters.png" /></button>
-      <button v-show="path === ('/game' || '/game#debug')"><img src="images/icons/sound-game-on.png" /></button>
-      <button v-show="path === ('/game' || '/game#debug')"><img src="images/icons/pause.png" /></button>
+      <button v-show="!isGamePath"><img src="images/icons/sound-on.png" /></button>
+      <button v-show="!isGamePath"><img src="images/icons/parameters.png" /></button>
+      <button v-show="isGamePath"><img src="images/icons/sound-game-on.png" /></button>
+      <button v-show="isGamePath"><img src="images/icons/pause.png" /></button>
     </div>
 
     <div id="view">
@@ -68,6 +68,11 @@ export default {
       this.isFullscreen = false;
     },
   },
+  computed: {
+    isGamePath() {
+      return this.path === ('/game' || '/game#debug')
+    }
+  }
 };
 </script>
 
