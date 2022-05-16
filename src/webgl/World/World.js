@@ -3,9 +3,13 @@ import {component} from "bidello";
 import Experience from "@/webgl/Experience";
 import {GridHelper, Vector2} from "three";
 import Player from "@/webgl/World/Player";
-import Item from "@/webgl/World/Item";
-import BoxCollision from "@/webgl/Collision/BoxCollision";
-import MapLevel from "./MapLevel.js";
+//import Item from "@/webgl/World/Item";
+//import BoxCollision from "@/webgl/Collision/BoxCollision";
+import {Pathfinding} from "three-pathfinding";
+import {uuid} from "@/utils/index.js";
+import Bot from "./Bot.js";
+import MapLevel from "@/webgl/World/MapLevel";
+
 
 export default class World extends component() {
     init() {
@@ -21,17 +25,42 @@ export default class World extends component() {
 
     onResourcesIsReady() {
         console.log("world is ready");
-        this.mapLevel = new MapLevel();
         this.environment = new Environment();
-        this.players = new Map()
-        console.log(typeof this.players)
+        this.mapLevel = new MapLevel();
+
+        this.players = new Map();
+        /*
+        TODO: For Colllision Items
         this.item = new Item();
-        this.boxCollision = new BoxCollision()
+        this.boxCollision = new BoxCollision();
+        */
+        this._initPathfinding();
+        this._initBots();
+
         const grid = new GridHelper(20, 20);
         this._scene.add(grid);
 
         this.onDebug()
         this._isLoaded = true;
+    }
+
+    _initPathfinding() {
+        this.pathfinding = new Pathfinding();
+        this.pathfinding.zone = "map";
+        this.pathfinding.setZoneData(
+            this.pathfinding.zone,
+            Pathfinding.createZone(this.mapLevel.navMesh.geometry)
+        );
+    }
+
+    _initBots() {
+        this.bots = {};
+
+        const BOT_COUNTS = 32;
+        for (let i = 0; i < BOT_COUNTS; i++) {
+            const botId = uuid();
+      this.bots[botId] = new Bot(botId);
+        }
     }
 
     _keyboard() {
@@ -65,15 +94,18 @@ export default class World extends component() {
         if (this._isLoaded) {
             this._keyboard()
 
-            // Check Collision Items
-            this.players.forEach((player, id) => {
-                if(this.boxCollision.hit(player.mesh, this.item.mesh)) console.log(id, 'Collision')
-            })
+            /*
+            TODO: Collision Items
+                // Check Collision Items
+                this.players.forEach((player, id) => {
+                    if (this.boxCollision.hit(player.mesh, this.item.mesh)) console.log(id, 'Collision')
+                })
+            */
         }
     }
 
     onAddPlayer({playerId}) {
-        this.players.set(playerId, new Player(this.mapLevel.collider));
+        this.players.set(playerId, new Player(playerId, this.mapLevel.collider));
     }
 
     onMovePlayer({playerId, vector2}) {
