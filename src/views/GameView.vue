@@ -19,7 +19,7 @@ export default {
   setup() {
     const colyseus = useColyseusStore();
 
-    return { colyseus, webgl };
+    return { colyseus };
   },
   data() {
     return {
@@ -28,21 +28,17 @@ export default {
   },
   mounted() {
     this.colyseus.currentRoom.onMessage("addPlayer", ({ playerSessionId }) => {
-      playerSessionId && this.webgl.addPlayer(playerSessionId);
-      this.colyseus.getAllPlayers();
-    colyseus.currentRoom.onMessage("addPlayer", ({ playerSessionId }) => {
       playerSessionId && bidello.trigger({ name: "addPlayer" }, {playerId: playerSessionId});
+      this.colyseus.getAllPlayers();
     });
 
     this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
       delete players[this.colyseus.currentRoom.sessionId];
       this.players = players;
-    colyseus.currentRoom.onMessage("joystick", ({playerSessionId, playerPosition}) => {
-      bidello.trigger({ name: "movePlayer" }, {playerId: playerSessionId, vector2: playerPosition});
     });
 
-    this.colyseus.currentRoom.onMessage("joystick", (message) => {
-      this.webgl.movePlayer(message.playerSessionId, message.playerPosition);
+    this.colyseus.currentRoom.onMessage("joystick", ({ playerSessionId, playerPosition }) => {
+      bidello.trigger({ name: "movePlayer" }, {playerId: playerSessionId, vector2: playerPosition});
     });
 
     this.colyseus.currentRoom.onMessage("kill", (message) => {
@@ -52,8 +48,6 @@ export default {
     this.colyseus.currentRoom.onMessage("power", (message) => {
       console.log(message);
     });
-
-    return { colyseus };
   },
 };
 </script>
