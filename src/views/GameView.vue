@@ -29,7 +29,7 @@ export default {
   mounted() {
     this.colyseus.getAllPlayers();
     this.colyseus.currentRoom.onMessage("addPlayer", ({ playerSessionId }) => {
-      playerSessionId && bidello.trigger({name: "addPlayer"}, {playerId: playerSessionId});
+      playerSessionId && bidello.trigger({ name: "addPlayer" }, { playerId: playerSessionId });
       this.colyseus.getAllPlayers();
     });
 
@@ -47,7 +47,7 @@ export default {
     });
 
     this.colyseus.currentRoom.onMessage("power", ({ playerSessionId }) => {
-      bidello.trigger({ name: "respawn" }, {playerId: playerSessionId});
+      bidello.trigger({ name: "respawn" }, { playerId: playerSessionId });
     });
   },
 };

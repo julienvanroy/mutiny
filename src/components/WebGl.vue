@@ -1,14 +1,22 @@
 <template>
   <canvas ref="canvas" />
+  <the-timer @levelTimeout="onLevelTimeout" />
 </template>
 
 <script>
 import Experience from "../webgl/Experience";
+import TheTimer from "./TheTimer/TheTimer.vue";
 
 export default {
   name: "WebGl",
+  components: { TheTimer },
   mounted() {
-    new Experience(this.$refs.canvas)
+    new Experience(this.$refs.canvas);
+  },
+  methods: {
+    onLevelTimeout() {
+      this.$emit("levelTimeout");
+    },
   },
 };
 </script>
