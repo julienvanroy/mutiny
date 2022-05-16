@@ -12,15 +12,14 @@
 
 <script>
 import useColyseusStore from "@/store/colyseus";
-import useWebglStore from "@/store/webgl";
+import bidello from "bidello";
 
 export default {
   name: "GameView",
   setup() {
     const colyseus = useColyseusStore();
-    const webgl = useWebglStore();
 
-    return { colyseus, webgl };
+    return { colyseus };
   },
   data() {
     return {
@@ -29,7 +28,7 @@ export default {
   },
   mounted() {
     this.colyseus.currentRoom.onMessage("addPlayer", ({ playerSessionId }) => {
-      playerSessionId && this.webgl.addPlayer(playerSessionId);
+      playerSessionId && bidello.trigger({ name: "addPlayer" }, {playerId: playerSessionId});
       this.colyseus.getAllPlayers();
     });
 
@@ -38,8 +37,8 @@ export default {
       this.players = players;
     });
 
-    this.colyseus.currentRoom.onMessage("joystick", (message) => {
-      this.webgl.movePlayer(message.playerSessionId, message.playerPosition);
+    this.colyseus.currentRoom.onMessage("joystick", ({ playerSessionId, playerPosition }) => {
+      bidello.trigger({ name: "movePlayer" }, {playerId: playerSessionId, vector2: playerPosition});
     });
 
     this.colyseus.currentRoom.onMessage("kill", (message) => {
