@@ -1,6 +1,6 @@
 const configs = {
     character: {
-        count: 4, //4
+        count: 32, //4
         colors: ["#414182", "#8DDDE9", "#FCA04C", "#4F9C98", "#FC6C4C"],
         sizes: {
             radius: 0.32,
