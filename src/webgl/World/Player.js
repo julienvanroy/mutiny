@@ -19,12 +19,6 @@ export default class Player extends component(Mover) {
         this._botsPool = experience.world.bots;
         this._players = experience.world.players;
 
-        this.bot = sample(Object.values(this._botsPool).filter((bot) => !bot.isPlayer));
-        if (this.bot) {
-            this.bot.isPlayer = true;
-            this.mesh = this.bot.mesh;
-        }
-
         this.points = 0;
 
         this._vectorControls = new Vector2();
@@ -144,6 +138,18 @@ export default class Player extends component(Mover) {
         if (this.mesh.position.y < 0) {
             this.mesh.position.y = 0;
         }
+    }
+
+    _setBot() {
+        if (this.bot) {
+            this.bot.isPlayer = false;
+            this.bot = null;
+        }
+
+        this.bot = sample(Object.values(this._botsPool).filter((bot) => !bot.isPlayer));
+
+        this.bot.isPlayer = true;
+        this.mesh = this.bot.mesh;
     }
 
     onRaf({ delta }) {
