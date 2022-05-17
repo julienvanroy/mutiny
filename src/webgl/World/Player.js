@@ -1,14 +1,15 @@
-import {component} from "bidello";
-import {Box3, Line3, Matrix4, Quaternion, Vector2, Vector3} from "three";
+import { component } from "bidello";
+import { Box3, Line3, Matrix4, Quaternion, Vector2, Vector3 } from "three";
 import Experience from "../Experience";
 import Mover from "./Mover";
-import { sample } from "@/utils";
+import { mapToArray, sample } from "@/utils";
+import configs from "@/configs";
 
 export default class Player extends component(Mover) {
     constructor(playerId, collider) {
-        super()
+        super();
         this.id = playerId;
-        this._collider = collider
+        this._collider = collider;
     }
 
     init() {
@@ -16,12 +17,15 @@ export default class Player extends component(Mover) {
         this._scene = experience.scene;
 
         this._botsPool = experience.world.bots;
+        this._players = experience.world.players;
 
-        this.bot = sample(
-            Object.values(this._botsPool).filter((bot) => !bot.isPlayer)
-        );
-        this.bot.isPlayer = true;
-        this.mesh = this.bot.mesh
+        this.bot = sample(Object.values(this._botsPool).filter((bot) => !bot.isPlayer));
+        if (this.bot) {
+            this.bot.isPlayer = true;
+            this.mesh = this.bot.mesh;
+        }
+
+        this.points = 0;
 
         this._vectorControls = new Vector2();
         this._targetQuaternion = new Quaternion();
@@ -40,13 +44,13 @@ export default class Player extends component(Mover) {
             mat: new Matrix4(),
             segment: new Line3(),
             vector: new Vector3(),
-            vector2: new Vector3()
-        }
+            vector2: new Vector3(),
+        };
     }
 
     set vectorControls(value) {
         this._vectorControls.x = value.x;
-        this._vectorControls.y = value.y
+        this._vectorControls.y = value.y;
     }
 
     get isMoving() {
@@ -93,8 +97,8 @@ export default class Player extends component(Mover) {
         this._temp.box.max.addScalar(capsuleInfo.radius);
 
         this._collider.geometry.boundsTree.shapecast({
-            intersectsBounds: box => box.intersectsBox(this._temp.box),
-            intersectsTriangle: tri => {
+            intersectsBounds: (box) => box.intersectsBox(this._temp.box),
+            intersectsTriangle: (tri) => {
                 // check if the triangle is intersecting the capsule and adjust the
                 // capsule position if it is.
                 const triPoint = this._temp.vector;
@@ -107,7 +111,7 @@ export default class Player extends component(Mover) {
                     this._temp.segment.start.addScaledVector(direction, depth);
                     this._temp.segment.end.addScaledVector(direction, depth);
                 }
-            }
+            },
         });
 
         // get the adjusted position of the capsule collider in world space after checking
@@ -138,27 +142,75 @@ export default class Player extends component(Mover) {
 
         // if the player has fallen too far below the level reset their position to 0
         if (this.mesh.position.y < 0) {
-            this.mesh.position.y = 0
+            this.mesh.position.y = 0;
         }
     }
 
-    onRaf({delta}) {
+    onRaf({ delta }) {
         this._move(delta);
         this._rotation(delta);
+        // this._updateCollision(delta);
+
+        // Object.values(this._botsPool).forEach((bot) => {
+        //     if (
+        //         this.bot &&
+        //         bot.id !== this.bot.id &&
+        //         this.mesh.position.distanceTo(bot.mesh.position) > configs.character.range
+        //     ) {
+        //         bot.mesh.scale.set(1, 1, 1);
+        //     }
+        // });
+
         /**
          * Todo: Need Low model navmesh and collison ( Only cube )
          */
         //this._updateCollision(delta)
     }
 
-    respawn() {
-        const selectedBot = sample(
-            Object.values(this._botsPool).filter((bot) => !bot.isPlayer)
-        );
+    onKill({ playerId, sendData }) {
+        if (playerId === this.id) {
+            Object.values(this._botsPool).forEach((bot) => {
+                if (this.mesh.position.distanceTo(bot.mesh.position) <= configs.character.range) {
+                    // if (bot.id !== this.bot?.id) {
+                    //     bot.mesh.scale.set(1.2, 1.2, 1.2);
+                    // }
+
+                    if (this.target && this.target.bot?.id === bot.id) {
+                        console.log(`${this.id} killed ${this.target.id}`);
+                        this.addPoints(sendData);
+                        this.target.respawn(this);
+                        this.switchTarget();
+                    }
+                }
+            });
+        }
+    }
+
+    addPoints(sendData) {
+        this.points += 1;
+        sendData("addPoint", { playerId: this.id, playerPoints: this.points });
+    }
+
+    respawn(targetPlayer) {
+        console.log(`${this.id} has old target ${this.target.id}, old bot ${this.bot.id}`);
+        const selectedBot = sample(Object.values(this._botsPool).filter((bot) => !bot.isPlayer));
         this.bot.isPlayer = false;
         console.log(selectedBot, this.bot);
         this.bot = selectedBot;
         this.bot.isPlayer = true;
-        this.mesh = this.bot.mesh
+        this.mesh = this.bot.mesh;
+        if (this.target instanceof Player) this.target = targetPlayer;
+        console.log(`${this.id} has new target ${this.target.id}, new bot ${this.bot.id}`);
+    }
+
+    switchTarget() {
+        if (this.target) {
+            console.log(`${this.id} has old target ${this.target.id}`);
+            let tempPlayers = mapToArray(this._players)
+                .map(({ value }) => value)
+                .filter((p) => p.id !== this.target.id);
+            this.target = sample(tempPlayers);
+            console.log(`${this.id} has new target ${this.target.id}`);
+        }
     }
 }

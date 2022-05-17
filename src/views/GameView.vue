@@ -1,10 +1,6 @@
 <template>
   <ul class="players">
-    <li
-      v-for="player in this.players"
-      :key="player.id"
-      :class="`player ${player.color}`"
-    >
+    <li v-for="player in this.players" :key="player.id" :class="`player ${player.color}`">
       <div class="points">
         <img src="/images/players/points.png" />
         <span>{{ player.points }}</span>
@@ -12,9 +8,7 @@
       <span class="name">{{ player.name }}</span>
     </li>
   </ul>
-  <router-link to="end-game"
-    ><button class="end-btn">END GAME</button></router-link
-  >
+  <router-link to="end-game"><button class="end-btn">END GAME</button></router-link>
   <TheTimer />
 </template>
 
@@ -40,8 +34,7 @@ export default {
     if (!this.colyseus.currentRoom) return;
     this.colyseus.getAllPlayers();
     this.colyseus.currentRoom.onMessage("addPlayer", ({ playerSessionId }) => {
-      playerSessionId &&
-        bidello.trigger({ name: "addPlayer" }, { playerId: playerSessionId });
+      playerSessionId && bidello.trigger({ name: "addPlayer" }, { playerId: playerSessionId });
       this.colyseus.getAllPlayers();
     });
 
@@ -51,21 +44,19 @@ export default {
       const mapPlayers = new Map(Object.entries(players));
       mapPlayers.forEach((value, key) => {
         bidello.trigger({ name: "addPlayer" }, { playerId: key });
-      })
+      });
     });
 
-    this.colyseus.currentRoom.onMessage(
-      "joystick",
-      ({ playerSessionId, playerPosition }) => {
-        bidello.trigger(
-          { name: "movePlayer" },
-          { playerId: playerSessionId, vector2: playerPosition }
-        );
-      }
-    );
+    this.colyseus.currentRoom.onMessage("addPoint", ({ playerId, playerPoints }) => {
+      Object.values(this.players).find((p) => p.id === playerId).points = playerPoints;
+    });
 
-    this.colyseus.currentRoom.onMessage("kill", (message) => {
-      console.log(message);
+    this.colyseus.currentRoom.onMessage("joystick", ({ playerSessionId, playerPosition }) => {
+      bidello.trigger({ name: "movePlayer" }, { playerId: playerSessionId, vector2: playerPosition });
+    });
+
+    this.colyseus.currentRoom.onMessage("kill", ({ playerSessionId }) => {
+      bidello.trigger({ name: "kill" }, { playerId: playerSessionId, sendData: this.colyseus.sendData });
     });
 
     this.colyseus.currentRoom.onMessage("power", ({ playerSessionId }) => {

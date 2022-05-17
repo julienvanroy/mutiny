@@ -21,18 +21,14 @@
       <div
         class="clue"
         :style="`background-color: ${clue.color}`"
-        v-for="clue in this.playerTarget.info"
+        v-for="clue in this.playerTarget.info.reverse()"
         :key="clue.color"
       >
         {{ clue.tags[0] }}
       </div>
     </div>
     <div class="right">
-      <button
-        ref="attack"
-        class="attack"
-        @click="colyseus.sendData('kill', true)"
-      >
+      <button ref="attack" class="attack" @click="colyseus.sendData('kill', true)">
         <img src="/images/pad/button.png" />
         <span>Attack</span>
       </button>
@@ -71,7 +67,11 @@ export default {
     });
 
     this.colyseus.currentRoom.onMessage("updatePlayerTarget", (message) => {
-      this.playerTarget = message.playerTarget;
+      if (message.playerId === this.colyseus.currentRoom.sessionId) this.playerTarget = message.playerTarget;
+    });
+
+    this.colyseus.currentRoom.onMessage("addPoint", ({ playerId, playerPoints }) => {
+      if (playerId === this.colyseus.currentRoom.sessionId) this.playerPoints = playerPoints;
     });
 
     this.joystick = nipplejs.create({

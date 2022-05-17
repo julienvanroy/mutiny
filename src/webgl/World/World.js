@@ -108,7 +108,10 @@ export default class World extends component() {
         this.players.set(playerId, new Player(playerId, this.mapLevel.collider));
         this.assignTargets();
         const colyseus = useColyseusStore();
-        colyseus.sendData("updatePlayerTarget", {playerId: playerId, playerTarget: this.players.get(playerId)._getTargetData()});
+        colyseus.sendData("updatePlayerTarget", {
+            playerId: playerId,
+            playerTarget: this.players.get(playerId)._getTargetData(),
+        });
     }
 
     onMovePlayer({ playerId, vector2 }) {
@@ -136,6 +139,7 @@ export default class World extends component() {
             bots,
             players,
             unassignedPlayers = [],
+            tempUnassignedPlayers = [],
             tempPlayers = new Map();
 
         switch (this.players.size) {
@@ -150,18 +154,21 @@ export default class World extends component() {
 
             default:
                 players = shuffle(this.players);
-                unassignedPlayers = players.map((keyValue) => keyValue[1]);
 
                 players.forEach(([playerId, player]) => {
-                    player.target = sample(unassignedPlayers.filter((p) => p.id !== playerId));
+                    unassignedPlayers = players.map((keyValue) => keyValue[1]);
 
-                    unassignedPlayers = unassignedPlayers.filter((p) => p.id !== player.target.id);
+                    tempUnassignedPlayers = unassignedPlayers.filter((p) => p.id !== playerId);
+
+                    player.target = sample(tempUnassignedPlayers);
+
+                    unassignedPlayers = tempUnassignedPlayers.filter((p) => p.id !== player.target.id);
 
                     tempPlayers.set(playerId, player);
-
-                    console.log(playerId, player.target.id);
                 });
                 this.players = tempPlayers;
+                console.log(this.players);
+                this.players.forEach((p) => console.log(`player ${p.id} has target ${p.target.id}`));
                 break;
         }
 

@@ -62,7 +62,7 @@ export default class Mover {
             new ConeGeometry(r, h, 32),
             new MeshStandardMaterial({ color: new Color(c[2]).convertSRGBToLinear() })
         );
-        cone.tags = ["cone"];
+        cone.tags = ["Cone"];
         cone.color = c[2];
 
         const circle = new Mesh(
@@ -87,11 +87,21 @@ export default class Mover {
         this._scene.add(this.mesh);
     }
 
-    _getTargetData() {
+    _getPlayerData() {
         const { body } = this;
         return {
             id: this.id,
             info: body.map(({ tags, color }) => ({ tags, color })),
         };
+    }
+
+    _getTargetData() {
+        if (this.target) {
+            const { body } = this.target;
+            return {
+                id: this.id,
+                info: body.map(({ tags, color }) => ({ tags, color })),
+            };
+        } else return undefined;
     }
 }
