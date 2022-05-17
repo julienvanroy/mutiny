@@ -17,7 +17,7 @@ export default {
   },
   data() {
     return {
-      showGamePad: true,
+      showGamePad: false,
     };
   },
   mounted() {
