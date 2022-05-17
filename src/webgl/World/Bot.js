@@ -45,7 +45,7 @@ export default class Bot extends component(Mover) {
 
                 if (velocity.lengthSq() > 0.05 * 0.05) {
                     velocity.normalize();
-                    this.position.add(velocity.multiplyScalar(delta * configs.tempCharacter.speed));
+                    this.position.add(velocity.multiplyScalar(delta * configs.character.speed));
                     this._helper.setPlayerPosition(this.position);
                 } else {
                     // Remove node from the path we calculated

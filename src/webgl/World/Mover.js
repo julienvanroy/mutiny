@@ -1,8 +1,19 @@
-import { ConeGeometry, Group, Mesh, MeshStandardMaterial, Color, BoxGeometry, CylinderGeometry } from "three";
+import {
+    ConeGeometry,
+    CircleGeometry,
+    Group,
+    Mesh,
+    MeshStandardMaterial,
+    MeshBasicMaterial,
+    Color,
+    BoxGeometry,
+    CylinderGeometry,
+} from "three";
 import Experience from "../Experience";
 import configs from "@/configs";
 import { sampleSize, shuffle } from "@/utils";
-const { colors, sizes } = configs.tempCharacter;
+
+const { colors, sizes, range } = configs.character;
 
 export default class Mover {
     constructor() {
@@ -54,11 +65,23 @@ export default class Mover {
         cone.tags = ["cone"];
         cone.color = c[2];
 
+        const circle = new Mesh(
+            new CircleGeometry(range / 2, 32),
+            new MeshBasicMaterial({
+                color: new Color(c[2]).convertSRGBToLinear(),
+                opacity: 0.2,
+                transparent: true,
+            })
+        );
+        circle.geometry.rotateX(-Math.PI / 2);
+        circle.position.y = 0.32;
+
         this.body = shuffle([cube, cone, cylinder]);
         this.body.forEach((part, index) => (part.position.y = (index + 1) * h));
 
         this.mesh = new Group();
         this.body.forEach((part) => this.mesh.add(part));
+        this.mesh.add(circle);
 
         this._scene.add(this.mesh);
     }
