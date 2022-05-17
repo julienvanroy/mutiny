@@ -33,10 +33,6 @@ export default {
   mounted() {
     if (!this.colyseus.currentRoom) return;
     this.colyseus.getAllPlayers();
-    this.colyseus.currentRoom.onMessage("addPlayer", ({ playerSessionId }) => {
-      playerSessionId && bidello.trigger({ name: "addPlayer" }, { playerId: playerSessionId });
-      this.colyseus.getAllPlayers();
-    });
 
     this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
       delete players[this.colyseus.currentRoom.sessionId];
