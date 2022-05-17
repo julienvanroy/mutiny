@@ -10,9 +10,7 @@ export default class Player extends component(Mover) {
         super();
         this.id = playerId;
         this._collider = collider;
-    }
 
-    init() {
         const experience = new Experience();
         this._scene = experience.scene;
 
@@ -45,6 +43,8 @@ export default class Player extends component(Mover) {
             vector2: new Vector3(),
         };
     }
+
+    init() {}
 
     set vectorControls(value) {
         this._vectorControls.x = value.x;
@@ -164,32 +164,26 @@ export default class Player extends component(Mover) {
         //this._updateCollision(delta)
     }
 
-    onKill({ sendData }) {
-        Object.values(this._botsPool).forEach((bot) => {
-            if (this.bot) {
-                if (
-                    bot.id !== this.bot.id &&
-                    this.mesh.position.distanceTo(bot.mesh.position) <= configs.character.range
-                ) {
-                    bot.mesh.scale.set(1.2, 1.2, 1.2);
+    onKill({ playerId, sendData }) {
+        if (playerId === this.id) {
+            Object.values(this._botsPool).forEach((bot) => {
+                if (this.mesh.position.distanceTo(bot.mesh.position) <= configs.character.range) {
+                    if (bot.id !== this.bot?.id) {
+                        bot.mesh.scale.set(1.2, 1.2, 1.2);
+                    }
+
+                    if (this.target && this.target.bot?.id === bot.id) {
+                        sendData("addPoint", { playerId: this.id });
+                        this.switchTarget();
+                        if (this.target instanceof Player) this.target.respawn(this);
+                    }
                 }
-                if (
-                    bot.id !== this.bot.id &&
-                    this.target &&
-                    bot.id === this.target.id &&
-                    this.mesh.position.distanceTo(bot.mesh.position) <= configs.character.range
-                ) {
-                    console.log("ok");
-                    sendData("addPoint", { playerId: this.id });
-                    this.switchTarget();
-                    if (this.target instanceof Player) this.target.respawn(this);
-                }
-            }
-        });
+            });
+        }
     }
 
     respawn(targetPlayer) {
-        console.log(this.target.id, this.bot.id);
+        console.log(`old target ${this.target.id}, old bold ${this.bot.id}`);
         const selectedBot = sample(Object.values(this._botsPool).filter((bot) => !bot.isPlayer));
         this.bot.isPlayer = false;
         console.log(selectedBot, this.bot);
@@ -197,7 +191,7 @@ export default class Player extends component(Mover) {
         this.bot.isPlayer = true;
         this.mesh = this.bot.mesh;
         this.target = targetPlayer;
-        console.log(this.target.id, this.bot.id);
+        console.log(`new target ${this.target.id}, new bold ${this.bot.id}`);
     }
 
     switchTarget() {}

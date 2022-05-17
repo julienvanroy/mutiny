@@ -139,6 +139,7 @@ export default class World extends component() {
             bots,
             players,
             unassignedPlayers = [],
+            tempUnassignedPlayers = [],
             tempPlayers = new Map();
 
         switch (this.players.size) {
@@ -153,18 +154,24 @@ export default class World extends component() {
 
             default:
                 players = shuffle(this.players);
-                unassignedPlayers = players.map((keyValue) => keyValue[1]);
 
                 players.forEach(([playerId, player]) => {
-                    player.target = sample(unassignedPlayers.filter((p) => p.id !== playerId));
+                    unassignedPlayers = players.map((keyValue) => keyValue[1]);
 
-                    unassignedPlayers = unassignedPlayers.filter((p) => p.id !== player.target.id);
+                    tempUnassignedPlayers = unassignedPlayers.filter((p) => p.id !== playerId);
+
+                    player.target = sample(tempUnassignedPlayers);
+
+                    console.log(playerId, tempUnassignedPlayers, player.target);
+
+                    unassignedPlayers = tempUnassignedPlayers.filter((p) => p.id !== player.target.id);
 
                     tempPlayers.set(playerId, player);
 
                     console.log(playerId, player.target.id);
                 });
                 this.players = tempPlayers;
+                console.log(this.players);
                 break;
         }
 
