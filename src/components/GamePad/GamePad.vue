@@ -18,12 +18,7 @@
     </div>
     <div class="middle" v-if="this.playerTarget">
       <p>CLUES</p>
-      <div
-        class="clue"
-        :style="`background-color: ${clue.color}`"
-        v-for="clue in this.playerTarget.info.reverse()"
-        :key="clue.color"
-      >
+      <div class="clue" :style="`background-color: ${clue.color}`" v-for="clue in clues" :key="clue.color">
         {{ clue.tags[0] }}
       </div>
     </div>
@@ -47,14 +42,24 @@ export default {
     const colyseus = useColyseusStore();
     return { colyseus };
   },
+  props: {
+    playerTarget: {
+      type: Object,
+      default: null,
+    },
+  },
   data() {
     return {
       joystick: [],
       playerName: null,
       playerPoints: null,
       playerColor: null,
-      playerTarget: null,
     };
+  },
+  computed: {
+    clues() {
+      return this.playerTarget?.info;
+    },
   },
   mounted() {
     this.colyseus.getPlayer(this.colyseus.currentRoom.sessionId);
@@ -64,10 +69,6 @@ export default {
         this.playerPoints = player.points;
         this.playerColor = player.color;
       }
-    });
-
-    this.colyseus.currentRoom.onMessage("updatePlayerTarget", (message) => {
-      if (message.playerId === this.colyseus.currentRoom.sessionId) this.playerTarget = message.playerTarget;
     });
 
     this.colyseus.currentRoom.onMessage("addPoint", ({ playerId, playerPoints }) => {
