@@ -156,7 +156,10 @@ export default class World extends component() {
                 players = shuffle(this.players);
 
                 players.forEach(([playerId, player]) => {
-                    unassignedPlayers = players.map((keyValue) => keyValue[0]);
+                    unassignedPlayers = diffArray(
+                        players.map((keyValue) => keyValue[0]),
+                        unassignedPlayers
+                    );
 
                     tempUnassignedPlayers = diffArray(
                         unassignedPlayers.filter((pId) => pId !== playerId),
