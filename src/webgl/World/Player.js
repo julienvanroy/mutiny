@@ -10,7 +10,9 @@ export default class Player extends component(Mover) {
         super();
         this.id = playerId;
         this._collider = collider;
+    }
 
+    init() {
         const experience = new Experience();
         this._scene = experience.scene;
 
@@ -43,8 +45,6 @@ export default class Player extends component(Mover) {
             vector2: new Vector3(),
         };
     }
-
-    init() {}
 
     set vectorControls(value) {
         this._vectorControls.x = value.x;
