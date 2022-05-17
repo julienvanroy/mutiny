@@ -68,8 +68,6 @@ export default {
       const playerName =
         PiratesNames[Math.floor(Math.random() * PiratesNames.length)];
       this.colyseus.joinRoom(roomId, playerName);
-
-      this.colyseus.getAllPlayers();
     },
     joinRandomRoom() {
       this.colyseus.joinRoom();
