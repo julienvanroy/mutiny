@@ -96,12 +96,12 @@ export default class Mover {
     }
 
     _getTargetData() {
-        const { body } = this.target;
-        return this.target
-            ? {
-                  id: this.id,
-                  info: body.map(({ tags, color }) => ({ tags, color })),
-              }
-            : undefined;
+        if (this.target) {
+            const { body } = this.target;
+            return {
+                id: this.id,
+                info: body.map(({ tags, color }) => ({ tags, color })),
+            };
+        } else return undefined;
     }
 }
