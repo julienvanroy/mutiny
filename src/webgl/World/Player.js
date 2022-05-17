@@ -2,7 +2,7 @@ import { component } from "bidello";
 import { Box3, Line3, Matrix4, Quaternion, Vector2, Vector3 } from "three";
 import Experience from "../Experience";
 import Mover from "./Mover";
-import { sample } from "@/utils";
+import { mapToArray, sample } from "@/utils";
 import configs from "@/configs";
 
 export default class Player extends component(Mover) {
@@ -173,9 +173,10 @@ export default class Player extends component(Mover) {
                     }
 
                     if (this.target && this.target.bot?.id === bot.id) {
+                        console.log(`${this.id} killed ${this.target.id}`);
                         sendData("addPoint", { playerId: this.id });
-                        this.switchTarget();
                         if (this.target instanceof Player) this.target.respawn(this);
+                        this.switchTarget();
                     }
                 }
             });
@@ -194,5 +195,14 @@ export default class Player extends component(Mover) {
         console.log(`${this.id} has new target ${this.target.id}, new bot ${this.bot.id}`);
     }
 
-    switchTarget() {}
+    switchTarget() {
+        if (this.target) {
+            console.log(`${this.id} has old target ${this.target.id}`);
+            let tempPlayers = mapToArray(this._players)
+                .map(({ value }) => value)
+                .filter((p) => p.id !== this.target.id);
+            this.target = sample(tempPlayers);
+            console.log(`${this.id} has new target ${this.target.id}`);
+        }
+    }
 }
