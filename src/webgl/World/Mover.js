@@ -69,8 +69,9 @@ export default class Mover {
             new CircleGeometry(range / 2, 32),
             new MeshBasicMaterial({
                 color: new Color(c[2]).convertSRGBToLinear(),
-                opacity: 0.2,
+                opacity: 0.64,
                 transparent: true,
+                wireframe: true,
             })
         );
         circle.geometry.rotateX(-Math.PI / 2);
