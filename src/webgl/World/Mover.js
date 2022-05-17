@@ -87,11 +87,21 @@ export default class Mover {
         this._scene.add(this.mesh);
     }
 
-    _getTargetData() {
+    _getPlayerData() {
         const { body } = this;
         return {
             id: this.id,
             info: body.map(({ tags, color }) => ({ tags, color })),
         };
+    }
+
+    _getTargetData() {
+        const { body } = this.target;
+        return this.target
+            ? {
+                  id: this.id,
+                  info: body.map(({ tags, color }) => ({ tags, color })),
+              }
+            : undefined;
     }
 }
