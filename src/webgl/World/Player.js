@@ -151,15 +151,16 @@ export default class Player extends component(Mover) {
         this._rotation(delta);
         this._updateCollision(delta);
 
-        Object.values(this._botsPool).forEach((bot) => {
-            if (
-                this.bot &&
-                bot.id !== this.bot.id &&
-                this.mesh.position.distanceTo(bot.mesh.position) > configs.character.range
-            ) {
-                bot.mesh.scale.set(1, 1, 1);
-            }
-        });
+        // Object.values(this._botsPool).forEach((bot) => {
+        //     if (
+        //         this.bot &&
+        //         bot.id !== this.bot.id &&
+        //         this.mesh.position.distanceTo(bot.mesh.position) > configs.character.range
+        //     ) {
+        //         bot.mesh.scale.set(1, 1, 1);
+        //     }
+        // });
+
         /**
          * Todo: Need Low model navmesh and collison ( Only cube )
          */
@@ -170,9 +171,9 @@ export default class Player extends component(Mover) {
         if (playerId === this.id) {
             Object.values(this._botsPool).forEach((bot) => {
                 if (this.mesh.position.distanceTo(bot.mesh.position) <= configs.character.range) {
-                    if (bot.id !== this.bot?.id) {
-                        bot.mesh.scale.set(1.2, 1.2, 1.2);
-                    }
+                    // if (bot.id !== this.bot?.id) {
+                    //     bot.mesh.scale.set(1.2, 1.2, 1.2);
+                    // }
 
                     if (this.target && this.target.bot?.id === bot.id) {
                         console.log(`${this.id} killed ${this.target.id}`);
