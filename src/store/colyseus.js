@@ -4,94 +4,92 @@ import router from "@/router";
 import { sample } from "@/utils";
 
 const useColyseusStore = defineStore("colyseus", {
-  state: () => {
-    return {
-      client: new Colyseus.Client(process.env.VUE_APP_COLYSEUS),
-      rooms: [],
-      currentRoom: null,
-      lobbyRoom: null,
-    };
-  },
-  getters: {},
-  actions: {
-    async initLobbyRoom() {
-      this.lobbyRoom = await this.client.joinOrCreate("lobby_room");
-
-      this.lobbyRoom.onMessage("rooms", (rooms) => {
-        this.rooms = rooms;
-      });
-
-      this.lobbyRoom.onMessage("+", ([roomId, room]) => {
-        const roomIndex = this.rooms.findIndex(
-          (room) => room.roomId === roomId
-        );
-        if (roomIndex !== -1) {
-          this.rooms[roomIndex] = room;
-        } else {
-          this.rooms.push(room);
-        }
-      });
-
-      this.lobbyRoom.onMessage("-", (roomId) => {
-        this.rooms = this.rooms.filter((room) => room.roomId !== roomId);
-      });
+    state: () => {
+        return {
+            client: new Colyseus.Client(process.env.VUE_APP_COLYSEUS),
+            rooms: [],
+            currentRoom: null,
+            lobbyRoom: null,
+        };
     },
-    toCurrentRoom() {
-      if (this.currentRoom) router.push(`/room/${this.currentRoom.id}`);
-    },
-    async getRooms(roomName) {
-      try {
-        const rooms = await this.client.getAvailableRooms(roomName);
+    getters: {},
+    actions: {
+        async initLobbyRoom() {
+            this.lobbyRoom = await this.client.joinOrCreate("lobby_room");
 
-        return rooms;
-      } catch (e) {
-        console.error("get error", e);
-      }
-    },
-    async createRoom(roomName, doJoinRoom = true) {
-      try {
-        const newRoom = await this.client.create(roomName, {
-          autoDispose: doJoinRoom,
-        });
+            this.lobbyRoom.onMessage("rooms", (rooms) => {
+                this.rooms = rooms;
+            });
 
-        if (doJoinRoom) {
-          this.currentRoom = newRoom;
-          router.push('/setup')
-        } else {
-          newRoom.leave();
-          this.currentRoom = null;
-        }
+            this.lobbyRoom.onMessage("+", ([roomId, room]) => {
+                const roomIndex = this.rooms.findIndex((room) => room.roomId === roomId);
+                if (roomIndex !== -1) {
+                    this.rooms[roomIndex] = room;
+                } else {
+                    this.rooms.push(room);
+                }
+            });
 
-        return newRoom;
-      } catch (e) {
-        console.error("join error", e);
-      }
-    },
-    async joinRoom(roomId = null, playerName) {
-      try {
-        let room;
-        if (roomId) room = await this.client.joinById(roomId, { name: playerName });
-        else room = await this.client.joinById(sample(this.rooms).roomId, { name: playerName });
+            this.lobbyRoom.onMessage("-", (roomId) => {
+                this.rooms = this.rooms.filter((room) => room.roomId !== roomId);
+            });
+        },
+        toCurrentRoom() {
+            if (this.currentRoom) router.push(`/room/${this.currentRoom.id}`);
+        },
+        async getRooms(roomName) {
+            try {
+                const rooms = await this.client.getAvailableRooms(roomName);
 
-        this.currentRoom = room;
+                return rooms;
+            } catch (e) {
+                console.error("get error", e);
+            }
+        },
+        async createRoom(roomName, doJoinRoom = true) {
+            try {
+                const newRoom = await this.client.create(roomName, {
+                    autoDispose: doJoinRoom,
+                });
 
-        this.sendData("addPlayer");
+                if (doJoinRoom) {
+                    this.currentRoom = newRoom;
+                    router.push("/setup");
+                } else {
+                    newRoom.leave();
+                    this.currentRoom = null;
+                }
 
-        this.toCurrentRoom();
-      } catch (e) {
-        console.error("join error", e);
-      }
+                return newRoom;
+            } catch (e) {
+                console.error("join error", e);
+            }
+        },
+        async joinRoom(roomId = null, playerName) {
+            try {
+                let room;
+                if (roomId) room = await this.client.joinById(roomId, { name: playerName });
+                else room = await this.client.joinById(sample(this.rooms).roomId, { name: playerName });
+
+                this.currentRoom = room;
+
+                this.sendData("addPlayer", { playerId: this.currentRoom.sessionId });
+
+                this.toCurrentRoom();
+            } catch (e) {
+                console.error("join error", e);
+            }
+        },
+        sendData(type, value) {
+            this.currentRoom.send(type, value);
+        },
+        getAllPlayers() {
+            this.sendData("getAllPlayers");
+        },
+        getPlayer(playerId) {
+            this.sendData("getPlayer", playerId);
+        },
     },
-    sendData(type, value) {
-      this.currentRoom.send(type, value);
-    },
-    getAllPlayers() {
-      this.sendData("getAllPlayers");
-    },
-    getPlayer(playerId) {
-      this.sendData("getPlayer", playerId);
-    }
-  },
 });
 
 export default useColyseusStore;

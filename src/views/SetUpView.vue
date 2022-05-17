@@ -1,9 +1,7 @@
 <template>
   <div class="setup">
     <div class="back">
-      <router-link to="/"
-        ><img src="images/icons/arrow-back.png" />Home</router-link
-      >
+      <router-link to="/"><img src="images/icons/arrow-back.png" />Home</router-link>
     </div>
 
     <div class="under">
@@ -92,6 +90,7 @@
 import useColyseusStore from "@/store/colyseus";
 import TheButton from "@/components/TheButton.vue";
 import router from "@/router";
+import bidello from "bidello";
 
 export default {
   name: "SetUpView",
@@ -107,8 +106,10 @@ export default {
     };
   },
   mounted() {
-    this.colyseus.currentRoom.onMessage("addPlayer", () => {
+    this.colyseus.currentRoom.onMessage("addPlayer", ({ playerSessionId: playerId }) => {
       this.colyseus.getAllPlayers();
+
+      bidello.trigger({ name: "addPlayer" }, { playerId });
     });
 
     this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
@@ -118,6 +119,7 @@ export default {
   },
   methods: {
     startGame() {
+      bidello.trigger({ name: "assignTargets" });
       this.colyseus.sendData("startGame");
       router.push("/game");
     },

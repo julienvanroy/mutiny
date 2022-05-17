@@ -6,7 +6,7 @@ import Player from "@/webgl/World/Player";
 //import Item from "@/webgl/World/Item";
 //import BoxCollision from "@/webgl/Collision/BoxCollision";
 import { Pathfinding } from "three-pathfinding";
-import { diffArray, mapToArray, sample, shuffle, uuid } from "@/utils/index.js";
+import { diffArray, sample, shuffle, uuid } from "@/utils/index.js";
 import Bot from "./Bot.js";
 import MapLevel from "@/webgl/World/MapLevel";
 import configs from "@/configs";
@@ -104,14 +104,13 @@ export default class World extends component() {
         }
     }
 
+    onAssignTargets() {
+        this.assignTargets();
+    }
+
     onAddPlayer({ playerId }) {
         this.players.set(playerId, new Player(playerId, this.mapLevel.collider));
-        this.assignTargets();
-        const colyseus = useColyseusStore();
-        colyseus.sendData("updatePlayerTarget", {
-            playerId: playerId,
-            playerTarget: this.players.get(playerId)._getTargetData(),
-        });
+        console.log(`player ${playerId} added`, this.players.get(playerId));
     }
 
     onMovePlayer({ playerId, vector2 }) {
@@ -139,8 +138,10 @@ export default class World extends component() {
             bots,
             players,
             unassignedPlayers = [],
-            tempUnassignedPlayers = [],
+            playersIds,
             tempPlayers = new Map();
+
+        this.players.forEach((p) => delete p.target);
 
         switch (this.players.size) {
             case 0:
@@ -154,30 +155,39 @@ export default class World extends component() {
 
             default:
                 players = shuffle(this.players);
+                playersIds = players.map((keyValue) => keyValue[0]);
 
                 players.forEach(([playerId, player]) => {
+                    console.log(playerId, player.target);
+                    // update unassigned players array
+                    // exclude already assigned player after each loop
+                    // also exclude current player
                     unassignedPlayers = diffArray(
-                        players.map((keyValue) => keyValue[0]),
+                        playersIds.filter((pId) => pId !== playerId),
                         unassignedPlayers
                     );
 
-                    tempUnassignedPlayers = diffArray(
-                        unassignedPlayers.filter((pId) => pId !== playerId),
-                        mapToArray(this.players).map(({ value }) => value)
-                    );
+                    player.target = this.players.get(sample(unassignedPlayers));
 
-                    player.target = this.players.get(sample(tempUnassignedPlayers));
-
-                    unassignedPlayers = tempUnassignedPlayers.filter((pId) => pId !== player.target.id);
+                    unassignedPlayers = unassignedPlayers.filter((pId) => pId !== player.target.id);
 
                     tempPlayers.set(playerId, this.players.get(playerId));
                 });
                 this.players = tempPlayers;
-                console.log(this.players);
-                this.players.forEach((p) => console.log(`player ${p.id} has target ${p.target.id}`));
                 break;
         }
 
         console.log(this.players);
+        this.players.forEach((p) => {
+            if (typeof p.target === Player) p.target._setBot();
+
+            const colyseus = useColyseusStore();
+            colyseus.sendData("updatePlayerTarget", {
+                playerId: p.id,
+                playerTarget: p._getTargetData(),
+            });
+
+            console.log(`player ${p.id} has target ${p.target.id}${p.target.bot ? `of bot ${p.target.bot.id}` : ""}`);
+        });
     }
 }
