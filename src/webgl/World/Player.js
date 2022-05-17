@@ -59,8 +59,8 @@ export default class Player extends component(Mover) {
 
     _move(delta) {
         if (this.isMoving) {
-            this.mesh.position.z -= this._vectorControls.y * delta * 3.2;
-            this.mesh.position.x += this._vectorControls.x * delta * 3.2;
+            this.mesh.position.z -= this._vectorControls.y * delta;
+            this.mesh.position.x += this._vectorControls.x * delta;
         }
     }
 
