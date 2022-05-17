@@ -96,8 +96,8 @@ export default class Mover {
     }
 
     _getTargetData() {
-        if (this.target) {
-            const { body } = this.target;
+        if (this.target && this.target.bot) {
+            const { body } = this.target.bot;
             return {
                 id: this.id,
                 info: body.map(({ tags, color }) => ({ tags, color })),
