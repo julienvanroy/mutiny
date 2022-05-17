@@ -3,6 +3,7 @@ import { PathfindingHelper } from "three-pathfinding";
 import Mover from "./Mover";
 import Experience from "../Experience";
 import configs from "@/configs";
+import { Vector3, Matrix4, Quaternion } from "three";
 
 export default class Bot extends component(Mover) {
     constructor(botId, position) {
@@ -12,6 +13,7 @@ export default class Bot extends component(Mover) {
         this.isPlayer = false;
 
         const experience = new Experience();
+        experience.scene.add(this.mesh);
         this._pathfinding = experience.world.pathfinding;
 
         this._helper = new PathfindingHelper();
@@ -54,7 +56,13 @@ export default class Bot extends component(Mover) {
                 this._setPath();
             }
 
-            this.mesh && this.mesh.position.set(this.position.x, 0, this.position.z);
+            if (this.mesh) {
+                this.mesh.position.set(this.position.x, 0, this.position.z);
+                var mx = new Matrix4().lookAt(this.position, new Vector3(0, 0, 0), new Vector3(0, 1, 0));
+                var qt = new Quaternion().setFromRotationMatrix(mx);
+                const step = 10 * delta;
+                this.mesh.quaternion.rotateTowards(qt, step);
+            }
         }
     }
 }

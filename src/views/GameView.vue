@@ -1,19 +1,25 @@
 <template>
   <ul class="players">
     <li v-for="player in this.players" :key="player.id" :class="`player ${player.color}`">
-      <div class="points">{{ player.points }}</div>
-      <span>{{ player.name }}</span>
+      <div class="points">
+        <img src="/images/players/points.png" />
+        <span>{{ player.points }}</span>
+      </div>
+      <span class="name">{{ player.name }}</span>
     </li>
   </ul>
   <router-link to="end-game"><button class="end-btn">END GAME</button></router-link>
+  <TheTimer />
 </template>
 
 <script>
 import useColyseusStore from "@/store/colyseus";
 import bidello from "bidello";
+import TheTimer from "@/components/TheTimer/TheTimer";
 
 export default {
   name: "GameView",
+  components: { TheTimer },
   setup() {
     const colyseus = useColyseusStore();
 
@@ -25,6 +31,7 @@ export default {
     };
   },
   mounted() {
+    if (!this.colyseus.currentRoom) return;
     this.colyseus.getAllPlayers();
     this.colyseus.currentRoom.onMessage("addPlayer", ({ playerSessionId }) => {
       playerSessionId && bidello.trigger({ name: "addPlayer" }, { playerId: playerSessionId });
@@ -34,6 +41,10 @@ export default {
     this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
       delete players[this.colyseus.currentRoom.sessionId];
       this.players = players;
+      const mapPlayers = new Map(Object.entries(players));
+      mapPlayers.forEach((value, key) => {
+        bidello.trigger({ name: "addPlayer" }, { playerId: key });
+      });
     });
 
     this.colyseus.currentRoom.onMessage("joystick", ({ playerSessionId, playerPosition }) => {
@@ -80,8 +91,21 @@ export default {
       background-color: $player-yellow;
     }
     .points {
+      position: relative;
+      img {
+        width: 30px;
+      }
+      span {
+        font-weight: $ft-bold;
+        font-size: 16px;
+        color: $black;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -60%);
+      }
     }
-    span {
+    .name {
       font-weight: $ft-bold;
       font-size: 16px;
       letter-spacing: 0.01em;

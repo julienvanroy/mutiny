@@ -32,8 +32,8 @@ export default class Player extends component(Mover) {
         this._velocity = new Vector3();
         this._gravity = -32;
         this._capsuleInfo = {
-            radius: 0.15,
-            segment: new Line3(new Vector3(), new Vector3(0, 0.0, 0.0)),
+            radius: 1,
+            segment: new Line3(new Vector3(), new Vector3(0.0, 0.0, 0.0)),
         };
 
         this._temp = {
@@ -153,6 +153,10 @@ export default class Player extends component(Mover) {
                 bot.mesh.scale.set(1, 1, 1);
             }
         });
+        /**
+         * Todo: Need Low model navmesh and collison ( Only cube )
+         */
+        //this._updateCollision(delta)
     }
 
     onKill({ sendData }) {

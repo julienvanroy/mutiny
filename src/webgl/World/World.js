@@ -10,6 +10,7 @@ import { sample, shuffle, uuid } from "@/utils/index.js";
 import Bot from "./Bot.js";
 import MapLevel from "@/webgl/World/MapLevel";
 import configs from "@/configs";
+import useColyseusStore from "@/store/colyseus.js";
 
 export default class World extends component() {
     init() {
@@ -106,6 +107,11 @@ export default class World extends component() {
     onAddPlayer({ playerId }) {
         this.players.set(playerId, new Player(playerId, this.mapLevel.collider));
         this.assignTargets();
+        const colyseus = useColyseusStore();
+        colyseus.sendData("updatePlayerTarget", {
+            playerId: playerId,
+            playerTarget: this.players.get(playerId)._getTargetData(),
+        });
     }
 
     onMovePlayer({ playerId, vector2 }) {
