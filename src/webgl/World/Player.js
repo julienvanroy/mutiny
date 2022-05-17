@@ -183,7 +183,7 @@ export default class Player extends component(Mover) {
     }
 
     respawn(targetPlayer) {
-        console.log(`old target ${this.target.id}, old bold ${this.bot.id}`);
+        console.log(`${this.id} has old target ${this.target.id}, old bot ${this.bot.id}`);
         const selectedBot = sample(Object.values(this._botsPool).filter((bot) => !bot.isPlayer));
         this.bot.isPlayer = false;
         console.log(selectedBot, this.bot);
@@ -191,7 +191,7 @@ export default class Player extends component(Mover) {
         this.bot.isPlayer = true;
         this.mesh = this.bot.mesh;
         this.target = targetPlayer;
-        console.log(`new target ${this.target.id}, new bold ${this.bot.id}`);
+        console.log(`${this.id} has new target ${this.target.id}, new bot ${this.bot.id}`);
     }
 
     switchTarget() {}

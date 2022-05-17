@@ -162,16 +162,13 @@ export default class World extends component() {
 
                     player.target = sample(tempUnassignedPlayers);
 
-                    console.log(playerId, tempUnassignedPlayers, player.target);
-
                     unassignedPlayers = tempUnassignedPlayers.filter((p) => p.id !== player.target.id);
 
                     tempPlayers.set(playerId, player);
-
-                    console.log(playerId, player.target.id);
                 });
                 this.players = tempPlayers;
                 console.log(this.players);
+                this.players.forEach((p) => console.log(`player ${p.id} has target ${p.target.id}`));
                 break;
         }
 
