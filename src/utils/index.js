@@ -1,4 +1,7 @@
+const diffArray = (arr1, arr2) => arr1.filter((x) => !arr2.includes(x));
+
 const mapToArray = (map) => Array.from(map, ([name, value]) => ({ name, value }));
+
 const sample = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 const sampleSize = ([...arr], n = 1) => {
@@ -24,4 +27,4 @@ const uuid = () =>
         (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16)
     );
 
-export { mapToArray, sample, sampleSize, shuffle, uuid };
+export { diffArray, mapToArray, sample, sampleSize, shuffle, uuid };

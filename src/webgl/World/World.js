@@ -6,7 +6,7 @@ import Player from "@/webgl/World/Player";
 //import Item from "@/webgl/World/Item";
 //import BoxCollision from "@/webgl/Collision/BoxCollision";
 import { Pathfinding } from "three-pathfinding";
-import { sample, shuffle, uuid } from "@/utils/index.js";
+import { diffArray, mapToArray, sample, shuffle, uuid } from "@/utils/index.js";
 import Bot from "./Bot.js";
 import MapLevel from "@/webgl/World/MapLevel";
 import configs from "@/configs";
@@ -156,15 +156,18 @@ export default class World extends component() {
                 players = shuffle(this.players);
 
                 players.forEach(([playerId, player]) => {
-                    unassignedPlayers = players.map((keyValue) => keyValue[1]);
+                    unassignedPlayers = players.map((keyValue) => keyValue[0]);
 
-                    tempUnassignedPlayers = unassignedPlayers.filter((p) => p.id !== playerId);
+                    tempUnassignedPlayers = diffArray(
+                        unassignedPlayers.filter((pId) => pId !== playerId),
+                        mapToArray(this.players).map(({ value }) => value)
+                    );
 
-                    player.target = sample(tempUnassignedPlayers);
+                    player.target = this.players.get(sample(tempUnassignedPlayers));
 
-                    unassignedPlayers = tempUnassignedPlayers.filter((p) => p.id !== player.target.id);
+                    unassignedPlayers = tempUnassignedPlayers.filter((pId) => pId !== player.target.id);
 
-                    tempPlayers.set(playerId, player);
+                    tempPlayers.set(playerId, this.players.get(playerId));
                 });
                 this.players = tempPlayers;
                 console.log(this.players);
