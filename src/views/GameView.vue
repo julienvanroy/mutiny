@@ -47,6 +47,10 @@ export default {
       });
     });
 
+    this.colyseus.currentRoom.onMessage("addPoint", ({ playerId, playerPoints }) => {
+      Object.values(this.players).find((p) => p.id === playerId).points = playerPoints;
+    });
+
     this.colyseus.currentRoom.onMessage("joystick", ({ playerSessionId, playerPosition }) => {
       bidello.trigger({ name: "movePlayer" }, { playerId: playerSessionId, vector2: playerPosition });
     });

@@ -70,6 +70,10 @@ export default {
       if (message.playerId === this.colyseus.currentRoom.sessionId) this.playerTarget = message.playerTarget;
     });
 
+    this.colyseus.currentRoom.onMessage("addPoint", ({ playerId, playerPoints }) => {
+      if (playerId === this.colyseus.currentRoom.sessionId) this.playerPoints = playerPoints;
+    });
+
     this.joystick = nipplejs.create({
       zone: this.$refs.joystick,
       size: 50,

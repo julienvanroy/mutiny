@@ -25,6 +25,8 @@ export default class Player extends component(Mover) {
             this.mesh = this.bot.mesh;
         }
 
+        this.points = 0;
+
         this._vectorControls = new Vector2();
         this._targetQuaternion = new Quaternion();
         this._speedRotation = 10;
@@ -174,8 +176,8 @@ export default class Player extends component(Mover) {
 
                     if (this.target && this.target.bot?.id === bot.id) {
                         console.log(`${this.id} killed ${this.target.id}`);
-                        sendData("addPoint", { playerId: this.id });
-                        if (this.target instanceof Player) this.target.respawn(this);
+                        this.addPoints(sendData);
+                        this.target.respawn(this);
                         this.switchTarget();
                     }
                 }
@@ -183,16 +185,23 @@ export default class Player extends component(Mover) {
         }
     }
 
+    addPoints(sendData) {
+        this.points += 1;
+        sendData("addPoint", { playerId: this.id, playerPoints: this.points });
+    }
+
     respawn(targetPlayer) {
-        console.log(`${this.id} has old target ${this.target.id}, old bot ${this.bot.id}`);
-        const selectedBot = sample(Object.values(this._botsPool).filter((bot) => !bot.isPlayer));
-        this.bot.isPlayer = false;
-        console.log(selectedBot, this.bot);
-        this.bot = selectedBot;
-        this.bot.isPlayer = true;
-        this.mesh = this.bot.mesh;
-        this.target = targetPlayer;
-        console.log(`${this.id} has new target ${this.target.id}, new bot ${this.bot.id}`);
+        if (this.target instanceof Player) {
+            console.log(`${this.id} has old target ${this.target.id}, old bot ${this.bot.id}`);
+            const selectedBot = sample(Object.values(this._botsPool).filter((bot) => !bot.isPlayer));
+            this.bot.isPlayer = false;
+            console.log(selectedBot, this.bot);
+            this.bot = selectedBot;
+            this.bot.isPlayer = true;
+            this.mesh = this.bot.mesh;
+            this.target = targetPlayer;
+            console.log(`${this.id} has new target ${this.target.id}, new bot ${this.bot.id}`);
+        }
     }
 
     switchTarget() {
