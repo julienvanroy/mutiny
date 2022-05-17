@@ -149,7 +149,7 @@ export default class Player extends component(Mover) {
     onRaf({ delta }) {
         this._move(delta);
         this._rotation(delta);
-        this._updateCollision(delta);
+        // this._updateCollision(delta);
 
         // Object.values(this._botsPool).forEach((bot) => {
         //     if (
@@ -192,17 +192,15 @@ export default class Player extends component(Mover) {
     }
 
     respawn(targetPlayer) {
-        if (this.target instanceof Player) {
-            console.log(`${this.id} has old target ${this.target.id}, old bot ${this.bot.id}`);
-            const selectedBot = sample(Object.values(this._botsPool).filter((bot) => !bot.isPlayer));
-            this.bot.isPlayer = false;
-            console.log(selectedBot, this.bot);
-            this.bot = selectedBot;
-            this.bot.isPlayer = true;
-            this.mesh = this.bot.mesh;
-            this.target = targetPlayer;
-            console.log(`${this.id} has new target ${this.target.id}, new bot ${this.bot.id}`);
-        }
+        console.log(`${this.id} has old target ${this.target.id}, old bot ${this.bot.id}`);
+        const selectedBot = sample(Object.values(this._botsPool).filter((bot) => !bot.isPlayer));
+        this.bot.isPlayer = false;
+        console.log(selectedBot, this.bot);
+        this.bot = selectedBot;
+        this.bot.isPlayer = true;
+        this.mesh = this.bot.mesh;
+        if (this.target instanceof Player) this.target = targetPlayer;
+        console.log(`${this.id} has new target ${this.target.id}, new bot ${this.bot.id}`);
     }
 
     switchTarget() {
