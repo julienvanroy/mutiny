@@ -49,10 +49,7 @@ export default {
   },
   data() {
     return {
-      isMobile:
-        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-          navigator.userAgent
-        ),
+      isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
     };
   },
   mounted() {
@@ -65,8 +62,7 @@ export default {
     joinRoom(roomId) {
       // TODO in the futur : get user pseudo from input (if not, set random pseudo)
       // TODO check if random pseudo is already used for another player
-      const playerName =
-        PiratesNames[Math.floor(Math.random() * PiratesNames.length)];
+      const playerName = PiratesNames[Math.floor(Math.random() * PiratesNames.length)];
       this.colyseus.joinRoom(roomId, playerName);
     },
     joinRandomRoom() {
