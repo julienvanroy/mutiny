@@ -1,22 +1,21 @@
 import Environment from "./Environment.js";
-import {component} from "bidello";
+import { component } from "bidello";
 import Experience from "@/webgl/Experience";
-import {GridHelper, Vector2, Vector3} from "three";
+import { GridHelper, Vector2, Vector3 } from "three";
 import Player from "@/webgl/World/Player";
 //import Item from "@/webgl/World/Item";
 //import BoxCollision from "@/webgl/Collision/BoxCollision";
-import {Pathfinding} from "three-pathfinding";
-import {sample, shuffle, uuid} from "@/utils/index.js";
+import { Pathfinding } from "three-pathfinding";
+import { sample, shuffle, uuid } from "@/utils/index.js";
 import Bot from "./Bot.js";
 import MapLevel from "@/webgl/World/MapLevel";
 import configs from "@/configs";
 import useColyseusStore from "@/store/colyseus.js";
 
-
 export default class World extends component() {
     init() {
         const experience = new Experience();
-        this._debug = experience.debug
+        this._debug = experience.debug;
         this._renderer = experience.renderer;
         this._scene = experience.scene;
         this._camera = experience.camera;
@@ -42,43 +41,25 @@ export default class World extends component() {
         const grid = new GridHelper(20, 20);
         this._scene.add(grid);
 
-        this.onDebug()
+        this.onDebug();
         this._isLoaded = true;
     }
 
     _initPathfinding() {
         this.pathfinding = new Pathfinding();
         this.pathfinding.zone = "map";
-        this.pathfinding.setZoneData(
-            this.pathfinding.zone,
-            Pathfinding.createZone(this.mapLevel.navMesh.geometry)
-        );
+        this.pathfinding.setZoneData(this.pathfinding.zone, Pathfinding.createZone(this.mapLevel.navMesh.geometry));
     }
 
     _initBots() {
         this.bots = {};
         const initialPositions = [];
 
-        for (let i = 0; i < configs.tempCharacter.count; i++) {
-            let position = this.pathfinding.getRandomNode(
-                this.pathfinding.zone,
-                0,
-                new Vector3(),
-                64
-            );
+        for (let i = 0; i < configs.character.count; i++) {
+            let position = this.pathfinding.getRandomNode(this.pathfinding.zone, 0, new Vector3(), 64);
 
-            while (
-                initialPositions.some(
-                    (pos) =>
-                        pos.distanceTo(position) < configs.tempCharacter.sizes.radius * 3.2
-                )
-                ) {
-                position = this.pathfinding.getRandomNode(
-                    this.pathfinding.zone,
-                    0,
-                    new Vector3(),
-                    64
-                );
+            while (initialPositions.some((pos) => pos.distanceTo(position) < configs.character.sizes.radius * 3.2)) {
+                position = this.pathfinding.getRandomNode(this.pathfinding.zone, 0, new Vector3(), 64);
             }
 
             initialPositions.push(position);
@@ -89,35 +70,29 @@ export default class World extends component() {
     }
 
     _keyboard() {
-        const player = this.players.get('debug')
-        if (!this._debug.active || !this._controls.isPressed || !player) return
+        const player = this.players.get("debug");
+        if (!this._debug.active || !this._controls.isPressed || !player) return;
 
-        const vectorControls = new Vector2()
+        const vectorControls = new Vector2();
 
-        if (this._controls.actions.up && this._controls.actions.down)
-            vectorControls.y = 0;
-        else if (this._controls.actions.up)
-            vectorControls.y = 1;
-        else if (this._controls.actions.down)
-            vectorControls.y = -1;
+        if (this._controls.actions.up && this._controls.actions.down) vectorControls.y = 0;
+        else if (this._controls.actions.up) vectorControls.y = 1;
+        else if (this._controls.actions.down) vectorControls.y = -1;
         else vectorControls.y = 0;
 
-        if (this._controls.actions.right && this._controls.actions.left)
-            vectorControls.x = 0;
-        else if (this._controls.actions.right)
-            vectorControls.x = 1;
-        else if (this._controls.actions.left)
-            vectorControls.x = -1;
+        if (this._controls.actions.right && this._controls.actions.left) vectorControls.x = 0;
+        else if (this._controls.actions.right) vectorControls.x = 1;
+        else if (this._controls.actions.left) vectorControls.x = -1;
         else vectorControls.x = 0;
 
-        player.vectorControls = vectorControls
+        player.vectorControls = vectorControls;
     }
 
     onRaf() {
         this._renderer.render(this._scene, this._camera);
 
         if (this._isLoaded) {
-            this._keyboard()
+            this._keyboard();
 
             /*
             TODO: Collision Items
@@ -129,16 +104,16 @@ export default class World extends component() {
         }
     }
 
-    onAddPlayer({playerId}) {
+    onAddPlayer({ playerId }) {
         this.players.set(playerId, new Player(playerId, this.mapLevel.collider));
         this.assignTargets();
         const colyseus = useColyseusStore();
         colyseus.sendData("updatePlayerTarget", {playerId: playerId, playerTarget: this.players.get(playerId)._getTargetData()});
     }
 
-    onMovePlayer({playerId, vector2}) {
-        const player = this.players.get(playerId)
-        player.vectorControls = vector2
+    onMovePlayer({ playerId, vector2 }) {
+        const player = this.players.get(playerId);
+        player.vectorControls = vector2;
     }
 
     onDebug() {
@@ -151,9 +126,9 @@ export default class World extends component() {
         });
 
         const btnAddPlayer = folderDebug.addButton({
-            title: 'addPlayer',
+            title: "addPlayer",
         });
-        btnAddPlayer.on('click', () => this.onAddPlayer({playerId: 'debug'}));
+        btnAddPlayer.on("click", () => this.onAddPlayer({ playerId: "debug" }));
     }
 
     assignTargets() {
@@ -169,9 +144,7 @@ export default class World extends component() {
 
             case 1:
                 singlePlayer = this.players.values().next().value;
-                bots = Object.values(singlePlayer._botsPool).filter(
-                    (bot) => !bot.isPlayer
-                );
+                bots = Object.values(singlePlayer._botsPool).filter((bot) => !bot.isPlayer);
                 singlePlayer.target = sample(bots);
                 break;
 
@@ -180,13 +153,9 @@ export default class World extends component() {
                 unassignedPlayers = players.map((keyValue) => keyValue[1]);
 
                 players.forEach(([playerId, player]) => {
-                    player.target = sample(
-                        unassignedPlayers.filter((p) => p.id !== playerId)
-                    );
+                    player.target = sample(unassignedPlayers.filter((p) => p.id !== playerId));
 
-                    unassignedPlayers = unassignedPlayers.filter(
-                        (p) => p.id !== player.target.id
-                    );
+                    unassignedPlayers = unassignedPlayers.filter((p) => p.id !== player.target.id);
 
                     tempPlayers.set(playerId, player);
 

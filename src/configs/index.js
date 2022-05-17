@@ -1,12 +1,13 @@
 const configs = {
-    tempCharacter: {
+    character: {
         count: 64,
-        colors: ["#365e55", "#72341f", "#c79161", "#c4ac90", "#dbcdc1"],
+        colors: ["#414182", "#8DDDE9", "#FCA04C", "#4F9C98", "#FC6C4C"],
         sizes: {
             radius: 0.32,
             height: 0.64,
         },
-        speed: 2.4,
+        speed: 0.6,
+        range: 3.2,
     },
     game: {
         maxTime: 150,

@@ -3,6 +3,7 @@ import { PathfindingHelper } from "three-pathfinding";
 import Mover from "./Mover";
 import Experience from "../Experience";
 import configs from "@/configs";
+import { Vector3, Matrix4, Quaternion } from "three";
 
 export default class Bot extends component(Mover) {
     constructor(botId, position) {
@@ -45,7 +46,7 @@ export default class Bot extends component(Mover) {
 
                 if (velocity.lengthSq() > 0.05 * 0.05) {
                     velocity.normalize();
-                    this.position.add(velocity.multiplyScalar(delta * configs.tempCharacter.speed));
+                    this.position.add(velocity.multiplyScalar(delta * configs.character.speed));
                     this._helper.setPlayerPosition(this.position);
                 } else {
                     // Remove node from the path we calculated
@@ -55,7 +56,13 @@ export default class Bot extends component(Mover) {
                 this._setPath();
             }
 
-            this.mesh && this.mesh.position.set(this.position.x, 0, this.position.z);
+            if (this.mesh) {
+                this.mesh.position.set(this.position.x, 0, this.position.z);
+                var mx = new Matrix4().lookAt(this.position, new Vector3(0, 0, 0), new Vector3(0, 1, 0));
+                var qt = new Quaternion().setFromRotationMatrix(mx);
+                const step = 10 * delta;
+                this.mesh.quaternion.rotateTowards(qt, step);
+            }
         }
     }
 }
