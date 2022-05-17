@@ -21,7 +21,7 @@
       <div
         class="clue"
         :style="`background-color: ${clue.color}`"
-        v-for="clue in this.playerTarget.info"
+        v-for="clue in this.playerTarget.info.reverse()"
         :key="clue.color"
       >
         {{ clue.tags[0] }}
@@ -67,7 +67,7 @@ export default {
     });
 
     this.colyseus.currentRoom.onMessage("updatePlayerTarget", (message) => {
-      this.playerTarget = message.playerTarget;
+      if (message.playerId === this.colyseus.currentRoom.sessionId) this.playerTarget = message.playerTarget;
     });
 
     this.joystick = nipplejs.create({

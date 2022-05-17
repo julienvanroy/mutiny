@@ -62,7 +62,7 @@ export default class Mover {
             new ConeGeometry(r, h, 32),
             new MeshStandardMaterial({ color: new Color(c[2]).convertSRGBToLinear() })
         );
-        cone.tags = ["cone"];
+        cone.tags = ["Cone"];
         cone.color = c[2];
 
         const circle = new Mesh(

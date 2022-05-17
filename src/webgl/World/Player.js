@@ -20,9 +20,10 @@ export default class Player extends component(Mover) {
         this._players = experience.world.players;
 
         this.bot = sample(Object.values(this._botsPool).filter((bot) => !bot.isPlayer));
-        this.bot.isPlayer = true;
-        this.mesh = this.bot.mesh;
-        this.mesh.position.set(2, 0, 2);
+        if (this.bot) {
+            this.bot.isPlayer = true;
+            this.mesh = this.bot.mesh;
+        }
 
         this._vectorControls = new Vector2();
         this._targetQuaternion = new Quaternion();
@@ -56,8 +57,8 @@ export default class Player extends component(Mover) {
 
     _move(delta) {
         if (this.isMoving) {
-            this.mesh.position.z -= this._vectorControls.y * delta;
-            this.mesh.position.x += this._vectorControls.x * delta;
+            this.mesh.position.z -= this._vectorControls.y * delta * 3.2;
+            this.mesh.position.x += this._vectorControls.x * delta * 3.2;
         }
     }
 
@@ -149,7 +150,11 @@ export default class Player extends component(Mover) {
         this._updateCollision(delta);
 
         Object.values(this._botsPool).forEach((bot) => {
-            if (bot.id !== this.bot.id && this.mesh.position.distanceTo(bot.mesh.position) > configs.character.range) {
+            if (
+                this.bot &&
+                bot.id !== this.bot.id &&
+                this.mesh.position.distanceTo(bot.mesh.position) > configs.character.range
+            ) {
                 bot.mesh.scale.set(1, 1, 1);
             }
         });
@@ -161,26 +166,38 @@ export default class Player extends component(Mover) {
 
     onKill({ sendData }) {
         Object.values(this._botsPool).forEach((bot) => {
-            if (bot.id !== this.bot.id && this.mesh.position.distanceTo(bot.mesh.position) <= configs.character.range) {
-                bot.mesh.scale.set(1.2, 1.2, 1.2);
-            }
-            if (bot.id !== this.bot.id && bot.id === this.target.id) {
-                sendData("addPoint", { playerId: this.id });
-                this.switchTarget();
-                if (this.target instanceof Player) this.target.respawn(this);
+            if (this.bot) {
+                if (
+                    bot.id !== this.bot.id &&
+                    this.mesh.position.distanceTo(bot.mesh.position) <= configs.character.range
+                ) {
+                    bot.mesh.scale.set(1.2, 1.2, 1.2);
+                }
+                if (
+                    bot.id !== this.bot.id &&
+                    this.target &&
+                    bot.id === this.target.id &&
+                    this.mesh.position.distanceTo(bot.mesh.position) <= configs.character.range
+                ) {
+                    console.log("ok");
+                    sendData("addPoint", { playerId: this.id });
+                    this.switchTarget();
+                    if (this.target instanceof Player) this.target.respawn(this);
+                }
             }
         });
     }
 
     respawn(targetPlayer) {
+        console.log(this.target.id, this.bot.id);
         const selectedBot = sample(Object.values(this._botsPool).filter((bot) => !bot.isPlayer));
         this.bot.isPlayer = false;
         console.log(selectedBot, this.bot);
         this.bot = selectedBot;
         this.bot.isPlayer = true;
         this.mesh = this.bot.mesh;
-        this.mesh.position.set(2, 0, 2);
         this.target = targetPlayer;
+        console.log(this.target.id, this.bot.id);
     }
 
     switchTarget() {}
