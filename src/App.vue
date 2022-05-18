@@ -151,7 +151,7 @@ export default {
   }
   .modal-landscape {
     position: absolute;
-    z-index: 12;
+    z-index: 16;
     inset: 0;
     background-color: $black;
     color: $white;

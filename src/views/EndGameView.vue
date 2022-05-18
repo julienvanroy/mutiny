@@ -74,6 +74,7 @@ export default {
 
   .over {
     position: absolute;
+    z-index: 14;
     inset: 0;
     width: 100%;
     height: 100%;
@@ -157,6 +158,7 @@ export default {
 
   .under {
     position: relative;
+    z-index: 1;
     width: 100%;
     height: 100%;
     overflow: hidden;
