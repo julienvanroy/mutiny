@@ -138,8 +138,7 @@ export default class World extends component() {
             bots,
             players,
             unassignedPlayers = [],
-            playersIds,
-            tempPlayers = new Map();
+            playersIds;
 
         this.players.forEach((p) => delete p.target);
 
@@ -170,16 +169,13 @@ export default class World extends component() {
                     player.target = this.players.get(sample(unassignedPlayers));
 
                     unassignedPlayers = unassignedPlayers.filter((pId) => pId !== player.target.id);
-
-                    tempPlayers.set(playerId, this.players.get(playerId));
                 });
-                this.players = tempPlayers;
                 break;
         }
 
         console.log(this.players);
         this.players.forEach((p) => {
-            if (typeof p.target === Player) p.target._setBot();
+            if (p.target instanceof Player) p.target._setBot();
 
             const colyseus = useColyseusStore();
             colyseus.sendData("updatePlayerTarget", {
