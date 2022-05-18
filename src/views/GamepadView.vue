@@ -1,5 +1,5 @@
 <template>
-  <game-pad v-if="!!showGamePad" :player-target="playerTarget" />
+  <game-pad v-if="!!showGamePad" :player="player" :player-target="playerTarget" />
   <div v-if="!showGamePad" class="modal-waiting">WAITING...</div>
 </template>
 
@@ -18,7 +18,8 @@ export default {
   data() {
     return {
       showGamePad: false,
-      playerTarget: null,
+      playerTarget: {},
+      player: {},
     };
   },
   mounted() {
@@ -29,6 +30,26 @@ export default {
     this.colyseus.currentRoom.onMessage("updatePlayerTarget", (message) => {
       if (message.playerId === this.colyseus.currentRoom.sessionId) this.playerTarget = message.playerTarget;
     });
+
+    this.colyseus.currentRoom.onMessage("getPlayer", ({ id, name, points, color }) => {
+      if (id === this.colyseus.currentRoom.sessionId) {
+        this.player = {
+          name,
+          points,
+          color,
+        };
+      }
+    });
+
+    this.colyseus.currentRoom.onMessage("addPoint", ({ playerId, playerPoints }) => {
+      if (playerId === this.colyseus.currentRoom.sessionId) this.playerPoints = playerPoints;
+    });
+
+    this.colyseus.currentRoom.onMessage("addPlayer", () => {});
+
+    this.colyseus.currentRoom.onMessage("getAllPlayers", () => {});
+
+    this.colyseus.currentRoom.onMessage("joystick", () => {});
   },
   unmounted() {
     this.colyseus.currentRoom?.leave();
