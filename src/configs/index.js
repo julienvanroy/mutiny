@@ -7,6 +7,7 @@ const configs = {
             height: 0.64,
         },
         speed: 1,
+        rotation: 100,
         range: 3.2, //10
     },
     game: {
