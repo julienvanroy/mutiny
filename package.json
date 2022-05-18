@@ -22,6 +22,7 @@
     "detect-gpu": "^4.0.19",
     "nipplejs": "^0.9.1",
     "pinia": "^2.0.13",
+    "qrcode": "^1.5.0",
     "three": "^0.140.0",
     "three-mesh-bvh": "^0.5.10",
     "three-pathfinding": "^1.1.0",
