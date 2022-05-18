@@ -96,8 +96,8 @@ export default {
         width: 30px;
       }
       span {
-        font-weight: $ft-bold;
-        font-size: 16px;
+        font-weight: $ft-w-bold;
+        font-size: $ft-s-xsmall;
         color: $black;
         position: absolute;
         top: 50%;
@@ -106,8 +106,8 @@ export default {
       }
     }
     .name {
-      font-weight: $ft-bold;
-      font-size: 16px;
+      font-weight: $ft-w-bold;
+      font-size: $ft-s-xsmall;
       letter-spacing: 0.01em;
       margin-left: 5px;
     }

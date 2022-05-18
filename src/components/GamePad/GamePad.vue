@@ -119,8 +119,8 @@ export default {
           width: 60px;
         }
         span {
-          font-weight: $ft-bold;
-          font-size: 20px;
+          font-weight: $ft-w-bold;
+          font-size: $ft-s-medium;
           color: $white;
           position: absolute;
           top: 50%;
@@ -132,8 +132,8 @@ export default {
         margin-left: 10px;
         span {
           display: block;
-          font-weight: $ft-bold;
-          font-size: 18px;
+          font-weight: $ft-w-bold;
+          font-size: $ft-s-small;
           margin-top: 6px;
         }
       }
@@ -158,8 +158,8 @@ export default {
     align-items: center;
     p {
       text-align: center;
-      font-weight: $ft-bold;
-      font-size: 20px;
+      font-weight: $ft-w-bold;
+      font-size: $ft-s-medium;
       letter-spacing: 0.01em;
     }
     .clue {
@@ -171,7 +171,7 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
-      font-weight: $ft-bold;
+      font-weight: $ft-w-bold;
     }
   }
   .right {
@@ -187,8 +187,8 @@ export default {
         width: 100px;
       }
       span {
-        font-weight: $ft-bold;
-        font-size: 20px;
+        font-weight: $ft-w-bold;
+        font-size: $ft-s-medium;
         position: absolute;
         top: 50%;
         left: 50%;

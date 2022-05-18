@@ -38,7 +38,7 @@ export default {
   inset: 0;
   background-color: $black;
   color: $white;
-  font-weight: $ft-bold;
+  font-weight: $ft-w-bold;
   display: flex;
   justify-content: center;
   align-items: center;

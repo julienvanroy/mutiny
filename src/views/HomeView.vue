@@ -108,7 +108,7 @@ export default {
     .how-to-play {
       max-width: 380px;
       p {
-        font-size: 18px;
+        font-size: $ft-s-small;
         text-align: center;
       }
     }
@@ -138,8 +138,8 @@ export default {
     left: 20px;
     a {
       color: $black;
-      font-size: 18px;
-      font-weight: 500;
+      font-size: $ft-s-small;
+      font-weight: $ft-w-medium;
       letter-spacing: 0.01em;
       text-decoration-line: underline;
     }

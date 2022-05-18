@@ -49,16 +49,16 @@
     align-items: center;
     text-align: center;
     h1 {
-      font-size: 50px;
+      font-size: $ft-s-xlarge;;
     }
     ul {
       padding: 0;
       li {
         list-style: none;
-        font-weight: $ft-medium;
-        font-size: 18px;
+        font-weight: $ft-w-medium;
+        font-size: $ft-s-small;
         &.subtitle {
-          font-weight: $ft-bold;
+          font-weight: $ft-w-bold;
           margin-top: 20px;
         }
       }

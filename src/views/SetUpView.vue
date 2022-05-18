@@ -192,7 +192,7 @@ export default {
                 justify-content: flex-start;
                 align-items: center;
                 span {
-                  font-weight: $ft-bold;
+                  font-weight: $ft-w-bold;
                   margin-left: 8px;
                 }
               }
@@ -271,7 +271,7 @@ export default {
             p {
               margin-top: 20px;
               height: 150px;
-              font-size: 24px;
+              font-size: $ft-s-medium;
               display: flex;
               justify-content: center;
               align-items: center;
@@ -301,8 +301,8 @@ export default {
             }
             h3 {
               margin: 0;
-              font-size: 30px;
-              font-weight: $ft-bold;
+              font-size: $ft-s-large;
+              font-weight: $ft-w-bold;
               text-align: center;
             }
             .subtitle {

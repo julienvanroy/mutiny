@@ -100,12 +100,11 @@ export default {
 
 <style lang="scss">
 #app {
-  font-family: "Montserrat";
   color: $black;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-family: $ft-body;
-  font-weight: $ft-regular;
+  font-weight: $ft-w-regular;
   box-sizing: border-box;
 }
 
@@ -156,7 +155,7 @@ export default {
     inset: 0;
     background-color: $black;
     color: $white;
-    font-weight: $ft-bold;
+    font-weight: $ft-w-bold;
     display: flex;
     justify-content: center;
     align-items: center;
