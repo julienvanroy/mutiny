@@ -137,8 +137,10 @@ export default class World extends component() {
         let singlePlayer,
             bots,
             players,
-            unassignedPlayers = [],
-            playersIds;
+            targetsToChose = [],
+            chosenAsTargets = [],
+            playersIds,
+            playerTarget;
 
         this.players.forEach((p) => delete p.target);
 
@@ -157,17 +159,25 @@ export default class World extends component() {
                 playersIds = players.map((keyValue) => keyValue[0]);
 
                 players.forEach(([playerId, player]) => {
-                    // update unassigned players array
-                    // exclude already assigned player after each loop
-                    // also exclude current player
-                    unassignedPlayers = diffArray(
-                        playersIds.filter((pId) => pId !== playerId),
-                        unassignedPlayers
-                    );
+                    console.log("__________________________");
+                    console.log(`player ${playerId}`);
 
-                    player.target = this.players.get(sample(unassignedPlayers));
+                    console.log(`chosen as targets`, [...chosenAsTargets]);
 
-                    unassignedPlayers = unassignedPlayers.filter((pId) => pId !== player.target.id);
+                    targetsToChose = playersIds.filter((pId) => pId !== playerId);
+                    console.log(`targets to chode`, [...targetsToChose]);
+
+                    playerTarget = sample(diffArray(targetsToChose, chosenAsTargets));
+
+                    console.log(`target ${playerTarget}`);
+                    console.log("__________________________");
+
+                    if (!playerTarget) this.assignTargets();
+                    else {
+                        chosenAsTargets.push(playerTarget);
+
+                        player.target = this.players.get(playerTarget);
+                    }
                 });
                 break;
         }
