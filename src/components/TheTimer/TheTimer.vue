@@ -48,7 +48,7 @@ export default {
 
 <style lang="scss" scoped>
 .timer {
-  font-size: 3.2rem;
+  font-size: $ft-s-xlarge;
   position: absolute;
   top: 10%;
   left: 50%;

@@ -34,11 +34,11 @@ export default {
 <style lang="scss" scoped>
 .modal-waiting {
   position: absolute;
-  z-index: 12;
+  z-index: 16;
   inset: 0;
   background-color: $black;
   color: $white;
-  font-weight: $ft-bold;
+  font-weight: $ft-w-bold;
   display: flex;
   justify-content: center;
   align-items: center;

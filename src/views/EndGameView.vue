@@ -74,6 +74,7 @@ export default {
 
   .over {
     position: absolute;
+    z-index: 14;
     inset: 0;
     width: 100%;
     height: 100%;
@@ -83,7 +84,7 @@ export default {
     align-items: center;
 
     h1 {
-      font-size: 50px;
+      font-size: $ft-s-xlarge;;
     }
 
     .end-container {
@@ -108,8 +109,8 @@ export default {
             }
 
             span {
-              font-weight: $ft-bold;
-              font-size: 20px;
+              font-weight: $ft-w-bold;
+              font-size: $ft-s-medium;
               color: $white;
               position: absolute;
               top: 50%;
@@ -119,9 +120,9 @@ export default {
           }
 
           .name {
-            font-weight: $ft-bold;
+            font-weight: $ft-w-bold;
             margin-left: 10px;
-            font-size: 20px;
+            font-size: $ft-s-medium;
           }
 
           &:first-of-type {
@@ -131,7 +132,7 @@ export default {
             }
 
             span {
-              font-size: 30px;
+              font-size: $ft-s-large;
             }
           }
 
@@ -157,6 +158,7 @@ export default {
 
   .under {
     position: relative;
+    z-index: 1;
     width: 100%;
     height: 100%;
     overflow: hidden;

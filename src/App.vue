@@ -100,12 +100,11 @@ export default {
 
 <style lang="scss">
 #app {
-  font-family: "Montserrat";
   color: $black;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-family: $ft-body;
-  font-weight: $ft-regular;
+  font-weight: $ft-w-regular;
   box-sizing: border-box;
 }
 
@@ -118,7 +117,7 @@ export default {
   .fullscreen,
   .btn-parameters {
     position: absolute;
-    z-index: 10;
+    z-index: 20;
     button {
       background: none;
       border: none;
@@ -152,11 +151,11 @@ export default {
   }
   .modal-landscape {
     position: absolute;
-    z-index: 12;
+    z-index: 16;
     inset: 0;
     background-color: $black;
     color: $white;
-    font-weight: $ft-bold;
+    font-weight: $ft-w-bold;
     display: flex;
     justify-content: center;
     align-items: center;

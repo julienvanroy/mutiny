@@ -83,6 +83,7 @@ export default {
   height: 100vh;
   .over {
     position: absolute;
+    z-index: 14;
     inset: 0;
     width: 100%;
     height: 100%;
@@ -108,13 +109,14 @@ export default {
     .how-to-play {
       max-width: 380px;
       p {
-        font-size: 18px;
+        font-size: $ft-s-small;
         text-align: center;
       }
     }
   }
   .under {
     position: relative;
+    z-index: 1;
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -133,13 +135,13 @@ export default {
   }
   .credits {
     position: absolute;
-    z-index: 10;
+    z-index: 20;
     bottom: 20px;
     left: 20px;
     a {
       color: $black;
-      font-size: 18px;
-      font-weight: 500;
+      font-size: $ft-s-small;
+      font-weight: $ft-w-medium;
       letter-spacing: 0.01em;
       text-decoration-line: underline;
     }

@@ -132,7 +132,7 @@ export default {
   height: 100vh;
   .back {
     position: absolute;
-    z-index: 10;
+    z-index: 20;
     top: 20px;
     left: 20px;
     a {
@@ -143,6 +143,7 @@ export default {
 
   .over {
     position: absolute;
+    z-index: 14;
     inset: 0;
     width: 100%;
     height: 100%;
@@ -192,7 +193,7 @@ export default {
                 justify-content: flex-start;
                 align-items: center;
                 span {
-                  font-weight: $ft-bold;
+                  font-weight: $ft-w-bold;
                   margin-left: 8px;
                 }
               }
@@ -271,7 +272,7 @@ export default {
             p {
               margin-top: 20px;
               height: 150px;
-              font-size: 24px;
+              font-size: $ft-s-medium;
               display: flex;
               justify-content: center;
               align-items: center;
@@ -301,8 +302,8 @@ export default {
             }
             h3 {
               margin: 0;
-              font-size: 30px;
-              font-weight: $ft-bold;
+              font-size: $ft-s-large;
+              font-weight: $ft-w-bold;
               text-align: center;
             }
             .subtitle {
@@ -345,6 +346,7 @@ export default {
   }
   .under {
     position: relative;
+    z-index: 1;
     width: 100%;
     height: 100%;
     overflow: hidden;

@@ -49,9 +49,9 @@ export default {
   min-height: 30px;
   border: 1px solid $grey-5;
   border-radius: 36px;
-  font-family: "Montserrat";
-  font-weight: $ft-medium;
-  font-size: 18px;
+  font-family: $ft-body;
+  font-weight: $ft-w-medium;
+  font-size: $ft-s-small;
   color: $black;
   text-align: center;
   letter-spacing: 0.01em;
