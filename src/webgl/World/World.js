@@ -157,7 +157,6 @@ export default class World extends component() {
                 playersIds = players.map((keyValue) => keyValue[0]);
 
                 players.forEach(([playerId, player]) => {
-                    console.log(playerId, player.target);
                     // update unassigned players array
                     // exclude already assigned player after each loop
                     // also exclude current player
