@@ -182,7 +182,7 @@ export default class World extends component() {
                 playerTarget: p._getTargetData(),
             });
 
-            console.log(`player ${p.id} has target ${p.target.id}${p.target.bot ? `of bot ${p.target.bot.id}` : ""}`);
+            console.log(`player ${p.id} has target ${p.target.id} ${p.target.bot ? `of bot ${p.target.bot.id}` : ""}`);
         });
     }
 }
