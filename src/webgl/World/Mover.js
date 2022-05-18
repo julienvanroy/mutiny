@@ -96,11 +96,15 @@ export default class Mover {
     }
 
     _getTargetData() {
-        if (this.target && this.target.bot) {
-            const { body } = this.target.bot;
+        if (this.target) {
+            let body;
+
+            if (this.target.bot) body = this.target.bot.body;
+            else body = this.target.body;
+
             return {
                 id: this.id,
-                info: body.map(({ tags, color }) => ({ tags, color })),
+                info: body.map(({ tags, color }) => ({ tags, color })).reverse(),
             };
         } else return undefined;
     }
