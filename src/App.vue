@@ -117,7 +117,7 @@ export default {
   .fullscreen,
   .btn-parameters {
     position: absolute;
-    z-index: 10;
+    z-index: 20;
     button {
       background: none;
       border: none;

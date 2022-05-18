@@ -30,7 +30,7 @@
   height: 100vh;
   .back {
     position: absolute;
-    z-index: 10;
+    z-index: 20;
     top: 20px;
     left: 20px;
     a {

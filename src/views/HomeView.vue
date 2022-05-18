@@ -135,7 +135,7 @@ export default {
   }
   .credits {
     position: absolute;
-    z-index: 10;
+    z-index: 20;
     bottom: 20px;
     left: 20px;
     a {
