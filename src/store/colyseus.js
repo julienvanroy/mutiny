@@ -2,7 +2,6 @@ import { defineStore } from "pinia";
 import * as Colyseus from "colyseus.js";
 import router from "@/router";
 import { sample } from "@/utils";
-import {PiratesNames} from "@/data/pirates-name";
 
 const useColyseusStore = defineStore("colyseus", {
     state: () => {
@@ -66,11 +65,8 @@ const useColyseusStore = defineStore("colyseus", {
                 console.error("join error", e);
             }
         },
-        async joinRoom(roomId = null) {
+        async joinRoom(roomId = null, playerName) {
             try {
-                // TODO in the futur : get user pseudo from input (if not, set random pseudo)
-                // TODO check if random pseudo is already used for another player
-                const playerName = PiratesNames[Math.floor(Math.random() * PiratesNames.length)];
                 let room;
                 if (roomId) room = await this.client.joinById(roomId, { name: playerName });
                 else room = await this.client.joinById(sample(this.rooms).roomId, { name: playerName });
@@ -92,6 +88,12 @@ const useColyseusStore = defineStore("colyseus", {
         },
         getPlayer(playerId) {
             this.sendData("getPlayer", playerId);
+        },
+        updatePlayerTarget(playerId, playerTarget) {
+            this.sendData("updatePlayerTarget", {
+                playerId,
+                playerTarget,
+            });
         },
     },
 });

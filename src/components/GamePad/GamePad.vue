@@ -45,35 +45,34 @@ export default {
   props: {
     playerTarget: {
       type: Object,
-      default: null,
+      default: () => {},
+    },
+    player: {
+      type: Object,
+      default: () => {},
     },
   },
   data() {
     return {
       joystick: [],
-      playerName: null,
-      playerPoints: null,
-      playerColor: null,
     };
   },
   computed: {
     clues() {
       return this.playerTarget?.info;
     },
+    playerName() {
+      return this.player.name;
+    },
+    playerPoints() {
+      return this.player.points;
+    },
+    playerColor() {
+      return this.player.color;
+    },
   },
   mounted() {
     this.colyseus.getPlayer(this.colyseus.currentRoom.sessionId);
-    this.colyseus.currentRoom.onMessage("getPlayer", (player) => {
-      if (player.id === this.colyseus.currentRoom.sessionId) {
-        this.playerName = player.name;
-        this.playerPoints = player.points;
-        this.playerColor = player.color;
-      }
-    });
-
-    this.colyseus.currentRoom.onMessage("addPoint", ({ playerId, playerPoints }) => {
-      if (playerId === this.colyseus.currentRoom.sessionId) this.playerPoints = playerPoints;
-    });
 
     this.joystick = nipplejs.create({
       zone: this.$refs.joystick,
