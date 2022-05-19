@@ -40,6 +40,11 @@ export default {
 
     this.colyseus.currentRoom.onMessage("getPlayer", () => {});
 
+    this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
+      delete players[this.colyseus.currentRoom.sessionId];
+      this.players = players;
+    });
+
     this.colyseus.currentRoom.onMessage("addPoint", ({ playerId, playerPoints }) => {
       Object.values(this.players).find((p) => p.id === playerId).points = playerPoints;
     });
