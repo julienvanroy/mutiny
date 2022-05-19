@@ -50,6 +50,8 @@ export default {
     this.colyseus.currentRoom.onMessage("getAllPlayers", () => {});
 
     this.colyseus.currentRoom.onMessage("joystick", () => {});
+
+    this.colyseus.currentRoom.onMessage("kill", () => {});
   },
   unmounted() {
     this.colyseus.currentRoom?.leave();
