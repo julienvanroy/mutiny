@@ -195,11 +195,7 @@ export default class Player extends component(Mover) {
         this.mesh = this.bot.mesh;
 
         this.target = targetPlayer;
-        const colyseus = useColyseusStore();
-        colyseus.sendData("updatePlayerTarget", {
-            playerId: this.id,
-            playerTarget: this._getTargetData(),
-        });
+        useColyseusStore().updatePlayerTarget(this.id, this._getTargetData());
 
         console.log(
             `player ${this.id} has new target ${this.target.id} ${
@@ -221,11 +217,7 @@ export default class Player extends component(Mover) {
             );
         }
 
-        const colyseus = useColyseusStore();
-        colyseus.sendData("updatePlayerTarget", {
-            playerId: this.id,
-            playerTarget: this._getTargetData(),
-        });
+        useColyseusStore().updatePlayerTarget(this.id, this._getTargetData());
 
         console.log(
             `player ${this.id} has new target ${this.target.id} ${

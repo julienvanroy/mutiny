@@ -89,6 +89,12 @@ const useColyseusStore = defineStore("colyseus", {
         getPlayer(playerId) {
             this.sendData("getPlayer", playerId);
         },
+        updatePlayerTarget(playerId, playerTarget) {
+            this.sendData("updatePlayerTarget", {
+                playerId,
+                playerTarget,
+            });
+        },
     },
 });
 
