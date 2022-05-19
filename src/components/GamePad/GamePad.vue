@@ -6,12 +6,12 @@
     <div class="left">
       <div class="player">
         <div class="points">
-          <img :src="`/images/players/${this.playerColor}.png`" />
-          <span>{{ this.playerPoints }}</span>
+          <img :src="`/images/players/${player.color}.png`" />
+          <span>{{ player.points }}</span>
         </div>
         <div class="name">
           you are<br />
-          <span>{{ this.playerName }}</span>
+          <span>{{ player.name }}</span>
         </div>
       </div>
       <div ref="joystick" class="joystick"></div>
@@ -45,35 +45,34 @@ export default {
   props: {
     playerTarget: {
       type: Object,
-      default: null,
+      default: () => {},
+    },
+    player: {
+      type: Object,
+      default: () => {},
     },
   },
   data() {
     return {
       joystick: [],
-      playerName: null,
-      playerPoints: null,
-      playerColor: null,
     };
   },
   computed: {
     clues() {
       return this.playerTarget?.info;
     },
+    playerName() {
+      return this.player.name;
+    },
+    playerPoints() {
+      return this.player.points;
+    },
+    playerColor() {
+      return this.player.color;
+    },
   },
   mounted() {
     this.colyseus.getPlayer(this.colyseus.currentRoom.sessionId);
-    this.colyseus.currentRoom.onMessage("getPlayer", (player) => {
-      if (player.id === this.colyseus.currentRoom.sessionId) {
-        this.playerName = player.name;
-        this.playerPoints = player.points;
-        this.playerColor = player.color;
-      }
-    });
-
-    this.colyseus.currentRoom.onMessage("addPoint", ({ playerId, playerPoints }) => {
-      if (playerId === this.colyseus.currentRoom.sessionId) this.playerPoints = playerPoints;
-    });
 
     this.joystick = nipplejs.create({
       zone: this.$refs.joystick,

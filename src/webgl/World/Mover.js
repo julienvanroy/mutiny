@@ -48,7 +48,7 @@ export default class Mover {
             new BoxGeometry(Math.random() > 0.5 ? r : h, h, Math.random() > 0.5 ? r : h),
             new MeshStandardMaterial({ color: new Color(c[0]).convertSRGBToLinear() })
         );
-        cube.tags = ["Cube"];
+        cube.tags = ["Box"];
         cube.color = c[0];
 
         const cylinder = new Mesh(

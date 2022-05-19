@@ -1,13 +1,13 @@
 <template>
   <div class="end-game">
     <div class="under">
-      <img src="images/background.jpg"/>
+      <img src="images/background.jpg" />
     </div>
     <div class="over">
       <h1>The End</h1>
       <div class="end-container">
         <ul>
-          <li v-for="(player, index) in players" :key="index">
+          <li v-for="(player, index) in rankedPlayers" :key="index">
             <div class="points">
               <img :src="`/images/players/${player.color}.png`" />
               <span>{{ player.points }}</span>
@@ -16,9 +16,9 @@
           </li>
         </ul>
         <div class="links">
-          <TheButton label="Replay" color="dark" link="/setup"/>
-          <TheButton label="Home" color="light" link="/"/>
-          <TheButton label="Credits" color="light" link="/credits"/>
+          <TheButton label="Replay" color="dark" link="/setup" />
+          <TheButton label="Home" color="light" link="/" />
+          <TheButton label="Credits" color="light" link="/credits" />
         </div>
       </div>
     </div>
@@ -31,38 +31,19 @@ import useColyseusStore from "@/store/colyseus";
 
 export default {
   name: "EndGameView",
-  components: {TheButton},
+  components: { TheButton },
   setup() {
     const colyseus = useColyseusStore();
 
-    return {colyseus};
+    return { players: colyseus.players };
   },
-  data() {
-    return {
-      players: [],
-    };
-  },
-  mounted() {
-    this.colyseus.getAllPlayers();
 
-    this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
-      delete players[this.colyseus.currentRoom.sessionId];
-      this.players = players
-      this.players = Object.entries(players).sort(this.compare).reduce((r, [k, v]) => ({ ...r, [k]: v }), {});
-    });
+  computed: {
+    rankedPlayers() {
+      const _ = [...this.players];
+      return _.sort((a, b) => (a.points < b.points ? 1 : -1));
+    },
   },
-  methods: {
-    compare(a, b) {
-      console.log(a[1])
-      if (a[1].points > b[1].points) {
-        return -1;
-      }
-      if (a[1].points < b[1].points) {
-        return 1;
-      }
-      return 0;
-    }
-  }
 };
 </script>
 
@@ -84,7 +65,7 @@ export default {
     align-items: center;
 
     h1 {
-      font-size: $ft-s-xlarge;;
+      font-size: $ft-s-xlarge;
     }
 
     .end-container {

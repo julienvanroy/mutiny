@@ -1,6 +1,6 @@
 <template>
   <ul class="players">
-    <li v-for="player in this.players" :key="player.id" :class="`player ${player.color}`">
+    <li v-for="player in colyseus.players" :key="player.id" :class="`player ${player.color}`">
       <div class="points">
         <img src="/images/players/points.png" />
         <span>{{ player.points }}</span>
@@ -25,34 +25,21 @@ export default {
 
     return { colyseus };
   },
-  data() {
-    return {
-      players: [],
-    };
-  },
   mounted() {
     if (!this.colyseus.currentRoom) return;
-    this.colyseus.getAllPlayers();
 
-    // this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
-    //   delete players[this.colyseus.currentRoom.sessionId];
-    //   this.players = players;
-    //   const mapPlayers = new Map(Object.entries(players));
-    //   mapPlayers.forEach((value, key) => {
-    //     bidello.trigger({ name: "addPlayer" }, { playerId: key });
-    //   });
-    // });
+    this.colyseus.currentRoom.onMessage("updatePlayerTarget", () => {});
 
-    this.colyseus.currentRoom.onMessage("addPoint", ({ playerId, playerPoints }) => {
-      Object.values(this.players).find((p) => p.id === playerId).points = playerPoints;
-    });
+    this.colyseus.currentRoom.onMessage("startGame", () => {});
+
+    this.colyseus.currentRoom.onMessage("getPlayer", () => {});
 
     this.colyseus.currentRoom.onMessage("joystick", ({ playerSessionId, playerPosition }) => {
       bidello.trigger({ name: "movePlayer" }, { playerId: playerSessionId, vector2: playerPosition });
     });
 
     this.colyseus.currentRoom.onMessage("kill", ({ playerSessionId }) => {
-      bidello.trigger({ name: "kill" }, { playerId: playerSessionId, sendData: this.colyseus.sendData });
+      bidello.trigger({ name: "kill" }, { playerId: playerSessionId });
     });
 
     this.colyseus.currentRoom.onMessage("power", ({ playerSessionId }) => {
