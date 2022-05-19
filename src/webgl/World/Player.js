@@ -4,6 +4,8 @@ import Experience from "../Experience";
 import Mover from "./Mover";
 import { mapToArray, sample } from "@/utils";
 import configs from "@/configs";
+import Bot from "./Bot";
+import useColyseusStore from "@/store/colyseus";
 
 export default class Player extends component(Mover) {
     constructor(playerId, collider) {
@@ -146,7 +148,7 @@ export default class Player extends component(Mover) {
             this.bot = null;
         }
 
-        this.bot = sample(Object.values(this._botsPool).filter((bot) => !bot.isPlayer));
+        this.bot = sample(Object.values(this._botsPool).filter((bot) => !bot.isPlayer && bot.id !== this.target.id));
 
         this.bot.isPlayer = true;
         this.mesh = this.bot.mesh;
@@ -157,16 +159,6 @@ export default class Player extends component(Mover) {
         this._rotation(delta);
         // this._updateCollision(delta);
 
-        // Object.values(this._botsPool).forEach((bot) => {
-        //     if (
-        //         this.bot &&
-        //         bot.id !== this.bot.id &&
-        //         this.mesh.position.distanceTo(bot.mesh.position) > configs.character.range
-        //     ) {
-        //         bot.mesh.scale.set(1, 1, 1);
-        //     }
-        // });
-
         /**
          * Todo: Need Low model navmesh and collison ( Only cube )
          */
@@ -174,21 +166,14 @@ export default class Player extends component(Mover) {
     }
 
     onKill({ playerId, sendData }) {
-        if (playerId === this.id) {
-            Object.values(this._botsPool).forEach((bot) => {
-                if (this.mesh.position.distanceTo(bot.mesh.position) <= configs.character.range) {
-                    // if (bot.id !== this.bot?.id) {
-                    //     bot.mesh.scale.set(1.2, 1.2, 1.2);
-                    // }
-
-                    if (this.target && this.target.bot?.id === bot.id) {
-                        console.log(`${this.id} killed ${this.target.id}`);
-                        this.addPoints(sendData);
-                        this.target.respawn(this);
-                        this.switchTarget();
-                    }
-                }
-            });
+        if (
+            playerId === this.id &&
+            this.mesh.position.distanceTo(this.target.mesh.position) <= configs.character.range
+        ) {
+            console.log(`player ${this.id} killed their target ${this.target.id}`);
+            this.addPoints(sendData);
+            this.switchTarget();
+            if (this.target instanceof Player) this.target.respawn(this);
         }
     }
 
@@ -199,24 +184,52 @@ export default class Player extends component(Mover) {
 
     respawn(targetPlayer) {
         console.log(`${this.id} has old target ${this.target.id}, old bot ${this.bot.id}`);
-        const selectedBot = sample(Object.values(this._botsPool).filter((bot) => !bot.isPlayer));
+
+        const selectedBot = sample(
+            Object.values(this._botsPool).filter((bot) => !bot.isPlayer && bot.id !== this.bot.id)
+        );
         this.bot.isPlayer = false;
-        console.log(selectedBot, this.bot);
         this.bot = selectedBot;
         this.bot.isPlayer = true;
         this.mesh = this.bot.mesh;
-        if (this.target instanceof Player) this.target = targetPlayer;
+
+        this.target = targetPlayer;
+        const colyseus = useColyseusStore();
+        colyseus.sendData("updatePlayerTarget", {
+            playerId: this.id,
+            playerTarget: this._getTargetData(),
+        });
+
+        console.log(
+            `player ${this.id} has new target ${this.target.id} ${
+                this.target.bot ? `of bot ${this.target.bot.id}` : ""
+            }`
+        );
+
         console.log(`${this.id} has new target ${this.target.id}, new bot ${this.bot.id}`);
     }
 
     switchTarget() {
-        if (this.target) {
-            console.log(`${this.id} has old target ${this.target.id}`);
-            let tempPlayers = mapToArray(this._players)
-                .map(({ value }) => value)
-                .filter((p) => p.id !== this.target.id);
-            this.target = sample(tempPlayers);
-            console.log(`${this.id} has new target ${this.target.id}`);
+        if (this.target instanceof Bot) {
+            this.target = sample(
+                Object.values(this._botsPool).filter((bot) => bot.id !== this.target.id && bot.id !== this.bot.id)
+            );
+        } else if (this.target instanceof Player) {
+            this.target = sample(
+                mapToArray(this._players, true).filter((p) => p.id !== this.target.it && p.id !== this.id)
+            );
         }
+
+        const colyseus = useColyseusStore();
+        colyseus.sendData("updatePlayerTarget", {
+            playerId: this.id,
+            playerTarget: this._getTargetData(),
+        });
+
+        console.log(
+            `player ${this.id} has new target ${this.target.id} ${
+                this.target.bot ? `of bot ${this.target.bot.id}` : ""
+            }`
+        );
     }
 }
