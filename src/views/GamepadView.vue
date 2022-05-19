@@ -48,8 +48,9 @@ export default {
       }
     });
 
-    this.colyseus.currentRoom.onMessage("addPoint", ({ playerId, playerPoints }) => {
-      if (playerId === this.colyseus.currentRoom.sessionId) this.playerPoints = playerPoints;
+    this.colyseus.currentRoom.onStateChange((state) => {
+      const player = state.players.$items.get(this.colyseus.currentRoom.sessionId);
+      if (player) this.player.points = player.points;
     });
 
     this.colyseus.currentRoom.onMessage("addPlayer", () => {});

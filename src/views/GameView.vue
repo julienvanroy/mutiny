@@ -27,7 +27,7 @@ export default {
   },
   data() {
     return {
-      players: [],
+      players: {},
     };
   },
   mounted() {
@@ -45,10 +45,6 @@ export default {
       this.players = players;
     });
 
-    this.colyseus.currentRoom.onMessage("addPoint", ({ playerId, playerPoints }) => {
-      Object.values(this.players).find((p) => p.id === playerId).points = playerPoints;
-    });
-
     this.colyseus.currentRoom.onMessage("joystick", ({ playerSessionId, playerPosition }) => {
       bidello.trigger({ name: "movePlayer" }, { playerId: playerSessionId, vector2: playerPosition });
     });
@@ -59,6 +55,13 @@ export default {
 
     this.colyseus.currentRoom.onMessage("power", ({ playerSessionId }) => {
       bidello.trigger({ name: "respawn" }, { playerId: playerSessionId });
+    });
+
+    this.colyseus.currentRoom.onStateChange((state) => {
+      state.players.$items.forEach((playerData, playerId) => {
+        const player = Object.values(this.players).find((p) => p.id === playerId);
+        if (player) player.points = playerData.points;
+      });
     });
   },
 };

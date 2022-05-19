@@ -6,12 +6,12 @@
     <div class="left">
       <div class="player">
         <div class="points">
-          <img :src="`/images/players/${this.playerColor}.png`" />
-          <span>{{ this.playerPoints }}</span>
+          <img :src="`/images/players/${player.color}.png`" />
+          <span>{{ player.points }}</span>
         </div>
         <div class="name">
           you are<br />
-          <span>{{ this.playerName }}</span>
+          <span>{{ player.name }}</span>
         </div>
       </div>
       <div ref="joystick" class="joystick"></div>
