@@ -1,6 +1,6 @@
 <template>
   <ul class="players">
-    <li v-for="player in this.players" :key="player.id" :class="`player ${player.color}`">
+    <li v-for="player in colyseus.players" :key="player.id" :class="`player ${player.color}`">
       <div class="points">
         <img src="/images/players/points.png" />
         <span>{{ player.points }}</span>
@@ -25,11 +25,6 @@ export default {
 
     return { colyseus };
   },
-  data() {
-    return {
-      players: {},
-    };
-  },
   mounted() {
     if (!this.colyseus.currentRoom) return;
     this.colyseus.getAllPlayers();
@@ -41,8 +36,7 @@ export default {
     this.colyseus.currentRoom.onMessage("getPlayer", () => {});
 
     this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
-      delete players[this.colyseus.currentRoom.sessionId];
-      this.players = players;
+      this.colyseus.updatePlayers(players);
     });
 
     this.colyseus.currentRoom.onMessage("joystick", ({ playerSessionId, playerPosition }) => {

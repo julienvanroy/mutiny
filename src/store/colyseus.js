@@ -11,6 +11,7 @@ const useColyseusStore = defineStore("colyseus", {
             rooms: [],
             currentRoom: null,
             lobbyRoom: null,
+            players: {},
         };
     },
     getters: {},
@@ -84,6 +85,9 @@ const useColyseusStore = defineStore("colyseus", {
             } catch (e) {
                 console.error("join error", e);
             }
+        },
+        updatePlayers(players) {
+            this.players = Object.values(players).filter((p) => !!p.name);
         },
         sendData(type, value) {
             this.currentRoom.send(type, value);

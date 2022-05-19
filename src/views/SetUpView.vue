@@ -13,7 +13,7 @@
           <div class="player-list">
             <h1>Secret sailors</h1>
             <ul>
-              <li v-for="player in this.players" :key="player.id">
+              <li v-for="player in colyseus.players" :key="player.id">
                 <div class="player">
                   <img :src="`images/players/${player.color}.png`" />
                   <span>{{ player.name }}</span>
@@ -96,14 +96,13 @@ import QrCode from "@/components/QrCode";
 
 export default {
   name: "SetUpView",
-  components: {QrCode, TheButton },
+  components: { QrCode, TheButton },
   setup() {
     const colyseus = useColyseusStore();
     return { colyseus };
   },
   data() {
     return {
-      players: [],
       showControls: false,
     };
   },
@@ -115,8 +114,7 @@ export default {
     });
 
     this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
-      delete players[this.colyseus.currentRoom.sessionId];
-      this.players = players;
+      this.colyseus.updatePlayers(players);
     });
   },
   methods: {
