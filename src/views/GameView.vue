@@ -54,7 +54,7 @@ export default {
     });
 
     this.colyseus.currentRoom.onMessage("kill", ({ playerSessionId }) => {
-      bidello.trigger({ name: "kill" }, { playerId: playerSessionId, sendData: this.colyseus.sendData });
+      bidello.trigger({ name: "kill" }, { playerId: playerSessionId });
     });
 
     this.colyseus.currentRoom.onMessage("power", ({ playerSessionId }) => {
