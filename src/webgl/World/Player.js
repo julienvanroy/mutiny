@@ -165,21 +165,21 @@ export default class Player extends component(Mover) {
         //this._updateCollision(delta)
     }
 
-    onKill({ playerId, sendData }) {
+    onKill({ playerId }) {
         if (
             playerId === this.id &&
             this.mesh.position.distanceTo(this.target.mesh.position) <= configs.character.range
         ) {
             console.log(`player ${this.id} killed their target ${this.target.id}`);
-            this.addPoints(sendData);
+            this.addPoints();
             this.switchTarget();
             if (this.target instanceof Player) this.target.respawn(this);
         }
     }
 
-    addPoints(sendData) {
+    addPoints() {
         this.points += 1;
-        sendData("addPoint", { playerId: this.id, playerPoints: this.points });
+        useColyseusStore().sendData("addPoint", { playerId: this.id, playerPoints: this.points });
     }
 
     respawn(targetPlayer) {
