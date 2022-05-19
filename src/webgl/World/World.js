@@ -150,7 +150,7 @@ export default class World extends component() {
 
             case 1:
                 singlePlayer = this.players.values().next().value;
-                bots = Object.values(singlePlayer._botsPool).filter((bot) => !bot.isPlayer);
+                bots = Object.values(singlePlayer._bots).filter((bot) => !bot.isPlayer);
                 singlePlayer.target = sample(bots);
                 break;
 
