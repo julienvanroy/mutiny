@@ -27,6 +27,7 @@
           <div class="code">
             <h2>Your vessel</h2>
             <p>{{ colyseus.currentRoom.id }}</p>
+            <QrCode />
           </div>
         </div>
         <div class="else">
@@ -91,10 +92,11 @@ import useColyseusStore from "@/store/colyseus";
 import TheButton from "@/components/TheButton.vue";
 import router from "@/router";
 import bidello from "bidello";
+import QrCode from "@/components/QrCode";
 
 export default {
   name: "SetUpView",
-  components: { TheButton },
+  components: {QrCode, TheButton },
   setup() {
     const colyseus = useColyseusStore();
     return { colyseus };

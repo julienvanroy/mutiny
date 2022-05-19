@@ -37,7 +37,6 @@
 
 <script>
 import useColyseusStore from "@/store/colyseus";
-import { PiratesNames } from "@/data/pirates-name";
 import TheButton from "@/components/TheButton.vue";
 
 export default {
@@ -60,10 +59,7 @@ export default {
       this.colyseus.createRoom("play_room", doJoinRoom);
     },
     joinRoom(roomId) {
-      // TODO in the futur : get user pseudo from input (if not, set random pseudo)
-      // TODO check if random pseudo is already used for another player
-      const playerName = PiratesNames[Math.floor(Math.random() * PiratesNames.length)];
-      this.colyseus.joinRoom(roomId, playerName);
+      this.colyseus.joinRoom(roomId);
     },
     joinRandomRoom() {
       this.colyseus.joinRoom();
