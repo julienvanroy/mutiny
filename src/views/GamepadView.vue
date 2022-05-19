@@ -44,14 +44,6 @@ export default {
         if (message.playerId === this.colyseus.currentRoom.sessionId) this.playerTarget = message.playerTarget;
       });
 
-      this.colyseus.currentRoom.onMessage("startGame", () => {
-        this.showGamePad = true;
-      });
-
-      this.colyseus.currentRoom.onMessage("updatePlayerTarget", (message) => {
-        if (message.playerId === this.colyseus.currentRoom.sessionId) this.playerTarget = message.playerTarget;
-      });
-
       this.colyseus.currentRoom.onMessage("getPlayer", ({ id, name, points, color }) => {
         if (id === this.colyseus.currentRoom.sessionId) {
           this.player = {
