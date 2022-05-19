@@ -1,5 +1,5 @@
 <template>
-  <game-pad v-if="!!showGamePad" :player-target="playerTarget" />
+  <game-pad v-if="!!showGamePad" :player-target="playerTarget"/>
   <div v-if="!showGamePad" class="modal-waiting">WAITING...</div>
 </template>
 
@@ -8,12 +8,12 @@ import GamePad from "@/components/GamePad/GamePad.vue";
 import useColyseusStore from "@/store/colyseus";
 
 export default {
-  components: { GamePad },
+  components: {GamePad},
   name: "GamepadView",
   setup() {
     const colyseus = useColyseusStore();
 
-    return { colyseus };
+    return {colyseus};
   },
   data() {
     return {
@@ -22,17 +22,30 @@ export default {
     };
   },
   mounted() {
-    this.colyseus.currentRoom.onMessage("startGame", () => {
-      this.showGamePad = true;
-    });
-
-    this.colyseus.currentRoom.onMessage("updatePlayerTarget", (message) => {
-      if (message.playerId === this.colyseus.currentRoom.sessionId) this.playerTarget = message.playerTarget;
-    });
+    if (this.colyseus.currentRoom) {
+      this.colyseusOnMessage()
+    } else {
+      this.colyseus.joinRoom(this.$route.params.roomId).then(
+          () => {
+            this.colyseusOnMessage()
+          }
+      )
+    }
   },
   unmounted() {
     this.colyseus.currentRoom?.leave();
   },
+  methods: {
+    colyseusOnMessage() {
+      this.colyseus.currentRoom.onMessage("startGame", () => {
+        this.showGamePad = true;
+      });
+
+      this.colyseus.currentRoom.onMessage("updatePlayerTarget", (message) => {
+        if (message.playerId === this.colyseus.currentRoom.sessionId) this.playerTarget = message.playerTarget;
+      });
+    }
+  }
 };
 </script>
 
