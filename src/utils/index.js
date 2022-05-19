@@ -1,6 +1,11 @@
 const diffArray = (arr1, arr2) => arr1.filter((x) => !arr2.includes(x));
 
-const mapToArray = (map) => Array.from(map, ([name, value]) => ({ name, value }));
+const mapToArray = (map, extractValues = false) => {
+    let arr = Array.from(map, ([name, value]) => ({ name, value }));
+    if (extractValues) arr = arr.map(({ value }) => value);
+
+    return arr;
+};
 
 const sample = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
