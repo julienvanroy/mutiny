@@ -187,11 +187,7 @@ export default class World extends component() {
             if (p.target instanceof Player) p.target._setBot();
             else if (p.target instanceof Bot) p._setBot();
 
-            const colyseus = useColyseusStore();
-            colyseus.sendData("updatePlayerTarget", {
-                playerId: p.id,
-                playerTarget: p._getTargetData(),
-            });
+            useColyseusStore().updatePlayerTarget(p.id, p._getTargetData());
 
             console.log(`player ${p.id} has target ${p.target.id} ${p.target.bot ? `of bot ${p.target.bot.id}` : ""}`);
         });
