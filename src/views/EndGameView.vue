@@ -35,12 +35,12 @@ export default {
   setup() {
     const colyseus = useColyseusStore();
 
-    return { colyseus };
+    return { players: colyseus.players };
   },
 
   computed: {
     rankedPlayers() {
-      const _ = [...this.colyseus.players];
+      const _ = [...this.players];
       return _.sort((a, b) => (a.points < b.points ? 1 : -1));
     },
   },
