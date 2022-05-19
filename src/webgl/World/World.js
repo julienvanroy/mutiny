@@ -185,6 +185,7 @@ export default class World extends component() {
         console.log(this.players);
         this.players.forEach((p) => {
             if (p.target instanceof Player) p.target._setBot();
+            else if (p.target instanceof Bot) p._setBot();
 
             const colyseus = useColyseusStore();
             colyseus.sendData("updatePlayerTarget", {
