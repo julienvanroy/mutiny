@@ -83,7 +83,7 @@ const useColyseusStore = defineStore("colyseus", {
 
                 this.sendData("addPlayer", { playerId: this.currentRoom.sessionId, playerName });
 
-                this.toCurrentRoom();
+                router.push(`/get-pseudo`);
             } catch (e) {
                 console.error("join error", e);
             }

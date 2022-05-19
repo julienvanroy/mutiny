@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "@/views/HomeView";
-import ConnectionView from "@/views/ConnectionView";
+// import ConnectionView from "@/views/ConnectionView";
+import GetPseudoView from "@/views/GetPseudoView";
 import SetUpView from "@/views/SetUpView";
 import GameView from "@/views/GameView";
 import GamepadView from "@/views/GamepadView";
@@ -16,10 +17,15 @@ export default createRouter({
       name: "home",
       component: HomeView,
     },
+    // {
+    //   path: "/connection",
+    //   name: "connection",
+    //   component: ConnectionView,
+    // },
     {
-      path: "/connection",
-      name: "connection",
-      component: ConnectionView,
+      path: "/get-pseudo",
+      name: "get-pseudo",
+      component: GetPseudoView,
     },
     {
       path: "/setup",
