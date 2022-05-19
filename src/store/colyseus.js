@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import * as Colyseus from "colyseus.js";
 import router from "@/router";
-import { sample } from "@/utils";
+import { mapToArray, sample } from "@/utils";
 import { PiratesNames } from "@/data/pirates-name";
 
 const useColyseusStore = defineStore("colyseus", {
@@ -62,6 +62,8 @@ const useColyseusStore = defineStore("colyseus", {
                     this.currentRoom = null;
                 }
 
+                newRoom.onStateChange((state) => this.updatePlayers(state.players.$items));
+
                 return newRoom;
             } catch (e) {
                 console.error("join error", e);
@@ -87,13 +89,10 @@ const useColyseusStore = defineStore("colyseus", {
             }
         },
         updatePlayers(players) {
-            this.players = Object.values(players).filter((p) => !!p.name);
+            this.players = mapToArray(players, true).filter((p) => !!p.name);
         },
         sendData(type, value) {
             this.currentRoom.send(type, value);
-        },
-        getAllPlayers() {
-            this.sendData("getAllPlayers");
         },
         getPlayer(playerId) {
             this.sendData("getPlayer", playerId);

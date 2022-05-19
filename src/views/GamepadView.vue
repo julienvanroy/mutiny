@@ -48,14 +48,7 @@ export default {
       }
     });
 
-    this.colyseus.currentRoom.onStateChange((state) => {
-      const player = state.players.$items.get(this.colyseus.currentRoom.sessionId);
-      if (player) this.player.points = player.points;
-    });
-
     this.colyseus.currentRoom.onMessage("addPlayer", () => {});
-
-    this.colyseus.currentRoom.onMessage("getAllPlayers", () => {});
 
     this.colyseus.currentRoom.onMessage("joystick", () => {});
 
