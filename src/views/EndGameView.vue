@@ -44,18 +44,6 @@ export default {
       return _.sort((a, b) => (a.points < b.points ? 1 : -1));
     },
   },
-  methods: {
-    compare(a, b) {
-      console.log(a);
-      if (a.points > b.points) {
-        return -1;
-      }
-      if (a.points < b.points) {
-        return 1;
-      }
-      return 0;
-    },
-  },
 };
 </script>
 
