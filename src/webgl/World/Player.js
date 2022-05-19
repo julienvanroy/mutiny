@@ -18,7 +18,7 @@ export default class Player extends component(Mover) {
         const experience = new Experience();
         this._scene = experience.scene;
 
-        this._botsPool = experience.world.bots;
+        this._bots = experience.world.bots;
         this._players = experience.world.players;
 
         this.points = 0;
@@ -148,7 +148,7 @@ export default class Player extends component(Mover) {
             this.bot = null;
         }
 
-        this.bot = sample(Object.values(this._botsPool).filter((bot) => !bot.isPlayer && bot.id !== this.target.id));
+        this.bot = sample(Object.values(this._bots).filter((bot) => !bot.isPlayer && bot.id !== this.target.id));
 
         this.bot.isPlayer = true;
         this.mesh = this.bot.mesh;
@@ -185,12 +185,13 @@ export default class Player extends component(Mover) {
     respawn(targetPlayer) {
         console.log(`${this.id} has old target ${this.target.id}, old bot ${this.bot.id}`);
 
-        const selectedBot = sample(
-            Object.values(this._botsPool).filter((bot) => !bot.isPlayer && bot.id !== this.bot.id)
-        );
+        const selectedBot = sample(Object.values(this._bots).filter((bot) => !bot.isPlayer && bot.id !== this.bot.id));
+        selectedBot.isPlayer = true;
+
         this.bot.isPlayer = false;
+
         this.bot = selectedBot;
-        this.bot.isPlayer = true;
+
         this.mesh = this.bot.mesh;
 
         this.target = targetPlayer;
@@ -212,7 +213,7 @@ export default class Player extends component(Mover) {
     switchTarget() {
         if (this.target instanceof Bot) {
             this.target = sample(
-                Object.values(this._botsPool).filter((bot) => bot.id !== this.target.id && bot.id !== this.bot.id)
+                Object.values(this._bots).filter((bot) => bot.id !== this.target.id && bot.id !== this.bot.id)
             );
         } else if (this.target instanceof Player) {
             this.target = sample(
