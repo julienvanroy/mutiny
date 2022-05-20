@@ -211,7 +211,9 @@ export default class Player extends component(Mover) {
             );
         } else if (this.target instanceof Player) {
             this.target = sample(
-                mapToArray(this._players, true).filter((p) => p.id !== this.target.it && p.id !== this.id)
+                mapToArray(this._players, true).filter((p) =>
+                    this._players.size === 2 ? p.id !== this.id : p.id !== this.target.id && p.id !== this.id
+                )
             );
         }
 
