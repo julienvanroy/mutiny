@@ -61,15 +61,6 @@ export default {
     clues() {
       return this.playerTarget?.info;
     },
-    playerName() {
-      return this.player.name;
-    },
-    playerPoints() {
-      return this.player.points;
-    },
-    playerColor() {
-      return this.player.color;
-    },
   },
   mounted() {
     this.colyseus.getPlayer(this.colyseus.currentRoom.sessionId);
