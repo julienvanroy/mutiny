@@ -3,7 +3,6 @@ import { PathfindingHelper } from "three-pathfinding";
 import Mover from "./Mover";
 import Experience from "../Experience";
 import configs from "@/configs";
-
 export default class Bot extends component(Mover) {
     constructor(botId, position) {
         super();
@@ -61,9 +60,9 @@ export default class Bot extends component(Mover) {
             if (this.mesh) {
                 this.mesh.position.set(this.position.x, 0, this.position.z);
 
-                const deltaPosition = this.mesh.position.clone();
+                // common way to get the  angle between two vectors
+                const deltaPosition = this.position.clone();
                 deltaPosition.sub(oldPosition);
-
                 let angle = Math.atan2(deltaPosition.x, deltaPosition.z);
                 if (angle < 0) angle += 2 * Math.PI;
 
