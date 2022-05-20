@@ -39,7 +39,9 @@ export default {
         this.showGamePad = true;
       });
 
-      this.colyseus.currentRoom.onMessage("addPlayer", () => {});
+      this.colyseus.currentRoom.onMessage("getPlayer", (player) => (this.colyseus.player = player));
+
+      this.colyseus.currentRoom.onMessage("getAllPlayer", () => {});
 
       this.colyseus.currentRoom.onMessage("joystick", () => {});
 
