@@ -1,21 +1,19 @@
 <template>
-  <game-pad v-if="!!showGamePad" :player="player" :player-target="playerTarget" />
+  <game-pad v-if="!!showGamePad" />
   <div v-if="!showGamePad" class="modal-waiting">WAITING...</div>
 </template>
 
 <script>
 import GamePad from "@/components/GamePad/GamePad.vue";
 import useColyseusStore from "@/store/colyseus";
-import { storeToRefs } from "pinia";
 
 export default {
   components: { GamePad },
   name: "GamepadView",
   setup() {
     const colyseus = useColyseusStore();
-    const { player } = storeToRefs(colyseus);
 
-    return { colyseus, player };
+    return { colyseus };
   },
   data() {
     return {
@@ -35,22 +33,10 @@ export default {
   unmounted() {
     this.colyseus.currentRoom?.leave();
   },
-  watch: {
-    player: {
-      handler(value) {
-        console.log(value);
-      },
-      deep: true,
-    },
-  },
   methods: {
     colyseusOnMessage() {
       this.colyseus.currentRoom.onMessage("startGame", () => {
         this.showGamePad = true;
-      });
-
-      this.colyseus.currentRoom.onMessage("updatePlayerTarget", (message) => {
-        if (message.playerId === this.colyseus.currentRoom.sessionId) this.playerTarget = message.playerTarget;
       });
 
       this.colyseus.currentRoom.onMessage("addPlayer", () => {});
