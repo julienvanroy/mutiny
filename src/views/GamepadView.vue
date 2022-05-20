@@ -6,20 +6,21 @@
 <script>
 import GamePad from "@/components/GamePad/GamePad.vue";
 import useColyseusStore from "@/store/colyseus";
+import { storeToRefs } from "pinia";
 
 export default {
   components: { GamePad },
   name: "GamepadView",
   setup() {
     const colyseus = useColyseusStore();
+    const { player } = storeToRefs(colyseus);
 
-    return { colyseus };
+    return { colyseus, player };
   },
   data() {
     return {
       showGamePad: false,
       playerTarget: {},
-      player: {},
     };
   },
   mounted() {
@@ -33,6 +34,14 @@ export default {
   },
   unmounted() {
     this.colyseus.currentRoom?.leave();
+  },
+  watch: {
+    player: {
+      handler(value) {
+        console.log(value);
+      },
+      deep: true,
+    },
   },
   methods: {
     colyseusOnMessage() {
