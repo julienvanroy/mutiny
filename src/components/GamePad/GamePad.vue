@@ -40,6 +40,7 @@ export default {
   name: "GamePad",
   setup() {
     const colyseus = useColyseusStore();
+
     return { colyseus };
   },
   data() {
