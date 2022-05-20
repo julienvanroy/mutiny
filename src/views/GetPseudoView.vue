@@ -30,7 +30,6 @@ export default {
       pseudo: "",
       placeholder: "",
       pseudoNotValid: false,
-      players: [],
     };
   },
   mounted() {
