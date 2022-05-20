@@ -3,7 +3,7 @@ import { PathfindingHelper } from "three-pathfinding";
 import Mover from "./Mover";
 import Experience from "../Experience";
 import configs from "@/configs";
-import { Quaternion, Vector3, Vector2 } from "three";
+import { Quaternion, Vector2, Vector3 } from "three";
 
 export default class Bot extends component(Mover) {
     constructor(botId, position) {

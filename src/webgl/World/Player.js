@@ -55,8 +55,8 @@ export default class Player extends component(Mover) {
 
     _move(delta) {
         if (this.isMoving) {
-            this.mesh.position.z -= this._vectorControls.y * delta;
-            this.mesh.position.x += this._vectorControls.x * delta;
+            this.mesh.position.z -= this._vectorControls.y * delta * configs.character.speed;
+            this.mesh.position.x += this._vectorControls.x * delta * configs.character.speed;
         }
     }
 
@@ -171,9 +171,9 @@ export default class Player extends component(Mover) {
             this.mesh.position.distanceTo(this.target.mesh.position) <= configs.character.range
         ) {
             console.log(`player ${this.id} killed their target ${this.target.id}`);
+            if (this.target instanceof Player) this.target.respawn(this);
             this.addPoints();
             this.switchTarget();
-            if (this.target instanceof Player) this.target.respawn(this);
         }
     }
 
@@ -183,7 +183,7 @@ export default class Player extends component(Mover) {
     }
 
     respawn(targetPlayer) {
-        console.log(`${this.id} has old target ${this.target.id}, old bot ${this.bot.id}`);
+        console.log(`player ${this.id} has old target ${this.target.id}, old bot ${this.bot.id}`);
 
         const selectedBot = sample(Object.values(this._bots).filter((bot) => !bot.isPlayer && bot.id !== this.bot.id));
         selectedBot.isPlayer = true;
@@ -202,8 +202,6 @@ export default class Player extends component(Mover) {
                 this.target.bot ? `of bot ${this.target.bot.id}` : ""
             }`
         );
-
-        console.log(`${this.id} has new target ${this.target.id}, new bot ${this.bot.id}`);
     }
 
     switchTarget() {
@@ -213,7 +211,9 @@ export default class Player extends component(Mover) {
             );
         } else if (this.target instanceof Player) {
             this.target = sample(
-                mapToArray(this._players, true).filter((p) => p.id !== this.target.it && p.id !== this.id)
+                mapToArray(this._players, true).filter((p) =>
+                    this._players.size === 2 ? p.id !== this.id : p.id !== this.target.id && p.id !== this.id
+                )
             );
         }
 
