@@ -40,7 +40,6 @@ export default {
       delete players[this.colyseus.currentRoom.sessionId];
       this.players = players;
     });
-
     this.colyseus.currentRoom.onMessage("addPlayer", () => {
       this.colyseus.sendData("getAllPlayers");
     });
