@@ -30,10 +30,16 @@ export default {
       pseudo: "",
       placeholder: "",
       pseudoNotValid: false,
+      players: {},
     };
   },
   mounted() {
     this.placeholder = sample(PiratesNames);
+
+    this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
+      delete players[this.colyseus.currentRoom.sessionId];
+      this.players = players;
+    });
   },
   watch: {
     pseudo(value) {
@@ -46,7 +52,7 @@ export default {
   },
   methods: {
     checkIsPseudoValid(pseudoToCheck) {
-      const isValid = !Object.values(this.colyseus.players).some((player) => player.name === pseudoToCheck);
+      const isValid = !Object.values(this.players).some((player) => player.name === pseudoToCheck);
       if (!isValid) {
         this.pseudoNotValid = true;
       } else {
