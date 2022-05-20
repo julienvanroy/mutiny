@@ -110,6 +110,8 @@ export default {
     this.colyseus.currentRoom.onMessage("addPlayer", ({ playerSessionId: playerId }) => {
       bidello.trigger({ name: "addPlayer" }, { playerId });
     });
+
+    this.colyseus.currentRoom.onMessage("getAllPlayers", () => {});
   },
   methods: {
     startGame() {
