@@ -11,7 +11,8 @@ import {
 } from "three";
 import Experience from "../Experience";
 import configs from "@/configs";
-import { sampleSize, shuffle } from "@/utils";
+import { sample, sampleSize, shuffle } from "@/utils";
+import { clone } from "three/examples/jsm/utils/SkeletonUtils";
 
 const { colors, sizes, range } = configs.character;
 
@@ -19,25 +20,30 @@ export default class Mover {
     constructor() {
         const experience = new Experience();
         this._scene = experience.scene;
-        //this.resource = experience.resources.items.robotModel;
-        //this._initModel();
+        this.resource = experience.resources.items.characterModel;
 
-        this._initMesh();
+        this._initModel();
+        // this._initMesh();
     }
 
-    /*
-  _initModel() {
-    this.mesh = this.resource.scene.clone();
-    this.mesh.scale.set(0.08, 0.08, 0.08);
-    this._scene.add(this.mesh);
+    _initModel() {
+        this.mesh = clone(this.resource.scene);
+        this.mesh.position.set(0, 0, 0);
+        this._scene.add(this.mesh);
 
-    this.mesh.traverse((child) => {
-      if (child instanceof Mesh) {
-        child.castShadow = true;
-      }
-    });
-  }
-  */
+        this.mesh.traverse((child) => {
+            if (child instanceof Mesh) child.castShadow = true;
+        });
+
+        this.mesh.children[0].traverse((child) => {
+            if (child instanceof Mesh) {
+                child.castShadow = true;
+                child.material = new MeshStandardMaterial({
+                    color: new Color(sample(colors)).convertSRGBToLinear(),
+                });
+            }
+        });
+    }
 
     _initMesh() {
         const r = sizes.radius;
@@ -97,14 +103,14 @@ export default class Mover {
 
     _getTargetData() {
         if (this.target) {
-            let body;
+            // let body;
 
-            if (this.target.bot) body = this.target.bot.body;
-            else body = this.target.body;
+            // if (this.target.bot) body = this.target.bot.body;
+            // else body = this.target.body;
 
             return {
                 id: this.id,
-                info: body.map(({ tags, color }) => ({ tags, color })).reverse(),
+                // info: body.map(({ tags, color }) => ({ tags, color })).reverse(),
             };
         } else return undefined;
     }
