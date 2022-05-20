@@ -6,17 +6,8 @@
     <div class="over">
       <input v-model="pseudo" :placeholder="placeholder" />
       <span v-if="pseudoNotValid">Pseudo is already taken</span>
-      <TheButton
-        label="Choose random"
-        color="light"
-        @click="chooseRandomPseudo()"
-      />
-      <TheButton
-        label="Let's go !"
-        color="dark"
-        :disabled="pseudoNotValid"
-        @click="sendPseudo()"
-      />
+      <TheButton label="Choose random" color="light" @click="chooseRandomPseudo()" />
+      <TheButton label="Let's go !" color="dark" :disabled="pseudoNotValid" @click="sendPseudo()" />
     </div>
   </div>
 </template>
@@ -44,9 +35,14 @@ export default {
   },
   mounted() {
     this.placeholder = sample(PiratesNames);
+
     this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
       delete players[this.colyseus.currentRoom.sessionId];
       this.players = players;
+    });
+
+    this.colyseus.currentRoom.onMessage("addPlayer", () => {
+      this.colyseus.sendData("getAllPlayers");
     });
   },
   watch: {

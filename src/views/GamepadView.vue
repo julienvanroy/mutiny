@@ -54,8 +54,6 @@ export default {
         }
       });
 
-      this.colyseus.currentRoom.onMessage("addPlayer", () => {});
-
       this.colyseus.currentRoom.onMessage("joystick", () => {});
 
       this.colyseus.currentRoom.onMessage("kill", () => {});
