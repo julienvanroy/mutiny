@@ -6,17 +6,17 @@
     <div class="left">
       <div class="player">
         <div class="points">
-          <img :src="`/images/players/${player.color}.png`" />
-          <span>{{ player.points }}</span>
+          <img :src="`/images/players/${color}.png`" />
+          <span>{{ points }}</span>
         </div>
         <div class="name">
           you are<br />
-          <span>{{ player.name }}</span>
+          <span>{{ name }}</span>
         </div>
       </div>
       <div ref="joystick" class="joystick"></div>
     </div>
-    <div class="middle" v-if="this.playerTarget">
+    <div class="middle" v-if="clues">
       <p>CLUES</p>
       <div class="clue" :style="`background-color: ${clue.color}`" v-for="clue in clues" :key="clue.color">
         {{ clue.tags[0] }}
@@ -40,17 +40,8 @@ export default {
   name: "GamePad",
   setup() {
     const colyseus = useColyseusStore();
+
     return { colyseus };
-  },
-  props: {
-    playerTarget: {
-      type: Object,
-      default: () => {},
-    },
-    player: {
-      type: Object,
-      default: () => {},
-    },
   },
   data() {
     return {
@@ -59,16 +50,16 @@ export default {
   },
   computed: {
     clues() {
-      return this.playerTarget?.info;
+      return this.colyseus.playerTarget.info;
     },
-    playerName() {
-      return this.player.name;
+    points() {
+      return this.colyseus.playerPoints;
     },
-    playerPoints() {
-      return this.player.points;
+    color() {
+      return this.colyseus.player.color;
     },
-    playerColor() {
-      return this.player.color;
+    name() {
+      return this.colyseus.player.name;
     },
   },
   mounted() {
