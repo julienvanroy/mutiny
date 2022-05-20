@@ -2,8 +2,8 @@ import { component } from "bidello";
 import { PathfindingHelper } from "three-pathfinding";
 import Mover from "./Mover";
 import Experience from "../Experience";
-// import configs from "@/configs";
-import { Quaternion } from "three";
+import configs from "@/configs";
+import { Quaternion, Vector2, Vector3 } from "three";
 
 export default class Bot extends component(Mover) {
     constructor(botId, position) {
