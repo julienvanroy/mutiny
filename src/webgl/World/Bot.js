@@ -35,39 +35,39 @@ export default class Bot extends component(Mover) {
         // else this._setPath(); // this causes infinite stack.
     }
 
-    // onRaf({ delta }) {
-    //     if (!this.isPlayer) {
-    //         if (this.path && this.path.length) {
-    //             // this._helper.reset().setPlayerPosition(this.position).setPath(this.path);
+    onRaf({ delta }) {
+        if (!this.isPlayer) {
+            if (this.path && this.path.length) {
+                // this._helper.reset().setPlayerPosition(this.position).setPath(this.path);
 
-    //             // Steering behavior
-    //             // Move from A to B
-    //             const targetPosition = this.path[0];
-    //             const velocity = targetPosition.clone().sub(this.position);
+                // Steering behavior
+                // Move from A to B
+                const targetPosition = this.path[0];
+                const velocity = targetPosition.clone().sub(this.position);
 
-    //             if (velocity.lengthSq() > 0.05 * 0.05) {
-    //                 velocity.normalize();
-    //                 this.position.add(velocity.multiplyScalar(delta * configs.character.speed));
-    //                 // this._helper.setPlayerPosition(this.position);
-    //             } else {
-    //                 // Remove node from the path we calculated
-    //                 this.path.shift();
-    //             }
-    //         } else {
-    //             this._setPath();
-    //         }
+                if (velocity.lengthSq() > 0.05 * 0.05) {
+                    velocity.normalize();
+                    this.position.add(velocity.multiplyScalar(delta * configs.character.speed));
+                    // this._helper.setPlayerPosition(this.position);
+                } else {
+                    // Remove node from the path we calculated
+                    this.path.shift();
+                }
+            } else {
+                this._setPath();
+            }
 
-    //         this.mesh && this.mesh.position.set(this.position.x, 0, this.position.z);
+            this.mesh && this.mesh.position.set(this.position.x, 0, this.position.z);
 
-    //         this.targetQuaternion.setFromAxisAngle(
-    //             new Vector3(0, 1, 0),
-    //             new Vector2(this.position.x, this.position.z).angle()
-    //         );
+            this.targetQuaternion.setFromAxisAngle(
+                new Vector3(0, 1, 0),
+                new Vector2(this.position.x, this.position.z).angle()
+            );
 
-    //         if (!this.mesh.quaternion.equals(this.targetQuaternion)) {
-    //             const step = configs.character.rotation * delta;
-    //             this.mesh.quaternion.rotateTowards(this.targetQuaternion, step);
-    //         }
-    //     }
-    // }
+            if (!this.mesh.quaternion.equals(this.targetQuaternion)) {
+                const step = configs.character.rotation * delta;
+                this.mesh.quaternion.rotateTowards(this.targetQuaternion, step);
+            }
+        }
+    }
 }
