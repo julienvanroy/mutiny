@@ -79,8 +79,6 @@ const useColyseusStore = defineStore("colyseus", {
 
                 room.onStateChange((state) => this.updateCurrentPlayer(state.players.$items, room.sessionId));
 
-                room.onStateChange((state) => this.updateCurrentPlayer(state.players.$items, room.sessionId));
-
                 this.currentRoom = room;
 
                 this.sendData("addPlayer", { playerId: this.currentRoom.sessionId });
