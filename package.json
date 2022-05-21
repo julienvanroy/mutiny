@@ -4,15 +4,15 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "dev": "npm run serve",
     "build": "vue-cli-service build",
-    "build-report": "vue-cli-service build --report",
     "lint": "vue-cli-service lint",
-    "vue-ui": "vue ui",
+    "build-report": "vue-cli-service build --report",
+    "dev": "npm run serve",
     "release": "standard-version",
+    "release:major": "standard-version --release-as major",
     "release:minor": "standard-version --release-as minor",
     "release:patch": "standard-version --release-as patch",
-    "release:major": "standard-version --release-as major"
+    "vue-ui": "vue ui"
   },
   "dependencies": {
     "@tweakpane/plugin-essentials": "^0.1.4",
@@ -23,6 +23,7 @@
     "nipplejs": "^0.9.1",
     "pinia": "^2.0.13",
     "qrcode": "^1.5.0",
+    "register-service-worker": "^1.7.2",
     "three": "^0.140.0",
     "three-mesh-bvh": "^0.5.10",
     "three-pathfinding": "^1.1.0",
@@ -37,6 +38,7 @@
     "@commitlint/config-conventional": "^16.2.4",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
+    "@vue/cli-plugin-pwa": "^5.0.4",
     "@vue/cli-service": "~5.0.0",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3",
