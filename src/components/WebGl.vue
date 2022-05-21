@@ -9,7 +9,7 @@ export default {
   name: "WebGl",
   mounted() {
     new Experience(this.$refs.canvas);
-  },
+  }
 };
 </script>
 
