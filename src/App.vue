@@ -35,6 +35,8 @@
       <router-view />
       <WebGl v-if="!isMobile" v-show="path === ('/game' || '/game#debug')" />
     </div>
+
+    <TheLoader />
   </div>
 </template>
 
@@ -42,10 +44,11 @@
 import WebGl from "@/components/WebGl";
 import { useRoute } from "vue-router";
 import { computed } from "vue";
+import TheLoader from "@/components/TheLoader";
 
 export default {
   name: "App",
-  components: { WebGl },
+  components: {TheLoader, WebGl },
   setup() {
     const route = useRoute();
 
