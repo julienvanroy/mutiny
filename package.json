@@ -20,6 +20,7 @@
     "colyseus.js": "^0.14.13",
     "core-js": "^3.8.3",
     "detect-gpu": "^4.0.19",
+    "howler": "^2.2.3",
     "nipplejs": "^0.9.1",
     "pinia": "^2.0.13",
     "qrcode": "^1.5.0",
