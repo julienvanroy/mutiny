@@ -23,6 +23,12 @@
   </div>
 </template>
 
+<script>
+export default {
+  name: 'CreditsView',
+}
+</script>
+
 <style lang="scss" scoped>
 .credits {
   position: relative;
