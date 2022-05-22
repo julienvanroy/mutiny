@@ -1,33 +1,30 @@
 <template>
-  <!-- <p>currentRoom : {{ colyseus.currentRoom.id }}</p>
-  <p>playerSessionId : {{ colyseus.currentRoom.sessionId }}</p> -->
-
   <div class="gamepad">
     <div class="left">
       <div class="player">
         <div class="points">
-          <img :src="`/images/players/${color}.png`" />
+          <img :src="`/images/players/${color}.png`"/>
           <span>{{ points }}</span>
         </div>
         <div class="name">
-          you are<br />
+          {{$t("youAre")}}<br/>
           <span>{{ name }}</span>
         </div>
       </div>
       <div ref="joystick" class="joystick"></div>
     </div>
     <div class="middle" v-if="clues">
-      <p>CLUES</p>
+      <p>$t("clues")</p>
       <div class="clue" :style="`background-color: ${clue.color}`" v-for="clue in clues" :key="clue.color">
         {{ clue.tags[0] }}
       </div>
     </div>
     <div class="right">
       <button ref="attack" class="attack" @click="colyseus.sendData('kill', true)">
-        <img src="/images/pad/button.png" />
-        <span>Attack</span>
+        <img src="/images/pad/button.png"/>
+        <span>{{$t("attack")}}</span>
       </button>
-      <!-- <button ref="power" @click="colyseus.sendData('power', true)">power</button> -->
+      <!-- <button ref="power" @click="colyseus.sendData('power', true)">{{$t("power")}}</button> -->
     </div>
   </div>
 </template>
@@ -35,13 +32,21 @@
 <script>
 import useColyseusStore from "@/store/colyseus";
 import nipplejs from "nipplejs";
+import en from './i18n/en.json'
+import fr from './i18n/fr.json'
 
 export default {
   name: "GamePad",
+  i18n: {
+    messages: {
+      en: en,
+      fr: fr
+    }
+  },
   setup() {
     const colyseus = useColyseusStore();
 
-    return { colyseus };
+    return {colyseus};
   },
   data() {
     return {
@@ -69,7 +74,7 @@ export default {
       zone: this.$refs.joystick,
       size: 50,
       maxNumberOfNipples: 1,
-      position: { left: "50%", top: "50%" },
+      position: {left: "50%", top: "50%"},
       mode: "static",
       color: "#5D5D5D",
     });
@@ -77,7 +82,7 @@ export default {
       this.colyseus.sendData("joystick", data.vector);
     });
     this.joystick.on("end", () => {
-      this.colyseus.sendData("joystick", { x: 0, y: 0 });
+      this.colyseus.sendData("joystick", {x: 0, y: 0});
     });
   },
   unmounted() {
@@ -94,21 +99,26 @@ export default {
   justify-content: space-between;
   align-items: stretch;
   box-sizing: border-box;
+
   .left {
     width: 40%;
     display: flex;
     flex-flow: column nowrap;
     justify-content: space-between;
     align-items: flex-start;
+
     .player {
       display: flex;
       justify-content: flex-start;
       align-items: center;
+
       .points {
         position: relative;
+
         img {
           width: 60px;
         }
+
         span {
           font-weight: $ft-w-bold;
           font-size: $ft-s-medium;
@@ -119,8 +129,10 @@ export default {
           transform: translate(-50%, -60%);
         }
       }
+
       .name {
         margin-left: 10px;
+
         span {
           display: block;
           font-weight: $ft-w-bold;
@@ -129,6 +141,7 @@ export default {
         }
       }
     }
+
     .joystick {
       position: relative;
       width: 250px;
@@ -138,6 +151,7 @@ export default {
       border-radius: 100%;
     }
   }
+
   .middle {
     width: 30%;
     background-color: $grey-2;
@@ -147,12 +161,15 @@ export default {
     flex-flow: column nowrap;
     justify-content: space-between;
     align-items: center;
+
     p {
+      text-transform: uppercase;
       text-align: center;
       font-weight: $ft-w-bold;
       font-size: $ft-s-medium;
       letter-spacing: 0.01em;
     }
+
     .clue {
       background: $grey-1;
       border-radius: 8px;
@@ -165,18 +182,22 @@ export default {
       font-weight: $ft-w-bold;
     }
   }
+
   .right {
     width: 30%;
     display: flex;
     justify-content: center;
     align-items: center;
+
     .attack {
       position: relative;
       background-color: transparent;
       border: none;
+
       img {
         width: 100px;
       }
+
       span {
         font-weight: $ft-w-bold;
         font-size: $ft-s-medium;

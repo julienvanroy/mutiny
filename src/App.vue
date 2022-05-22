@@ -8,6 +8,8 @@
       <router-link to="/end-game">End Game</router-link> |
     </div> -->
 
+    <LocaleChanger />
+
     <div class="fullscreen">
       <button v-if="showFullscreenBtn" @click="!!isFullscreen ? closeFullscreen() : goFullscreen()">
         <img src="images/icons/fullscreen-on.png" />
@@ -36,7 +38,7 @@
       <WebGl v-if="!isMobile" v-show="path === ('/game' || '/game#debug')" />
     </div>
 
-    <TheLoader />
+    <TheLoader v-if="!isMobile" />
   </div>
 </template>
 
@@ -47,10 +49,11 @@ import { computed } from "vue";
 import TheLoader from "@/components/TheLoader";
 import {mapState} from "pinia/dist/pinia.esm-browser";
 import useWebglStore from "@/store/webgl";
+import LocaleChanger from "@/components/LocaleChanger";
 
 export default {
   name: "App",
-  components: {TheLoader, WebGl },
+  components: {LocaleChanger, TheLoader, WebGl },
   setup() {
     const route = useRoute();
 
