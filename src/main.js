@@ -8,7 +8,7 @@ import './registerServiceWorker'
 import en from './i18n/en.json'
 import fr from './i18n/fr.json'
 
-const lang = navigator.language.substring(0, 2);
+const lang = navigator.language.substring(0, 2) === 'fr' ? 'fr' : 'en';
 
 const i18n = createI18n({
     locale: lang,
