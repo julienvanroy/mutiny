@@ -1,20 +1,8 @@
-import {
-    ConeGeometry,
-    CircleGeometry,
-    Group,
-    Mesh,
-    MeshStandardMaterial,
-    MeshBasicMaterial,
-    Color,
-    BoxGeometry,
-    CylinderGeometry,
-} from "three";
+import { Mesh, MeshStandardMaterial, Color } from "three";
 import Experience from "../Experience";
 import configs from "@/configs";
-import { sample, sampleSize, shuffle } from "@/utils";
+import { sample } from "@/utils";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils";
-
-const { colors, sizes, range } = configs.character;
 
 export default class Mover {
     constructor() {
@@ -23,7 +11,6 @@ export default class Mover {
         this.resource = experience.resources.items.characterModel;
 
         this._initModel();
-        // this._initMesh();
     }
 
     _initModel() {
@@ -31,86 +18,47 @@ export default class Mover {
         this.mesh.position.set(0, 0, 0);
         this._scene.add(this.mesh);
 
-        this.mesh.traverse((child) => {
-            if (child instanceof Mesh) child.castShadow = true;
-        });
+        this.body = {};
+        for (const [key, value] of Object.entries(configs.character.body)) {
+            this.body[key] = {
+                tag: value.tag,
+                color: sample(configs.character.colors),
+                modelNames: value.modelNames,
+            };
+        }
 
         this.mesh.children[0].traverse((child) => {
             if (child instanceof Mesh) {
+                const bodyPart = Object.values(this.body).find(({ modelNames }) => modelNames.includes(child.name));
+
                 child.castShadow = true;
                 child.material = new MeshStandardMaterial({
-                    color: new Color(sample(colors)).convertSRGBToLinear(),
+                    color: new Color(bodyPart.color || sample(configs.character.colors)).convertSRGBToLinear(),
                 });
             }
         });
-    }
 
-    _initMesh() {
-        const r = sizes.radius;
-        const h = sizes.height;
-        const c = sampleSize(colors, 3);
-
-        const cube = new Mesh(
-            new BoxGeometry(Math.random() > 0.5 ? r : h, h, Math.random() > 0.5 ? r : h),
-            new MeshStandardMaterial({ color: new Color(c[0]).convertSRGBToLinear() })
-        );
-        cube.tags = ["Box"];
-        cube.color = c[0];
-
-        const cylinder = new Mesh(
-            new CylinderGeometry(r, r, h, 32),
-            new MeshStandardMaterial({ color: new Color(c[1]).convertSRGBToLinear() })
-        );
-        cylinder.tags = ["Cylinder"];
-        cylinder.color = c[1];
-
-        const cone = new Mesh(
-            new ConeGeometry(r, h, 32),
-            new MeshStandardMaterial({ color: new Color(c[2]).convertSRGBToLinear() })
-        );
-        cone.tags = ["Cone"];
-        cone.color = c[2];
-
-        const circle = new Mesh(
-            new CircleGeometry(range / 2, 32),
-            new MeshBasicMaterial({
-                color: new Color(c[2]).convertSRGBToLinear(),
-                opacity: 0.64,
-                transparent: true,
-                wireframe: true,
-            })
-        );
-        circle.geometry.rotateX(-Math.PI / 2);
-        circle.position.y = 0.32;
-
-        this.body = shuffle([cube, cone, cylinder]);
-        this.body.forEach((part, index) => (part.position.y = (index + 1) * h));
-
-        this.mesh = new Group();
-        this.body.forEach((part) => this.mesh.add(part));
-        this.mesh.add(circle);
-
-        this._scene.add(this.mesh);
+        this.bodyData = Object.values(this.body).filter(({ tag }) => tag !== "Others");
     }
 
     _getPlayerData() {
-        const { body } = this;
+        const { bodyData } = this;
         return {
             id: this.id,
-            info: body.map(({ tags, color }) => ({ tags, color })),
+            info: bodyData.map(({ tag, color }) => ({ tag, color })),
         };
     }
 
     _getTargetData() {
         if (this.target) {
-            // let body;
+            let bodyData;
 
-            // if (this.target.bot) body = this.target.bot.body;
-            // else body = this.target.body;
+            if (this.target.bot) bodyData = this.target.bot.bodyData;
+            else bodyData = this.target.bodyData;
 
             return {
                 id: this.id,
-                // info: body.map(({ tags, color }) => ({ tags, color })).reverse(),
+                info: bodyData.map(({ tag, color }) => ({ tag, color })),
             };
         } else return undefined;
     }
