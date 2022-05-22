@@ -11,6 +11,7 @@ import Bot from "./Bot.js";
 import MapLevel from "@/webgl/World/MapLevel";
 import configs from "@/configs";
 import useColyseusStore from "@/store/colyseus.js";
+import Water from "@/webgl/Mesh/Water";
 
 export default class World extends component() {
     init() {
@@ -27,6 +28,7 @@ export default class World extends component() {
     onResourcesIsReady() {
         console.log("world is ready");
         this.environment = new Environment();
+        this.water = new Water();
         this.mapLevel = new MapLevel();
 
         this.players = new Map();
