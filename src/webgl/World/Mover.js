@@ -3,6 +3,8 @@ import Experience from "../Experience";
 import configs from "@/configs";
 import { sample } from "@/utils";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils";
+import { AnimationMixer } from "three";
+import { AnimationClip } from "three";
 
 export default class Mover {
     constructor() {
@@ -11,10 +13,12 @@ export default class Mover {
         this.resource = experience.resources.items.characterModel;
 
         this._initModel();
+        this._initAnimation();
     }
 
     _initModel() {
         this.mesh = clone(this.resource.scene);
+
         this.mesh.position.set(0, 0, 0);
         this._scene.add(this.mesh);
 
@@ -39,6 +43,16 @@ export default class Mover {
         });
 
         this.bodyData = Object.values(this.body).filter(({ tag }) => tag !== "Others");
+    }
+
+    _initAnimation() {
+        this.animations = this.resource.animations;
+        this.animationMixer = new AnimationMixer(this.mesh);
+
+        const walkAnimation = AnimationClip.findByName(this.animations, "marche");
+        const walkAction = this.animationMixer.clipAction(walkAnimation);
+
+        walkAction.play();
     }
 
     _getPlayerData() {

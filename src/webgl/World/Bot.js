@@ -34,6 +34,8 @@ export default class Bot extends component(Mover) {
     }
 
     onRaf({ delta }) {
+        if (this.animationMixer) this.animationMixer.update(delta);
+
         if (!this.isPlayer) {
             const oldPosition = this.position.clone();
 
