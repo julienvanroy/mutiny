@@ -15,7 +15,7 @@
     </div>
 
     <div class="btn-parameters">
-      <button v-show="!isGamePath">
+      <button v-show="!isGamePath" @click="playMusic">
         <img src="images/icons/sound-on.png" />
       </button>
       <button v-show="!isGamePath">
@@ -45,6 +45,8 @@ import WebGl from "@/components/WebGl";
 import { useRoute } from "vue-router";
 import { computed } from "vue";
 import TheLoader from "@/components/TheLoader";
+import {mapState} from "pinia/dist/pinia.esm-browser";
+import useWebglStore from "@/store/webgl";
 
 export default {
   name: "App",
@@ -92,8 +94,15 @@ export default {
         this.isLandscape = true;
       }
     },
+    playMusic() {
+      this.music.play()
+    }
   },
   computed: {
+    ...mapState(useWebglStore, ['audio']),
+    music() {
+      return this.audio.musicGame
+    },
     isGamePath() {
       return this.path === ("/game" || "/game#debug");
     },
