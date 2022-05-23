@@ -1,13 +1,5 @@
 <template>
   <div class="main-container" ref="fullscreenContainer">
-    <!-- <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/connection">Connection</router-link> |
-      <router-link to="/setup">SetUp</router-link> |
-      <router-link to="/game">Game</router-link> |
-      <router-link to="/end-game">End Game</router-link> |
-    </div> -->
-
     <LocaleChanger />
 
     <div class="fullscreen">
@@ -32,9 +24,7 @@
       <button v-show="isGamePath"><img src="images/icons/pause.png" /></button>
     </div>
 
-    <div v-if="isMobile" class="modal-landscape">
-      Turn your phone to landscape view !!!
-    </div>
+    <ModalLandscape />
 
     <div id="view">
       <router-view />
@@ -50,33 +40,33 @@ import WebGl from "@/components/WebGl";
 import { useRoute } from "vue-router";
 import { computed } from "vue";
 import TheLoader from "@/components/TheLoader";
-import { mapState } from "pinia/dist/pinia.esm-browser";
+import { mapState } from "pinia";
+import { mapWritableState } from 'pinia'
 import useWebglStore from "@/store/webgl";
 import LocaleChanger from "@/components/LocaleChanger";
+import ModalLandscape from "@/components/ModalLandscape";
+import useGlobalStore from "@/store/global";
 
 export default {
   name: "App",
-  components: { LocaleChanger, TheLoader, WebGl },
+  components: {ModalLandscape, LocaleChanger, TheLoader, WebGl },
   setup() {
     const route = useRoute();
 
     const path = computed(() => route.path);
     return { path };
   },
-  data() {
-    return {
-      isMobile:
-        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-          navigator.userAgent
-        ),
-      showFullscreenBtn: !(
-        /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
-        /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
-      ),
-      isFullscreen: false,
-    };
+  mounted() {
+    this.resize()
+    window.addEventListener('resize', this.resize, false);
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.resize, false);
   },
   methods: {
+    resize() {
+      this.isLandscape = window.innerWidth > window.innerHeight
+    },
     goFullscreen() {
       this.$refs.fullscreenContainer.requestFullscreen();
       this.isFullscreen = true;
@@ -91,6 +81,8 @@ export default {
   },
   computed: {
     ...mapState(useWebglStore, ["audio"]),
+    ...mapState(useGlobalStore, ["isMobile", "showFullscreenBtn"]),
+    ...mapWritableState(useGlobalStore, ["isFullscreen", "isLandscape"]),
     music() {
       return this.audio.musicGame;
     },
@@ -151,20 +143,6 @@ export default {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-  }
-  .modal-landscape {
-    position: absolute;
-    z-index: 16;
-    inset: 0;
-    background-color: $black;
-    color: $white;
-    font-weight: $ft-w-bold;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    @media (orientation: landscape) {
-      z-index: -1;
-    }
   }
 }
 </style>
