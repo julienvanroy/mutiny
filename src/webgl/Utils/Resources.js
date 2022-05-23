@@ -1,14 +1,19 @@
-import { TextureLoader, CubeTextureLoader, AudioLoader } from "three";
+import { TextureLoader, CubeTextureLoader } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import bidello from "bidello";
+import useWebglStore from "@/store/webgl";
+import {Howl} from "howler";
 
 export default class Resources {
   constructor(sources) {
     this.sources = sources;
 
     this.items = {};
+    this.audio = {};
     this.toLoad = this.sources.length;
     this.loaded = 0;
+
+    this._storeWebgl = useWebglStore()
 
     this.setLoaders();
     this.startLoading();
@@ -19,7 +24,6 @@ export default class Resources {
     this.loaders.gltfLoader = new GLTFLoader();
     this.loaders.textureLoader = new TextureLoader();
     this.loaders.cubeTextureLoader = new CubeTextureLoader();
-    this.loaders.audioLoader = new AudioLoader();
   }
 
   startLoading() {
@@ -38,9 +42,14 @@ export default class Resources {
           this.sourceLoaded(source, file);
         });
       } else if (source.type === "audio") {
-        this.loaders.audioLoader.load(source.path, (file) => {
-          this.sourceLoaded(source, file);
-        });
+          const file = new Howl({
+              src: [source.path],
+              ...source.options,
+              onload: () => {
+                  this.audio[source.name] = file;
+                  this.sourceLoaded(source, file);
+              }
+          })
       }
     }
   }
@@ -50,8 +59,15 @@ export default class Resources {
 
     this.loaded++;
 
+    this._storeWebgl.progressLoading = this.progressRatio
+
     if (this.loaded === this.toLoad) {
-      bidello.trigger({ name: "resourcesIsReady" });
+        this._storeWebgl.audio = this.audio
+        bidello.trigger({ name: "resourcesIsReady" });
     }
+  }
+
+  get progressRatio() {
+      return this.loaded / this.toLoad
   }
 }
