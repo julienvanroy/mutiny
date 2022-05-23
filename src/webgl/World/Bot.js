@@ -3,6 +3,9 @@ import { PathfindingHelper } from "three-pathfinding";
 import Mover from "./Mover";
 import Experience from "../Experience";
 import configs from "@/configs";
+
+const { character: confCharacter } = configs;
+const { animation: confAnimation } = confCharacter;
 export default class Bot extends component(Mover) {
     constructor(botId, position) {
         super();
@@ -22,6 +25,12 @@ export default class Bot extends component(Mover) {
         this.mesh.position.set(this.position.x, this.position.y, this.position.z);
 
         this.path = [];
+
+        this.idle = {
+            active: Math.random() < confAnimation.idle.chance(),
+            duration: 0,
+            interval: null,
+        };
     }
 
     _setPath() {
@@ -34,9 +43,7 @@ export default class Bot extends component(Mover) {
     }
 
     onRaf({ delta }) {
-        if (this.animation && this.animation.mixer) this.animation.mixer.update(delta);
-
-        if (!this.isPlayer) {
+        if (!this.isPlayer && !this.idle.active) {
             const oldPosition = this.position.clone();
 
             if (this.path && this.path.length) {
@@ -49,7 +56,7 @@ export default class Bot extends component(Mover) {
 
                 if (velocity.lengthSq() > 0.05 * 0.05) {
                     velocity.normalize();
-                    this.position.add(velocity.multiplyScalar(delta * configs.character.speed));
+                    this.position.add(velocity.multiplyScalar(delta * confCharacter.speed));
                     // this._helper.setPlayerPosition(this.position);
                 } else {
                     // Remove node from the path we calculated
@@ -58,6 +65,8 @@ export default class Bot extends component(Mover) {
             } else {
                 this._setPath();
             }
+
+            if (this.animation && this.animation.mixer) this.animation.mixer.update(delta);
 
             if (this.mesh) {
                 this.mesh.position.set(this.position.x, 0, this.position.z);
@@ -68,8 +77,20 @@ export default class Bot extends component(Mover) {
                 let angle = Math.atan2(deltaPosition.x, deltaPosition.z);
                 if (angle < 0) angle += 2 * Math.PI;
 
-                this.mesh.rotation.y += (angle - this.mesh.rotation.y) * configs.character.rotationSpeed;
+                this.mesh.rotation.y += (angle - this.mesh.rotation.y) * confCharacter.rotationSpeed;
             }
+        }
+
+        if (!this.idle.interval) {
+            this.idle.interval = setInterval(() => (this.idle.duration += 1), 1000);
+        }
+
+        if (this.idle.interval && this.idle.duration === confAnimation.idle.duration) {
+            clearInterval(this.idle.interval);
+            this.idle.interval = null;
+
+            this.idle.duration = 0;
+            this.idle.active = confAnimation.idle.chance();
         }
     }
 }
