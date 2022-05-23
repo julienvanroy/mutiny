@@ -46,13 +46,31 @@ export default class Mover {
     }
 
     _initAnimation() {
-        this.animations = this.resource.animations;
-        this.animationMixer = new AnimationMixer(this.mesh);
+        this.animation = {};
 
-        const walkAnimation = AnimationClip.findByName(this.animations, "marche");
-        const walkAction = this.animationMixer.clipAction(walkAnimation);
+        // Mixer
+        this.animation.mixer = new AnimationMixer(this.mesh);
 
-        walkAction.play();
+        // Actions
+        this.animation.actions = {};
+
+        this.animation.actions.walk = this.animation.mixer.clipAction(
+            AnimationClip.findByName(this.resource.animations, "marche")
+        );
+
+        this.animation.play = (name, duration = 1) => {
+            const newAction = this.animation.actions[name];
+            const oldAction = this.animation.actions.current;
+
+            newAction.reset();
+            newAction.play();
+            newAction.crossFadeFrom(oldAction, duration);
+
+            this.animation.actions.current = newAction;
+        };
+
+        this.animation.actions.current = this.animation.actions.walk;
+        this.animation.play("walk");
     }
 
     _getPlayerData() {
