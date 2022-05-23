@@ -14,7 +14,7 @@
       <div ref="joystick" class="joystick"></div>
     </div>
     <div class="middle" v-if="clues">
-      <p>$t("clues")</p>
+      <p>{{$t("clues")}}</p>
       <div class="clue" :style="`background-color: ${clue.color}`" v-for="clue in clues" :key="clue.color">
         {{ clue.tags[0] }}
       </div>
