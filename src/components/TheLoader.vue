@@ -1,7 +1,9 @@
 <template>
-  <div :class="`loading ${ended ? 'ended' : ''}`">
-    <div class="loading-bar" :style="{transform : !ended ? `scaleX(${progress})` : ''}"/>
-  </div>
+  <transition name="fade">
+    <div :class="`loading ${ended ? 'ended' : ''}`" v-if="show">
+      <div class="loading-bar" :style="{transform : !ended ? `scaleX(${progress})` : ''}"/>
+    </div>
+  </transition>
 </template>
 
 <script>
