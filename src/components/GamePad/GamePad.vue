@@ -7,14 +7,14 @@
           <span>{{ points }}</span>
         </div>
         <div class="name">
-          {{$t("youAre")}}<br/>
+          {{ $t("youAre") }}<br/>
           <span>{{ name }}</span>
         </div>
       </div>
       <div ref="joystick" class="joystick"></div>
     </div>
     <div class="middle" v-if="clues">
-      <p>{{$t("clues")}}</p>
+      <p>{{ $t("clues") }}</p>
       <div class="clue" :style="`background-color: ${clue.color}`" v-for="clue in clues" :key="clue.color">
         {{ clue.tags[0] }}
       </div>
@@ -22,7 +22,7 @@
     <div class="right">
       <button ref="attack" class="attack" @click="colyseus.sendData('kill', true)">
         <img src="/images/pad/button.png"/>
-        <span>{{$t("attack")}}</span>
+        <span>{{ $t("attack") }}</span>
       </button>
       <!-- <button ref="power" @click="colyseus.sendData('power', true)">{{$t("power")}}</button> -->
     </div>
@@ -193,6 +193,11 @@ export default {
       position: relative;
       background-color: transparent;
       border: none;
+      transition: transform 0.25s ease;
+
+      &:active {
+        transform: scale(0.9);
+      }
 
       img {
         width: 100px;
