@@ -152,9 +152,13 @@ export default class Player extends component(Mover) {
 
         this.bot.isPlayer = true;
         this.mesh = this.bot.mesh;
+
+        super._initAnimation();
     }
 
     onRaf({ delta }) {
+        if (this.isMoving && this.animation && this.animation.mixer) this.animation.mixer.update(delta);
+
         this._move(delta);
         this._rotation(delta);
         // this._updateCollision(delta);
