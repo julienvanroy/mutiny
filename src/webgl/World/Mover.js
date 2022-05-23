@@ -1,10 +1,8 @@
-import { Mesh, MeshStandardMaterial, Color } from "three";
+import { Mesh, MeshStandardMaterial, Color, AnimationClip, AnimationMixer } from "three";
 import Experience from "../Experience";
 import configs from "@/configs";
 import { sample, sampleSize } from "@/utils";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils";
-import { AnimationMixer } from "three";
-import { AnimationClip } from "three";
 
 export default class Mover {
     constructor() {
