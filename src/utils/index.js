@@ -7,6 +7,8 @@ const mapToArray = (map, extractValues = false) => {
     return arr;
 };
 
+const randomNumberInRange = (min, max) => Math.random() * (max - min) + min;
+
 const sample = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 const sampleSize = ([...arr], n = 1) => {
@@ -32,5 +34,5 @@ const uuid = () =>
         (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16)
     );
 
-export { diffArray, mapToArray, sample, sampleSize, shuffle, uuid };
-export { stringToBoolean } from './stringToBoolean'
+export { diffArray, mapToArray, randomNumberInRange, sample, sampleSize, shuffle, uuid };
+export { stringToBoolean } from "./stringToBoolean";

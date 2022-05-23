@@ -3,6 +3,7 @@ import { PathfindingHelper } from "three-pathfinding";
 import Mover from "./Mover";
 import Experience from "../Experience";
 import configs from "@/configs";
+import { randomNumberInRange } from "@/utils";
 
 const { character: confCharacter } = configs;
 const { animation: confAnimation } = confCharacter;
@@ -30,6 +31,7 @@ export default class Bot extends component(Mover) {
             active: Math.random() < confAnimation.idle.chance(),
             duration: 0,
             interval: null,
+            angle: 0,
         };
     }
 
@@ -82,6 +84,11 @@ export default class Bot extends component(Mover) {
         }
 
         if (!this.isPlayer) {
+            if (this.idle.active) {
+                if (!this.idle.angle) this.idle.angle = randomNumberInRange(-Math.PI * 2, Math.PI * 2);
+                this.mesh.rotation.y += (this.idle.angle - this.mesh.rotation.y) * confCharacter.rotationSpeed * 3.2;
+            }
+
             if (!this.idle.interval) {
                 this.idle.interval = setInterval(() => (this.idle.duration += 1), 1000);
             }
@@ -90,6 +97,7 @@ export default class Bot extends component(Mover) {
                 clearInterval(this.idle.interval);
                 this.idle.interval = null;
 
+                this.idle.angle = 0;
                 this.idle.duration = 0;
                 this.idle.active = confAnimation.idle.chance();
             }
