@@ -4,11 +4,12 @@
 @import "transitions";
 
 html {
-    height: -webkit-fill-available;
+  height: -webkit-fill-available;
+  touch-action: manipulation
 }
 
 body {
-    overflow: hidden;
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
+  overflow: hidden;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
 }
