@@ -33,3 +33,4 @@ const uuid = () =>
     );
 
 export { diffArray, mapToArray, sample, sampleSize, shuffle, uuid };
+export { stringToBoolean } from './stringToBoolean'
