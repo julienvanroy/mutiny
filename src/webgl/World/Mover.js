@@ -1,7 +1,7 @@
 import { Mesh, MeshStandardMaterial, Color } from "three";
 import Experience from "../Experience";
 import configs from "@/configs";
-import { sample } from "@/utils";
+import { sample, sampleSize } from "@/utils";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils";
 import { AnimationMixer } from "three";
 import { AnimationClip } from "three";
@@ -17,18 +17,23 @@ export default class Mover {
     }
 
     _initModel() {
+        const colors = sampleSize(configs.character.colors, Object.entries(configs.character.body).length);
+
         this.mesh = clone(this.resource.scene);
 
         this.mesh.position.set(0, 0, 0);
         this._scene.add(this.mesh);
 
         this.body = {};
+
+        let i = 0;
         for (const [key, value] of Object.entries(configs.character.body)) {
             this.body[key] = {
                 tag: value.tag,
-                color: sample(configs.character.colors),
+                color: colors[i],
                 modelNames: value.modelNames,
             };
+            i++;
         }
 
         this.mesh.children[0].traverse((child) => {
