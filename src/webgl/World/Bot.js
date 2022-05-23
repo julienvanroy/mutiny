@@ -81,16 +81,18 @@ export default class Bot extends component(Mover) {
             }
         }
 
-        if (!this.idle.interval) {
-            this.idle.interval = setInterval(() => (this.idle.duration += 1), 1000);
-        }
+        if (!this.isPlayer) {
+            if (!this.idle.interval) {
+                this.idle.interval = setInterval(() => (this.idle.duration += 1), 1000);
+            }
 
-        if (this.idle.interval && this.idle.duration === confAnimation.idle.duration) {
-            clearInterval(this.idle.interval);
-            this.idle.interval = null;
+            if (this.idle.interval && this.idle.duration === confAnimation.idle.duration) {
+                clearInterval(this.idle.interval);
+                this.idle.interval = null;
 
-            this.idle.duration = 0;
-            this.idle.active = confAnimation.idle.chance();
+                this.idle.duration = 0;
+                this.idle.active = confAnimation.idle.chance();
+            }
         }
     }
 }
