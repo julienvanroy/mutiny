@@ -9,7 +9,7 @@ import {
 } from "three";
 import Experience from "../Experience";
 import configs from "@/configs";
-import { sample, sampleSize } from "@/utils";
+import { sample, sampleSize, shuffle } from "@/utils";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils";
 
 export default class Mover {
@@ -23,7 +23,7 @@ export default class Mover {
     }
 
     _initModel() {
-        const colors = sampleSize(configs.character.colors, Object.entries(configs.character.body).length);
+        const colors = shuffle(sampleSize(configs.character.colors, Object.entries(configs.character.body).length));
 
         this.mesh = clone(this.resource.scene);
 
