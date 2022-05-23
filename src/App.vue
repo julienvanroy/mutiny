@@ -11,7 +11,10 @@
     <LocaleChanger />
 
     <div class="fullscreen">
-      <button v-if="showFullscreenBtn" @click="!!isFullscreen ? closeFullscreen() : goFullscreen()">
+      <button
+        v-if="showFullscreenBtn"
+        @click="!!isFullscreen ? closeFullscreen() : goFullscreen()"
+      >
         <img src="images/icons/fullscreen-on.png" />
       </button>
     </div>
@@ -29,7 +32,7 @@
       <button v-show="isGamePath"><img src="images/icons/pause.png" /></button>
     </div>
 
-    <div v-if="isMobile && !isLandscape" class="modal-landscape">
+    <div v-if="isMobile" class="modal-landscape">
       Turn your phone to landscape view !!!
     </div>
 
@@ -47,13 +50,13 @@ import WebGl from "@/components/WebGl";
 import { useRoute } from "vue-router";
 import { computed } from "vue";
 import TheLoader from "@/components/TheLoader";
-import {mapState} from "pinia/dist/pinia.esm-browser";
+import { mapState } from "pinia/dist/pinia.esm-browser";
 import useWebglStore from "@/store/webgl";
 import LocaleChanger from "@/components/LocaleChanger";
 
 export default {
   name: "App",
-  components: {LocaleChanger, TheLoader, WebGl },
+  components: { LocaleChanger, TheLoader, WebGl },
   setup() {
     const route = useRoute();
 
@@ -67,18 +70,11 @@ export default {
           navigator.userAgent
         ),
       showFullscreenBtn: !(
-        /iPhone|iPad|iPod/i.test(navigator.userAgent) || /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+        /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+        /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
       ),
       isFullscreen: false,
-      isLandscape: false,
     };
-  },
-  mounted() {
-    this.handleOrientationChange()
-    window.addEventListener("orientationchange", this.handleOrientationChange);
-  },
-  unmounted() {
-    window.removeEventListener('orientationchange', this.handleOrientationChange);
   },
   methods: {
     goFullscreen() {
@@ -89,22 +85,14 @@ export default {
       document.exitFullscreen();
       this.isFullscreen = false;
     },
-    handleOrientationChange() {
-      const orientation = window.screen.orientation.type;
-      if (orientation === "portrait-primary") {
-        this.isLandscape = false;
-      } else if (orientation === "landscape-primary") {
-        this.isLandscape = true;
-      }
-    },
     playMusic() {
-      this.music.play()
-    }
+      this.music.play();
+    },
   },
   computed: {
-    ...mapState(useWebglStore, ['audio']),
+    ...mapState(useWebglStore, ["audio"]),
     music() {
-      return this.audio.musicGame
+      return this.audio.musicGame;
     },
     isGamePath() {
       return this.path === ("/game" || "/game#debug");
@@ -174,6 +162,9 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    @media (orientation: landscape) {
+      z-index: -1;
+    }
   }
 }
 </style>
