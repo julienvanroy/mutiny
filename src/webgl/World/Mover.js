@@ -1,4 +1,12 @@
-import { Mesh, MeshStandardMaterial, Color, AnimationClip, AnimationMixer } from "three";
+import {
+    Mesh,
+    MeshStandardMaterial,
+    Color,
+    AnimationClip,
+    AnimationMixer,
+    CircleGeometry,
+    MeshBasicMaterial,
+} from "three";
 import Experience from "../Experience";
 import configs from "@/configs";
 import { sample, sampleSize } from "@/utils";
@@ -21,6 +29,19 @@ export default class Mover {
 
         this.mesh.position.set(0, 0, 0);
         this._scene.add(this.mesh);
+
+        const circle = new Mesh(
+            new CircleGeometry(configs.character.range / 2, 32),
+            new MeshBasicMaterial({
+                color: new Color(sample(colors)).convertSRGBToLinear(),
+                opacity: 0.64,
+                transparent: true,
+                wireframe: true,
+            })
+        );
+        circle.geometry.rotateX(-Math.PI / 2);
+        circle.position.y = 0.32;
+        this.mesh.add(circle);
 
         this.body = {};
 
