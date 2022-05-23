@@ -7,8 +7,30 @@ const configs = {
             height: 0.64,
         },
         speed: 1,
-        rotation: 100,
+        rotationSpeed: 0.032,
         range: 3.2, //10
+        body: {
+            hat: {
+                tag: "Hat",
+                modelNames: ["personnage_1"],
+            },
+            head: {
+                tag: "Head",
+                modelNames: ["personnage_5"],
+            },
+            barrel: {
+                tag: "Barrel",
+                modelNames: ["personnage_2", "personnage_4"],
+            },
+            weapon: {
+                tag: "Weapon",
+                modelNames: ["personnage_6"],
+            },
+            others: {
+                tag: "Others",
+                modelNames: ["personnage_3"],
+            },
+        },
     },
     game: {
         maxTime: 150, //150,

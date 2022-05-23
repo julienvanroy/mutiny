@@ -3,8 +3,6 @@ import { PathfindingHelper } from "three-pathfinding";
 import Mover from "./Mover";
 import Experience from "../Experience";
 import configs from "@/configs";
-import { Quaternion, Vector2, Vector3 } from "three";
-
 export default class Bot extends component(Mover) {
     constructor(botId, position) {
         super();
@@ -20,7 +18,7 @@ export default class Bot extends component(Mover) {
         // this._scene.add(this._helper);
 
         this.position = position;
-        this.targetQuaternion = new Quaternion();
+
         this.mesh.position.set(this.position.x, this.position.y, this.position.z);
 
         this.path = [];
@@ -36,7 +34,11 @@ export default class Bot extends component(Mover) {
     }
 
     onRaf({ delta }) {
+        if (this.animation && this.animation.mixer) this.animation.mixer.update(delta);
+
         if (!this.isPlayer) {
+            const oldPosition = this.position.clone();
+
             if (this.path && this.path.length) {
                 // this._helper.reset().setPlayerPosition(this.position).setPath(this.path);
 
@@ -57,16 +59,16 @@ export default class Bot extends component(Mover) {
                 this._setPath();
             }
 
-            this.mesh && this.mesh.position.set(this.position.x, 0, this.position.z);
+            if (this.mesh) {
+                this.mesh.position.set(this.position.x, 0, this.position.z);
 
-            this.targetQuaternion.setFromAxisAngle(
-                new Vector3(0, 1, 0),
-                new Vector2(this.position.x, this.position.z).angle()
-            );
+                // common way to get the  angle between two vectors
+                const deltaPosition = this.position.clone();
+                deltaPosition.sub(oldPosition);
+                let angle = Math.atan2(deltaPosition.x, deltaPosition.z);
+                if (angle < 0) angle += 2 * Math.PI;
 
-            if (!this.mesh.quaternion.equals(this.targetQuaternion)) {
-                const step = configs.character.rotation * delta;
-                this.mesh.quaternion.rotateTowards(this.targetQuaternion, step);
+                this.mesh.rotation.y += (angle - this.mesh.rotation.y) * configs.character.rotationSpeed;
             }
         }
     }

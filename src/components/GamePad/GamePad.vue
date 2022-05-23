@@ -16,7 +16,7 @@
     <div class="middle" v-if="clues">
       <p>{{ $t("clues") }}</p>
       <div class="clue" :style="`background-color: ${clue.color}`" v-for="clue in clues" :key="clue.color">
-        {{ clue.tags[0] }}
+        {{ clue.tag }}
       </div>
     </div>
     <div class="right">
