@@ -1,5 +1,5 @@
 <template>
-  <div :class="`loading ${ended ? 'ended' : ''}`" v-if="show">
+  <div :class="`loading ${ended ? 'ended' : ''}`">
     <div class="loading-bar" :style="{transform : !ended ? `scaleX(${progress})` : ''}"/>
   </div>
 </template>
