@@ -9,6 +9,14 @@ const configs = {
         speed: 1,
         rotationSpeed: 0.032,
         range: 3.2, //10
+        animation: {
+            idle: {
+                chance() {
+                    return Math.random() < 0.2;
+                },
+                duration: 2, // in second
+            },
+        },
         body: {
             hat: {
                 tag: "Hat",
