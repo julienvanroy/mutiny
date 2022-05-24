@@ -56,7 +56,10 @@ export default {
   .over {
     position: absolute;
     z-index: 14;
-    inset: 0;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     width: 100%;
     height: 100%;
     display: flex;
@@ -155,7 +158,10 @@ export default {
       display: block;
       background-color: rgba($white, 0.6);
       position: absolute;
-      inset: 0;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
     }
   }
 }
