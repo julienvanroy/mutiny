@@ -22,7 +22,10 @@ export default {
 .modal-landscape {
   position: absolute;
   z-index: 16;
-  inset: 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   background-color: $black;
   color: $white;
   font-weight: $ft-w-bold;
