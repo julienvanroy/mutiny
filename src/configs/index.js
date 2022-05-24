@@ -23,7 +23,7 @@ const configs = {
                 modelNames: ["personnage_1"],
             },
             head: {
-                tag: "Head",
+                tag: "Beard",
                 modelNames: ["personnage_5"],
             },
             barrel: {
@@ -31,7 +31,7 @@ const configs = {
                 modelNames: ["personnage_2", "personnage_4"],
             },
             weapon: {
-                tag: "Weapon",
+                tag: "Sword",
                 modelNames: ["personnage_6"],
             },
             others: {
