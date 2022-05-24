@@ -38,6 +38,8 @@
 <script>
 import useColyseusStore from "@/store/colyseus";
 import TheButton from "@/components/TheButton.vue";
+import {mapState} from "pinia/dist/pinia.esm-browser";
+import useGlobalStore from "@/store/global";
 
 export default {
   name: "App",
@@ -46,13 +48,8 @@ export default {
     const colyseus = useColyseusStore();
     return { colyseus };
   },
-  data() {
-    return {
-      isMobile:
-        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-          navigator.userAgent
-        ),
-    };
+  computed: {
+    ...mapState(useGlobalStore, ["isMobile"]),
   },
   mounted() {
     this.colyseus.initLobbyRoom();

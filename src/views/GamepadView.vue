@@ -22,32 +22,21 @@ export default {
     };
   },
   mounted() {
-    if (this.colyseus.currentRoom) {
-      this.colyseusOnMessage();
-    } else {
-      this.colyseus.joinRoom(this.$route.params.roomId).then(() => {
-        this.colyseusOnMessage();
-      });
-    }
+    this.colyseus.currentRoom.onMessage("startGame", () => {
+      this.showGamePad = true;
+    });
+
+    this.colyseus.currentRoom.onMessage(
+        "getPlayer",
+        (player) => (this.colyseus.player = player)
+    );
+
+    this.colyseus.currentRoom.onMessage("joystick", () => {});
+
+    this.colyseus.currentRoom.onMessage("kill", () => {});
   },
   unmounted() {
     this.colyseus.currentRoom?.leave();
-  },
-  methods: {
-    colyseusOnMessage() {
-      this.colyseus.currentRoom.onMessage("startGame", () => {
-        this.showGamePad = true;
-      });
-
-      this.colyseus.currentRoom.onMessage(
-        "getPlayer",
-        (player) => (this.colyseus.player = player)
-      );
-
-      this.colyseus.currentRoom.onMessage("joystick", () => {});
-
-      this.colyseus.currentRoom.onMessage("kill", () => {});
-    },
   },
 };
 </script>

@@ -4,7 +4,8 @@ import { createI18n } from 'vue-i18n'
 import App from "./App.vue";
 import router from "./router";
 import { createPinia } from "pinia";
-import './registerServiceWorker'
+// TODO: Delete comments... Just for prototype
+//import './registerServiceWorker'
 import en from './i18n/en.json'
 import fr from './i18n/fr.json'
 
