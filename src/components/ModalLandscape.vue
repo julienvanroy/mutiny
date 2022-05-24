@@ -1,0 +1,33 @@
+<template>
+  <transition name="fade">
+    <div v-if="isMobile && !isLandscape" class="modal-landscape">
+      {{ $t('landscape') }}
+    </div>
+  </transition>
+</template>
+
+<script>
+import {mapState} from "pinia";
+import useGlobalStore from "@/store/global";
+
+export default {
+  name: "ModalLandscape",
+  computed: {
+    ...mapState(useGlobalStore, ["isMobile", "isLandscape"]),
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.modal-landscape {
+  position: absolute;
+  z-index: 16;
+  inset: 0;
+  background-color: $black;
+  color: $white;
+  font-weight: $ft-w-bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>
