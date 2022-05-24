@@ -16,7 +16,7 @@
 import useColyseusStore from "@/store/colyseus";
 import { PiratesNames } from "@/data/pirates-name";
 import TheButton from "@/components/TheButton.vue";
-import { sample } from "@/utils";
+import { diffArray, sample } from "@/utils";
 import router from "@/router";
 
 export default {
@@ -35,11 +35,18 @@ export default {
     };
   },
   mounted() {
-    this.placeholder = sample(PiratesNames);
+    this.colyseus.sendData("getAllPlayers");
 
     this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
       delete players[this.colyseus.currentRoom.sessionId];
       this.players = players;
+
+      this.placeholder = sample(
+        diffArray(
+          PiratesNames,
+          Object.values(this.players).map(({ name }) => name)
+        )
+      );
     });
     this.colyseus.currentRoom.onMessage("addPlayer", () => {
       this.colyseus.sendData("getAllPlayers");
@@ -66,6 +73,7 @@ export default {
     },
     chooseRandomPseudo() {
       let newPseudo = sample(PiratesNames);
+      console.log(newPseudo);
       // if pseudo is already used for another player, try another, else, assign pseudo
       if (!this.checkIsPseudoValid(newPseudo)) {
         this.chooseRandomPseudo();
