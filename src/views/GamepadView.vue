@@ -39,7 +39,10 @@ export default {
         this.showGamePad = true;
       });
 
-      this.colyseus.currentRoom.onMessage("getPlayer", (player) => (this.colyseus.player = player));
+      this.colyseus.currentRoom.onMessage(
+        "getPlayer",
+        (player) => (this.colyseus.player = player)
+      );
 
       this.colyseus.currentRoom.onMessage("joystick", () => {});
 
@@ -53,7 +56,10 @@ export default {
 .modal-waiting {
   position: absolute;
   z-index: 16;
-  inset: 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   background-color: $black;
   color: $white;
   font-weight: $ft-w-bold;
