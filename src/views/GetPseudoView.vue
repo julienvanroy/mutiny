@@ -6,17 +6,8 @@
     <div class="over">
       <input v-model="pseudo" :placeholder="placeholder" />
       <span v-if="pseudoNotValid">Pseudo is already taken</span>
-      <TheButton
-        label="Choose random"
-        color="light"
-        @click="chooseRandomPseudo()"
-      />
-      <TheButton
-        label="Let's go !"
-        color="dark"
-        :disabled="pseudoNotValid"
-        @click="sendPseudo()"
-      />
+      <TheButton label="Choose random" color="light" @click="chooseRandomPseudo()" />
+      <TheButton label="Let's go !" color="dark" :disabled="pseudoNotValid" @click="sendPseudo()" />
     </div>
   </div>
 </template>
@@ -65,9 +56,7 @@ export default {
   },
   methods: {
     checkIsPseudoValid(pseudoToCheck) {
-      const isValid = !Object.values(this.players).some(
-        (player) => player.name === pseudoToCheck
-      );
+      const isValid = !Object.values(this.players).some((player) => player.name === pseudoToCheck);
       if (!isValid) {
         this.pseudoNotValid = true;
       } else {
@@ -86,10 +75,8 @@ export default {
     },
     sendPseudo() {
       if ("" === this.pseudo) this.pseudo = this.placeholder;
-      this.colyseus.sendData("addPseudo", {
-        playerId: this.colyseus.currentRoom.sessionId,
-        playerName: this.pseudo,
-      });
+      this.colyseus.addPseudo(this.pseudo);
+      this.colyseus.addPlayer();
       router.push(`/gamepad`);
     },
   },
