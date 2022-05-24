@@ -19,7 +19,7 @@ export default class Mover {
         this.resource = experience.resources.items.characterModel;
 
         this._initModel();
-        this._initAnimation();
+        // this._initAnimation();
     }
 
     _initModel() {

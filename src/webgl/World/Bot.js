@@ -68,7 +68,7 @@ export default class Bot extends component(Mover) {
                 this._setPath();
             }
 
-            if (this.animation && this.animation.mixer) this.animation.mixer.update(delta);
+            // if (this.animation && this.animation.mixer) this.animation.mixer.update(delta);
 
             if (this.mesh) {
                 this.mesh.position.set(this.position.x, 0, this.position.z);
