@@ -28,7 +28,7 @@ export default class Bot extends component(Mover) {
         this.path = [];
 
         this.idle = {
-            active: Math.random() < confAnimation.idle.chance(),
+            active: confAnimation.idle.chance(),
             duration: 0,
             interval: null,
             angle: 0,
@@ -36,9 +36,36 @@ export default class Bot extends component(Mover) {
     }
 
     _setPath() {
-        this.targetPosition = this._pathfinding.getRandomNode(this._pathfinding.zone, 0, this.position, 32);
-        const groupID = this._pathfinding.getGroup(this._pathfinding.zone, this.position);
-        const newPath = this._pathfinding.findPath(this.position, this.targetPosition, this._pathfinding.zone, groupID);
+        const groupID = this._pathfinding.getGroup(this._pathfinding.zone, this.position.clone());
+
+        this.targetPosition = this._pathfinding.getRandomNode(
+            this._pathfinding.zone,
+            groupID,
+            this.position.clone(),
+            configs.map.nearRange
+        );
+
+        while (this.position.equals(this.targetPosition)) {
+            this.targetPosition = this._pathfinding.getRandomNode(
+                this._pathfinding.zone,
+                groupID,
+                this.position.clone(),
+                configs.map.nearRange
+            );
+        }
+
+        let closestTargetNode = this._pathfinding.getClosestNode(
+            this.targetPosition.clone(),
+            this._pathfinding.zone,
+            groupID
+        );
+
+        let newPath = this._pathfinding.findPath(
+            this.position.clone(),
+            closestTargetNode.centroid.clone(),
+            this._pathfinding.zone,
+            groupID
+        );
 
         if (newPath && newPath.length > 0) this.path.push(...newPath);
         // else this._setPath(); // this causes infinite stack.
@@ -71,7 +98,7 @@ export default class Bot extends component(Mover) {
             // if (this.animation && this.animation.mixer) this.animation.mixer.update(delta);
 
             if (this.mesh) {
-                this.mesh.position.set(this.position.x, 0, this.position.z);
+                this.mesh.position.set(this.position.x, this.position.y, this.position.z);
 
                 // common way to get the  angle between two vectors
                 const deltaPosition = this.position.clone();

@@ -6,7 +6,7 @@ import Player from "@/webgl/World/Player";
 //import Item from "@/webgl/World/Item";
 //import BoxCollision from "@/webgl/Collision/BoxCollision";
 import { Pathfinding } from "three-pathfinding";
-import { diffArray, sample, shuffle, uuid } from "@/utils/index.js";
+import { diffArray, randomIntegerInRange, sample, shuffle, uuid } from "@/utils/index.js";
 import Bot from "./Bot.js";
 import MapLevel from "@/webgl/World/MapLevel";
 import configs from "@/configs";
@@ -30,7 +30,7 @@ export default class World extends component() {
         console.log("world is ready");
         this.environment = new Environment();
         this.water = new Water();
-        this.fireflies = new Fireflies(100)
+        this.fireflies = new Fireflies(100);
         this.mapLevel = new MapLevel();
 
         this.players = new Map();
@@ -52,18 +52,39 @@ export default class World extends component() {
     _initPathfinding() {
         this.pathfinding = new Pathfinding();
         this.pathfinding.zone = "map";
-        this.pathfinding.setZoneData(this.pathfinding.zone, Pathfinding.createZone(this.mapLevel.navMesh.geometry));
+        this.pathfinding.setZoneData(
+            this.pathfinding.zone,
+            Pathfinding.createZone(this.mapLevel.navMesh.geometry, Number.EPSILON)
+        );
+
+        let tempGroups = [];
+        this.pathfinding.zones.map.groups.forEach((group) => group.length >= 64 && tempGroups.push(group));
+        this.pathfinding.zones.map.groups = tempGroups;
     }
 
     _initBots() {
         this.bots = {};
         const initialPositions = [];
+        const zonesCount = this.pathfinding.zones.map.groups.length - 1;
 
         for (let i = 0; i < configs.character.count; i++) {
-            let position = this.pathfinding.getRandomNode(this.pathfinding.zone, 0, new Vector3(), 64);
+            let position = this.pathfinding.getRandomNode(
+                this.pathfinding.zone,
+                randomIntegerInRange(0, zonesCount),
+                new Vector3(),
+                configs.map.nearRange
+            );
 
-            while (initialPositions.some((pos) => pos.distanceTo(position) < configs.character.sizes.radius * 3.2)) {
-                position = this.pathfinding.getRandomNode(this.pathfinding.zone, 0, new Vector3(), 64);
+            while (
+                initialPositions.some((pos) => pos.distanceTo(position) < configs.character.range) &&
+                !this.mapLevel.decors.every((mesh) => mesh.position.distanceTo(position) > configs.character.range)
+            ) {
+                position = this.pathfinding.getRandomNode(
+                    this.pathfinding.zone,
+                    randomIntegerInRange(0, zonesCount),
+                    new Vector3(),
+                    configs.map.nearRange
+                );
             }
 
             initialPositions.push(position);
