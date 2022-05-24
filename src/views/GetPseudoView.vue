@@ -73,7 +73,7 @@ export default {
     },
     chooseRandomPseudo() {
       let newPseudo = sample(PiratesNames);
-      console.log(newPseudo);
+
       // if pseudo is already used for another player, try another, else, assign pseudo
       if (!this.checkIsPseudoValid(newPseudo)) {
         this.chooseRandomPseudo();
