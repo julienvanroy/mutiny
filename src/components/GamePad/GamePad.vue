@@ -3,11 +3,11 @@
     <div class="left">
       <div class="player">
         <div class="points">
-          <img :src="`/images/players/${color}.png`"/>
+          <img :src="`/images/players/${color}.png`" />
           <span>{{ points }}</span>
         </div>
         <div class="name">
-          {{ $t("youAre") }}<br/>
+          {{ $t("youAre") }}<br />
           <span>{{ name }}</span>
         </div>
       </div>
@@ -21,7 +21,7 @@
     </div>
     <div class="right">
       <button ref="attack" class="attack" @click="colyseus.sendData('kill', true)">
-        <img src="/images/pad/button.png"/>
+        <img src="/images/pad/button.png" />
         <span>{{ $t("attack") }}</span>
       </button>
       <!-- <button ref="power" @click="colyseus.sendData('power', true)">{{$t("power")}}</button> -->
@@ -32,21 +32,21 @@
 <script>
 import useColyseusStore from "@/store/colyseus";
 import nipplejs from "nipplejs";
-import en from './i18n/en.json'
-import fr from './i18n/fr.json'
+import en from "./i18n/en.json";
+import fr from "./i18n/fr.json";
 
 export default {
   name: "GamePad",
   i18n: {
     messages: {
       en: en,
-      fr: fr
-    }
+      fr: fr,
+    },
   },
   setup() {
     const colyseus = useColyseusStore();
 
-    return {colyseus};
+    return { colyseus };
   },
   data() {
     return {
@@ -74,7 +74,7 @@ export default {
       zone: this.$refs.joystick,
       size: 50,
       maxNumberOfNipples: 1,
-      position: {left: "50%", top: "50%"},
+      position: { left: "50%", top: "50%" },
       mode: "static",
       color: "#5D5D5D",
     });
@@ -82,7 +82,7 @@ export default {
       this.colyseus.sendData("joystick", data.vector);
     });
     this.joystick.on("end", () => {
-      this.colyseus.sendData("joystick", {x: 0, y: 0});
+      this.colyseus.sendData("joystick", { x: 0, y: 0 });
     });
   },
   unmounted() {
@@ -180,6 +180,7 @@ export default {
       justify-content: center;
       align-items: center;
       font-weight: $ft-w-bold;
+      margin: 3.2px 0;
     }
   }
 
