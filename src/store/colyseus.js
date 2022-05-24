@@ -1,7 +1,7 @@
-import { defineStore } from "pinia";
+import {defineStore} from "pinia";
 import * as Colyseus from "colyseus.js";
 import router from "@/router";
-import { mapToArray, sample } from "@/utils";
+import {mapToArray, sample} from "@/utils";
 
 const useColyseusStore = defineStore("colyseus", {
     state: () => {
@@ -38,14 +38,9 @@ const useColyseusStore = defineStore("colyseus", {
                 this.rooms = this.rooms.filter((room) => room.roomId !== roomId);
             });
         },
-        toCurrentRoom() {
-            if (this.currentRoom) router.push(`/room/${this.currentRoom.id}`);
-        },
         async getRooms(roomName) {
             try {
-                const rooms = await this.client.getAvailableRooms(roomName);
-
-                return rooms;
+                return await this.client.getAvailableRooms(roomName);
             } catch (e) {
                 console.error("get error", e);
             }

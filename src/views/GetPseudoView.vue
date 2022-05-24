@@ -26,6 +26,7 @@ import useColyseusStore from "@/store/colyseus";
 import { PiratesNames } from "@/data/pirates-name";
 import TheButton from "@/components/TheButton.vue";
 import { sample } from "@/utils";
+import router from "@/router";
 
 export default {
   name: "GetPseudoView",
@@ -89,7 +90,7 @@ export default {
         playerId: this.colyseus.currentRoom.sessionId,
         playerName: this.pseudo,
       });
-      this.colyseus.toCurrentRoom();
+      router.push(`/gamepad`);
     },
   },
 };

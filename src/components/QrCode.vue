@@ -11,11 +11,12 @@ export default {
   name: "QrCode",
   setup() {
     const colyseus = useColyseusStore();
-    const sessionId = colyseus.currentRoom.sessionId
     const src = ref(null)
 
+
     onMounted(() => {
-      QRCode.toDataURL(`${location.protocol}//${location.host}/room/${sessionId}`)
+      const id = colyseus.currentRoom.id
+      QRCode.toDataURL(`${location.protocol}//${location.host}/room/${id}`)
           .then(url => {
             src.value = url
           })
