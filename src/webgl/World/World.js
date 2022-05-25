@@ -76,14 +76,14 @@ export default class World extends component() {
             );
 
             while (
-                initialPositions.some((pos) => pos.distanceTo(position) < configs.character.range) &&
-                !this.mapLevel.decors.every((mesh) => mesh.position.distanceTo(position) > configs.character.range)
+                !initialPositions.every((pos) => pos.distanceTo(position) > configs.character.range) &&
+                !this.mapLevel.decors.every((mesh) => mesh.position.distanceTo(position) < configs.character.range * 2)
             ) {
                 position = this.pathfinding.getRandomNode(
                     this.pathfinding.zone,
                     randomIntegerInRange(0, zonesCount),
                     new Vector3(),
-                    configs.map.nearRange
+                    32
                 );
             }
 

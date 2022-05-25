@@ -21,7 +21,7 @@ export default class Bot extends component(Mover) {
         this._helper = new PathfindingHelper();
         // this._scene.add(this._helper);
 
-        this.position = position;
+        this.position = position.clone();
 
         this.mesh.position.set(this.position.x, this.position.y, this.position.z);
 
@@ -36,12 +36,12 @@ export default class Bot extends component(Mover) {
     }
 
     _setPath() {
-        const groupID = this._pathfinding.getGroup(this._pathfinding.zone, this.position.clone());
+        const groupID = this._pathfinding.getGroup(this._pathfinding.zone, this.position);
 
         this.targetPosition = this._pathfinding.getRandomNode(
             this._pathfinding.zone,
             groupID,
-            this.position.clone(),
+            this.position,
             configs.map.nearRange
         );
 
@@ -49,26 +49,18 @@ export default class Bot extends component(Mover) {
             this.targetPosition = this._pathfinding.getRandomNode(
                 this._pathfinding.zone,
                 groupID,
-                this.position.clone(),
+                this.position,
                 configs.map.nearRange
             );
         }
 
-        let closestTargetNode = this._pathfinding.getClosestNode(
-            this.targetPosition.clone(),
-            this._pathfinding.zone,
-            groupID
-        );
-
-        let newPath = this._pathfinding.findPath(
-            this.position.clone(),
-            closestTargetNode.centroid.clone(),
-            this._pathfinding.zone,
-            groupID
-        );
+        let newPath = this._pathfinding.findPath(this.position, this.targetPosition, this._pathfinding.zone, groupID);
 
         if (newPath && newPath.length > 0) this.path.push(...newPath);
-        // else this._setPath(); // this causes infinite stack.
+        else
+            this.path.push(
+                this._pathfinding.getClosestNode(this.targetPosition, this._pathfinding.zone, groupID).centroid
+            );
     }
 
     onRaf({ delta }) {
