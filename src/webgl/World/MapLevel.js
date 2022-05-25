@@ -49,18 +49,18 @@ export default class MapLevel extends component() {
         this.navMesh.updateMatrixWorld();
 
         this.navMesh.geometry.applyMatrix4(this.navMesh.matrix);
-        this._scene.add(
-            new Mesh(
-                this.navMesh.geometry,
-                new MeshStandardMaterial({
-                    color: new Color(0xffceb0).convertSRGBToLinear().getHex(),
-                    map: this.texture,
-                    opacity: 0.75,
-                    transparent: true,
-                    side: BackSide,
-                })
-            )
-        );
+        // this._scene.add(
+        //     new Mesh(
+        //         this.navMesh.geometry,
+        //         new MeshStandardMaterial({
+        //             color: new Color(0xffceb0).convertSRGBToLinear().getHex(),
+        //             map: this.texture,
+        //             opacity: 0.75,
+        //             transparent: true,
+        //             side: BackSide,
+        //         })
+        //     )
+        // );
     }
 
     _initCollider() {
