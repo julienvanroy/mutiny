@@ -7,13 +7,7 @@ import configs from "@/configs";
 import Bot from "./Bot";
 import useColyseusStore from "@/store/colyseus";
 
-let tempVector = new Vector3();
-let tempVector2 = new Vector3();
-let tempBox = new Box3();
-let tempMat = new Matrix4();
-let tempSegment = new Line3();
 let velocity = new Vector3();
-
 export default class Player extends component(Mover) {
     constructor(playerId) {
         super();
@@ -34,7 +28,7 @@ export default class Player extends component(Mover) {
         this._targetQuaternion = new Quaternion();
         this._speedRotation = 10;
 
-        this.isOnGround = false;
+        this.isOnGround = true;
         velocity = new Vector3();
         this._gravity = -30;
         this._capsuleInfo = {
@@ -77,6 +71,9 @@ export default class Player extends component(Mover) {
     }
 
     _updateCollision(delta) {
+        // try to change "velocity" to "this._velocity" and see
+        console.log("velocity", velocity);
+
         /**
          * Character's movement and rotation are placed here
          * according to
@@ -96,35 +93,35 @@ export default class Player extends component(Mover) {
 
         // adjust player position based on collisions
         const capsuleInfo = this._capsuleInfo;
-        tempBox.makeEmpty();
-        tempMat.copy(this._collider.matrixWorld).invert();
-        tempSegment.copy(capsuleInfo.segment);
+        this._temp.box.makeEmpty();
+        this._temp.mat.copy(this._collider.matrixWorld).invert();
+        this._temp.segment.copy(capsuleInfo.segment);
 
         // get the position of the capsule in the local space of the collider
-        tempSegment.start.applyMatrix4(this.mesh.matrixWorld).applyMatrix4(tempMat);
-        tempSegment.end.applyMatrix4(this.mesh.matrixWorld).applyMatrix4(tempMat);
+        this._temp.segment.start.applyMatrix4(this.mesh.matrixWorld).applyMatrix4(this._temp.mat);
+        this._temp.segment.end.applyMatrix4(this.mesh.matrixWorld).applyMatrix4(this._temp.mat);
 
         // get the axis aligned bounding box of the capsule
-        tempBox.expandByPoint(tempSegment.start);
-        tempBox.expandByPoint(tempSegment.end);
+        this._temp.box.expandByPoint(this._temp.segment.start);
+        this._temp.box.expandByPoint(this._temp.segment.end);
 
-        tempBox.min.addScalar(-capsuleInfo.radius);
-        tempBox.max.addScalar(capsuleInfo.radius);
+        this._temp.box.min.addScalar(-capsuleInfo.radius);
+        this._temp.box.max.addScalar(capsuleInfo.radius);
 
         this._collider.geometry.boundsTree.shapecast({
-            intersectsBounds: (box) => box.intersectsBox(tempBox),
+            intersectsBounds: (box) => box.intersectsBox(this._temp.box),
             intersectsTriangle: (tri) => {
                 // check if the triangle is intersecting the capsule and adjust the
                 // capsule position if it is.
-                const triPoint = tempVector;
-                const capsulePoint = tempVector2;
-                const distance = tri.closestPointToSegment(tempSegment, triPoint, capsulePoint);
+                const triPoint = this._temp.vector;
+                const capsulePoint = this._temp.vector2;
+                const distance = tri.closestPointToSegment(this._temp.segment, triPoint, capsulePoint);
                 if (distance < capsuleInfo.radius) {
                     const depth = capsuleInfo.radius - distance;
                     const direction = capsulePoint.sub(triPoint).normalize();
 
-                    tempSegment.start.addScaledVector(direction, depth);
-                    tempSegment.end.addScaledVector(direction, depth);
+                    this._temp.segment.start.addScaledVector(direction, depth);
+                    this._temp.segment.end.addScaledVector(direction, depth);
                 }
             },
         });
@@ -132,11 +129,11 @@ export default class Player extends component(Mover) {
         // get the adjusted position of the capsule collider in world space after checking
         // triangle collisions and moving it. capsuleInfo.segment.start is assumed to be
         // the origin of the player model.
-        const newPosition = tempVector;
-        newPosition.copy(tempSegment.start).applyMatrix4(this._collider.matrixWorld);
+        const newPosition = this._temp.vector;
+        newPosition.copy(this._temp.segment.start).applyMatrix4(this._collider.matrixWorld);
 
         // check how much the collider was moved
-        const deltaVector = tempVector2;
+        const deltaVector = this._temp.vector2;
         deltaVector.subVectors(newPosition, this.mesh.position);
 
         // if the player was primarily adjusted vertically we assume it's on something we should consider ground
