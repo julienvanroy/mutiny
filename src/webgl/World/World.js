@@ -134,7 +134,7 @@ export default class World extends component() {
     }
 
     onAddPlayer({ playerId }) {
-        this.players.set(playerId, new Player(playerId, this.mapLevel.collider));
+        this.players.set(playerId, new Player(playerId));
         console.log(`player ${playerId} added`, this.players.get(playerId));
     }
 

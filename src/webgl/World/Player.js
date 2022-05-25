@@ -7,16 +7,23 @@ import configs from "@/configs";
 import Bot from "./Bot";
 import useColyseusStore from "@/store/colyseus";
 
+let tempVector = new Vector3();
+let tempVector2 = new Vector3();
+let tempBox = new Box3();
+let tempMat = new Matrix4();
+let tempSegment = new Line3();
+let velocity = new Vector3();
+
 export default class Player extends component(Mover) {
-    constructor(playerId, collider) {
+    constructor(playerId) {
         super();
         this.id = playerId;
-        this._collider = collider;
     }
 
     init() {
         const experience = new Experience();
         this._scene = experience.scene;
+        this._collider = experience.world.mapLevel.collider;
 
         this._bots = experience.world.bots;
         this._players = experience.world.players;
@@ -28,11 +35,11 @@ export default class Player extends component(Mover) {
         this._speedRotation = 10;
 
         this.isOnGround = false;
-        this._velocity = new Vector3();
-        this._gravity = -32;
+        velocity = new Vector3();
+        this._gravity = -30;
         this._capsuleInfo = {
-            radius: 1,
-            segment: new Line3(new Vector3(), new Vector3(0.0, 0.0, 0.0)),
+            radius: 0.5,
+            segment: new Line3(new Vector3(), new Vector3(0.0, -1.0, 0.0)),
         };
 
         this._temp = {
@@ -70,42 +77,54 @@ export default class Player extends component(Mover) {
     }
 
     _updateCollision(delta) {
-        this._velocity.y += this.isOnGround ? 0 : delta * this._gravity;
-        this.mesh.position.addScaledVector(this._velocity, delta);
+        /**
+         * Character's movement and rotation are placed here
+         * according to
+         * https://github.com/gkjohnson/three-mesh-bvh/blob/master/example/characterMovement.js
+         */
+        velocity.y += this.isOnGround ? 0 : delta * this._gravity;
+        this.mesh.position.addScaledVector(velocity, delta);
+
+        this._move(delta);
+        this._rotation(delta);
 
         this.mesh.updateMatrixWorld();
 
+        /**
+         * END Character's movement and rotation
+         */
+
         // adjust player position based on collisions
         const capsuleInfo = this._capsuleInfo;
-        this._temp.box.makeEmpty();
-        this._temp.mat.copy(this._collider.matrixWorld).invert();
-        this._temp.segment.copy(capsuleInfo.segment);
+        tempBox.makeEmpty();
+        tempMat.copy(this._collider.matrixWorld).invert();
+        tempSegment.copy(capsuleInfo.segment);
 
         // get the position of the capsule in the local space of the collider
-        this._temp.segment.start.applyMatrix4(this.mesh.matrixWorld).applyMatrix4(this._temp.mat);
-        this._temp.segment.end.applyMatrix4(this.mesh.matrixWorld).applyMatrix4(this._temp.mat);
+        tempSegment.start.applyMatrix4(this.mesh.matrixWorld).applyMatrix4(tempMat);
+        tempSegment.end.applyMatrix4(this.mesh.matrixWorld).applyMatrix4(tempMat);
 
         // get the axis aligned bounding box of the capsule
-        this._temp.box.expandByPoint(this._temp.segment.start);
-        this._temp.box.expandByPoint(this._temp.segment.end);
+        tempBox.expandByPoint(tempSegment.start);
+        tempBox.expandByPoint(tempSegment.end);
 
-        this._temp.box.min.addScalar(-capsuleInfo.radius);
-        this._temp.box.max.addScalar(capsuleInfo.radius);
+        tempBox.min.addScalar(-capsuleInfo.radius);
+        tempBox.max.addScalar(capsuleInfo.radius);
 
         this._collider.geometry.boundsTree.shapecast({
-            intersectsBounds: (box) => box.intersectsBox(this._temp.box),
+            intersectsBounds: (box) => box.intersectsBox(tempBox),
             intersectsTriangle: (tri) => {
                 // check if the triangle is intersecting the capsule and adjust the
                 // capsule position if it is.
-                const triPoint = this._temp.vector;
-                const capsulePoint = this._temp.vector2;
-                const distance = tri.closestPointToSegment(this._temp.segment, triPoint, capsulePoint);
+                const triPoint = tempVector;
+                const capsulePoint = tempVector2;
+                const distance = tri.closestPointToSegment(tempSegment, triPoint, capsulePoint);
                 if (distance < capsuleInfo.radius) {
                     const depth = capsuleInfo.radius - distance;
                     const direction = capsulePoint.sub(triPoint).normalize();
 
-                    this._temp.segment.start.addScaledVector(direction, depth);
-                    this._temp.segment.end.addScaledVector(direction, depth);
+                    tempSegment.start.addScaledVector(direction, depth);
+                    tempSegment.end.addScaledVector(direction, depth);
                 }
             },
         });
@@ -113,15 +132,15 @@ export default class Player extends component(Mover) {
         // get the adjusted position of the capsule collider in world space after checking
         // triangle collisions and moving it. capsuleInfo.segment.start is assumed to be
         // the origin of the player model.
-        const newPosition = this._temp.vector;
-        newPosition.copy(this._temp.segment.start).applyMatrix4(this._collider.matrixWorld);
+        const newPosition = tempVector;
+        newPosition.copy(tempSegment.start).applyMatrix4(this._collider.matrixWorld);
 
         // check how much the collider was moved
-        const deltaVector = this._temp.vector2;
+        const deltaVector = tempVector2;
         deltaVector.subVectors(newPosition, this.mesh.position);
 
         // if the player was primarily adjusted vertically we assume it's on something we should consider ground
-        this.isOnGround = deltaVector.y > Math.abs(delta * this._velocity.y * 0.25);
+        this.isOnGround = deltaVector.y > Math.abs(delta * velocity.y * 0.25);
 
         const offset = Math.max(0.0, deltaVector.length() - 1e-5);
         deltaVector.normalize().multiplyScalar(offset);
@@ -131,9 +150,9 @@ export default class Player extends component(Mover) {
 
         if (!this.isOnGround) {
             deltaVector.normalize();
-            this._velocity.addScaledVector(deltaVector, -deltaVector.dot(this._velocity));
+            velocity.addScaledVector(deltaVector, -deltaVector.dot(velocity));
         } else {
-            this._velocity.set(0, 0, 0);
+            velocity.set(0, 0, 0);
         }
 
         // if the player has fallen too far below the level reset their position to 0
@@ -159,9 +178,9 @@ export default class Player extends component(Mover) {
     onRaf({ delta }) {
         // if (this.isMoving && this.animation && this.animation.mixer) this.animation.mixer.update(delta);
 
-        this._move(delta);
-        this._rotation(delta);
-        // this._updateCollision(delta);
+        // this._move(delta);
+        // this._rotation(delta);
+        this._updateCollision(delta);
 
         /**
          * Todo: Need Low model navmesh and collison ( Only cube )
