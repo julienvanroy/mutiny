@@ -23,6 +23,12 @@
   </div>
 </template>
 
+<script>
+export default {
+  name: "CreditsView",
+};
+</script>
+
 <style lang="scss" scoped>
 .credits {
   position: relative;
@@ -30,7 +36,7 @@
   height: 100vh;
   .back {
     position: absolute;
-    z-index: 10;
+    z-index: 20;
     top: 20px;
     left: 20px;
     a {
@@ -40,7 +46,11 @@
   }
   .over {
     position: absolute;
-    inset: 0;
+    z-index: 14;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     width: 100%;
     height: 100%;
     display: flex;
@@ -49,16 +59,16 @@
     align-items: center;
     text-align: center;
     h1 {
-      font-size: 50px;
+      font-size: $ft-s-xlarge;
     }
     ul {
       padding: 0;
       li {
         list-style: none;
-        font-weight: $ft-medium;
-        font-size: 18px;
+        font-weight: $ft-w-medium;
+        font-size: $ft-s-small;
         &.subtitle {
-          font-weight: $ft-bold;
+          font-weight: $ft-w-bold;
           margin-top: 20px;
         }
       }
@@ -66,6 +76,7 @@
   }
   .under {
     position: relative;
+    z-index: 1;
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -79,7 +90,10 @@
       display: block;
       background-color: rgba($white, 0.6);
       position: absolute;
-      inset: 0;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
     }
   }
 }

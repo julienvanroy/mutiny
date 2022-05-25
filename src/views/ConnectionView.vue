@@ -1,51 +1,39 @@
 <template>
-  <h1>Rooms</h1>
-  <button @click="createRoom">Create Room And Join</button>
-  <button @click="createRoom(false)">Simply Create A Room</button>
-  <button @click="joinRandomRoom">Join random room</button>
-  <button
-    v-for="(room, roomIndex) in colyseus.rooms"
-    :key="roomIndex"
-    @click="joinRoom(room.roomId)"
-  >
-    Join {{ room.name === "lobby_room" ? "Lobby" : "" }} Room
-    {{ room.roomId }}
-  </button>
+  <div class="modal-waiting">WAITING...</div>
 </template>
 
 <script>
 import useColyseusStore from "@/store/colyseus";
-import { PiratesNames } from "@/data/pirates-name";
+import {onMounted} from "vue";
+import {useRoute} from "vue-router";
 
 export default {
   name: "ConnectionView",
   setup() {
-    const colyseus = useColyseusStore();
-    return { colyseus };
-  },
-  mounted() {
-    this.colyseus.initLobbyRoom();
-  },
-  methods: {
-    createRoom(doJoinRoom = true) {
-      this.colyseus.createRoom("play_room", doJoinRoom);
-    },
-    joinRoom(roomId) {
-      // TODO in the futur : get user pseudo from input (if not, set random pseudo)
-      // TODO check if random pseudo is already used for another player
-      const playerName = PiratesNames[Math.floor(Math.random() * PiratesNames.length)];
-      this.colyseus.joinRoom(roomId, playerName);
-    },
-    joinRandomRoom() {
-      this.colyseus.joinRoom();
-    },
-  },
+    const store = useColyseusStore()
+    const route = useRoute()
+
+    onMounted(() => {
+      store.joinRoom(route.params.roomId)
+    })
+
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-button {
-  display: block;
-  margin: 8px auto;
+.modal-waiting {
+  position: absolute;
+  z-index: 16;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: $black;
+  color: $white;
+  font-weight: $ft-w-bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

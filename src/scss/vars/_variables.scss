@@ -16,8 +16,15 @@ $player-yellow: #FBC383;
 
 
 $ft-body: 'Montserrat', sans-serif;
-// $ft-title: ;
+$ft-title: 'Montserrat', sans-serif;
 
-$ft-regular: 400;
-$ft-medium: 500;
-$ft-bold: 700;
+$ft-s-xxsmall: 0.75rem; // 12px
+$ft-s-xsmall: 1rem; // 16px
+$ft-s-small: 1.125rem; // 18px
+$ft-s-medium: 1.5rem; // 24px
+$ft-s-large: 2rem; // 32px
+$ft-s-xlarge: 3rem; // 48px
+
+$ft-w-regular: 400;
+$ft-w-medium: 500;
+$ft-w-bold: 700;

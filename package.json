@@ -1,18 +1,18 @@
 {
   "name": "client-naufrages",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "dev": "npm run serve",
     "build": "vue-cli-service build",
-    "build-report": "vue-cli-service build --report",
     "lint": "vue-cli-service lint",
-    "vue-ui": "vue ui",
+    "build-report": "vue-cli-service build --report",
+    "dev": "npm run serve",
     "release": "standard-version",
+    "release:major": "standard-version --release-as major",
     "release:minor": "standard-version --release-as minor",
     "release:patch": "standard-version --release-as patch",
-    "release:major": "standard-version --release-as major"
+    "vue-ui": "vue ui"
   },
   "dependencies": {
     "@tweakpane/plugin-essentials": "^0.1.4",
@@ -20,13 +20,17 @@
     "colyseus.js": "^0.14.13",
     "core-js": "^3.8.3",
     "detect-gpu": "^4.0.19",
+    "howler": "^2.2.3",
     "nipplejs": "^0.9.1",
     "pinia": "^2.0.13",
+    "qrcode": "^1.5.0",
+    "register-service-worker": "^1.7.2",
     "three": "^0.140.0",
     "three-mesh-bvh": "^0.5.10",
     "three-pathfinding": "^1.1.0",
     "tweakpane": "^3.0.8",
     "vue": "^3.2.13",
+    "vue-i18n": "^9.1.10",
     "vue-router": "^4.0.14"
   },
   "devDependencies": {
@@ -36,10 +40,13 @@
     "@commitlint/config-conventional": "^16.2.4",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
+    "@vue/cli-plugin-pwa": "^5.0.4",
     "@vue/cli-service": "~5.0.0",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3",
+    "glslify-loader": "^2.0.0",
     "husky": "^7.0.4",
+    "raw-loader": "^4.0.2",
     "sass": "^1.51.0",
     "sass-loader": "^12.6.0",
     "standard-version": "^9.3.2"

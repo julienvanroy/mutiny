@@ -6,11 +6,13 @@ import Player from "@/webgl/World/Player";
 //import Item from "@/webgl/World/Item";
 //import BoxCollision from "@/webgl/Collision/BoxCollision";
 import { Pathfinding } from "three-pathfinding";
-import { diffArray, mapToArray, sample, shuffle, uuid } from "@/utils/index.js";
+import { diffArray, sample, shuffle, uuid } from "@/utils/index.js";
 import Bot from "./Bot.js";
 import MapLevel from "@/webgl/World/MapLevel";
 import configs from "@/configs";
 import useColyseusStore from "@/store/colyseus.js";
+import Water from "@/webgl/Mesh/Water";
+import Fireflies from "@/webgl/Mesh/Fireflies";
 
 export default class World extends component() {
     init() {
@@ -27,6 +29,8 @@ export default class World extends component() {
     onResourcesIsReady() {
         console.log("world is ready");
         this.environment = new Environment();
+        this.water = new Water();
+        this.fireflies = new Fireflies(100)
         this.mapLevel = new MapLevel();
 
         this.players = new Map();
@@ -104,14 +108,13 @@ export default class World extends component() {
         }
     }
 
+    onAssignTargets() {
+        this.assignTargets();
+    }
+
     onAddPlayer({ playerId }) {
         this.players.set(playerId, new Player(playerId, this.mapLevel.collider));
-        this.assignTargets();
-        const colyseus = useColyseusStore();
-        colyseus.sendData("updatePlayerTarget", {
-            playerId: playerId,
-            playerTarget: this.players.get(playerId)._getTargetData(),
-        });
+        console.log(`player ${playerId} added`, this.players.get(playerId));
     }
 
     onMovePlayer({ playerId, vector2 }) {
@@ -138,9 +141,12 @@ export default class World extends component() {
         let singlePlayer,
             bots,
             players,
-            unassignedPlayers = [],
-            tempUnassignedPlayers = [],
-            tempPlayers = new Map();
+            targetsToChose = [],
+            chosenAsTargets = [],
+            playersIds,
+            playerTarget;
+
+        this.players.forEach((p) => delete p.target);
 
         switch (this.players.size) {
             case 0:
@@ -148,36 +154,46 @@ export default class World extends component() {
 
             case 1:
                 singlePlayer = this.players.values().next().value;
-                bots = Object.values(singlePlayer._botsPool).filter((bot) => !bot.isPlayer);
+                bots = Object.values(singlePlayer._bots).filter((bot) => !bot.isPlayer);
                 singlePlayer.target = sample(bots);
                 break;
 
             default:
                 players = shuffle(this.players);
+                playersIds = players.map((keyValue) => keyValue[0]);
 
                 players.forEach(([playerId, player]) => {
-                    unassignedPlayers = diffArray(
-                        players.map((keyValue) => keyValue[0]),
-                        unassignedPlayers
-                    );
+                    console.log("__________________________");
+                    console.log(`player ${playerId}`);
 
-                    tempUnassignedPlayers = diffArray(
-                        unassignedPlayers.filter((pId) => pId !== playerId),
-                        mapToArray(this.players).map(({ value }) => value)
-                    );
+                    console.log(`chosen as targets`, [...chosenAsTargets]);
 
-                    player.target = this.players.get(sample(tempUnassignedPlayers));
+                    targetsToChose = playersIds.filter((pId) => pId !== playerId);
+                    console.log(`targets to chode`, [...targetsToChose]);
 
-                    unassignedPlayers = tempUnassignedPlayers.filter((pId) => pId !== player.target.id);
+                    playerTarget = sample(diffArray(targetsToChose, chosenAsTargets));
 
-                    tempPlayers.set(playerId, this.players.get(playerId));
+                    console.log(`target ${playerTarget}`);
+                    console.log("__________________________");
+
+                    if (!playerTarget) this.assignTargets();
+                    else {
+                        chosenAsTargets.push(playerTarget);
+
+                        player.target = this.players.get(playerTarget);
+                    }
                 });
-                this.players = tempPlayers;
-                console.log(this.players);
-                this.players.forEach((p) => console.log(`player ${p.id} has target ${p.target.id}`));
                 break;
         }
 
         console.log(this.players);
+        this.players.forEach((p) => {
+            if (p.target instanceof Player) p.target._setBot();
+            else if (p.target instanceof Bot) p._setBot();
+
+            useColyseusStore().updatePlayerTarget(p.id, p._getTargetData());
+
+            console.log(`player ${p.id} has target ${p.target.id} ${p.target.bot ? `of bot ${p.target.bot.id}` : ""}`);
+        });
     }
 }

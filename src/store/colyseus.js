@@ -1,97 +1,115 @@
-import { defineStore } from "pinia";
+import {defineStore} from "pinia";
 import * as Colyseus from "colyseus.js";
 import router from "@/router";
-import { sample } from "@/utils";
+import {mapToArray, sample} from "@/utils";
 
 const useColyseusStore = defineStore("colyseus", {
-  state: () => {
-    return {
-      client: new Colyseus.Client(process.env.VUE_APP_COLYSEUS),
-      rooms: [],
-      currentRoom: null,
-      lobbyRoom: null,
-    };
-  },
-  getters: {},
-  actions: {
-    async initLobbyRoom() {
-      this.lobbyRoom = await this.client.joinOrCreate("lobby_room");
-
-      this.lobbyRoom.onMessage("rooms", (rooms) => {
-        this.rooms = rooms;
-      });
-
-      this.lobbyRoom.onMessage("+", ([roomId, room]) => {
-        const roomIndex = this.rooms.findIndex(
-          (room) => room.roomId === roomId
-        );
-        if (roomIndex !== -1) {
-          this.rooms[roomIndex] = room;
-        } else {
-          this.rooms.push(room);
-        }
-      });
-
-      this.lobbyRoom.onMessage("-", (roomId) => {
-        this.rooms = this.rooms.filter((room) => room.roomId !== roomId);
-      });
+    state: () => {
+        return {
+            client: new Colyseus.Client(process.env.VUE_APP_COLYSEUS),
+            rooms: [],
+            currentRoom: null,
+            lobbyRoom: null,
+            players: {},
+            player: {},
+            playerPoints: 0,
+            playerTarget: {},
+        };
     },
-    toCurrentRoom() {
-      if (this.currentRoom) router.push(`/room/${this.currentRoom.id}`);
-    },
-    async getRooms(roomName) {
-      try {
-        const rooms = await this.client.getAvailableRooms(roomName);
+    getters: {},
+    actions: {
+        async initLobbyRoom() {
+            this.lobbyRoom = await this.client.joinOrCreate("lobby_room");
 
-        return rooms;
-      } catch (e) {
-        console.error("get error", e);
-      }
-    },
-    async createRoom(roomName, doJoinRoom = true) {
-      try {
-        const newRoom = await this.client.create(roomName, {
-          autoDispose: doJoinRoom,
-        });
+            this.lobbyRoom.onMessage("rooms", (rooms) => {
+                this.rooms = rooms;
+            });
 
-        if (doJoinRoom) {
-          this.currentRoom = newRoom;
-          router.push('/setup')
-        } else {
-          newRoom.leave();
-          this.currentRoom = null;
-        }
+            this.lobbyRoom.onMessage("+", ([roomId, room]) => {
+                const roomIndex = this.rooms.findIndex((room) => room.roomId === roomId);
+                if (roomIndex !== -1) {
+                    this.rooms[roomIndex] = room;
+                } else {
+                    this.rooms.push(room);
+                }
+            });
 
-        return newRoom;
-      } catch (e) {
-        console.error("join error", e);
-      }
-    },
-    async joinRoom(roomId = null, playerName) {
-      try {
-        let room;
-        if (roomId) room = await this.client.joinById(roomId, { name: playerName });
-        else room = await this.client.joinById(sample(this.rooms).roomId, { name: playerName });
+            this.lobbyRoom.onMessage("-", (roomId) => {
+                this.rooms = this.rooms.filter((room) => room.roomId !== roomId);
+            });
+        },
+        async getRooms(roomName) {
+            try {
+                return await this.client.getAvailableRooms(roomName);
+            } catch (e) {
+                console.error("get error", e);
+            }
+        },
+        async createRoom(roomName, doJoinRoom = true) {
+            try {
+                const newRoom = await this.client.create(roomName, {
+                    autoDispose: doJoinRoom,
+                });
 
-        this.currentRoom = room;
+                if (doJoinRoom) {
+                    this.currentRoom = newRoom;
+                    router.push("/setup");
+                } else {
+                    newRoom.leave();
+                    this.currentRoom = null;
+                }
 
-        this.sendData("addPlayer");
+                newRoom.onStateChange((state) => this.updatePlayers(state.players.$items));
 
-        this.toCurrentRoom();
-      } catch (e) {
-        console.error("join error", e);
-      }
+                return newRoom;
+            } catch (e) {
+                console.error("join error", e);
+            }
+        },
+        async joinRoom(roomId = null) {
+            try {
+                let room;
+                if (roomId) room = await this.client.joinById(roomId);
+                else room = await this.client.joinById(sample(this.rooms).roomId);
+
+                room.onStateChange((state) => this.updateCurrentPlayer(state.players.$items, room.sessionId));
+
+                this.currentRoom = room;
+
+                this.sendData("addPlayer", { playerId: this.currentRoom.sessionId });
+
+                router.push(`/get-pseudo`);
+            } catch (e) {
+                console.error("join error", e);
+            }
+        },
+        updatePlayers(players) {
+            this.players = mapToArray(players, true).filter((p) => !!p.name);
+        },
+        updateCurrentPlayer(players, playerId) {
+            this.player = players.get(playerId);
+            this.playerPoints = this.player.points;
+            if (this.player.target) {
+                console.log(this.player.target);
+                this.playerTarget = JSON.parse(this.player.target);
+            }
+        },
+        sendData(type, value) {
+            this.currentRoom.send(type, value);
+        },
+        getPlayer(playerId) {
+            this.sendData("getPlayer", playerId);
+        },
+        getAllPlayers() {
+            this.sendData("getAllPlayers");
+        },
+        updatePlayerTarget(playerId, playerTarget) {
+            this.sendData("updatePlayerTarget", {
+                playerId,
+                playerTarget,
+            });
+        },
     },
-    sendData(type, value) {
-      this.currentRoom.send(type, value);
-    },
-    getAllPlayers() {
-      this.sendData("getAllPlayers");
-    },
-    getPlayer(playerId) {
-      this.sendData("getPlayer", playerId);
-    }
-  },
 });
 
 export default useColyseusStore;

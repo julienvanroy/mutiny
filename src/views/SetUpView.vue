@@ -1,9 +1,7 @@
 <template>
   <div class="setup">
     <div class="back">
-      <router-link to="/"
-        ><img src="images/icons/arrow-back.png" />Home</router-link
-      >
+      <router-link to="/"><img src="images/icons/arrow-back.png" />Home</router-link>
     </div>
 
     <div class="under">
@@ -15,7 +13,7 @@
           <div class="player-list">
             <h1>Secret sailors</h1>
             <ul>
-              <li v-for="player in this.players" :key="player.id">
+              <li v-for="player in colyseus.players" :key="player.id">
                 <div class="player">
                   <img :src="`images/players/${player.color}.png`" />
                   <span>{{ player.name }}</span>
@@ -29,6 +27,7 @@
           <div class="code">
             <h2>Your vessel</h2>
             <p>{{ colyseus.currentRoom.id }}</p>
+            <QrCode />
           </div>
         </div>
         <div class="else">
@@ -92,32 +91,34 @@
 import useColyseusStore from "@/store/colyseus";
 import TheButton from "@/components/TheButton.vue";
 import router from "@/router";
+import bidello from "bidello";
+import QrCode from "@/components/QrCode";
 
 export default {
   name: "SetUpView",
-  components: { TheButton },
+  components: { QrCode, TheButton },
   setup() {
     const colyseus = useColyseusStore();
     return { colyseus };
   },
   data() {
     return {
-      players: [],
       showControls: false,
     };
   },
   mounted() {
-    this.colyseus.currentRoom.onMessage("addPlayer", () => {
-      this.colyseus.getAllPlayers();
-    });
+    this.colyseus.currentRoom.onMessage(
+      "addPlayer",
+      ({ playerSessionId: playerId }) => {
+        bidello.trigger({ name: "addPlayer" }, { playerId });
+      }
+    );
 
-    this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
-      delete players[this.colyseus.currentRoom.sessionId];
-      this.players = players;
-    });
+    this.colyseus.currentRoom.onMessage("getAllPlayers", () => {});
   },
   methods: {
     startGame() {
+      bidello.trigger({ name: "assignTargets" });
       this.colyseus.sendData("startGame");
       router.push("/game");
     },
@@ -132,7 +133,7 @@ export default {
   height: 100vh;
   .back {
     position: absolute;
-    z-index: 10;
+    z-index: 20;
     top: 20px;
     left: 20px;
     a {
@@ -143,7 +144,11 @@ export default {
 
   .over {
     position: absolute;
-    inset: 0;
+    z-index: 14;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     width: 100%;
     height: 100%;
     display: flex;
@@ -192,7 +197,7 @@ export default {
                 justify-content: flex-start;
                 align-items: center;
                 span {
-                  font-weight: $ft-bold;
+                  font-weight: $ft-w-bold;
                   margin-left: 8px;
                 }
               }
@@ -271,7 +276,7 @@ export default {
             p {
               margin-top: 20px;
               height: 150px;
-              font-size: 24px;
+              font-size: $ft-s-medium;
               display: flex;
               justify-content: center;
               align-items: center;
@@ -301,8 +306,8 @@ export default {
             }
             h3 {
               margin: 0;
-              font-size: 30px;
-              font-weight: $ft-bold;
+              font-size: $ft-s-large;
+              font-weight: $ft-w-bold;
               text-align: center;
             }
             .subtitle {
@@ -345,6 +350,7 @@ export default {
   }
   .under {
     position: relative;
+    z-index: 1;
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -358,7 +364,10 @@ export default {
       display: block;
       background-color: rgba($white, 0.6);
       position: absolute;
-      inset: 0;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
     }
   }
 }

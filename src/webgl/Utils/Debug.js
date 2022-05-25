@@ -1,10 +1,11 @@
 import { Pane } from "tweakpane";
 import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { component } from "bidello";
+import {stringToBoolean} from "@/utils";
 
 export default class Debug extends component() {
   init() {
-    this.active = process.env.VUE_APP_DEBUG === 'true';
+    this.active = stringToBoolean(process.env.VUE_APP_DEBUG)
 
     if(this.active) {
       this.pane = new Pane({

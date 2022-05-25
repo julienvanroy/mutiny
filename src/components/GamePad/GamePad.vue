@@ -1,38 +1,30 @@
 <template>
-  <!-- <p>currentRoom : {{ colyseus.currentRoom.id }}</p>
-  <p>playerSessionId : {{ colyseus.currentRoom.sessionId }}</p> -->
-
   <div class="gamepad">
     <div class="left">
       <div class="player">
         <div class="points">
-          <img :src="`/images/players/${this.playerColor}.png`" />
-          <span>{{ this.playerPoints }}</span>
+          <img :src="`/images/players/${color}.png`" />
+          <span>{{ points }}</span>
         </div>
         <div class="name">
-          you are<br />
-          <span>{{ this.playerName }}</span>
+          {{ $t("youAre") }}<br />
+          <span>{{ name }}</span>
         </div>
       </div>
       <div ref="joystick" class="joystick"></div>
     </div>
-    <div class="middle" v-if="this.playerTarget">
-      <p>CLUES</p>
-      <div
-        class="clue"
-        :style="`background-color: ${clue.color}`"
-        v-for="clue in this.playerTarget.info.reverse()"
-        :key="clue.color"
-      >
-        {{ clue.tags[0] }}
+    <div class="middle" v-if="clues">
+      <p>{{ $t("clues") }}</p>
+      <div class="clue" :style="`background-color: ${clue.color}`" v-for="clue in clues" :key="clue.color">
+        {{ clue.tag }}
       </div>
     </div>
     <div class="right">
       <button ref="attack" class="attack" @click="colyseus.sendData('kill', true)">
         <img src="/images/pad/button.png" />
-        <span>Attack</span>
+        <span>{{ $t("attack") }}</span>
       </button>
-      <!-- <button ref="power" @click="colyseus.sendData('power', true)">power</button> -->
+      <!-- <button ref="power" @click="colyseus.sendData('power', true)">{{$t("power")}}</button> -->
     </div>
   </div>
 </template>
@@ -40,39 +32,43 @@
 <script>
 import useColyseusStore from "@/store/colyseus";
 import nipplejs from "nipplejs";
+import en from "./i18n/en.json";
+import fr from "./i18n/fr.json";
 
 export default {
   name: "GamePad",
+  i18n: {
+    messages: {
+      en: en,
+      fr: fr,
+    },
+  },
   setup() {
     const colyseus = useColyseusStore();
+
     return { colyseus };
   },
   data() {
     return {
       joystick: [],
-      playerName: null,
-      playerPoints: null,
-      playerColor: null,
-      playerTarget: null,
     };
+  },
+  computed: {
+    clues() {
+      return this.colyseus.playerTarget.info;
+    },
+    points() {
+      return this.colyseus.playerPoints;
+    },
+    color() {
+      return this.colyseus.player.color;
+    },
+    name() {
+      return this.colyseus.player.name;
+    },
   },
   mounted() {
     this.colyseus.getPlayer(this.colyseus.currentRoom.sessionId);
-    this.colyseus.currentRoom.onMessage("getPlayer", (player) => {
-      if (player.id === this.colyseus.currentRoom.sessionId) {
-        this.playerName = player.name;
-        this.playerPoints = player.points;
-        this.playerColor = player.color;
-      }
-    });
-
-    this.colyseus.currentRoom.onMessage("updatePlayerTarget", (message) => {
-      if (message.playerId === this.colyseus.currentRoom.sessionId) this.playerTarget = message.playerTarget;
-    });
-
-    this.colyseus.currentRoom.onMessage("addPoint", ({ playerId, playerPoints }) => {
-      if (playerId === this.colyseus.currentRoom.sessionId) this.playerPoints = playerPoints;
-    });
 
     this.joystick = nipplejs.create({
       zone: this.$refs.joystick,
@@ -103,24 +99,29 @@ export default {
   justify-content: space-between;
   align-items: stretch;
   box-sizing: border-box;
+
   .left {
     width: 40%;
     display: flex;
     flex-flow: column nowrap;
     justify-content: space-between;
     align-items: flex-start;
+
     .player {
       display: flex;
       justify-content: flex-start;
       align-items: center;
+
       .points {
         position: relative;
+
         img {
           width: 60px;
         }
+
         span {
-          font-weight: $ft-bold;
-          font-size: 20px;
+          font-weight: $ft-w-bold;
+          font-size: $ft-s-medium;
           color: $white;
           position: absolute;
           top: 50%;
@@ -128,16 +129,19 @@ export default {
           transform: translate(-50%, -60%);
         }
       }
+
       .name {
         margin-left: 10px;
+
         span {
           display: block;
-          font-weight: $ft-bold;
-          font-size: 18px;
+          font-weight: $ft-w-bold;
+          font-size: $ft-s-small;
           margin-top: 6px;
         }
       }
     }
+
     .joystick {
       position: relative;
       width: 250px;
@@ -147,6 +151,7 @@ export default {
       border-radius: 100%;
     }
   }
+
   .middle {
     width: 30%;
     background-color: $grey-2;
@@ -156,12 +161,15 @@ export default {
     flex-flow: column nowrap;
     justify-content: space-between;
     align-items: center;
+
     p {
+      text-transform: uppercase;
       text-align: center;
-      font-weight: $ft-bold;
-      font-size: 20px;
+      font-weight: $ft-w-bold;
+      font-size: $ft-s-medium;
       letter-spacing: 0.01em;
     }
+
     .clue {
       background: $grey-1;
       border-radius: 8px;
@@ -171,24 +179,34 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
-      font-weight: $ft-bold;
+      font-weight: $ft-w-bold;
+      margin: 3.2px 0;
     }
   }
+
   .right {
     width: 30%;
     display: flex;
     justify-content: center;
     align-items: center;
+
     .attack {
       position: relative;
       background-color: transparent;
       border: none;
+      transition: transform 0.25s ease;
+
+      &:active {
+        transform: scale(0.9);
+      }
+
       img {
         width: 100px;
       }
+
       span {
-        font-weight: $ft-bold;
-        font-size: 20px;
+        font-weight: $ft-w-bold;
+        font-size: $ft-s-medium;
         position: absolute;
         top: 50%;
         left: 50%;

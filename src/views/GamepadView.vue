@@ -18,12 +18,22 @@ export default {
   data() {
     return {
       showGamePad: false,
+      playerTarget: {},
     };
   },
   mounted() {
     this.colyseus.currentRoom.onMessage("startGame", () => {
       this.showGamePad = true;
     });
+
+    this.colyseus.currentRoom.onMessage(
+        "getPlayer",
+        (player) => (this.colyseus.player = player)
+    );
+
+    this.colyseus.currentRoom.onMessage("joystick", () => {});
+
+    this.colyseus.currentRoom.onMessage("kill", () => {});
   },
   unmounted() {
     this.colyseus.currentRoom?.leave();
@@ -34,11 +44,14 @@ export default {
 <style lang="scss" scoped>
 .modal-waiting {
   position: absolute;
-  z-index: 12;
-  inset: 0;
+  z-index: 16;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   background-color: $black;
   color: $white;
-  font-weight: $ft-bold;
+  font-weight: $ft-w-bold;
   display: flex;
   justify-content: center;
   align-items: center;

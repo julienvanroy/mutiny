@@ -37,8 +37,9 @@
 
 <script>
 import useColyseusStore from "@/store/colyseus";
-import { PiratesNames } from "@/data/pirates-name";
 import TheButton from "@/components/TheButton.vue";
+import {mapState} from "pinia/dist/pinia.esm-browser";
+import useGlobalStore from "@/store/global";
 
 export default {
   name: "App",
@@ -47,13 +48,8 @@ export default {
     const colyseus = useColyseusStore();
     return { colyseus };
   },
-  data() {
-    return {
-      isMobile:
-        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-          navigator.userAgent
-        ),
-    };
+  computed: {
+    ...mapState(useGlobalStore, ["isMobile"]),
   },
   mounted() {
     this.colyseus.initLobbyRoom();
@@ -63,11 +59,7 @@ export default {
       this.colyseus.createRoom("play_room", doJoinRoom);
     },
     joinRoom(roomId) {
-      // TODO in the futur : get user pseudo from input (if not, set random pseudo)
-      // TODO check if random pseudo is already used for another player
-      const playerName =
-        PiratesNames[Math.floor(Math.random() * PiratesNames.length)];
-      this.colyseus.joinRoom(roomId, playerName);
+      this.colyseus.joinRoom(roomId);
     },
     joinRandomRoom() {
       this.colyseus.joinRoom();
@@ -83,7 +75,11 @@ export default {
   height: 100vh;
   .over {
     position: absolute;
-    inset: 0;
+    z-index: 14;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     width: 100%;
     height: 100%;
     display: flex;
@@ -108,13 +104,14 @@ export default {
     .how-to-play {
       max-width: 380px;
       p {
-        font-size: 18px;
+        font-size: $ft-s-small;
         text-align: center;
       }
     }
   }
   .under {
     position: relative;
+    z-index: 1;
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -128,18 +125,21 @@ export default {
       display: block;
       background-color: rgba($white, 0.6);
       position: absolute;
-      inset: 0;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
     }
   }
   .credits {
     position: absolute;
-    z-index: 10;
+    z-index: 20;
     bottom: 20px;
     left: 20px;
     a {
       color: $black;
-      font-size: 18px;
-      font-weight: 500;
+      font-size: $ft-s-small;
+      font-weight: $ft-w-medium;
       letter-spacing: 0.01em;
       text-decoration-line: underline;
     }
