@@ -12,19 +12,19 @@ export default [
         ],
     },
     {
-        name: "grassColorTexture",
+        name: "woodTexture",
         type: "texture",
-        path: "textures/dirt/color.jpg",
+        path: "textures/wood.jpeg",
     },
     {
-        name: "grassNormalTexture",
-        type: "texture",
-        path: "textures/dirt/normal.jpg",
+        name: "mapTutoModel",
+        type: "gltfModel",
+        path: "models/Map/hextile.glb",
     },
     {
         name: "mapModel",
         type: "gltfModel",
-        path: "models/Map/hextile.glb",
+        path: "models/Map/pirate-ship-with-navmesh-2.glb",
     },
     {
         name: "characterModel",

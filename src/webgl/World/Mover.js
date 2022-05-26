@@ -59,6 +59,7 @@ export default class Mover {
             if (child instanceof Mesh) {
                 const bodyPart = Object.values(this.body).find(({ modelNames }) => modelNames.includes(child.name));
 
+                child.receiveShadow = true;
                 child.castShadow = true;
                 child.material = new MeshStandardMaterial({
                     color: new Color(bodyPart.color || sample(configs.character.colors)).convertSRGBToLinear(),
