@@ -2,7 +2,7 @@ import { component } from "bidello";
 import Experience from "../Experience";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils";
 import { MeshBVH, MeshBVHVisualizer } from "three-mesh-bvh";
-import { BackSide, Color, Mesh, MeshBasicMaterial, MeshStandardMaterial } from "three";
+import { Color, Mesh, MeshBasicMaterial, MeshStandardMaterial } from "three";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils";
 import configs from "@/configs";
 
@@ -49,18 +49,18 @@ export default class MapLevel extends component() {
         this.navMesh.updateMatrixWorld();
 
         this.navMesh.geometry.applyMatrix4(this.navMesh.matrix);
-        this._scene.add(
-            new Mesh(
-                this.navMesh.geometry,
-                new MeshStandardMaterial({
-                    color: new Color(0xffceb0).convertSRGBToLinear().getHex(),
-                    map: this.texture,
-                    opacity: 0.75,
-                    transparent: true,
-                    side: BackSide,
-                })
-            )
-        );
+        // this._scene.add(
+        //     new Mesh(
+        //         this.navMesh.geometry,
+        //         new MeshStandardMaterial({
+        //             color: new Color(0xffceb0).convertSRGBToLinear().getHex(),
+        //             map: this.texture,
+        //             opacity: 0.75,
+        //             transparent: true,
+        //             side: BackSide,
+        //         })
+        //     )
+        // );
     }
 
     _initCollider() {
