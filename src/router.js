@@ -10,6 +10,7 @@ import NotFound from "@/views/NotFound";
 import useColyseusStore from "@/store/colyseus";
 import useGlobalStore from "@/store/global";
 import ConnectionView from "@/views/ConnectionView";
+import DebugView from "@/views/DebugView";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -61,6 +62,12 @@ const router = createRouter({
             name: "credits",
             component: CreditsView,
             meta: {requiresDesktop: true, requiresMobile: true, requiresRoom: false, requiresDebug: false}
+        },
+        {
+            path: "/debug",
+            name: "debug",
+            component: DebugView,
+            meta: {requiresDesktop: true, requiresMobile: true, requiresRoom: false, requiresDebug: true}
         },
         {
             path: "/:pathMatch(.*)",

@@ -87,7 +87,7 @@ export default {
       return this.audio.musicGame;
     },
     isGamePath() {
-      return this.path === ("/game" || "/game#debug");
+      return this.path === ("/game" || "/debug");
     },
   },
 };
