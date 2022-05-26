@@ -17,6 +17,11 @@ export default [
         path: "textures/wood.jpeg",
     },
     {
+        name: "waterTexture",
+        type: "texture",
+        path: "textures/water/normals.jpeg",
+    },
+    {
         name: "mapTutoModel",
         type: "gltfModel",
         path: "models/Map/hextile.glb",
