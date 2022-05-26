@@ -1,7 +1,7 @@
-import {defineStore} from "pinia";
+import { defineStore } from "pinia";
 import * as Colyseus from "colyseus.js";
 import router from "@/router";
-import {mapToArray, sample} from "@/utils";
+import { mapToArray, sample } from "@/utils";
 
 const useColyseusStore = defineStore("colyseus", {
     state: () => {
@@ -76,8 +76,6 @@ const useColyseusStore = defineStore("colyseus", {
 
                 this.currentRoom = room;
 
-                this.sendData("addPlayer", { playerId: this.currentRoom.sessionId });
-
                 router.push(`/get-pseudo`);
             } catch (e) {
                 console.error("join error", e);
@@ -96,6 +94,15 @@ const useColyseusStore = defineStore("colyseus", {
         },
         sendData(type, value) {
             this.currentRoom.send(type, value);
+        },
+        addPseudo(pseudo) {
+            this.sendData("addPseudo", {
+                playerId: this.currentRoom.sessionId,
+                playerName: pseudo,
+            });
+        },
+        addPlayer() {
+            this.sendData("addPlayer", { playerId: this.currentRoom.sessionId });
         },
         getPlayer(playerId) {
             this.sendData("getPlayer", playerId);

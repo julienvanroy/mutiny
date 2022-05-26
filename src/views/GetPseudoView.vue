@@ -6,17 +6,8 @@
     <div class="over">
       <input v-model="pseudo" :placeholder="placeholder" />
       <span v-if="pseudoNotValid">Pseudo is already taken</span>
-      <TheButton
-        label="Choose random"
-        color="light"
-        @click="chooseRandomPseudo()"
-      />
-      <TheButton
-        label="Let's go !"
-        color="dark"
-        :disabled="pseudoNotValid"
-        @click="sendPseudo()"
-      />
+      <TheButton label="Choose random" color="light" @click="chooseRandomPseudo()" />
+      <TheButton label="Let's go !" color="dark" :disabled="pseudoNotValid" @click="sendPseudo()" />
     </div>
   </div>
 </template>
@@ -25,7 +16,7 @@
 import useColyseusStore from "@/store/colyseus";
 import { PiratesNames } from "@/data/pirates-name";
 import TheButton from "@/components/TheButton.vue";
-import { sample } from "@/utils";
+import { diffArray, sample } from "@/utils";
 import router from "@/router";
 
 export default {
@@ -44,11 +35,18 @@ export default {
     };
   },
   mounted() {
-    this.placeholder = sample(PiratesNames);
+    this.colyseus.sendData("getAllPlayers");
 
     this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
       delete players[this.colyseus.currentRoom.sessionId];
       this.players = players;
+
+      this.placeholder = sample(
+        diffArray(
+          PiratesNames,
+          Object.values(this.players).map(({ name }) => name)
+        )
+      );
     });
     this.colyseus.currentRoom.onMessage("addPlayer", () => {
       this.colyseus.sendData("getAllPlayers");
@@ -65,9 +63,7 @@ export default {
   },
   methods: {
     checkIsPseudoValid(pseudoToCheck) {
-      const isValid = !Object.values(this.players).some(
-        (player) => player.name === pseudoToCheck
-      );
+      const isValid = !Object.values(this.players).some((player) => player.name === pseudoToCheck);
       if (!isValid) {
         this.pseudoNotValid = true;
       } else {
@@ -77,6 +73,7 @@ export default {
     },
     chooseRandomPseudo() {
       let newPseudo = sample(PiratesNames);
+
       // if pseudo is already used for another player, try another, else, assign pseudo
       if (!this.checkIsPseudoValid(newPseudo)) {
         this.chooseRandomPseudo();
@@ -86,10 +83,8 @@ export default {
     },
     sendPseudo() {
       if ("" === this.pseudo) this.pseudo = this.placeholder;
-      this.colyseus.sendData("addPseudo", {
-        playerId: this.colyseus.currentRoom.sessionId,
-        playerName: this.pseudo,
-      });
+      this.colyseus.addPseudo(this.pseudo);
+      this.colyseus.addPlayer();
       router.push(`/gamepad`);
     },
   },
