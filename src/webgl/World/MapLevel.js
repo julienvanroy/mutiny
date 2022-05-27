@@ -2,12 +2,17 @@ import { component } from "bidello";
 import Experience from "../Experience";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils";
 import { MeshBVH, MeshBVHVisualizer } from "three-mesh-bvh";
-import { Color, Mesh, MeshBasicMaterial, MeshStandardMaterial } from "three";
+import {Color, Mesh, MeshBasicMaterial, MeshStandardMaterial, Quaternion, Euler} from "three";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils";
 import configs from "@/configs";
 
 export default class MapLevel extends component() {
+    constructor(gerstnerWater) {
+        super(gerstnerWater);
+    }
     init() {
+        this._gerstnerWater = this._args[0];
+
         const experience = new Experience();
         this._scene = experience.scene;
         this._debug = experience.debug;
@@ -123,5 +128,12 @@ export default class MapLevel extends component() {
         });
         folderDebug.addInput(this.collider, "visible", { label: "Display Collider" });
         folderDebug.addInput(visualizer, "visible", { label: "Display BVH" });
+    }
+
+    onRaf({delta}) {
+        const waveInfo = this._gerstnerWater.getWaveInfo( this.model.position.x, this.model.position.z, this._gerstnerWater.water.material.uniforms.time.value );
+        this.model.position.y = waveInfo.position.y + 2;
+        const quaternion = new Quaternion().setFromEuler(new Euler( waveInfo.normal.x, waveInfo.normal.y, waveInfo.normal.z ));
+        this.model.quaternion.rotateTowards( quaternion, delta * 0.5 );
     }
 }

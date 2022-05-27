@@ -1,6 +1,6 @@
 import {component} from "bidello";
 import {Water} from 'three/examples/jsm/objects/Water'
-import {PlaneGeometry, RepeatWrapping, Vector2, Vector3} from "three";
+import {PlaneGeometry, RepeatWrapping, Vector2, Vector3, Color} from "three";
 import Experience from "@/webgl/Experience";
 import vertexShader from "@/shaders/water/water.vert"
 import fragmentShader from "@/shaders/water/water.frag"
@@ -61,7 +61,7 @@ export default class GerstnerWater extends component() {
         this.onDebug()
     }
 
-    getWaveInfo(offsetX, offsetZ, x, z, time) {
+    getWaveInfo(x, z, time) {
         const pos = new Vector3()
         const tangent = new Vector3(1, 0, 0)
         const binormal = new Vector3(0, 0, 1)
@@ -104,6 +104,13 @@ export default class GerstnerWater extends component() {
         const folderWater = folderDebug.addFolder({
             title: "Water",
             expanded: false,
+        });
+
+
+        folderWater.addInput(waterUniforms.waterColor, 'value', {
+            label: "Color",
+        }).on('change', (ev) => {
+            waterUniforms.waterColor.value = new Color(ev.value)
         });
 
         folderWater.addInput(waterUniforms.distortionScale, 'value', {

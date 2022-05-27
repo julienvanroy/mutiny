@@ -29,9 +29,9 @@ export default class World extends component() {
     onResourcesIsReady() {
         console.log("world is ready");
         this.environment = new Environment();
-        this.water = new GerstnerWater();
+        this.gerstnerWater = new GerstnerWater();
         this.fireflies = new Fireflies(100);
-        this.mapLevel = new MapLevel();
+        this.mapLevel = new MapLevel(this.gerstnerWater);
 
         this.players = new Map();
         /*
