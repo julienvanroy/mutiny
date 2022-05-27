@@ -18,7 +18,7 @@
       <button v-show="!isGamePath">
         <img src="images/icons/parameters.png" />
       </button>
-      <button v-show="isGamePath">
+      <button v-show="isGamePath" @click="playMusic">
         <img src="images/icons/sound-game-on.png" />
       </button>
       <button v-show="isGamePath"><img src="images/icons/pause.png" /></button>
