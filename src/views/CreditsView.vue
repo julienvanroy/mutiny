@@ -6,7 +6,7 @@
       >
     </div>
     <div class="under">
-      <img src="images/background.jpg" />
+      <img src="images/background.png" />
     </div>
     <div class="over">
       <h1>Crédits</h1>

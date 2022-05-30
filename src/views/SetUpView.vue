@@ -5,7 +5,7 @@
     </div>
 
     <div class="under">
-      <img src="images/background.jpg" />
+      <img src="images/background.png" />
     </div>
     <div class="over">
       <div class="container">
@@ -77,8 +77,8 @@
             </div>
 
             <div class="actions">
-              <TheButton label="Tutorial" color="light" :disabled="true" />
-              <TheButton label="GO !" color="dark" @click="startGame()" />
+              <TheButton label="Tutorial" color="secondary" :disabled="true" />
+              <TheButton label="GO !" color="primary" @click="startGame()" />
             </div>
           </div>
         </div>
