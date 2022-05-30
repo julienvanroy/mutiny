@@ -63,7 +63,7 @@ export default class Player extends component(Mover) {
     _rotation(delta) {
         if (this.isMoving) this._targetQuaternion.setFromAxisAngle(new Vector3(0, 1, 0), this._vectorControls.angle());
 
-        if (!this.mesh.quaternion.equals(this._targetQuaternion)) {
+        if (this.mesh && !this.mesh.quaternion.equals(this._targetQuaternion)) {
             const step = this._speedRotation * delta;
             this.mesh.quaternion.rotateTowards(this._targetQuaternion, step);
         }
