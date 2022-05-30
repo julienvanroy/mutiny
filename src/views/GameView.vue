@@ -85,7 +85,7 @@ export default {
       span {
         font-weight: $ft-w-bold;
         font-size: $ft-s-xsmall;
-        color: $black;
+        color: $purple;
         position: absolute;
         top: 50%;
         left: 50%;

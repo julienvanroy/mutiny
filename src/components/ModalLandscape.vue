@@ -26,7 +26,7 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: $black;
+  background-color: $purple;
   color: $white;
   font-weight: $ft-w-bold;
   display: flex;

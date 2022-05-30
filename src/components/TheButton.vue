@@ -49,14 +49,13 @@ export default {
   min-height: 30px;
   border: 1px solid $grey-5;
   border-radius: 36px;
-  font-family: $ft-body;
   font-weight: $ft-w-medium;
   font-size: $ft-s-small;
-  color: $black;
+  color: $purple;
   text-align: center;
   letter-spacing: 0.01em;
   a {
-    color: $black;
+    color: $purple;
     text-decoration: none;
   }
 

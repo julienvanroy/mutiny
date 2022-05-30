@@ -137,7 +137,7 @@ export default {
     bottom: 20px;
     left: 20px;
     a {
-      color: $black;
+      color: $purple;
       font-size: $ft-s-small;
       font-weight: $ft-w-medium;
       letter-spacing: 0.01em;

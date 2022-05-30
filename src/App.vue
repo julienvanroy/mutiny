@@ -95,10 +95,10 @@ export default {
 
 <style lang="scss">
 #app {
-  color: $black;
+  color: $purple;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: $ft-body;
+  font-family: $font;
   font-weight: $ft-w-regular;
   box-sizing: border-box;
 }
