@@ -1,7 +1,7 @@
 <template>
   <div class="homepage">
     <div class="credits">
-      <TheButton link="/credits" :label="$t('credits')" color="tertiary" />
+      <TheButton link="/credits" :label="$t('homepage.credits')" color="tertiary" />
     </div>
 
     <div class="under">
@@ -12,11 +12,11 @@
       <div v-if="!isMobile" class="btn-container">
         <TheButton
           @click="createRoom"
-          :label="$t('create-room')"
+          :label="$t('homepage.createRoom')"
           color="primary"
         />
         <p>
-          {{ $t("home-phrase-desktop") }}
+          {{ $t("homepage.homePhraseDesktop") }}
         </p>
       </div>
       <div v-if="!!isMobile" class="btn-container">
@@ -28,7 +28,7 @@
           color="primary"
         />
         <p>
-          {{ $t("home-phrase-mobile") }}
+          {{ $t("homepage.homePhraseMobile") }}
         </p>
       </div>
     </div>

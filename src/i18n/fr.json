@@ -1,8 +1,16 @@
 {
-  "create-room": "Créer une partie",
-  "home-phrase-desktop": "Un téléphone par moussaillon est requis pour contrôler votre personnage",
-  "home-phrase-mobile": "Rejoignez une partie depuis le jeu sur ordinateur",
-  "credits": "Crédits",
+  "homepage": {
+    "credits": "Crédits",
+    "createRoom": "Créer une partie",
+    "homePhraseDesktop": "Un téléphone par moussaillon est requis pour contrôler votre personnage",
+    "homePhraseMobile": "Rejoignez une partie depuis le jeu sur ordinateur"
+  },
   "back": "Retour",
-  "landscape": "Tournez votre téléphone en vue paysage !!!"
+  "landscape": "Tournez votre téléphone en vue paysage !!!",
+  "gamepad": {
+    "youAre": "tu es",
+    "clues": "indices",
+    "attack": "Attaque",
+    "power": "Pouvoir"
+  }
 }

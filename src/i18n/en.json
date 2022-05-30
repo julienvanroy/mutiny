@@ -1,8 +1,16 @@
 {
-  "create-room": "Create room",
-  "home-phrase-desktop": "One phone per shipwright is required to control your character",
-  "home-phrase-mobile": "Join a game from a computer gascreenme",
-  "credits": "Credits",
+  "homepage": {
+    "credits": "Credits",
+    "createRoom": "Create room",
+    "homePhraseDesktop": "One phone per shipwright is required to control your character",
+    "homePhraseMobile": "Join a game from a computer gascreenme"
+  },
   "back": "Back",
-  "landscape": "Turn your phone to landscape view !!!"
+  "landscape": "Turn your phone to landscape view !!!",
+  "gamepad": {
+    "youAre": "you are",
+    "clues": "clues",
+    "attack": "Attack",
+    "power": "Power"
+  }
 }
