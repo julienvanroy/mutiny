@@ -1,7 +1,7 @@
 <template>
   <div class="setup">
     <div class="back">
-      <router-link to="/"><img src="images/icons/arrow-back.png" />Home</router-link>
+      <TheButton link="/" :label="$t('back')" color="back" />
     </div>
 
     <div class="under">
