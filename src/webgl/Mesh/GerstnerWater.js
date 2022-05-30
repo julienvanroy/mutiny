@@ -1,5 +1,5 @@
 import {component} from "bidello";
-import {Water} from 'three/examples/jsm/objects/Water'
+import {Water} from './Water'
 import {PlaneGeometry, RepeatWrapping, Vector2, Vector3, Color} from "three";
 import Experience from "@/webgl/Experience";
 import vertexShader from "@/shaders/water/water.vert"
@@ -28,14 +28,17 @@ export default class GerstnerWater extends component() {
             sunColor: 0xffffff,
             waterColor: 0x001e0f,
             distortionScale: 8,
-            fog: undefined,
+            fog: true,
         })
+
+        console.log(this.water.material.uniforms)
 
         this.water.material.wireframe = false
         this.water.rotation.x = -Math.PI / 2
         this.water.material.onBeforeCompile = (
             shader
         ) => {
+            shader.uniforms.fogTime = {value: 0}
             shader.uniforms.offsetX = {value: 0}
             shader.uniforms.offsetZ = {value: 0}
             const setupWave = (uniform, index) => {
@@ -186,5 +189,6 @@ export default class GerstnerWater extends component() {
 
     onRaf({delta}) {
         this.water.material.uniforms['time'].value += delta
+        this.water.material.uniforms['fogTime'].value += delta * 0.05
     }
 }
