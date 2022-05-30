@@ -1,7 +1,7 @@
 <template>
   <div class="end-game">
     <div class="under">
-      <img src="images/background.jpg" />
+      <img src="images/background.png" />
     </div>
     <div class="over">
       <h1>The End</h1>
@@ -16,9 +16,9 @@
           </li>
         </ul>
         <div class="links">
-          <TheButton label="Replay" color="dark" link="/setup" />
-          <TheButton label="Home" color="light" link="/" />
-          <TheButton label="Credits" color="light" link="/credits" />
+          <TheButton label="Replay" color="primary" link="/setup" />
+          <TheButton label="Home" color="secondary" link="/" />
+          <TheButton label="Credits" color="secondary" link="/credits" />
         </div>
       </div>
     </div>

@@ -1,13 +1,13 @@
 <template>
   <div class="get-pseudo">
     <div class="under">
-      <img src="images/background.jpg" />
+      <img src="images/background.png" />
     </div>
     <div class="over">
       <input v-model="pseudo" :placeholder="placeholder" />
       <span v-if="pseudoNotValid">Pseudo is already taken</span>
-      <TheButton label="Choose random" color="light" @click="chooseRandomPseudo()" />
-      <TheButton label="Let's go !" color="dark" :disabled="pseudoNotValid" @click="sendPseudo()" />
+      <TheButton label="Choose random" color="tertiary" @click="chooseRandomPseudo()" />
+      <TheButton label="Let's go !" color="primary" :disabled="pseudoNotValid" @click="sendPseudo()" />
     </div>
   </div>
 </template>

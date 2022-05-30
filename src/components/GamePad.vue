@@ -7,14 +7,14 @@
           <span>{{ points }}</span>
         </div>
         <div class="name">
-          {{ $t("youAre") }}<br />
+          {{ $t("gamepad.youAre") }}<br />
           <span>{{ name }}</span>
         </div>
       </div>
       <div ref="joystick" class="joystick"></div>
     </div>
     <div class="middle" v-if="clues">
-      <p>{{ $t("clues") }}</p>
+      <p>{{ $t("gamepad.clues") }}</p>
       <div class="clue" :style="`background-color: ${clue.color}`" v-for="clue in clues" :key="clue.color">
         {{ clue.tag }}
       </div>
@@ -22,9 +22,9 @@
     <div class="right">
       <button ref="attack" class="attack" @click="colyseus.sendData('kill', true)">
         <img src="/images/pad/button.png" />
-        <span>{{ $t("attack") }}</span>
+        <span>{{ $t("gamepad.attack") }}</span>
       </button>
-      <!-- <button ref="power" @click="colyseus.sendData('power', true)">{{$t("power")}}</button> -->
+      <!-- <button ref="power" @click="colyseus.sendData('power', true)">{{$t("gamepad.power")}}</button> -->
     </div>
   </div>
 </template>
@@ -32,17 +32,17 @@
 <script>
 import useColyseusStore from "@/store/colyseus";
 import nipplejs from "nipplejs";
-import en from "./i18n/en.json";
-import fr from "./i18n/fr.json";
+// import en from "./i18n/en.json";
+// import fr from "./i18n/fr.json";
 
 export default {
   name: "GamePad",
-  i18n: {
-    messages: {
-      en: en,
-      fr: fr,
-    },
-  },
+  // i18n: {
+  //   messages: {
+  //     en: en,
+  //     fr: fr,
+  //   },
+  // },
   setup() {
     const colyseus = useColyseusStore();
 

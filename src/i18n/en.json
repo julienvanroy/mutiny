@@ -1,3 +1,16 @@
 {
-  "landscape": "Turn your phone to landscape view !!!"
+  "homepage": {
+    "credits": "Credits",
+    "createRoom": "Create room",
+    "homePhraseDesktop": "One phone per shipwright is required to control your character",
+    "homePhraseMobile": "Join a game from a computer gascreenme"
+  },
+  "back": "Back",
+  "landscape": "Turn your phone to landscape view !!!",
+  "gamepad": {
+    "youAre": "you are",
+    "clues": "clues",
+    "attack": "Attack",
+    "power": "Power"
+  }
 }

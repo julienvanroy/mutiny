@@ -30,9 +30,9 @@ export default {
     color: {
       type: String,
       required: false,
-      default: "light",
+      default: "primary",
       validator(value) {
-        return ["light", "dark"].includes(value);
+        return ["primary", "secondary", "tertiary", "back"].includes(value);
       },
     },
   },
@@ -41,37 +41,109 @@ export default {
 
 <style lang="scss" scoped>
 .btn {
+  position: relative;
   display: flex;
   flex-flow: row nowrap;
   justify-content: center;
   align-items: center;
-  padding: 10px 20px;
-  min-height: 30px;
-  border: 1px solid $grey-5;
-  border-radius: 36px;
-  font-weight: $ft-w-medium;
-  font-size: $ft-s-small;
-  color: $purple;
+  padding: 10px 30px;
+  min-height: 60px;
+  border: none;
+  background-color: transparent;
+  color: $white;
   text-align: center;
-  letter-spacing: 0.01em;
-  a {
+  transition: 0.3s all ease-in-out;
+  a,
+  span {
+    z-index: 2;
     color: $purple;
     text-decoration: none;
+    font-weight: $ft-w-black;
+    font-size: $ft-s-small;
+    letter-spacing: 0.01em;
+  }
+  &:before,
+  &:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    transition: 0.2s all ease-in-out;
+  }
+  &:before {
+    z-index: 1;
+  }
+  &:after {
+    z-index: 0;
+    opacity: 0;
+  }
+
+  &-primary {
+    color: $white;
+    &:before {
+      background-image: url("../assets/buttons/primary.png");
+    }
+    &:after {
+      background-image: url("../assets/buttons/primary-shadow.png");
+    }
+    a,
+    span {
+      color: $white;
+    }
+  }
+  &-secondary {
+    &:before {
+      background-image: url("../assets/buttons/secondary.png");
+    }
+    &:after {
+      background-image: url("../assets/buttons/secondary-shadow.png");
+    }
+  }
+  &-tertiary {
+    min-height: 30px;
+    padding: 10px 20px;
+    a,
+    span {
+      font-size: $ft-s-xsmall;
+    }
+    &:before {
+      background-image: url("../assets/buttons/tertiary.png");
+    }
+    /* &:after {
+      background-image: url("../assets/buttons/tertiary-shadow.png");
+    } */
+  }
+  &-back {
+    min-height: 30px;
+    padding: 10px 20px 10px 40px;
+    a,
+    span {
+      font-size: $ft-s-xsmall;
+    }
+    &:before {
+      background-image: url("../assets/buttons/back.png");
+    }
+    /* &:after {
+      background-image: url("../assets/buttons/back-shadow.png");
+    } */
   }
 
   @media (any-hover: hover) {
     &:hover {
       cursor: pointer;
-    }
-  }
-  &-light {
-    background-color: $white;
-  }
-  &-dark {
-    background-color: $grey-5;
-    color: $white;
-    a {
-      color: $white;
+      transform: rotate(-1deg);
+      transition: 0.2s all ease-in-out;
+      &:after {
+        transform: translate(-8px, 8px);
+        opacity: 0.3;
+        transition: 0.2s all ease-in-out;
+      }
     }
   }
 
