@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import GamePad from "@/components/GamePad/GamePad.vue";
+import GamePad from "@/components/GamePad.vue";
 import useColyseusStore from "@/store/colyseus";
 
 export default {

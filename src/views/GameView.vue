@@ -15,7 +15,7 @@
 <script>
 import useColyseusStore from "@/store/colyseus";
 import bidello from "bidello";
-import TheTimer from "@/components/TheTimer/TheTimer";
+import TheTimer from "@/components/TheTimer";
 
 export default {
   name: "GameView",
