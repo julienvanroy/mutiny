@@ -1,7 +1,5 @@
 <template>
   <div class="main-container" ref="fullscreenContainer">
-    <LocaleChanger />
-
     <div class="fullscreen">
       <button
         v-if="showFullscreenBtn"
@@ -43,13 +41,12 @@ import TheLoader from "@/components/TheLoader";
 import { mapState } from "pinia";
 import { mapWritableState } from 'pinia'
 import useWebglStore from "@/store/webgl";
-import LocaleChanger from "@/components/LocaleChanger";
 import ModalLandscape from "@/components/ModalLandscape";
 import useGlobalStore from "@/store/global";
 
 export default {
   name: "App",
-  components: {ModalLandscape, LocaleChanger, TheLoader, WebGl },
+  components: {ModalLandscape, TheLoader, WebGl },
   setup() {
     const route = useRoute();
 

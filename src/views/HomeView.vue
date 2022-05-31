@@ -1,13 +1,15 @@
 <template>
   <div class="homepage">
+        <LocaleChanger />
+
     <div class="credits">
       <TheButton link="/credits" :label="$t('homepage.credits')" color="tertiary" />
     </div>
 
-    <div class="under">
+    <div class="homepage__under">
       <img src="images/background-home.png" />
     </div>
-    <div class="over">
+    <div class="homepage__over">
       <img src="images/logo.png" />
       <div v-if="!isMobile" class="btn-container">
         <TheButton
@@ -40,10 +42,11 @@ import useColyseusStore from "@/store/colyseus";
 import TheButton from "@/components/TheButton.vue";
 import { mapState } from "pinia/dist/pinia.esm-browser";
 import useGlobalStore from "@/store/global";
+import LocaleChanger from "@/components/LocaleChanger";
 
 export default {
   name: "App",
-  components: { TheButton },
+  components: { TheButton, LocaleChanger },
   setup() {
     const colyseus = useColyseusStore();
     return { colyseus };
@@ -73,7 +76,7 @@ export default {
   position: relative;
   width: 100%;
   height: 100vh;
-  .over {
+  &__over {
     position: absolute;
     z-index: 14;
     top: 0;
@@ -109,7 +112,7 @@ export default {
       }
     }
   }
-  .under {
+  &__under {
     position: relative;
     z-index: 1;
     width: 100%;
