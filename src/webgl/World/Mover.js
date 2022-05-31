@@ -6,12 +6,13 @@ import {
     CircleGeometry,
     MeshBasicMaterial,
     MeshStandardMaterial,
+    LoopOnce,
 } from "three";
 import Experience from "../Experience";
 import configs from "@/configs";
 import { sample } from "@/utils";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils";
-import { LoopOnce } from "three";
+import { DoubleSide } from "three";
 
 export default class Mover {
     constructor() {
@@ -37,8 +38,17 @@ export default class Mover {
                 tag: key,
                 alphaTexture: value.alphaTexture,
                 shuffleMesh: value.shuffleMesh,
+                addColor: value.addColor,
                 meshes: value.meshes,
-                mesh: value.shuffleMesh ? sample(value.meshes) : undefined,
+                mesh: value.shuffleMesh
+                    ? sample(
+                          value.meshes.map(({ name, texture, color: colors }) => ({
+                              name,
+                              texture,
+                              color: colors ? sample(colors) : undefined,
+                          }))
+                      )
+                    : undefined,
             };
         }
 
@@ -51,7 +61,7 @@ export default class Mover {
                         .includes(child.name)
                 );
 
-                if (child.name === "Tonneau") rangeColor = bodyPart.mesh.color[0];
+                if (child.name === "Tonneau") rangeColor = bodyPart.mesh.color;
 
                 if (bodyPart.shuffleMesh) {
                     if (bodyPart.mesh.name !== child.name) child.visible = false;
@@ -59,8 +69,9 @@ export default class Mover {
                     child.material = new MeshStandardMaterial();
 
                     child.material.map = this._resources[bodyPart.mesh.texture];
-                    if (bodyPart.mesh.color)
-                        child.material.color = new Color(sample(bodyPart.mesh.color)).convertSRGBToLinear();
+                    if (bodyPart.addColor) {
+                        child.material.color = new Color(bodyPart.mesh.color).convertSRGBToLinear();
+                    }
 
                     if (bodyPart.alphaTexture) {
                         child.material.transparent = true;
@@ -68,7 +79,9 @@ export default class Mover {
                     }
                 } else {
                     const mesh = bodyPart.meshes.find(({ name }) => name === child.name);
-                    if (mesh.texture) child.material.map = this._resources[mesh.texture];
+                    if (mesh.texture) {
+                        child.material.map = this._resources[mesh.texture];
+                    }
                 }
 
                 child.receiveShadow = true;
@@ -95,7 +108,7 @@ export default class Mover {
             .filter((bodyPart) => bodyPart.shuffleMesh)
             .map((bodyPartData) => ({
                 ...bodyPartData,
-                color: bodyPartData.mesh.color ? bodyPartData.mesh.color : "#FFF",
+                color: bodyPartData.mesh.color || "#FFF",
             }));
     }
 

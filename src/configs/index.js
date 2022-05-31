@@ -16,6 +16,7 @@ const configs = {
         body: {
             hat: {
                 shuffleMesh: true,
+                addColor: true,
                 meshes: [
                     {
                         name: "Chapeau_01",
@@ -30,6 +31,7 @@ const configs = {
             beard: {
                 shuffleMesh: true,
                 alphaTexture: "barbeAlphaTexture",
+                addColor: false,
                 meshes: [
                     {
                         name: "Barbe",
@@ -55,6 +57,7 @@ const configs = {
             },
             barrel: {
                 shuffleMesh: true,
+                addColor: false,
                 meshes: [
                     {
                         name: "Tonneau",
@@ -80,6 +83,7 @@ const configs = {
             },
             weapon: {
                 shuffleMesh: true,
+                addColor: false,
                 meshes: [
                     {
                         name: "Epee_01",
@@ -89,6 +93,7 @@ const configs = {
             },
             belt: {
                 shuffleMesh: false,
+                addColor: false,
                 meshes: [
                     {
                         name: "Cinture_bas",
