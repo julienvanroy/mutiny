@@ -21,8 +21,6 @@ export default class Player extends component(Mover) {
         this._bots = experience.world.bots;
         this._players = experience.world.players;
 
-        this.points = 0;
-
         this._vectorControls = new Vector2();
         this._targetQuaternion = new Quaternion();
         this._speedRotation = 10;
@@ -189,8 +187,7 @@ export default class Player extends component(Mover) {
     }
 
     addPoints() {
-        this.points += 1;
-        useColyseusStore().sendData("addPoint", { playerId: this.id, playerPoints: this.points });
+        useColyseusStore().sendData("addPoint", { playerId: this.id });
     }
 
     respawn(targetPlayer) {
