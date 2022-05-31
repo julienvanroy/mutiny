@@ -61,8 +61,6 @@ export default class Mover {
                         .includes(child.name)
                 );
 
-                if (child.name === "Tonneau") rangeColor = bodyPart.mesh.color;
-
                 if (bodyPart.shuffleMesh) {
                     if (bodyPart.mesh.name !== child.name) child.visible = false;
 
@@ -83,6 +81,11 @@ export default class Mover {
                         child.material.map = this._resources[mesh.texture];
                     }
                 }
+
+                if (child.name === "Tonneau") rangeColor = bodyPart.mesh.color;
+
+                if (child.name === "Barbe")
+                    this.mesh.children[0].getObjectByName("Sourcil").material = child.material.clone();
 
                 child.receiveShadow = true;
                 child.castShadow = true;
