@@ -66,7 +66,7 @@ export default {
     box-sizing: border-box;
     .title {
       font-size: $ft-s-xlarge;
-      font-weight: $ft-w-black;
+      font-weight: $ft-w-bold;
       text-align: center;
     }
     .content {

@@ -140,7 +140,7 @@ export default {
     a {
       color: $purple;
       font-size: $ft-s-small;
-      font-weight: $ft-w-medium;
+      font-weight: $ft-w-regular;
       letter-spacing: 0.01em;
       text-decoration-line: underline;
     }
