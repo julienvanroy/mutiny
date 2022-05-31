@@ -171,7 +171,6 @@ export default class Player extends component(Mover) {
 
     onKill({ playerId }) {
         if (playerId === this.id) {
-            console.log("aa");
             this.animation.play("attack");
         }
 
