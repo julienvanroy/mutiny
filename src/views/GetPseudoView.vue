@@ -1,9 +1,9 @@
 <template>
   <div class="get-pseudo">
-    <div class="under">
+    <div class="get-pseudo__under">
       <img src="images/background-home.png" />
     </div>
-    <div class="over">
+    <div class="get-pseudo__over">
       <input v-model="pseudo" :placeholder="placeholder" />
       <span v-if="pseudoNotValid">Pseudo is already taken</span>
       <TheButton label="Choose random" color="tertiary" @click="chooseRandomPseudo()" />
@@ -96,7 +96,7 @@ export default {
   position: relative;
   width: 100%;
   height: 100vh;
-  .over {
+  &__over {
     position: absolute;
     z-index: 14;
     top: 0;
@@ -110,7 +110,7 @@ export default {
     justify-content: center;
     align-items: center;
   }
-  .under {
+  &__under {
     position: relative;
     z-index: 1;
     width: 100%;
@@ -130,19 +130,6 @@ export default {
       bottom: 0;
       left: 0;
       right: 0;
-    }
-  }
-  .credits {
-    position: absolute;
-    z-index: 20;
-    bottom: 20px;
-    left: 20px;
-    a {
-      color: $purple;
-      font-size: $ft-s-small;
-      font-weight: $ft-w-regular;
-      letter-spacing: 0.01em;
-      text-decoration-line: underline;
     }
   }
 }
