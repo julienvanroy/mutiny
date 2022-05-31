@@ -15,7 +15,6 @@ export default class Camera extends component(PerspectiveCamera) {
         this._canvas = experience.canvas;
 
         this.position.set(28, 22, 29);
-        this.lookAt(this._scene.position);
 
         this._scene.add(this);
 
@@ -32,6 +31,7 @@ export default class Camera extends component(PerspectiveCamera) {
 
         // OrbitControls
         this.controls = new OrbitControls(this, this._canvas);
+        this.controls.enable= true;
         this.controls.enableDamping = true;
 
         // TweakPane
@@ -39,11 +39,14 @@ export default class Camera extends component(PerspectiveCamera) {
             title: "Camera",
             expanded: false,
         });
-        const folderPosition = folderDebug.addFolder({
-            title: "Position",
-            expanded: false,
-        });
-        folderPosition.addInput(this, "position");
+        folderDebug.addInput(this, "position",
+            {
+                title: "Position",
+            });
+        folderDebug.addInput(this, "rotation",
+            {
+                title: "Rotation",
+            });
     }
 
     onRaf() {

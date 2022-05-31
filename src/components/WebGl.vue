@@ -19,6 +19,6 @@ canvas {
   top: 0;
   left: 0;
   outline: none;
-  z-index: -1;
+  z-index: 0;
 }
 </style>
