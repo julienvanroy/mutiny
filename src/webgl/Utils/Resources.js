@@ -3,7 +3,6 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import bidello from "bidello";
 import useWebglStore from "@/store/webgl";
 import { Howl } from "howler";
-import { sRGBEncoding } from "three";
 
 export default class Resources {
     constructor(sources) {
@@ -56,9 +55,10 @@ export default class Resources {
     }
 
     sourceLoaded(source, file) {
-        if (source.type === "texture") {
-            file.encoding = sRGBEncoding;
-            file.flipY = false;
+        if (source.options && source.type === "texture") {
+            for (const [key, value] of Object.entries(source.options)) {
+                file[key] = value
+            }
         }
 
         this.items[source.name] = file;

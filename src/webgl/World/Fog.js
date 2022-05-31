@@ -1,4 +1,4 @@
-import {ShaderChunk, FogExp2} from "three";
+import {ShaderChunk, FogExp2, Color} from "three";
 import Experience from "@/webgl/Experience";
 import fog_fragment from "@/shaders/fog/fog_fragment.glsl"
 import fog_pars_fragment from "@/shaders/fog/fog_pars_fragment.glsl"
@@ -8,7 +8,12 @@ import fog_pars_vertex from "@/shaders/fog/fog_pars_vertex.glsl"
 export default class FogCustom {
     constructor() {
         const experience = new Experience()
+        this._debug = experience.debug
         this._scene = experience.scene
+        this._settings = {
+            color: "#DFE9F3",
+            density:  0.0005
+        }
 
         ShaderChunk.fog_fragment = fog_fragment;
 
@@ -18,6 +23,32 @@ export default class FogCustom {
 
         ShaderChunk.fog_pars_vertex = fog_pars_vertex;
 
-        this._scene.fog = new FogExp2(0xDFE9F3, 0.0005);
+        this._scene.fog = new FogExp2(this._settings.color, this._settings.density);
+
+        this.onDebug()
+    }
+
+    onDebug () {
+        if(!this._debug.active) return
+
+        // TweakPane
+        const folderDebug = this._debug.pane.addFolder({
+            title: "Fog",
+            expanded: false,
+        });
+
+        folderDebug.addInput(this._scene.fog, 'density', {
+            label: "distortionScale",
+            step: 0.0001,
+            min: 0,
+            max: 1,
+        });
+
+        folderDebug.addInput(this._settings, 'color', {
+            label: "Color",
+        }).on('change', (ev) => {
+            this._settings.color = ev.value
+            this._scene.fog.color = new Color(ev.value)
+        });
     }
 }

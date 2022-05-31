@@ -1,3 +1,5 @@
+import {sRGBEncoding} from "three";
+
 export default [
     {
         name: "woodTexture",
@@ -28,56 +30,100 @@ export default [
         name: "barbeAlphaTexture",
         type: "texture",
         path: "textures/character/Barbe_alpha.png",
+        options: {
+            encoding: sRGBEncoding,
+            flipY: false
+        }
     },
     {
         name: "cintureBas01Texture",
         type: "texture",
         path: "textures/character/Cinture_bas_01.png",
+        options: {
+            encoding: sRGBEncoding,
+            flipY: false
+        }
     },
     {
         name: "barbeBlancTexture",
         type: "texture",
         path: "textures/character/Barbe_blanc.jpg",
+        options: {
+            encoding: sRGBEncoding,
+            flipY: false
+        }
     },
     {
         name: "barbeJauneTexture",
         type: "texture",
         path: "textures/character/Barbe_jaune.jpg",
+        options: {
+            encoding: sRGBEncoding,
+            flipY: false
+        }
     },
     {
         name: "barbeOrangeTexture",
         type: "texture",
         path: "textures/character/Barbe_orange.jpg",
+        options: {
+            encoding: sRGBEncoding,
+            flipY: false
+        }
     },
     {
         name: "barbeVioletTexture",
         type: "texture",
         path: "textures/character/Barbe_violet.jpg",
+        options: {
+            encoding: sRGBEncoding,
+            flipY: false
+        }
     },
     {
         name: "epee01Texture",
         type: "texture",
         path: "textures/character/Epee_01.jpg",
+        options: {
+            encoding: sRGBEncoding,
+            flipY: false
+        }
     },
     {
         name: "tonneauBlancTexture",
         type: "texture",
         path: "textures/character/Tonneau_blanc.jpg",
+        options: {
+            encoding: sRGBEncoding,
+            flipY: false
+        }
     },
     {
         name: "tonneauBleuTexture",
         type: "texture",
         path: "textures/character/Tonneau_bleu.jpg",
+        options: {
+            encoding: sRGBEncoding,
+            flipY: false
+        }
     },
     {
         name: "tonneauJauneTexture",
         type: "texture",
         path: "textures/character/Tonneau_jaune.jpg",
+        options: {
+            encoding: sRGBEncoding,
+            flipY: false
+        }
     },
     {
         name: "tonneauOrangeTexture",
         type: "texture",
         path: "textures/character/Tonneau_orange.jpg",
+        options: {
+            encoding: sRGBEncoding,
+            flipY: false
+        }
     },
     {
         name: "musicGame",

@@ -30,9 +30,7 @@ export default class GerstnerWater extends component() {
             distortionScale: 8,
             fog: true,
         })
-
-        console.log(this.water.material.uniforms)
-
+        
         this.water.material.wireframe = false
         this.water.rotation.x = -Math.PI / 2
         this.water.material.onBeforeCompile = (
@@ -114,6 +112,12 @@ export default class GerstnerWater extends component() {
             label: "Color",
         }).on('change', (ev) => {
             waterUniforms.waterColor.value = new Color(ev.value)
+        });
+
+        folderWater.addInput(waterUniforms.sunColor, 'value', {
+            label: "Sun Color",
+        }).on('change', (ev) => {
+            waterUniforms.sunColor.value = new Color(ev.value)
         });
 
         folderWater.addInput(waterUniforms.distortionScale, 'value', {
