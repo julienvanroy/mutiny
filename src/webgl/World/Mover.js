@@ -11,6 +11,7 @@ import Experience from "../Experience";
 import configs from "@/configs";
 import { sample } from "@/utils";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils";
+import { LoopOnce } from "three";
 
 export default class Mover {
     constructor() {
@@ -20,7 +21,7 @@ export default class Mover {
         this.charaResource = experience.resources.items.characterModel;
 
         this._initModel();
-        // this._initAnimation();
+        this._initAnimation();
     }
 
     _initModel() {
@@ -108,18 +109,26 @@ export default class Mover {
         this.animation.actions = {};
 
         this.animation.actions.walk = this.animation.mixer.clipAction(
-            AnimationClip.findByName(this.charaResource.animations, "marche")
+            AnimationClip.findByName(this.charaResource.animations, "Arret_01")
+        );
+        this.animation.actions.idle = this.animation.mixer.clipAction(
+            AnimationClip.findByName(this.charaResource.animations, "Arret_01")
+        );
+        this.animation.actions.attack = this.animation.mixer.clipAction(
+            AnimationClip.findByName(this.charaResource.animations, "Attaque_01")
         );
 
-        this.animation.play = (name, duration = 1) => {
+        this.animation.play = (name, playOnce = true, duration = 1) => {
             const newAction = this.animation.actions[name];
             const oldAction = this.animation.actions.current;
+
+            playOnce && newAction.setLoop(LoopOnce);
 
             newAction.reset();
             newAction.play();
             newAction.crossFadeFrom(oldAction, duration);
 
-            this.animation.actions.current = newAction;
+            this.animation.actions.current = playOnce ? oldAction : newAction;
         };
 
         this.animation.actions.current = this.animation.actions.walk;
