@@ -18,6 +18,8 @@ export default class Mover {
         this._resources = experience.resources.items;
         this.charaResource = experience.resources.items.characterModel;
 
+        this.mesh = clone(this.charaResource.scene);
+
         if (body) {
             this._initModel(body);
             this._initAnimation();
@@ -25,8 +27,6 @@ export default class Mover {
     }
 
     _initModel(body) {
-        this.mesh = clone(this.charaResource.scene);
-
         this.mesh.position.set(0, 0, 0);
         this._scene.add(this.mesh);
 

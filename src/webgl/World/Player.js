@@ -61,7 +61,7 @@ export default class Player extends component(Mover) {
     _rotation(delta) {
         if (this.isMoving) this._targetQuaternion.setFromAxisAngle(new Vector3(0, 1, 0), this._vectorControls.angle());
 
-        if (this.mesh && !this.mesh.quaternion.equals(this._targetQuaternion)) {
+        if (!this.mesh.quaternion.equals(this._targetQuaternion)) {
             const step = this._speedRotation * delta;
             this.mesh.quaternion.rotateTowards(this._targetQuaternion, step);
         }
@@ -70,6 +70,9 @@ export default class Player extends component(Mover) {
     _updateCollision(delta) {
         this._velocity.y += this.isOnGround ? 0 : delta * this._gravity;
         this.mesh.position.addScaledVector(this._velocity, delta);
+
+        this._move(delta);
+        this._rotation(delta);
 
         this.mesh.updateMatrixWorld();
 
@@ -155,13 +158,10 @@ export default class Player extends component(Mover) {
     }
 
     onRaf({ delta }) {
-        this._move(delta);
-        this._rotation(delta);
-
         /**
          * Todo: Need Low model navmesh and collison ( Only cube )
          */
-        //this._updateCollision(delta)
+        this._updateCollision(delta);
 
         if (this.animation && this.animation.mixer) this.animation.mixer.update(delta);
     }

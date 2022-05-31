@@ -13,7 +13,7 @@ import configs from "@/configs";
 import useColyseusStore from "@/store/colyseus.js";
 import Fireflies from "@/webgl/Mesh/Fireflies";
 import GerstnerWater from "@/webgl/Mesh/GerstnerWater";
-import FogCustom from './Fog'
+import FogCustom from "./Fog";
 
 export default class World extends component() {
     init() {
