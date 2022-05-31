@@ -5,7 +5,7 @@
     </div>
 
     <div class="under">
-      <img src="images/background.png" />
+      <img src="images/background-setup.png" />
     </div>
     <div class="over">
       <div class="container">

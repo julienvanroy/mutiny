@@ -1,7 +1,7 @@
 <template>
   <div class="get-pseudo">
     <div class="under">
-      <img src="images/background.png" />
+      <img src="images/background-home.png" />
     </div>
     <div class="over">
       <input v-model="pseudo" :placeholder="placeholder" />

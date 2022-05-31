@@ -5,7 +5,7 @@
     </div>
 
     <div class="under">
-      <img src="images/background.png" />
+      <img src="images/background-home.png" />
     </div>
     <div class="over">
       <img src="images/logo.png" />
