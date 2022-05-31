@@ -8,14 +8,15 @@ import { randomNumberInRange } from "@/utils";
 const { character: confCharacter } = configs;
 const { animation: confAnimation } = confCharacter;
 export default class Bot extends component(Mover) {
-    constructor(botId, position) {
+    constructor(botId, position, group) {
         super();
+        this._group = group
 
         this.id = botId;
         this.isPlayer = false;
 
         const experience = new Experience();
-        experience.scene.add(this.mesh);
+        this._group.add(this.mesh);
         this._pathfinding = experience.world.pathfinding;
 
         this._helper = new PathfindingHelper();

@@ -1,13 +1,14 @@
-import { component } from "bidello";
 import Experience from "../Experience";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils";
 import { MeshBVH, MeshBVHVisualizer } from "three-mesh-bvh";
-import { Color, Mesh, MeshBasicMaterial, MeshStandardMaterial } from "three";
+import {Color, Mesh, MeshBasicMaterial, MeshStandardMaterial} from "three";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils";
 import configs from "@/configs";
 
-export default class MapLevel extends component() {
-    init() {
+export default class MapLevel {
+    constructor(group) {
+        this._group = group;
+
         const experience = new Experience();
         this._scene = experience.scene;
         this._debug = experience.debug;
@@ -37,39 +38,27 @@ export default class MapLevel extends component() {
             }
         });
 
-        this._scene.add(this.model);
+        this._group.add(this.model);
+
+        this._scene.add(this._group)
 
         this.onDebug();
     }
 
     _initNavMesh(mesh) {
         this.navMesh = mesh;
-        // this.navMesh.position.set(0, 0, 0);
         this.navMesh.scale.set(-1, 1, 1);
         this.navMesh.updateMatrixWorld();
-
         this.navMesh.geometry.applyMatrix4(this.navMesh.matrix);
-        // this._scene.add(
-        //     new Mesh(
-        //         this.navMesh.geometry,
-        //         new MeshStandardMaterial({
-        //             color: new Color(0xffceb0).convertSRGBToLinear().getHex(),
-        //             map: this.texture,
-        //             opacity: 0.75,
-        //             transparent: true,
-        //             side: BackSide,
-        //         })
-        //     )
-        // );
     }
 
     _initCollider() {
         // collect all geometries to merge
         const geometries = [];
-        this.model.updateMatrixWorld(true);
+        this.model.updateMatrixWorld();
         this.model.traverse((child) => {
             if (configs.map.navMesh.includes(child.name)) {
-                child.visible = false;
+                child.visible = true;
                 this._initNavMesh(clone(child));
             } else if (child.geometry) {
                 const cloned = child.geometry.clone();
@@ -98,7 +87,7 @@ export default class MapLevel extends component() {
         this.collider = new Mesh(mergedGeometry, colliderMaterial);
         this.collider.visible = false;
 
-        this._scene.add(this.collider);
+        this._group.add(this.collider);
     }
 
     onDebug() {
@@ -114,7 +103,7 @@ export default class MapLevel extends component() {
 
         const visualizer = new MeshBVHVisualizer(this.collider, this._debug.params.visualizeDepth);
         visualizer.visible = this._debug.params.displayBVH;
-        this._scene.add(visualizer);
+        this._group.add(visualizer);
 
         // TweakPane
         const folderDebug = this._debug.pane.addFolder({

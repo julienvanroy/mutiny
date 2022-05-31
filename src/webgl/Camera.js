@@ -5,7 +5,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 export default class Camera extends component(PerspectiveCamera) {
     constructor() {
-        super(35, window.innerWidth / window.innerHeight, 0.1, 100);
+        super(35, window.innerWidth / window.innerHeight, 0.1, 1000);
     }
 
     init() {

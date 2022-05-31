@@ -1,20 +1,13 @@
 export default [
     {
-        name: "environmentMapTexture",
-        type: "cubeTexture",
-        path: [
-            "textures/environmentMap/px.jpg",
-            "textures/environmentMap/nx.jpg",
-            "textures/environmentMap/py.jpg",
-            "textures/environmentMap/ny.jpg",
-            "textures/environmentMap/pz.jpg",
-            "textures/environmentMap/nz.jpg",
-        ],
-    },
-    {
         name: "woodTexture",
         type: "texture",
         path: "textures/wood.jpeg",
+    },
+    {
+        name: "waterTexture",
+        type: "texture",
+        path: "textures/water/normals.jpeg",
     },
     {
         name: "mapTutoModel",

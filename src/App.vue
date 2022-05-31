@@ -18,7 +18,7 @@
       <button v-show="!isGamePath">
         <img src="images/icons/parameters.png" />
       </button>
-      <button v-show="isGamePath">
+      <button v-show="isGamePath" @click="playMusic">
         <img src="images/icons/sound-game-on.png" />
       </button>
       <button v-show="isGamePath"><img src="images/icons/pause.png" /></button>
@@ -28,7 +28,7 @@
 
     <div id="view">
       <router-view />
-      <WebGl v-if="!isMobile" v-show="path === ('/game' || '/game#debug')" />
+      <WebGl v-if="!isMobile" v-show="isGamePath" />
     </div>
 
     <TheLoader v-if="!isMobile" />
@@ -87,7 +87,7 @@ export default {
       return this.audio.musicGame;
     },
     isGamePath() {
-      return this.path === ("/game" || "/game#debug");
+      return this.path === "/game" || this.path === "/debug";
     },
   },
 };
