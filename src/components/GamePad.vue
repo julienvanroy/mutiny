@@ -61,10 +61,10 @@ export default {
       return this.colyseus.playerPoints;
     },
     color() {
-      return this.colyseus.player.color;
+      return this.colyseus.playerColor;
     },
     name() {
-      return this.colyseus.player.name;
+      return this.colyseus.playerName;
     },
   },
   mounted() {
