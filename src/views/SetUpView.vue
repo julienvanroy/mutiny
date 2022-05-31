@@ -26,7 +26,7 @@
           </div>
           <div class="code">
             <h2>Your vessel</h2>
-            <p>{{ colyseus.currentRoom.id }}</p>
+            <CopyCode :code="colyseus.currentRoom.id" />
             <QrCode @click="() => (showModalQRCode = true)" />
           </div>
         </div>
@@ -95,7 +95,7 @@
     <div class="modal-join-content">
       <p v-html="$t('setup.modalJoin.description')"></p>
       <div class="connexion">
-        <div class="code-container">je suis le code</div>
+        <div class="code-container"><CopyCode :code="colyseus.currentRoom.id" /></div>
         <span>{{ $t("setup.modalJoin.or") }}</span>
         <div class="qrcode-container">
           <div class="qrcode"><QrCode /></div>
@@ -120,12 +120,13 @@ import useColyseusStore from "@/store/colyseus";
 import TheButton from "@/components/TheButton.vue";
 import router from "@/router";
 import bidello from "bidello";
+import CopyCode from "@/components/CopyCode";
 import QrCode from "@/components/QrCode";
 import ModalContainer from "@/components/ModalContainer";
 
 export default {
   name: "SetUpView",
-  components: { QrCode, TheButton, ModalContainer },
+  components: { CopyCode, QrCode, TheButton, ModalContainer },
   setup() {
     const colyseus = useColyseusStore();
     return { colyseus };
