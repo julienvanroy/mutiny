@@ -7,7 +7,7 @@
       <h1>The End</h1>
       <div class="end-container">
         <ul>
-          <li v-for="(player, index) in rankedPlayers" :key="index">
+          <li v-for="(player, index) in colyseus.rankedPlayers" :key="index">
             <div class="points">
               <img :src="`/images/players/${player.color}.png`" />
               <span>{{ player.points }}</span>
@@ -35,14 +35,7 @@ export default {
   setup() {
     const colyseus = useColyseusStore();
 
-    return { players: colyseus.players };
-  },
-
-  computed: {
-    rankedPlayers() {
-      const _ = [...this.players];
-      return _.sort((a, b) => (a.points < b.points ? 1 : -1));
-    },
+    return { colyseus };
   },
 };
 </script>
