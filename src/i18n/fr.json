@@ -5,7 +5,18 @@
     "homePhraseDesktop": "Un téléphone par moussaillon est requis pour contrôler votre personnage",
     "homePhraseMobile": "Rejoignez une partie depuis le jeu sur ordinateur"
   },
+  "setup": {
+    "modalJoin": {
+      "title": "Rejoins le navire",
+      "description": "Pour rejoindre la partie, allez sur <strong>Mutiny.com</strong> avec <strong>votre téléphone</strong> et entrez le code suivant :",
+      "or": "Ou"
+    },
+    "modalQRCode": {
+      "title": "Votre navire"
+    }
+  },
   "back": "Retour",
+  "close": "Fermer",
   "landscape": "Tournez votre téléphone en vue paysage !!!",
   "gamepad": {
     "youAre": "tu es",

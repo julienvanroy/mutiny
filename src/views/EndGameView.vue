@@ -1,7 +1,7 @@
 <template>
   <div class="end-game">
     <div class="under">
-      <img src="images/background.png" />
+      <img src="images/background-home.png" />
     </div>
     <div class="over">
       <h1>The End</h1>

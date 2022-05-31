@@ -5,7 +5,18 @@
     "homePhraseDesktop": "One phone per shipwright is required to control your character",
     "homePhraseMobile": "Join a game from a computer gascreenme"
   },
+  "setup": {
+    "modalJoin": {
+      "title": "Join the ship",
+      "description": "To join the game, go to <strong>Mutiny.com</strong> with <strong>your phone</strong> and enter the following code:",
+      "or": "Or"
+    },
+    "modalQRCode": {
+      "title": "Your vessel"
+    }
+  },
   "back": "Back",
+  "close": "Close",
   "landscape": "Turn your phone to landscape view !!!",
   "gamepad": {
     "youAre": "you are",

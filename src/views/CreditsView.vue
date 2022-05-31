@@ -1,12 +1,10 @@
 <template>
   <div class="credits">
     <div class="back">
-      <router-link to="/"
-        ><img src="images/icons/arrow-back.png" />back to home</router-link
-      >
+      <TheButton link="/" :label="$t('back')" color="back" />
     </div>
     <div class="under">
-      <img src="images/background.png" />
+      <img src="images/background-home.png" />
     </div>
     <div class="over">
       <h1>Crédits</h1>
@@ -24,8 +22,11 @@
 </template>
 
 <script>
+import TheButton from "@/components/TheButton.vue";
+
 export default {
   name: "CreditsView",
+  components: { TheButton },
 };
 </script>
 
@@ -60,12 +61,12 @@ export default {
     text-align: center;
     h1 {
       font-size: $ft-s-xlarge;
+      font-weight: $ft-w-bold;
     }
     ul {
       padding: 0;
       li {
         list-style: none;
-        font-weight: $ft-w-medium;
         font-size: $ft-s-small;
         &.subtitle {
           font-weight: $ft-w-bold;

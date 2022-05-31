@@ -58,7 +58,7 @@ export default {
     z-index: 2;
     color: $purple;
     text-decoration: none;
-    font-weight: $ft-w-black;
+    font-weight: $ft-w-bold;
     font-size: $ft-s-small;
     letter-spacing: 0.01em;
   }

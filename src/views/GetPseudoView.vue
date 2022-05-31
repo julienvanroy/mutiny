@@ -1,7 +1,7 @@
 <template>
   <div class="get-pseudo">
     <div class="under">
-      <img src="images/background.png" />
+      <img src="images/background-home.png" />
     </div>
     <div class="over">
       <input v-model="pseudo" :placeholder="placeholder" />
@@ -140,7 +140,7 @@ export default {
     a {
       color: $purple;
       font-size: $ft-s-small;
-      font-weight: $ft-w-medium;
+      font-weight: $ft-w-regular;
       letter-spacing: 0.01em;
       text-decoration-line: underline;
     }
