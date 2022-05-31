@@ -8,8 +8,8 @@ import { randomNumberInRange } from "@/utils";
 const { character: confCharacter } = configs;
 const { animation: confAnimation } = confCharacter;
 export default class Bot extends component(Mover) {
-    constructor(botId, position, group) {
-        super();
+    constructor(botId, position, body, group) {
+        super(body);
         this._group = group;
 
         this.id = botId;

@@ -10,49 +10,29 @@ import {
 } from "three";
 import Experience from "../Experience";
 import configs from "@/configs";
-import { sample } from "@/utils";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils";
-import { DoubleSide } from "three";
-
 export default class Mover {
-    constructor() {
+    constructor(body) {
         const experience = new Experience();
         this._scene = experience.scene;
         this._resources = experience.resources.items;
         this.charaResource = experience.resources.items.characterModel;
 
-        this._initModel();
+        this._initModel(body);
         this._initAnimation();
     }
 
-    _initModel() {
+    _initModel(body) {
         this.mesh = clone(this.charaResource.scene);
 
         this.mesh.position.set(0, 0, 0);
         this._scene.add(this.mesh);
 
         // Generative chara
-        this.body = {};
-        for (const [key, value] of Object.entries(configs.character.body)) {
-            this.body[key] = {
-                tag: key,
-                alphaTexture: value.alphaTexture,
-                shuffleMesh: value.shuffleMesh,
-                addColor: value.addColor,
-                meshes: value.meshes,
-                mesh: value.shuffleMesh
-                    ? sample(
-                          value.meshes.map(({ name, texture, color: colors }) => ({
-                              name,
-                              texture,
-                              color: colors ? sample(colors) : undefined,
-                          }))
-                      )
-                    : undefined,
-            };
-        }
+        this.body = body;
 
         let rangeColor;
+
         this.mesh.children[0].traverse((child) => {
             if (child instanceof Mesh) {
                 const bodyPart = Object.values(this.body).find(({ meshes }) =>
