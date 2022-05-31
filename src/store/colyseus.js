@@ -11,7 +11,8 @@ const useColyseusStore = defineStore("colyseus", {
             currentRoom: null,
             lobbyRoom: null,
             players: {},
-            player: {},
+            playerName: "",
+            playerColor: "",
             playerPoints: 0,
             playerTarget: {},
         };
@@ -87,6 +88,8 @@ const useColyseusStore = defineStore("colyseus", {
         updateCurrentPlayer(players, playerId) {
             this.player = players.get(playerId);
             this.playerPoints = this.player.points;
+            this.playerName = this.player.name;
+            this.playerColor = this.player.color;
             if (this.player.target) {
                 console.log(this.player.target);
                 this.playerTarget = JSON.parse(this.player.target);
