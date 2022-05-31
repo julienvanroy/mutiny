@@ -27,7 +27,7 @@
           <div class="code">
             <h2>Your vessel</h2>
             <p>{{ colyseus.currentRoom.id }}</p>
-            <QrCode />
+            <QrCode @click="() => (showModalQRCode = true)" />
           </div>
         </div>
         <div class="else">
@@ -85,6 +85,34 @@
       </div>
     </div>
   </div>
+
+  <ModalContainer
+    v-if="!!showModalJoin"
+    :title="$t('setup.modalJoin.title')"
+    btnLabel="Ok"
+    :btnAction="() => (showModalJoin = false)"
+  >
+    <div class="modal-join-content">
+      <p v-html="$t('setup.modalJoin.description')"></p>
+      <div class="connexion">
+        <div class="code-container">je suis le code</div>
+        <span>{{ $t("setup.modalJoin.or") }}</span>
+        <div class="qrcode-container">
+          <div class="qrcode"><QrCode /></div>
+        </div>
+      </div>
+    </div>
+  </ModalContainer>
+
+  <ModalContainer
+    v-if="!!showModalQRCode"
+    :title="$t('setup.modalQRCode.title')"
+    :btnAction="() => (showModalQRCode = false)"
+  >
+    <div class="modal-qrcode-content">
+      <div class="qrcode"><QrCode /></div>
+    </div>
+  </ModalContainer>
 </template>
 
 <script>
@@ -93,10 +121,11 @@ import TheButton from "@/components/TheButton.vue";
 import router from "@/router";
 import bidello from "bidello";
 import QrCode from "@/components/QrCode";
+import ModalContainer from "@/components/ModalContainer";
 
 export default {
   name: "SetUpView",
-  components: { QrCode, TheButton },
+  components: { QrCode, TheButton, ModalContainer },
   setup() {
     const colyseus = useColyseusStore();
     return { colyseus };
@@ -104,6 +133,8 @@ export default {
   data() {
     return {
       showControls: false,
+      showModalJoin: true,
+      showModalQRCode: false,
     };
   },
   mounted() {
@@ -369,6 +400,61 @@ export default {
       left: 0;
       right: 0;
     }
+  }
+}
+
+.modal-join-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-evenly;
+  align-items: center;
+  p {
+    max-width: 560px;
+    text-align: center;
+    font-size: $ft-s-medium;
+    strong {
+      font-weight: $ft-w-bold;
+    }
+  }
+  .connexion {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: stretch;
+    span {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      font-size: $ft-s-small;
+      font-weight: $ft-w-bold;
+    }
+    .code-container,
+    .qrcode-container {
+      min-width: 200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: inset 0px 0px 16px rgba(222, 197, 204, 0.8);
+      border-radius: 4px;
+      padding: 50px;
+    }
+    .qrcode {
+      width: 100px;
+    }
+  }
+}
+
+.modal-qrcode-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-evenly;
+  align-items: center;
+  .qrcode {
+    width: 300px;
   }
 }
 </style>
