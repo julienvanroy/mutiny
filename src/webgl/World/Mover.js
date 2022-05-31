@@ -89,7 +89,13 @@ export default class Mover {
         rangeCircle.position.y = 0.32;
         this.mesh.add(rangeCircle);
 
-        this.bodyData = Object.values(this.body).filter(({ tag }) => tag !== "Others");
+        // Body data (to send to gamepad)
+        this.bodyData = Object.values(this.body)
+            .filter((bodyPart) => bodyPart.shuffleMesh)
+            .map((bodyPartData) => ({
+                ...bodyPartData,
+                color: bodyPartData.mesh.color ? bodyPartData.mesh.color : "#FFF",
+            }));
     }
 
     _initAnimation() {
