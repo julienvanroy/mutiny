@@ -1,7 +1,7 @@
 import Environment from "./Environment.js";
 import { component } from "bidello";
 import Experience from "@/webgl/Experience";
-import {Euler, Group, Quaternion, Vector2, Vector3} from "three";
+import { Euler, Group, Quaternion, Vector2, Vector3 } from "three";
 import Player from "@/webgl/World/Player";
 //import Item from "@/webgl/World/Item";
 //import BoxCollision from "@/webgl/Collision/BoxCollision";
@@ -41,9 +41,10 @@ export default class World extends component() {
         this.boxCollision = new BoxCollision();
         */
         this._initPathfinding();
+        this._initCharacters();
         this._initBots();
 
-        this._scene.add(this.group)
+        this._scene.add(this.group);
         this.onDebug();
         this._isLoaded = true;
     }
@@ -89,8 +90,64 @@ export default class World extends component() {
             initialPositions.push(position);
 
             const botId = uuid();
-            this.bots[botId] = new Bot(botId, position, this.group);
+            this.bots[botId] = new Bot(botId, position, this.characters[i], this.group);
         }
+    }
+
+    // Generative chara
+    _initCharacters() {
+        this.characters = [];
+
+        for (let i = 0; i < configs.character.count; i++) {
+            let body = {};
+            for (const [key, value] of Object.entries(configs.character.body)) {
+                body[key] = {
+                    tag: key,
+                    alphaTexture: value.alphaTexture,
+                    shuffleMesh: value.shuffleMesh,
+                    addColor: value.addColor,
+                    meshes: value.meshes,
+                    mesh: value.shuffleMesh
+                        ? sample(
+                              value.meshes.map(({ name, texture, color: colors }) => ({
+                                  name,
+                                  texture,
+                                  color: colors ? sample(colors) : undefined,
+                              }))
+                          )
+                        : undefined,
+                };
+            }
+
+            let duplicataCount = 0;
+            while (this.characters.find((charaBody) => JSON.stringify(charaBody) === JSON.stringify(body))) {
+                duplicataCount++;
+                body = {};
+                for (const [key, value] of Object.entries(configs.character.body)) {
+                    body[key] = {
+                        tag: key,
+                        alphaTexture: value.alphaTexture,
+                        shuffleMesh: value.shuffleMesh,
+                        addColor: value.addColor,
+                        meshes: value.meshes,
+                        mesh: value.shuffleMesh
+                            ? sample(
+                                  value.meshes.map(({ name, texture, color: colors }) => ({
+                                      name,
+                                      texture,
+                                      color: colors ? sample(colors) : undefined,
+                                  }))
+                              )
+                            : undefined,
+                    };
+                }
+            }
+
+            console.log(`Generative characters ${i + 1}: ${duplicataCount} duplicata times`);
+            this.characters.push(body);
+        }
+
+        this.characters = shuffle(this.characters);
     }
 
     _keyboard() {
@@ -113,20 +170,26 @@ export default class World extends component() {
     }
 
     waveRaf(delta) {
-        const waveInfo = this.gerstnerWater.getWaveInfo( this.group.position.x, this.group.position.z, this.gerstnerWater.water.material.uniforms.time.value );
+        const waveInfo = this.gerstnerWater.getWaveInfo(
+            this.group.position.x,
+            this.group.position.z,
+            this.gerstnerWater.water.material.uniforms.time.value
+        );
         this.group.position.y = waveInfo.position.y + 2;
-        const quaternion = new Quaternion().setFromEuler(new Euler( waveInfo.normal.x, waveInfo.normal.y, waveInfo.normal.z ));
-        this.group.quaternion.rotateTowards( quaternion, delta * 0.5 );
+        const quaternion = new Quaternion().setFromEuler(
+            new Euler(waveInfo.normal.x, waveInfo.normal.y, waveInfo.normal.z)
+        );
+        this.group.quaternion.rotateTowards(quaternion, delta * 0.5);
         this.group.updateMatrixWorld();
     }
 
-    onRaf({delta}) {
+    onRaf({ delta }) {
         this._renderer.render(this._scene, this._camera);
 
         if (this._isLoaded) {
             this._keyboard();
 
-            this.waveRaf(delta)
+            this.waveRaf(delta);
 
             /*
             TODO: Collision Items

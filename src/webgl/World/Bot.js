@@ -8,9 +8,9 @@ import { randomNumberInRange } from "@/utils";
 const { character: confCharacter } = configs;
 const { animation: confAnimation } = confCharacter;
 export default class Bot extends component(Mover) {
-    constructor(botId, position, group) {
-        super();
-        this._group = group
+    constructor(botId, position, body, group) {
+        super(body);
+        this._group = group;
 
         this.id = botId;
         this.isPlayer = false;
@@ -46,22 +46,9 @@ export default class Bot extends component(Mover) {
             configs.map.nearRange
         );
 
-        while (this.position.equals(this.targetPosition)) {
-            this.targetPosition = this._pathfinding.getRandomNode(
-                this._pathfinding.zone,
-                groupID,
-                this.position,
-                configs.map.nearRange
-            );
-        }
-
         let newPath = this._pathfinding.findPath(this.position, this.targetPosition, this._pathfinding.zone, groupID);
 
         if (newPath && newPath.length > 0) this.path.push(...newPath);
-        else
-            this.path.push(
-                this._pathfinding.getClosestNode(this.targetPosition, this._pathfinding.zone, groupID).centroid
-            );
     }
 
     onRaf({ delta }) {
@@ -88,7 +75,7 @@ export default class Bot extends component(Mover) {
                 this._setPath();
             }
 
-            // if (this.animation && this.animation.mixer) this.animation.mixer.update(delta);
+            if (this.animation && this.animation.mixer) this.animation.mixer.update(delta);
 
             if (this.mesh) {
                 this.mesh.position.set(this.position.x, this.position.y, this.position.z);

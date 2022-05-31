@@ -63,7 +63,7 @@ export default class Player extends component(Mover) {
     _rotation(delta) {
         if (this.isMoving) this._targetQuaternion.setFromAxisAngle(new Vector3(0, 1, 0), this._vectorControls.angle());
 
-        if (!this.mesh.quaternion.equals(this._targetQuaternion)) {
+        if (this.mesh && !this.mesh.quaternion.equals(this._targetQuaternion)) {
             const step = this._speedRotation * delta;
             this.mesh.quaternion.rotateTowards(this._targetQuaternion, step);
         }
@@ -153,12 +153,10 @@ export default class Player extends component(Mover) {
         this.bot.isPlayer = true;
         this.mesh = this.bot.mesh;
 
-        // super._initAnimation();
+        super._initAnimation();
     }
 
     onRaf({ delta }) {
-        // if (this.isMoving && this.animation && this.animation.mixer) this.animation.mixer.update(delta);
-
         this._move(delta);
         this._rotation(delta);
         // this._updateCollision(delta);
@@ -167,9 +165,15 @@ export default class Player extends component(Mover) {
          * Todo: Need Low model navmesh and collison ( Only cube )
          */
         //this._updateCollision(delta)
+
+        if (this.animation && this.animation.mixer) this.animation.mixer.update(delta);
     }
 
     onKill({ playerId }) {
+        if (playerId === this.id) {
+            this.animation.play("attack");
+        }
+
         if (
             playerId === this.id &&
             this.mesh.position.distanceTo(this.target.mesh.position) <= configs.character.range
