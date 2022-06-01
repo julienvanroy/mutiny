@@ -1,14 +1,15 @@
 <template>
   <game-pad v-if="!!showGamePad" />
-  <div v-if="!showGamePad" class="modal-waiting">WAITING...</div>
+  <ModalWaiting v-if="!showGamePad" />
 </template>
 
 <script>
 import GamePad from "@/components/GamePad.vue";
 import useColyseusStore from "@/store/colyseus";
+import ModalWaiting from "@/components/ModalWaiting";
 
 export default {
-  components: { GamePad },
+  components: {ModalWaiting, GamePad },
   name: "GamepadView",
   setup() {
     const colyseus = useColyseusStore();
@@ -40,20 +41,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.modal-waiting {
-  position: absolute;
-  z-index: 16;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: $purple;
-  color: $white;
-  font-weight: $ft-w-bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-</style>
