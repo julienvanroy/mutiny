@@ -21,8 +21,6 @@ export default class Player extends component(Mover) {
         this._bots = experience.world.bots;
         this._players = experience.world.players;
 
-        this.points = 0;
-
         this._vectorControls = new Vector2();
         this._targetQuaternion = new Quaternion();
         this._speedRotation = 10;
@@ -159,7 +157,6 @@ export default class Player extends component(Mover) {
     onRaf({ delta }) {
         this._move(delta);
         this._rotation(delta);
-        // this._updateCollision(delta);
 
         /**
          * Todo: Need Low model navmesh and collison ( Only cube )
@@ -179,15 +176,22 @@ export default class Player extends component(Mover) {
             this.mesh.position.distanceTo(this.target.mesh.position) <= configs.character.range
         ) {
             console.log(`player ${this.id} killed their target ${this.target.id}`);
-            if (this.target instanceof Player) this.target.respawn(this);
+            if (this.target instanceof Player) {
+                this.target.respawn(this);
+
+                const playersWithSameTarget = mapToArray(this._players, true).filter(
+                    (player) => player.target.id === this.target.id && player.id !== this.id
+                );
+
+                playersWithSameTarget.forEach((player) => player.switchTarget());
+            }
             this.addPoints();
             this.switchTarget();
         }
     }
 
     addPoints() {
-        this.points += 1;
-        useColyseusStore().sendData("addPoint", { playerId: this.id, playerPoints: this.points });
+        useColyseusStore().sendData("addPoint", { playerId: this.id });
     }
 
     respawn(targetPlayer) {

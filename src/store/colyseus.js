@@ -4,19 +4,22 @@ import router from "@/router";
 import { mapToArray, sample } from "@/utils";
 
 const useColyseusStore = defineStore("colyseus", {
-    state: () => {
-        return {
-            client: new Colyseus.Client(process.env.VUE_APP_COLYSEUS),
-            rooms: [],
-            currentRoom: null,
-            lobbyRoom: null,
-            players: {},
-            player: {},
-            playerPoints: 0,
-            playerTarget: {},
-        };
+    state: () => ({
+        client: new Colyseus.Client(process.env.VUE_APP_COLYSEUS),
+        rooms: [],
+        currentRoom: null,
+        lobbyRoom: null,
+        players: [],
+        playerName: "",
+        playerColor: "",
+        playerPoints: 0,
+        playerTarget: {},
+    }),
+    getters: {
+        rankedPlayers(state) {
+            return [...state.players].sort((a, b) => (a.points < b.points ? 1 : -1));
+        },
     },
-    getters: {},
     actions: {
         async initLobbyRoom() {
             this.lobbyRoom = await this.client.joinOrCreate("lobby_room");
@@ -72,7 +75,10 @@ const useColyseusStore = defineStore("colyseus", {
                 if (roomId) room = await this.client.joinById(roomId);
                 else room = await this.client.joinById(sample(this.rooms).roomId);
 
-                room.onStateChange((state) => this.updateCurrentPlayer(state.players.$items, room.sessionId));
+                room.onStateChange((state) => {
+                    this.updateCurrentPlayer(state.players.$items, room.sessionId);
+                    this.updatePlayers(state.players.$items);
+                });
 
                 this.currentRoom = room;
 
@@ -87,6 +93,8 @@ const useColyseusStore = defineStore("colyseus", {
         updateCurrentPlayer(players, playerId) {
             this.player = players.get(playerId);
             this.playerPoints = this.player.points;
+            this.playerName = this.player.name;
+            this.playerColor = this.player.color;
             if (this.player.target) {
                 console.log(this.player.target);
                 this.playerTarget = JSON.parse(this.player.target);
