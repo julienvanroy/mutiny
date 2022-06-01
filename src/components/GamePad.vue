@@ -90,7 +90,6 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: stretch;
-  box-sizing: border-box;
 
   &__left {
     width: 40%;

@@ -39,7 +39,6 @@ export default {
   width: 200px;
   height: 50px;
   padding: 0 0 0 16px;
-  box-sizing: border-box;
   display: flex;
   justify-content: space-between;
   align-items: center;

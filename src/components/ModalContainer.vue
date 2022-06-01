@@ -66,7 +66,6 @@ export default {
       width: 100%;
       height: 100%;
       padding: 100px 100px 80px 100px;
-      box-sizing: border-box;
       .title {
         font-size: $ft-s-xlarge;
         font-weight: $ft-w-bold;
@@ -78,7 +77,6 @@ export default {
         justify-content: center;
         align-items: center;
         padding-bottom: 60px;
-        box-sizing: border-box;
       }
       .btn-container {
         position: absolute;

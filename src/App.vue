@@ -98,7 +98,6 @@ export default {
   font-family: $font;
   font-weight: $ft-w-regular;
   line-height: 1.5;
-  box-sizing: border-box;
 }
 
 .main-container {
