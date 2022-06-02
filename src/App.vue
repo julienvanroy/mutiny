@@ -1,7 +1,5 @@
 <template>
   <div class="main-container" ref="fullscreenContainer">
-    <LocaleChanger />
-
     <div class="fullscreen">
       <button
         v-if="showFullscreenBtn"
@@ -12,14 +10,11 @@
     </div>
 
     <div class="btn-parameters">
-      <button v-show="!isGamePath" @click="playMusic">
+      <button @click="playMusic">
         <img src="images/icons/sound-on.png" />
       </button>
-      <button v-show="!isGamePath">
+      <button>
         <img src="images/icons/parameters.png" />
-      </button>
-      <button v-show="isGamePath" @click="playMusic">
-        <img src="images/icons/sound-game-on.png" />
       </button>
       <button v-show="isGamePath"><img src="images/icons/pause.png" /></button>
     </div>
@@ -43,13 +38,12 @@ import TheLoader from "@/components/TheLoader";
 import { mapState } from "pinia";
 import { mapWritableState } from 'pinia'
 import useWebglStore from "@/store/webgl";
-import LocaleChanger from "@/components/LocaleChanger";
 import ModalLandscape from "@/components/ModalLandscape";
 import useGlobalStore from "@/store/global";
 
 export default {
   name: "App",
-  components: {ModalLandscape, LocaleChanger, TheLoader, WebGl },
+  components: {ModalLandscape, TheLoader, WebGl },
   setup() {
     const route = useRoute();
 
@@ -101,7 +95,6 @@ export default {
   font-family: $font;
   font-weight: $ft-w-regular;
   line-height: 1.5;
-  box-sizing: border-box;
 }
 
 .main-container {

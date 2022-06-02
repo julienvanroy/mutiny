@@ -1,9 +1,9 @@
 <template>
   <div class="end-game">
-    <div class="under">
+    <div class="end-game__under">
       <img src="images/background-home.png" />
     </div>
-    <div class="over">
+    <div class="end-game__over">
       <h1>The End</h1>
       <div class="end-container">
         <ul>
@@ -46,7 +46,7 @@ export default {
   width: 100%;
   height: 100vh;
 
-  .over {
+  &__over {
     position: absolute;
     z-index: 14;
     top: 0;
@@ -59,17 +59,14 @@ export default {
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
-
     h1 {
       font-size: $ft-s-xlarge;
     }
-
     .end-container {
       display: flex;
       justify-content: space-between;
       align-items: center;
       min-width: 680px;
-
       ul {
         li {
           list-style: none;
@@ -84,7 +81,6 @@ export default {
               width: 60px;
               margin: 0 30px;
             }
-
             span {
               font-weight: $ft-w-bold;
               font-size: $ft-s-medium;
@@ -95,28 +91,23 @@ export default {
               transform: translate(-50%, -60%);
             }
           }
-
           .name {
             font-weight: $ft-w-bold;
             margin-left: 10px;
             font-size: $ft-s-medium;
           }
-
           &:first-of-type {
             img {
               width: 100px;
               margin: 0;
             }
-
             span {
               font-size: $ft-s-large;
             }
           }
-
           & + li {
             margin-top: 20px;
           }
-
           &:first-child {
             .name {
               margin-left: 30px;
@@ -133,19 +124,17 @@ export default {
     }
   }
 
-  .under {
+  &__under {
     position: relative;
     z-index: 1;
     width: 100%;
     height: 100%;
     overflow: hidden;
-
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
-
     &:after {
       content: "";
       display: block;

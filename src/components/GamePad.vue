@@ -1,25 +1,25 @@
 <template>
   <div class="gamepad">
-    <div class="left">
+    <div class="gamepad__left">
       <div class="player">
-        <div class="points">
+        <div class="player__points">
           <img :src="`/images/players/${color}.png`" />
           <span>{{ points }}</span>
         </div>
-        <div class="name">
+        <div class="player__name">
           {{ $t("gamepad.youAre") }}<br />
           <span>{{ name }}</span>
         </div>
       </div>
       <div ref="joystick" class="joystick"></div>
     </div>
-    <div class="middle" v-if="clues">
+    <div class="gamepad__middle" v-if="clues">
       <p>{{ $t("gamepad.clues") }}</p>
-      <div class="clue" :style="`background-color: ${clue.color}`" v-for="clue in clues" :key="clue.color">
+      <div class="clues" :style="`background-color: ${clue.color}`" v-for="clue in clues" :key="clue.color">
         {{ clue.tag }}
       </div>
     </div>
-    <div class="right">
+    <div class="gamepad__right">
       <button ref="attack" class="attack" @click="colyseus.sendData('kill', true)">
         <img src="/images/pad/button.png" />
         <span>{{ $t("gamepad.attack") }}</span>
@@ -32,17 +32,9 @@
 <script>
 import useColyseusStore from "@/store/colyseus";
 import nipplejs from "nipplejs";
-// import en from "./i18n/en.json";
-// import fr from "./i18n/fr.json";
 
 export default {
   name: "GamePad",
-  // i18n: {
-  //   messages: {
-  //     en: en,
-  //     fr: fr,
-  //   },
-  // },
   setup() {
     const colyseus = useColyseusStore();
 
@@ -98,9 +90,8 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: stretch;
-  box-sizing: border-box;
 
-  .left {
+  &__left {
     width: 40%;
     display: flex;
     flex-flow: column nowrap;
@@ -111,14 +102,11 @@ export default {
       display: flex;
       justify-content: flex-start;
       align-items: center;
-
-      .points {
+      &__points {
         position: relative;
-
         img {
           width: 60px;
         }
-
         span {
           font-weight: $ft-w-bold;
           font-size: $ft-s-medium;
@@ -129,10 +117,8 @@ export default {
           transform: translate(-50%, -60%);
         }
       }
-
-      .name {
+      &__name {
         margin-left: 10px;
-
         span {
           display: block;
           font-weight: $ft-w-bold;
@@ -152,7 +138,7 @@ export default {
     }
   }
 
-  .middle {
+  &__middle {
     width: 30%;
     background-color: $grey-2;
     border-radius: 8px;
@@ -170,7 +156,7 @@ export default {
       letter-spacing: 0.01em;
     }
 
-    .clue {
+    .clues {
       background: $grey-1;
       border-radius: 8px;
       width: 80px;
@@ -184,7 +170,7 @@ export default {
     }
   }
 
-  .right {
+  &__right {
     width: 30%;
     display: flex;
     justify-content: center;

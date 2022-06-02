@@ -115,9 +115,9 @@ export default {
     &:before {
       background-image: url("../assets/buttons/tertiary.png");
     }
-    /* &:after {
+    &:after {
       background-image: url("../assets/buttons/tertiary-shadow.png");
-    } */
+    }
   }
   &-back {
     min-height: 30px;
@@ -129,9 +129,9 @@ export default {
     &:before {
       background-image: url("../assets/buttons/back.png");
     }
-    /* &:after {
+    &:after {
       background-image: url("../assets/buttons/back-shadow.png");
-    } */
+    }
   }
 
   @media (any-hover: hover) {
@@ -140,7 +140,7 @@ export default {
       transform: rotate(-1deg);
       transition: 0.2s all ease-in-out;
       &:after {
-        transform: translate(-8px, 8px);
+        transform: translate(-6px, 6px);
         opacity: 0.3;
         transition: 0.2s all ease-in-out;
       }
@@ -148,7 +148,7 @@ export default {
   }
 
   &.disabled {
-    /* pointer-events: none; */
+    pointer-events: none;
     opacity: 0.7;
     @media (any-hover: hover) {
       &:hover {

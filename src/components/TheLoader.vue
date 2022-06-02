@@ -1,7 +1,7 @@
 <template>
   <transition name="fade">
-    <div :class="`loading ${ended ? 'ended' : ''}`" v-if="show">
-      <div class="loading-bar" :style="{transform : !ended ? `scaleX(${progress})` : ''}"/>
+    <div :class="`loader ${ended ? 'ended' : ''}`" v-if="show">
+      <div class="loader-bar" :style="{transform : !ended ? `scaleX(${progress})` : ''}"/>
     </div>
   </transition>
 </template>
@@ -37,7 +37,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.loading {
+.loader {
   position: fixed;
   top: 0;
   left: 0;
@@ -47,7 +47,6 @@ export default {
   z-index: 20;
   opacity: 1;
   transition: 0.5s opacity ease;
-
   &-bar {
     position: absolute;
     top: 50%;
@@ -61,8 +60,7 @@ export default {
 
   &.ended {
     opacity: 0;
-
-    .loading-bar {
+    .loader-bar {
       transform: scaleX(0);
       transform-origin: 100% 0;
       transition: transform 1.5s ease-in-out;

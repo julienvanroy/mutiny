@@ -3,10 +3,10 @@
     <div class="back">
       <TheButton link="/" :label="$t('back')" color="back" />
     </div>
-    <div class="under">
+    <div class="credits__under">
       <img src="images/background-home.png" />
     </div>
-    <div class="over">
+    <div class="credits__over">
       <h1>Crédits</h1>
       <ul>
         <li class="subtitle">Design</li>
@@ -45,7 +45,7 @@ export default {
       align-items: center;
     }
   }
-  .over {
+  &__over {
     position: absolute;
     z-index: 14;
     top: 0;
@@ -75,7 +75,7 @@ export default {
       }
     }
   }
-  .under {
+  &__under {
     position: relative;
     z-index: 1;
     width: 100%;

@@ -1,14 +1,18 @@
 <template>
   <transition name="fade">
     <div class="modal">
-      <div class="modal-container">
-        <div class="modal-inner">
+      <div class="modal__container">
+        <div class="modal__container-inner">
           <h2 class="title">{{ this.title }}</h2>
           <div class="content">
             <slot></slot>
           </div>
           <div class="btn-container">
-            <TheButton :label="btnLabel ? btnLabel : $t('close')" color="primary" @click="this.btnAction" />
+            <TheButton
+              :label="btnLabel ? btnLabel : $t('close')"
+              color="primary"
+              @click="this.btnAction"
+            />
           </div>
         </div>
       </div>
@@ -29,11 +33,11 @@ export default {
     },
     btnLabel: {
       type: String,
-      required: false
+      required: false,
     },
     btnAction: {
-      required: true
-    }
+      required: true,
+    },
   },
 };
 </script>
@@ -51,37 +55,35 @@ export default {
   justify-content: center;
   align-items: center;
   backdrop-filter: blur(4px);
-  &-container {
+  &__container {
     position: relative;
     background-image: url("../assets/modal/background.png");
     background-repeat: no-repeat;
     background-size: 100% 100%;
     width: 1024px;
     height: 720px;
-  }
-  &-inner {
-    width: 100%;
-    height: 100%;
-    padding: 100px 100px 80px 100px;
-    box-sizing: border-box;
-    .title {
-      font-size: $ft-s-xlarge;
-      font-weight: $ft-w-bold;
-      text-align: center;
-    }
-    .content {
+    &-inner {
+      width: 100%;
       height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding-bottom: 60px;
-      box-sizing: border-box;
-    }
-    .btn-container {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
+      padding: 100px 100px 80px 100px;
+      .title {
+        font-size: $ft-s-xlarge;
+        font-weight: $ft-w-bold;
+        text-align: center;
+      }
+      .content {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 60px;
+      }
+      .btn-container {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+      }
     }
   }
 }

@@ -1,4 +1,8 @@
 {
+  "back": "Retour",
+  "close": "Fermer",
+  "tutorial": "Tutoriel",
+  "waiting": "EN ATTENTE...",
   "homepage": {
     "credits": "Crédits",
     "createRoom": "Créer une partie",
@@ -6,6 +10,9 @@
     "homePhraseMobile": "Rejoignez une partie depuis le jeu sur ordinateur"
   },
   "setup": {
+    "playersTitle": "Tonneaux",
+    "playersPlaceholder": "Pour rejoindre la partie, allez sur <strong>Mutiny.com</strong> avec <strong>votre téléphone</strong>.",
+    "codeTitle": "Votre navire",
     "modalJoin": {
       "title": "Rejoins le navire",
       "description": "Pour rejoindre la partie, allez sur <strong>Mutiny.com</strong> avec <strong>votre téléphone</strong> et entrez le code suivant :",
@@ -15,14 +22,27 @@
       "title": "Votre navire"
     }
   },
-  "waiting": "EN ATTENTE...",
-  "back": "Retour",
-  "close": "Fermer",
   "landscape": "Tournez votre téléphone en vue paysage !!!",
   "gamepad": {
     "youAre": "tu es",
     "clues": "indices",
     "attack": "Attaque",
     "power": "Pouvoir"
+  },
+
+  "parameters": {
+    "difficulty": "Difficulté",
+    "duration": "Durée",
+    "controls": "Contrôles",
+    "easy": "Facile",
+    "normal": "Normal",
+    "hard": "Difficile"
+  },
+  "modes": {
+    "1": {
+      "name": "Traqueurs Traqués",
+      "shortDescription": "je suis la short description je suis la short descriptionje suis la short descriptionje suis la short description",
+      "description": "Tu veux devenir le capitaine du navire ? Gagne le plus de points de terreur en attaquant tes adversaires. Les indices de ta prochaine cible sont sur ton tableau de bord. Bon vent !"
+    }
   }
 }
