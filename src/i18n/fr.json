@@ -6,6 +6,9 @@
     "homePhraseMobile": "Rejoignez une partie depuis le jeu sur ordinateur"
   },
   "setup": {
+    "playersTitle": "Tonneaux",
+    "playersPlaceholder": "Pour rejoindre la partie, allez sur <strong>Mutiny.com</strong> avec <strong>votre téléphone</strong>.",
+    "codeTitle": "Votre navire",
     "modalJoin": {
       "title": "Rejoins le navire",
       "description": "Pour rejoindre la partie, allez sur <strong>Mutiny.com</strong> avec <strong>votre téléphone</strong> et entrez le code suivant :",
@@ -23,5 +26,13 @@
     "clues": "indices",
     "attack": "Attaque",
     "power": "Pouvoir"
+  },
+
+  "modes": {
+    "1": {
+      "name": "Traqueurs Traqués",
+      "shortDescription": "je suis la short description je suis la short descriptionje suis la short descriptionje suis la short description",
+      "description": "je suis la description"
+    }
   }
 }

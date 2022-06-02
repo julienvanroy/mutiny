@@ -6,6 +6,9 @@
     "homePhraseMobile": "Join a game from a computer gascreenme"
   },
   "setup": {
+    "playersTitle": "Barrels",
+    "playersPlaceholder": "To join the game, go to <strong>Mutiny.com</strong> with <strong>your phone</strong>.",
+    "codeTitle": "Your vessel",
     "modalJoin": {
       "title": "Join the ship",
       "description": "To join the game, go to <strong>Mutiny.com</strong> with <strong>your phone</strong> and enter the following code:",
@@ -23,5 +26,13 @@
     "clues": "clues",
     "attack": "Attack",
     "power": "Power"
+  },
+
+  "modes": {
+    "1": {
+      "name": "Stalkers Stalked",
+      "shortDescription": "i am the short description",
+      "description": "i am the description"
+    }
   }
 }
