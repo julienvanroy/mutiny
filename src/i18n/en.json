@@ -1,4 +1,7 @@
 {
+  "back": "Back",
+  "close": "Close",
+  "tutorial": "Tutorial",
   "homepage": {
     "credits": "Credits",
     "createRoom": "Create room",
@@ -18,8 +21,7 @@
       "title": "Your vessel"
     }
   },
-  "back": "Back",
-  "close": "Close",
+
   "landscape": "Turn your phone to landscape view !!!",
   "gamepad": {
     "youAre": "you are",
@@ -28,11 +30,19 @@
     "power": "Power"
   },
 
+  "parameters": {
+    "difficulty": "Difficulty",
+    "duration": "Duration",
+    "controls": "Controls",
+    "easy": "Easy",
+    "normal": "Normal",
+    "hard": "Hard"
+  },
   "modes": {
     "1": {
       "name": "Stalkers Stalked",
       "shortDescription": "i am the short description",
-      "description": "i am the description"
+      "description": "Do you want to be the captain of the ship? Earn the most terror points by attacking your opponents. The clues to your next target are on your dashboard. Have a nice trip!"
     }
   }
 }

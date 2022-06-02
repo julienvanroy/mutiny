@@ -1,4 +1,7 @@
 {
+  "back": "Retour",
+  "close": "Fermer",
+  "tutorial": "Tutoriel",
   "homepage": {
     "credits": "Crédits",
     "createRoom": "Créer une partie",
@@ -18,8 +21,7 @@
       "title": "Votre navire"
     }
   },
-  "back": "Retour",
-  "close": "Fermer",
+
   "landscape": "Tournez votre téléphone en vue paysage !!!",
   "gamepad": {
     "youAre": "tu es",
@@ -28,11 +30,19 @@
     "power": "Pouvoir"
   },
 
+  "parameters": {
+    "difficulty": "Difficulté",
+    "duration": "Durée",
+    "controls": "Contrôles",
+    "easy": "Facile",
+    "normal": "Normal",
+    "hard": "Difficile"
+  },
   "modes": {
     "1": {
       "name": "Traqueurs Traqués",
       "shortDescription": "je suis la short description je suis la short descriptionje suis la short descriptionje suis la short description",
-      "description": "je suis la description"
+      "description": "Tu veux devenir le capitaine du navire ? Gagne le plus de points de terreur en attaquant tes adversaires. Les indices de ta prochaine cible sont sur ton tableau de bord. Bon vent !"
     }
   }
 }
