@@ -2,6 +2,7 @@
   "back": "Retour",
   "close": "Fermer",
   "tutorial": "Tutoriel",
+  "waiting": "EN ATTENTE...",
   "homepage": {
     "credits": "Crédits",
     "createRoom": "Créer une partie",
@@ -21,7 +22,6 @@
       "title": "Votre navire"
     }
   },
-
   "landscape": "Tournez votre téléphone en vue paysage !!!",
   "gamepad": {
     "youAre": "tu es",
