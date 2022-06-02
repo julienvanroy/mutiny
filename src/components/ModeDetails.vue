@@ -10,14 +10,22 @@
           <OptionContainer :title="$t('parameters.difficulty')">
             <TheRadioer
               label="difficulty"
-              :values="[$t('parameters.easy'), $t('parameters.normal'), $t('parameters.hard')]"
+              :values="[
+                $t('parameters.easy'),
+                $t('parameters.normal'),
+                $t('parameters.hard'),
+              ]"
               :defaultValue="$t('parameters.normal')"
             />
           </OptionContainer>
           <OptionContainer :title="$t('parameters.duration')">
             <TheRadioer
               label="duration"
-              :values="[$t('parameters.easy'), $t('parameters.normal'), $t('parameters.hard')]"
+              :values="[
+                $t('parameters.easy'),
+                $t('parameters.normal'),
+                $t('parameters.hard'),
+              ]"
               :defaultValue="$t('parameters.normal')"
             />
           </OptionContainer>
@@ -29,7 +37,11 @@
         </div>
       </div>
       <div class="actions">
-        <TheButton :label="$t('back')" color="back" @click="() => selected = null" />
+        <TheButton
+          :label="$t('back')"
+          color="back"
+          @click="() => (selected = null)"
+        />
         <TheButton label="GO !" color="primary" @click="startGame()" />
         <TheButton :label="$t('tutorial')" color="secondary" :disabled="true" />
       </div>
@@ -39,6 +51,9 @@
 </template>
 
 <script>
+import useColyseusStore from "@/store/colyseus";
+import router from "@/router";
+import bidello from "bidello";
 import TheButton from "@/components/TheButton.vue";
 import OptionContainer from "@/components/OptionContainer.vue";
 import TheRadioer from "@/components/TheRadioer.vue";
@@ -46,9 +61,20 @@ import TheRadioer from "@/components/TheRadioer.vue";
 export default {
   name: "ModeDetails",
   components: { TheButton, OptionContainer, TheRadioer },
+  setup() {
+    const colyseus = useColyseusStore();
+    return { colyseus };
+  },
   props: {
     mode: {
       required: true,
+    },
+  },
+  methods: {
+    startGame() {
+      bidello.trigger({ name: "assignTargets" });
+      this.colyseus.sendData("startGame");
+      router.push("/game");
     },
   },
 };

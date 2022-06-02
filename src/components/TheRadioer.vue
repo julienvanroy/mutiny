@@ -68,17 +68,19 @@ export default {
           background-size: 100% 100%;
           transform: translate(-30%, -40%);
           transform-origin: center;
-          transition: .3s all ease-in-out;
+          transition: 0.3s all ease-in-out;
         }
         @media (any-hover: hover) {
-          cursor: pointer;
+          &:hover {
+            cursor: pointer;
+          }
         }
         &:checked {
           &:before {
             width: 32px;
             height: 36px;
             background-image: url("../assets/parameters/radio-checked.png");
-            transition: .3s all ease-in-out;
+            transition: 0.3s all ease-in-out;
           }
         }
       }
@@ -86,7 +88,9 @@ export default {
         font-size: $ft-s-xsmall;
         margin-top: 10px;
         @media (any-hover: hover) {
-          cursor: pointer;
+          &:hover {
+            cursor: pointer;
+          }
         }
       }
       & + .radio {
