@@ -10,14 +10,21 @@ const useColyseusStore = defineStore("colyseus", {
         currentRoom: null,
         lobbyRoom: null,
         players: [],
-        playerName: "",
-        playerColor: "",
-        playerPoints: 0,
-        playerTarget: {},
+        player: null,
+        playerTarget: null
     }),
     getters: {
         rankedPlayers(state) {
             return [...state.players].sort((a, b) => (a.points < b.points ? 1 : -1));
+        },
+        playerPoints(state) {
+            return state.player.points;
+        },
+        playerName(state) {
+            return state.player.name;
+        },
+        playerColor(state) {
+            return state.player.name;
         },
     },
     actions: {
@@ -92,13 +99,7 @@ const useColyseusStore = defineStore("colyseus", {
         },
         updateCurrentPlayer(players, playerId) {
             this.player = players.get(playerId);
-            this.playerPoints = this.player.points;
-            this.playerName = this.player.name;
-            this.playerColor = this.player.color;
-            if (this.player.target) {
-                console.log(this.player.target);
-                this.playerTarget = JSON.parse(this.player.target);
-            }
+            this.playerTarget = this.player?.target ? JSON.parse(this.player.target) : null;
         },
         sendData(type, value) {
             this.currentRoom.send(type, value);

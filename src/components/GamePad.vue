@@ -15,8 +15,8 @@
     </div>
     <div class="gamepad__middle" v-if="clues">
       <p>{{ $t("gamepad.clues") }}</p>
-      <div class="clues" :style="`background-color: ${clue.color}`" v-for="clue in clues" :key="clue.color">
-        {{ clue.tag }}
+      <div class="clues" :style="`background-color: ${clue.show ? clue.color : 'black'}`" v-for="(clue, indexClue) in clues" :key="indexClue">
+        {{ clue.show ? clue.tag : '?' }}
       </div>
     </div>
     <div class="gamepad__right">
@@ -32,6 +32,7 @@
 <script>
 import useColyseusStore from "@/store/colyseus";
 import nipplejs from "nipplejs";
+import {sample} from "@/utils";
 
 export default {
   name: "GamePad",
@@ -43,11 +44,23 @@ export default {
   data() {
     return {
       joystick: [],
+      interval: null
     };
+  },
+  watch: {
+    cluesHide(newValue) {
+      if(newValue.length === 4) {
+        this.showOneClue()
+        this.setIntervalClues()
+      }
+    }
   },
   computed: {
     clues() {
-      return this.colyseus.playerTarget.info;
+      return this.colyseus.playerTarget?.info;
+    },
+    cluesHide() {
+      return this.clues?.filter((clue) => !clue.show)
     },
     points() {
       return this.colyseus.playerPoints;
@@ -58,6 +71,21 @@ export default {
     name() {
       return this.colyseus.playerName;
     },
+  },
+  methods: {
+    setIntervalClues() {
+      if(this.interval) clearInterval(this.interval);
+      this.interval = setInterval(this.showOneClue, 10000);
+    },
+    showOneClue() {
+      if(!this.interval) return
+      if(this.cluesHide.length === 0) {
+        clearInterval(this.interval)
+        return;
+      } else {
+        sample(this.cluesHide).show = true
+      }
+    }
   },
   mounted() {
     this.colyseus.getPlayer(this.colyseus.currentRoom.sessionId);
@@ -76,6 +104,8 @@ export default {
     this.joystick.on("end", () => {
       this.colyseus.sendData("joystick", { x: 0, y: 0 });
     });
+
+    this.setIntervalClues()
   },
   unmounted() {
     this.joystick.destroy();
