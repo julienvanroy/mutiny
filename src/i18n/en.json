@@ -2,6 +2,7 @@
   "back": "Back",
   "close": "Close",
   "tutorial": "Tutorial",
+  "waiting": "WAITING...",
   "homepage": {
     "credits": "Credits",
     "createRoom": "Create room",
@@ -21,7 +22,6 @@
       "title": "Your vessel"
     }
   },
-
   "landscape": "Turn your phone to landscape view !!!",
   "gamepad": {
     "youAre": "you are",
