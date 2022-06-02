@@ -10,14 +10,11 @@
     </div>
 
     <div class="btn-parameters">
-      <button v-show="!isGamePath" @click="playMusic">
+      <button @click="playMusic">
         <img src="images/icons/sound-on.png" />
       </button>
-      <button v-show="!isGamePath">
+      <button>
         <img src="images/icons/parameters.png" />
-      </button>
-      <button v-show="isGamePath" @click="playMusic">
-        <img src="images/icons/sound-game-on.png" />
       </button>
       <button v-show="isGamePath"><img src="images/icons/pause.png" /></button>
     </div>
