@@ -94,6 +94,7 @@ export default class Mover {
             .map((bodyPartData) => ({
                 ...bodyPartData,
                 color: bodyPartData.mesh.color || "#FFF",
+                show: false
             }));
     }
 
@@ -137,7 +138,7 @@ export default class Mover {
         const { bodyData } = this;
         return {
             id: this.id,
-            info: bodyData.map(({ tag, color }) => ({ tag, color })),
+            info: bodyData.map(({ tag, color, show }) => ({ tag, color, show })),
         };
     }
 
@@ -150,7 +151,7 @@ export default class Mover {
 
             return {
                 id: this.id,
-                info: bodyData.map(({ tag, color }) => ({ tag, color })),
+                info: bodyData.map(({ tag, color, show }) => ({ tag, color, show })),
             };
         } else return undefined;
     }
