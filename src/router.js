@@ -41,7 +41,7 @@ const router = createRouter({
         },
         {
             path: "/room/:roomId",
-            name: "connexion",
+            name: "connection",
             component: ConnectionView,
             meta: {requiresDesktop: false, requiresMobile: true, requiresRoom: false, requiresDebug: false}
         },
