@@ -17,7 +17,7 @@
           :class="`mode ${!mode.isAvailable ? 'unavailable' : ''}`"
           @mouseover="() => mouseHover(mode.isAvailable, idx)"
           @mouseleave="() => mouseHover(mode.isAvailable, null)"
-          @click="() => (selected = mode)"
+          @click="() => setSelected(mode)"
         >
           <div v-if="!!mode.isAvailable" class="content">
             <p class="uptitle">Mode</p>
@@ -72,7 +72,7 @@
       </div>
     </div>
 
-    <ModeDetails v-if="null !== selected" :mode="selected"></ModeDetails>
+    <ModeDetails v-if="null !== selected" v-on:set-selected="setSelected" :mode="selected" />
   </div>
 
   <ModalContainer
@@ -147,6 +147,9 @@ export default {
       if (!isAvailable) return;
       this.hovered = value;
     },
+    setSelected(val) {
+      this.selected = val
+    }
   },
 };
 </script>

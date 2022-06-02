@@ -40,7 +40,7 @@
         <TheButton
           :label="$t('back')"
           color="back"
-          @click="() => (selected = null)"
+          @click="() => $emit('setSelected', null)"
         />
         <TheButton label="GO !" color="primary" @click="startGame()" />
         <TheButton :label="$t('tutorial')" color="secondary" :disabled="true" />
