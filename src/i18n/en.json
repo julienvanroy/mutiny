@@ -1,4 +1,8 @@
 {
+  "lang": {
+    "fr": "French",
+    "en": "English"
+  },
   "back": "Back",
   "close": "Close",
   "tutorial": "Tutorial",
@@ -31,12 +35,23 @@
   },
 
   "parameters": {
+    "options": "Options",
     "difficulty": "Difficulty",
     "duration": "Duration",
+    "graphics": "Graphics",
+    "quality": "Quality",
     "controls": "Controls",
+    "audio": "Audio",
+    "languages": "Languages",
     "easy": "Easy",
     "normal": "Normal",
-    "hard": "Hard"
+    "hard": "Hard",
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "fullscreen": "Fullscreen",
+    "music": "Music",
+    "effects": "Effects"
   },
   "modes": {
     "1": {
