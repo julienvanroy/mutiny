@@ -27,6 +27,10 @@ export default {
     font-size: $ft-s-medium;
     font-weight: $ft-w-bold;
     text-align: center;
+    margin-bottom: 10px;
+  }
+  & + .option-container {
+    margin-top: 30px;
   }
 }
 </style>
