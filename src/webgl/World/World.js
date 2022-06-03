@@ -8,11 +8,12 @@ import Player from "@/webgl/World/Player";
 import { Pathfinding } from "three-pathfinding";
 import { diffArray, randomIntegerInRange, sample, shuffle, uuid } from "@/utils/index.js";
 import Bot from "./Bot.js";
-import MapLevel from "@/webgl/World/MapLevel";
+// import MapLevel from "@/webgl/World/MapLevel";
 import configs from "@/configs";
 import useColyseusStore from "@/store/colyseus.js";
-import Fireflies from "@/webgl/Mesh/Fireflies";
-import GerstnerWater from "@/webgl/Mesh/GerstnerWater";
+import Test from "@/webgl/Test";
+// import Fireflies from "@/webgl/Mesh/Fireflies";
+// import GerstnerWater from "@/webgl/Mesh/GerstnerWater";
 // import FogCustom from './Fog'
 
 export default class World extends component() {
@@ -32,6 +33,7 @@ export default class World extends component() {
         console.log("world is ready");
         this.environment = new Environment();
         // this.fog = new FogCustom();
+        /*
         this.gerstnerWater = new GerstnerWater();
         this.fireflies = new Fireflies(100);
         this.mapLevel = new MapLevel(this.group);
@@ -42,12 +44,15 @@ export default class World extends component() {
         this.item = new Item();
         this.boxCollision = new BoxCollision();
         */
+        /*
         this._initPathfinding();
         this._initCharacters();
         this._initBots();
 
         this._scene.add(this.group);
         this.onDebug();
+        */
+        new Test()
         this._isLoaded = true;
     }
 
@@ -185,13 +190,13 @@ export default class World extends component() {
         this.group.updateMatrixWorld();
     }
 
-    onRaf({ delta }) {
+    onRaf( ) {
         this._renderer.render(this._scene, this._camera);
 
         if (this._isLoaded) {
-            this._keyboard();
+            // this._keyboard();
 
-            this.waveRaf(delta);
+            // this.waveRaf(delta);
 
             /*
             TODO: Collision Items
