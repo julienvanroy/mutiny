@@ -65,7 +65,7 @@ export default {
           width: 21px;
           height: 24px;
           background-color: #fff3f2;
-          background-image: url("../assets/parameters/radio.png");
+          background-image: url("../../assets/parameters/radio.png");
           background-repeat: no-repeat;
           background-size: 100% 100%;
           transform-origin: center;
@@ -78,7 +78,7 @@ export default {
         }
         &:checked {
           &:before {
-            background-image: url("../assets/parameters/radio-checked.png");
+            background-image: url("../../assets/parameters/radio-checked.png");
             transform: scale(1.5);
             transition: 0.3s all ease-in-out;
           }

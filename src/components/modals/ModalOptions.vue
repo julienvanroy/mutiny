@@ -35,12 +35,12 @@
 </template>
 
 <script>
-import ModalContainer from "@/components/ModalContainer";
-import OptionContainer from "@/components/OptionContainer";
-import TheRadioer from "@/components/TheRadioer";
-import TheRanger from "@/components/TheRanger";
-import TheSwitcher from "@/components/TheSwitcher";
-import LangChanger from "@/components/LangChanger";
+import ModalContainer from "@/components/modals/ModalContainer";
+import OptionContainer from "@/components/parameters/OptionContainer";
+import TheRadioer from "@/components/parameters/TheRadioer";
+import TheRanger from "@/components/parameters/TheRanger";
+import TheSwitcher from "@/components/parameters/TheSwitcher";
+import LangChanger from "@/components/parameters/LangChanger";
 
 export default {
   name: "ModalOptions",

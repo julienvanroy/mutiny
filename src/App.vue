@@ -40,8 +40,8 @@ import TheLoader from "@/components/TheLoader";
 import { mapState } from "pinia";
 import { mapWritableState } from "pinia";
 import useWebglStore from "@/store/webgl";
-import ModalLandscape from "@/components/ModalLandscape";
-import ModalOptions from "@/components/ModalOptions";
+import ModalLandscape from "@/components/modals/ModalLandscape";
+import ModalOptions from "@/components/modals/ModalOptions";
 import useGlobalStore from "@/store/global";
 
 export default {

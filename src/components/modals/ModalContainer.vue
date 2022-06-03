@@ -57,7 +57,7 @@ export default {
   backdrop-filter: blur(4px);
   &__container {
     position: relative;
-    background-image: url("../assets/modal/background.png");
+    background-image: url("../../assets/modal/background.png");
     background-repeat: no-repeat;
     background-size: 100% 100%;
     width: 1024px;

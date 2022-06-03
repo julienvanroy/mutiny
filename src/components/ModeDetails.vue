@@ -55,8 +55,8 @@ import useColyseusStore from "@/store/colyseus";
 import router from "@/router";
 import bidello from "bidello";
 import TheButton from "@/components/TheButton.vue";
-import OptionContainer from "@/components/OptionContainer.vue";
-import TheRadioer from "@/components/TheRadioer.vue";
+import OptionContainer from "@/components/parameters/OptionContainer.vue";
+import TheRadioer from "@/components/parameters/TheRadioer.vue";
 
 export default {
   name: "ModeDetails",

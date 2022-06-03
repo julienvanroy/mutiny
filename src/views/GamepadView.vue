@@ -6,7 +6,7 @@
 <script>
 import GamePad from "@/components/GamePad.vue";
 import useColyseusStore from "@/store/colyseus";
-import ModalWaiting from "@/components/ModalWaiting";
+import ModalWaiting from "@/components/modals/ModalWaiting";
 
 export default {
   components: {ModalWaiting, GamePad },

@@ -46,7 +46,7 @@ export default {
         width: 32px;
         height: 32px;
         background-color: #ecded9;
-        background-image: url("../assets/parameters/button-off.png");
+        background-image: url("../../assets/parameters/button-off.png");
         background-repeat: no-repeat;
         background-size: 100% 100%;
         transform-origin: center;
@@ -59,7 +59,7 @@ export default {
       }
       &:checked {
         &:before {
-          background-image: url("../assets/parameters/button.png");
+          background-image: url("../../assets/parameters/button.png");
           transition: 0.3s all ease-in-out;
         }
         & + label {

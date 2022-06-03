@@ -112,7 +112,7 @@ import TheButton from "@/components/TheButton.vue";
 import bidello from "bidello";
 import CopyCode from "@/components/CopyCode";
 import QrCode from "@/components/QrCode";
-import ModalContainer from "@/components/ModalContainer";
+import ModalContainer from "@/components/modals/ModalContainer";
 import { Modes } from "@/data/modes";
 import ModeDetails from "@/components/ModeDetails.vue";
 

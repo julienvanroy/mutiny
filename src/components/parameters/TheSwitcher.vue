@@ -32,7 +32,7 @@ export default {
     display: inline-block;
     width: 80px;
     height: 24px;
-    background-image: url("../assets/parameters/switcher.png");
+    background-image: url("../../assets/parameters/switcher.png");
     background-repeat: no-repeat;
     background-size: 100% 100%;
     &::before,
@@ -74,7 +74,7 @@ export default {
         left: 0;
         -webkit-transition: 0.4s;
         transition: 0.4s;
-        background-image: url("../assets/parameters/button.png");
+        background-image: url("../../assets/parameters/button.png");
         background-repeat: no-repeat;
         background-size: 100% 100%;
         transform: translate(0%, -12%);

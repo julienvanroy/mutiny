@@ -71,7 +71,7 @@ export default {
       -webkit-appearance: none;
       height: 32px;
       width: 28px;
-      background-image: url("../assets/parameters/radio-checked.png");
+      background-image: url("../../assets/parameters/radio-checked.png");
       background-repeat: no-repeat;
       background-size: 100% 100%;
       cursor: pointer;
