@@ -1,16 +1,16 @@
 <template>
-  <div class="radioer">
+  <div :class="`radioer ${label}`">
     <p class="subtitle" v-if="!!subtitle">{{ subtitle }}</p>
     <div class="radios">
       <div class="radio" v-for="(value, idx) in values" :key="`val-${idx}`">
         <input
           type="radio"
-          :id="value"
+          :id="label + value"
           :name="label"
           :value="value"
           :defaultChecked="defaultValue === value"
         />
-        <label :for="value">{{ value }}</label>
+        <label :for="label + value">{{ value }}</label>
       </div>
     </div>
   </div>
@@ -57,6 +57,8 @@ export default {
       align-items: center;
       input[type="radio"] {
         position: relative;
+        width: 21px;
+        height: 24px;
         &:before {
           content: "";
           display: block;
@@ -66,7 +68,6 @@ export default {
           background-image: url("../assets/parameters/radio.png");
           background-repeat: no-repeat;
           background-size: 100% 100%;
-          transform: translate(-30%, -40%);
           transform-origin: center;
           transition: 0.3s all ease-in-out;
         }
@@ -77,9 +78,8 @@ export default {
         }
         &:checked {
           &:before {
-            width: 32px;
-            height: 36px;
             background-image: url("../assets/parameters/radio-checked.png");
+            transform: scale(1.5);
             transition: 0.3s all ease-in-out;
           }
         }
@@ -98,13 +98,24 @@ export default {
         input[type="radio"] {
           &:after {
             content: "";
-            width: 74px;
+            width: 80px;
             height: 2px;
             background-color: #dec5cc;
             position: absolute;
-            top: 0;
+            top: 50%;
             left: 0;
-            transform: translateX(-116%);
+            transform: translate(-114%, -50%);
+          }
+        }
+      }
+    }
+  }
+  &.graphics {
+    .radios {
+      .radio {
+        input[type="radio"] {
+          &:before {
+            background-color: #ecded9;
           }
         }
       }
