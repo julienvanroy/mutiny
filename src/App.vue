@@ -13,14 +13,21 @@
       <button @click="() => (showModalOptions = true)">
         <img src="images/icons/parameters.png" />
       </button>
-      <button v-show="isGamePath"><img src="images/icons/pause.png" /></button>
+      <button v-show="isGamePath" @click="setShowModalPause(true)">
+        <img src="images/icons/pause.png" />
+      </button>
     </div>
 
     <ModalLandscape />
     <ModalOptions
       v-if="!!showModalOptions"
       :setFullscreen="setFullscreen"
-      v-on:close-modal-options="closeModalOptions"
+      :setShowModalOptions="setShowModalOptions"
+    />
+
+    <ModalPause
+      v-if="!!showModalPause"
+      :setShowModalPause="setShowModalPause"
     />
 
     <div id="view">
@@ -42,6 +49,7 @@ import { mapWritableState } from "pinia";
 import useWebglStore from "@/store/webgl";
 import ModalLandscape from "@/components/modals/ModalLandscape";
 import ModalOptions from "@/components/modals/ModalOptions";
+import ModalPause from "@/components/modals/ModalPause";
 import useGlobalStore from "@/store/global";
 
 export default {
@@ -49,6 +57,7 @@ export default {
   components: {
     ModalLandscape,
     ModalOptions,
+    ModalPause,
     TheLoader,
     WebGl,
   },
@@ -61,6 +70,7 @@ export default {
   data() {
     return {
       showModalOptions: false,
+      showModalPause: false,
     };
   },
   mounted() {
@@ -83,11 +93,14 @@ export default {
         this.isFullscreen = true;
       }
     },
-    closeModalOptions() {
-      this.showModalOptions = false;
-    },
     playMusic() {
       this.music.play();
+    },
+    setShowModalOptions(val) {
+      this.showModalOptions = val;
+    },
+    setShowModalPause(val) {
+      this.showModalPause = val;
     },
   },
   computed: {

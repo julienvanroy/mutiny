@@ -51,7 +51,8 @@
     "high": "High",
     "fullscreen": "Fullscreen",
     "music": "Music",
-    "effects": "Effects"
+    "effects": "Effects",
+    "pause": "Paused"
   },
   "modes": {
     "1": {
