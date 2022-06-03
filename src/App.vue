@@ -1,10 +1,7 @@
 <template>
   <div class="main-container" ref="fullscreenContainer">
     <div class="fullscreen">
-      <button
-        v-if="showFullscreenBtn"
-        @click="!!isFullscreen ? closeFullscreen() : goFullscreen()"
-      >
+      <button v-if="showFullscreenBtn" @click="setFullscreen()">
         <img src="images/icons/fullscreen-on.png" />
       </button>
     </div>
@@ -13,13 +10,18 @@
       <button @click="playMusic">
         <img src="images/icons/sound-on.png" />
       </button>
-      <button>
+      <button @click="() => (showModalOptions = true)">
         <img src="images/icons/parameters.png" />
       </button>
       <button v-show="isGamePath"><img src="images/icons/pause.png" /></button>
     </div>
 
     <ModalLandscape />
+    <ModalOptions
+      v-if="!!showModalOptions"
+      :setFullscreen="setFullscreen"
+      v-on:close-modal-options="closeModalOptions"
+    />
 
     <div id="view">
       <router-view />
@@ -36,38 +38,53 @@ import { useRoute } from "vue-router";
 import { computed } from "vue";
 import TheLoader from "@/components/TheLoader";
 import { mapState } from "pinia";
-import { mapWritableState } from 'pinia'
+import { mapWritableState } from "pinia";
 import useWebglStore from "@/store/webgl";
 import ModalLandscape from "@/components/ModalLandscape";
+import ModalOptions from "@/components/ModalOptions";
 import useGlobalStore from "@/store/global";
 
 export default {
   name: "App",
-  components: {ModalLandscape, TheLoader, WebGl },
+  components: {
+    ModalLandscape,
+    ModalOptions,
+    TheLoader,
+    WebGl,
+  },
   setup() {
     const route = useRoute();
 
     const path = computed(() => route.path);
     return { path };
   },
+  data() {
+    return {
+      showModalOptions: false,
+    };
+  },
   mounted() {
-    this.resize()
-    window.addEventListener('resize', this.resize, false);
+    this.resize();
+    window.addEventListener("resize", this.resize, false);
   },
   beforeUnmount() {
-    window.removeEventListener('resize', this.resize, false);
+    window.removeEventListener("resize", this.resize, false);
   },
   methods: {
     resize() {
-      this.isLandscape = window.innerWidth > window.innerHeight
+      this.isLandscape = window.innerWidth > window.innerHeight;
     },
-    goFullscreen() {
-      this.$refs.fullscreenContainer.requestFullscreen();
-      this.isFullscreen = true;
+    setFullscreen() {
+      if (true === this.isFullscreen) {
+        document.exitFullscreen();
+        this.isFullscreen = false;
+      } else {
+        this.$refs.fullscreenContainer.requestFullscreen();
+        this.isFullscreen = true;
+      }
     },
-    closeFullscreen() {
-      document.exitFullscreen();
-      this.isFullscreen = false;
+    closeModalOptions() {
+      this.showModalOptions = false;
     },
     playMusic() {
       this.music.play();
