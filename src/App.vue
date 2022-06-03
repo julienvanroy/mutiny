@@ -36,7 +36,7 @@
 import WebGl from "@/components/WebGl";
 import { useRoute } from "vue-router";
 import { computed } from "vue";
-import TheLoader from "@/components/TheLoader";
+import TheLoader from "@/components/ui/TheLoader";
 import { mapState } from "pinia";
 import { mapWritableState } from "pinia";
 import useWebglStore from "@/store/webgl";

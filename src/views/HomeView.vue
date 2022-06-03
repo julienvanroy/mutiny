@@ -41,7 +41,7 @@
 
 <script>
 import useColyseusStore from "@/store/colyseus";
-import TheButton from "@/components/TheButton.vue";
+import TheButton from "@/components/ui/TheButton.vue";
 import { mapState } from "pinia/dist/pinia.esm-browser";
 import useGlobalStore from "@/store/global";
 

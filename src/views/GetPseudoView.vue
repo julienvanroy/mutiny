@@ -15,7 +15,7 @@
 <script>
 import useColyseusStore from "@/store/colyseus";
 import { PiratesNames } from "@/data/pirates-name";
-import TheButton from "@/components/TheButton.vue";
+import TheButton from "@/components/ui/TheButton.vue";
 import { diffArray, sample } from "@/utils";
 import router from "@/router";
 

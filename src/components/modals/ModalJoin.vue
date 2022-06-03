@@ -23,8 +23,8 @@
 
 <script>
 import ModalContainer from "@/components/modals/ModalContainer";
-import CopyCode from "@/components/CopyCode";
-import QrCode from "@/components/QrCode";
+import CopyCode from "@/components/ui/CopyCode";
+import QrCode from "@/components/ui/QrCode";
 
 export default {
   name: "ModalJoin",

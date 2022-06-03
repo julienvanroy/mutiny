@@ -95,9 +95,9 @@
 import useColyseusStore from "@/store/colyseus";
 import bidello from "bidello";
 import { Modes } from "@/data/modes";
-import TheButton from "@/components/TheButton.vue";
-import CopyCode from "@/components/CopyCode";
-import QrCode from "@/components/QrCode";
+import TheButton from "@/components/ui/TheButton.vue";
+import CopyCode from "@/components/ui/CopyCode";
+import QrCode from "@/components/ui/QrCode";
 import ModalJoin from "@/components/modals/ModalJoin";
 import ModalQrCode from "@/components/modals/ModalQrCode";
 import ModeDetails from "@/components/ModeDetails.vue";

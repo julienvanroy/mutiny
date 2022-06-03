@@ -54,7 +54,7 @@
 import useColyseusStore from "@/store/colyseus";
 import router from "@/router";
 import bidello from "bidello";
-import TheButton from "@/components/TheButton.vue";
+import TheButton from "@/components/ui/TheButton.vue";
 import OptionContainer from "@/components/parameters/OptionContainer.vue";
 import TheRadioer from "@/components/parameters/TheRadioer.vue";
 

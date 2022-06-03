@@ -13,7 +13,7 @@
 
 <script>
 import ModalContainer from "@/components/modals/ModalContainer";
-import QrCode from "@/components/QrCode";
+import QrCode from "@/components/ui/QrCode";
 
 export default {
   name: "ModalQrCode",

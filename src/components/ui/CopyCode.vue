@@ -33,7 +33,7 @@ export default {
 <style lang="scss" scoped>
 .copy-code {
   position: relative;
-  background-image: url("../assets/code/background.png");
+  background-image: url("../../assets/code/background.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
   width: 200px;
@@ -55,7 +55,7 @@ export default {
     }
   }
   button {
-    background-image: url("../assets/code/copy.png");
+    background-image: url("../../assets/code/copy.png");
     background-repeat: no-repeat;
     background-size: 100% 100%;
     border: none;
