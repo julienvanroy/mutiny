@@ -1,7 +1,7 @@
 <template>
   <div class="credits">
     <div class="back">
-      <TheButton link="/" :label="$t('back')" color="back" />
+      <TheButton link="/" :label="$t('ui.back')" color="back" />
     </div>
     <div class="credits__under">
       <img src="images/background-home.png" />

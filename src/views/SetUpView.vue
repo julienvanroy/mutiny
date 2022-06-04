@@ -1,7 +1,7 @@
 <template>
   <div class="setup">
     <div class="back">
-      <TheButton link="/" :label="$t('back')" color="back" />
+      <TheButton link="/" :label="$t('ui.back')" color="back" />
     </div>
 
     <div :class="`setup__under ${null !== selected ? 'details-open' : ''}`">

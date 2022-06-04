@@ -3,10 +3,17 @@
     "fr": "French",
     "en": "English"
   },
-  "back": "Back",
-  "close": "Close",
-  "tutorial": "Tutorial",
-  "waiting": "WAITING...",
+  "ui": {
+    "back": "Back",
+    "close": "Close",
+    "continue": "Continue",
+    "restart": "Restart",
+    "quit": "Quit",
+    "timeLeft": "Remaining time",
+    "tutorial": "Tutorial",
+    "waiting": "WAITING...",
+    "landscape": "Turn your phone to landscape view !!!"
+  },
   "homepage": {
     "credits": "Credits",
     "createRoom": "Create room",
@@ -26,14 +33,12 @@
       "title": "Your vessel"
     }
   },
-  "landscape": "Turn your phone to landscape view !!!",
   "gamepad": {
     "youAre": "you are",
     "clues": "clues",
     "attack": "Attack",
     "power": "Power"
   },
-
   "parameters": {
     "options": "Options",
     "difficulty": "Difficulty",

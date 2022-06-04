@@ -1,7 +1,7 @@
 <template>
   <transition name="fade">
     <div v-if="isMobile && !isLandscape" class="modal-landscape">
-      {{ $t('landscape') }}
+      {{ $t('ui.landscape') }}
     </div>
   </transition>
 </template>

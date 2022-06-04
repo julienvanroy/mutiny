@@ -3,10 +3,17 @@
     "fr": "Français",
     "en": "Anglais"
   },
-  "back": "Retour",
-  "close": "Fermer",
-  "tutorial": "Tutoriel",
-  "waiting": "EN ATTENTE...",
+  "ui": {
+    "back": "Retour",
+    "close": "Fermer",
+    "continue": "Continuer",
+    "restart": "Rejouer",
+    "quit": "Quitter",
+    "timeLeft": "Temps restant",
+    "tutorial": "Tutoriel",
+    "waiting": "EN ATTENTE...",
+    "landscape": "Tournez votre téléphone en vue paysage !!!"
+  },
   "homepage": {
     "credits": "Crédits",
     "createRoom": "Créer une partie",
@@ -26,14 +33,12 @@
       "title": "Votre navire"
     }
   },
-  "landscape": "Tournez votre téléphone en vue paysage !!!",
   "gamepad": {
     "youAre": "tu es",
     "clues": "indices",
     "attack": "Attaque",
     "power": "Pouvoir"
   },
-
   "parameters": {
     "options": "Options",
     "difficulty": "Difficulté",

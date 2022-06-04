@@ -38,12 +38,12 @@
       </div>
       <div class="actions">
         <TheButton
-          :label="$t('back')"
+          :label="$t('ui.back')"
           color="back"
           @click="() => $emit('setSelected', null)"
         />
         <TheButton label="GO !" color="primary" @click="startGame()" />
-        <TheButton :label="$t('tutorial')" color="secondary" :disabled="true" />
+        <TheButton :label="$t('ui.tutorial')" color="secondary" :disabled="true" />
       </div>
     </div>
   </div>
