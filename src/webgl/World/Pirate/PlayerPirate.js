@@ -1,13 +1,13 @@
 import { component } from "bidello";
 import { Box3, Line3, Matrix4, Quaternion, Vector2, Vector3 } from "three";
-import Experience from "../Experience";
-import Mover from "./Mover";
+import Experience from "../../Experience";
+import Pirate from "./Pirate";
 import { mapToArray, sample } from "@/utils";
 import configs from "@/configs";
-import Bot from "./Bot";
+import BotPirate from "./BotPirate";
 import useColyseusStore from "@/store/colyseus";
 
-export default class Player extends component(Mover) {
+export default class PlayerPirate extends component(Pirate) {
     constructor(playerId, collider) {
         super();
         this.id = playerId;
@@ -176,7 +176,7 @@ export default class Player extends component(Mover) {
             this.mesh.position.distanceTo(this.target.mesh.position) <= configs.character.range
         ) {
             console.log(`player ${this.id} killed their target ${this.target.id}`);
-            if (this.target instanceof Player) {
+            if (this.target instanceof PlayerPirate) {
                 this.target.respawn(this);
 
                 const playersWithSameTarget = mapToArray(this._players, true).filter(
@@ -217,11 +217,11 @@ export default class Player extends component(Mover) {
     }
 
     switchTarget() {
-        if (this.target instanceof Bot) {
+        if (this.target instanceof BotPirate) {
             this.target = sample(
                 Object.values(this._bots).filter((bot) => bot.id !== this.target.id && bot.id !== this.bot.id)
             );
-        } else if (this.target instanceof Player) {
+        } else if (this.target instanceof PlayerPirate) {
             this.target = sample(
                 mapToArray(this._players, true).filter((p) =>
                     this._players.size === 2 ? p.id !== this.id : p.id !== this.target.id && p.id !== this.id

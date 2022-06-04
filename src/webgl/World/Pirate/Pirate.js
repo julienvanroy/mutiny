@@ -8,10 +8,10 @@ import {
     MeshStandardMaterial,
     LoopOnce,
 } from "three";
-import Experience from "../Experience";
+import Experience from "../../Experience";
 import configs from "@/configs";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils";
-export default class Mover {
+export default class Pirate {
     constructor(body) {
         const experience = new Experience();
         this._scene = experience.scene;

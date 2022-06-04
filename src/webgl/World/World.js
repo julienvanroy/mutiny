@@ -2,18 +2,17 @@ import Environment from "./Environment.js";
 import { component } from "bidello";
 import Experience from "@/webgl/Experience";
 import { Euler, Group, Quaternion, Vector2, Vector3 } from "three";
-import Player from "@/webgl/World/Player";
+import PlayerPirate from "@/webgl/World/Pirate/PlayerPirate";
 //import Item from "@/webgl/World/Item";
 //import BoxCollision from "@/webgl/Collision/BoxCollision";
 import { Pathfinding } from "three-pathfinding";
 import { diffArray, randomIntegerInRange, sample, shuffle, uuid } from "@/utils/index.js";
-import Bot from "./Bot.js";
+import BotPirate from "./Pirate/BotPirate.js";
 import MapLevel from "@/webgl/World/MapLevel";
 import configs from "@/configs";
 import useColyseusStore from "@/store/colyseus.js";
 import Fireflies from "@/webgl/Mesh/Fireflies";
 import GerstnerWater from "@/webgl/Mesh/GerstnerWater";
-// import FogCustom from './Fog'
 
 export default class World extends component() {
     init() {
@@ -31,7 +30,6 @@ export default class World extends component() {
     onResourcesIsReady() {
         console.log("world is ready");
         this.environment = new Environment();
-        // this.fog = new FogCustom();
         this.gerstnerWater = new GerstnerWater();
         this.fireflies = new Fireflies(100);
         this.mapLevel = new MapLevel(this.group);
@@ -92,7 +90,7 @@ export default class World extends component() {
             initialPositions.push(position);
 
             const botId = uuid();
-            this.bots[botId] = new Bot(botId, position, this.characters[i], this.group);
+            this.bots[botId] = new BotPirate(botId, position, this.characters[i], this.group);
         }
     }
 
@@ -208,7 +206,7 @@ export default class World extends component() {
     }
 
     onAddPlayer({ playerId }) {
-        this.players.set(playerId, new Player(playerId, this.mapLevel.collider));
+        this.players.set(playerId, new PlayerPirate(playerId, this.mapLevel.collider));
         console.log(`player ${playerId} added`, this.players.get(playerId));
     }
 
@@ -283,8 +281,8 @@ export default class World extends component() {
 
         console.log(this.players);
         this.players.forEach((p) => {
-            if (p.target instanceof Player) p.target._setBot();
-            else if (p.target instanceof Bot) p._setBot();
+            if (p.target instanceof PlayerPirate) p.target._setBot();
+            else if (p.target instanceof BotPirate) p._setBot();
 
             useColyseusStore().updatePlayerTarget(p.id, p._getTargetData());
 

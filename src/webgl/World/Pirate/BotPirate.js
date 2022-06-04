@@ -1,13 +1,13 @@
 import { component } from "bidello";
 import { PathfindingHelper } from "three-pathfinding";
-import Mover from "./Mover";
-import Experience from "../Experience";
+import Pirate from "./Pirate";
+import Experience from "../../Experience";
 import configs from "@/configs";
 import { randomNumberInRange } from "@/utils";
 
 const { character: confCharacter } = configs;
 const { animation: confAnimation } = confCharacter;
-export default class Bot extends component(Mover) {
+export default class BotPirate extends component(Pirate) {
     constructor(botId, position, body, group) {
         super(body);
         this._group = group;
