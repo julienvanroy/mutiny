@@ -47,7 +47,7 @@ export default {
         return value < 10 ? `0${value}` : value;
       };
 
-      return `${toString(minutes)}:${toString(seconds)}`;
+      return `${toString(minutes)}'${toString(seconds)}''`;
     }
   },
   mounted() {
@@ -84,12 +84,7 @@ export default {
 
 <style lang="scss" scoped>
 .timer {
-  font-size: $ft-s-xlarge;
-  position: absolute;
-  top: 10%;
-  left: 50%;
-  transform: translateX(-50%);
-  color: white;
-  z-index: 999;
+  font-size: $ft-s-medium;
+  font-weight: $ft-w-bold;
 }
 </style>
