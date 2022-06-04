@@ -1,7 +1,7 @@
 <template>
   <transition name="fade">
     <div class="modal">
-      <div class="modal__container">
+      <div :class="`modal__container ${!!isPause ? 'pause' : ''}`">
         <div class="modal__container-inner">
           <h2 class="title">{{ this.title }}</h2>
           <div class="content">
@@ -9,10 +9,24 @@
           </div>
           <div class="btn-container">
             <TheButton
-              :label="btnLabel ? btnLabel : $t('close')"
+              v-if="!!isPause"
+              :label="$t('ui.restart')"
+              color="secondary"
+            />
+            <TheButton
+              :label="btnLabel ? btnLabel : $t('ui.close')"
               color="primary"
               @click="this.btnAction"
             />
+            <TheButton
+              v-if="!!isPause"
+              :label="$t('ui.quit')"
+              color="secondary"
+            />
+          </div>
+          <div class="timer-container">
+            <p>{{ $t("ui.timeLeft") }}</p>
+            <TheTimer />
           </div>
         </div>
       </div>
@@ -22,10 +36,11 @@
 
 <script>
 import TheButton from "@/components/ui/TheButton.vue";
+import TheTimer from "@/components/ui/TheTimer";
 
 export default {
   name: "ModalContainer",
-  components: { TheButton },
+  components: { TheButton, TheTimer },
   props: {
     title: {
       type: String,
@@ -37,6 +52,10 @@ export default {
     },
     btnAction: {
       required: true,
+    },
+    isPause: {
+      type: Boolean,
+      default: false,
     },
   },
 };
@@ -63,6 +82,7 @@ export default {
     width: 1024px;
     height: 720px;
     &-inner {
+      position: relative;
       width: 100%;
       height: 100%;
       padding: 100px 100px 80px 100px;
@@ -83,6 +103,30 @@ export default {
         bottom: 0;
         left: 50%;
         transform: translateX(-50%);
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        button + button {
+          margin-left: 20px;
+        }
+      }
+      .timer-container {
+        position: absolute;
+        top: 100px;
+        right: 150px;
+        p {
+          font-size: $ft-s-xsmall;
+        }
+        .timer {
+          text-align: right;
+        }
+      }
+    }
+    &.pause {
+      background-image: url("../../assets/modal/background-pause.png");
+      .btn-container {
+        bottom: 15px;
       }
     }
   }

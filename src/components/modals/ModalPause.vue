@@ -2,7 +2,9 @@
   <transition name="fade">
     <ModalContainer
       :title="$t('parameters.pause')"
+      :btnLabel="$t('ui.continue')"
       :btnAction="() => setShowModalPause(false)"
+      :isPause="true"
     >
       <div class="modal__pause">
         <div class="modal__pause-left">
