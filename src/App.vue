@@ -10,24 +10,23 @@
       <button @click="playMusic">
         <img src="images/icons/sound-on.png" />
       </button>
-      <button @click="() => (showModalOptions = true)">
+      <button @click="() => modalShown = 'options'">
         <img src="images/icons/parameters.png" />
       </button>
-      <button v-show="isGamePath" @click="setShowModalPause(true)">
+      <button v-show="isGamePath" @click="() => modalShown = 'pause'">
         <img src="images/icons/pause.png" />
       </button>
     </div>
 
     <ModalLandscape />
     <ModalOptions
-      v-if="!!showModalOptions"
+      v-if="'options' === modalShown"
       :setFullscreen="setFullscreen"
-      :setShowModalOptions="setShowModalOptions"
     />
 
     <ModalPause
-      v-if="!!showModalPause"
-      :setShowModalPause="setShowModalPause"
+      v-if="'pause' === modalShown"
+      :setFullscreen="setFullscreen"
     />
 
     <div id="view">
@@ -67,12 +66,6 @@ export default {
     const path = computed(() => route.path);
     return { path };
   },
-  data() {
-    return {
-      showModalOptions: false,
-      showModalPause: false,
-    };
-  },
   mounted() {
     this.resize();
     window.addEventListener("resize", this.resize, false);
@@ -96,17 +89,11 @@ export default {
     playMusic() {
       this.music.play();
     },
-    setShowModalOptions(val) {
-      this.showModalOptions = val;
-    },
-    setShowModalPause(val) {
-      this.showModalPause = val;
-    },
   },
   computed: {
     ...mapState(useWebglStore, ["audio"]),
     ...mapState(useGlobalStore, ["isMobile", "showFullscreenBtn"]),
-    ...mapWritableState(useGlobalStore, ["isFullscreen", "isLandscape"]),
+    ...mapWritableState(useGlobalStore, ["isFullscreen", "isLandscape", "modalShown"]),
     music() {
       return this.audio.musicGame;
     },

@@ -65,7 +65,7 @@
         <h2>{{ $t("setup.codeTitle") }}</h2>
         <div class="connection__inner">
           <div class="code"><CopyCode :code="colyseus.currentRoom.id" /></div>
-          <div class="qrcode" @click="setShowModalQRCode(true)">
+          <div class="qrcode" @click="() => modalShown = 'qrcode'">
             <QrCode />
           </div>
         </div>
@@ -79,20 +79,20 @@
     />
 
     <ModalJoin
-      v-if="!!showModalJoin"
+      v-if="'join' === modalShown"
       :roomId="colyseus.currentRoom.id"
-      :setShowModalJoin="setShowModalJoin"
     />
 
     <ModalQrCode
-      v-if="!!showModalQRCode"
-      :setShowModalQRCode="setShowModalQRCode"
+      v-if="'qrcode' === modalShown"
     />
   </div>
 </template>
 
 <script>
+import { mapWritableState } from "pinia";
 import useColyseusStore from "@/store/colyseus";
+import useGlobalStore from "@/store/global";
 import bidello from "bidello";
 import { Modes } from "@/data/modes";
 import TheButton from "@/components/ui/TheButton.vue";
@@ -134,6 +134,8 @@ export default {
     );
 
     this.colyseus.currentRoom.onMessage("getAllPlayers", () => {});
+
+    this.modalShown = 'join';
   },
   methods: {
     mouseHover(isAvailable, value) {
@@ -143,12 +145,9 @@ export default {
     setSelected(val) {
       this.selected = val;
     },
-    setShowModalJoin(val) {
-      this.showModalJoin = val;
-    },
-    setShowModalQRCode(val) {
-      this.showModalQRCode = val;
-    },
+  },
+  computed: {
+    ...mapWritableState(useGlobalStore, ["modalShown"]),
   },
 };
 </script>

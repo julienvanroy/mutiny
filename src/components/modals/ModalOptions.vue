@@ -2,7 +2,6 @@
   <transition name="fade">
     <ModalContainer
       :title="$t('parameters.options')"
-      :btnAction="() => setShowModalOptions(false)"
     >
       <div class="modal__options">
         <div class="modal__options-left">
@@ -54,7 +53,6 @@ export default {
   },
   props: {
     setFullscreen: { type: Function },
-    setShowModalOptions: { type: Function },
   },
 };
 </script>

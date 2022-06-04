@@ -3,7 +3,6 @@
     <ModalContainer
       :title="$t('parameters.pause')"
       :btnLabel="$t('ui.continue')"
-      :btnAction="() => setShowModalPause(false)"
       :isPause="true"
     >
       <div class="modal__pause">
@@ -52,7 +51,7 @@ export default {
     TheSwitcher,
   },
   props: {
-    setShowModalPause: { type: Function },
+    setFullscreen: { type: Function },
   },
 };
 </script>

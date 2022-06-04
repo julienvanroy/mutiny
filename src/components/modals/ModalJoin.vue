@@ -3,7 +3,6 @@
     <ModalContainer
       :title="$t('setup.modalJoin.title')"
       btnLabel="Ok"
-      :btnAction="() => setShowModalJoin(false)"
     >
       <div class="modal__join">
         <p v-html="$t('setup.modalJoin.description')" />
@@ -35,7 +34,6 @@ export default {
   },
   props: {
     roomId: { type: String, required: true },
-    setShowModalJoin: { type: Function },
   },
 };
 </script>

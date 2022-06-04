@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import {stringToBoolean} from "@/utils";
 
-const useGlobalStore = defineStore("webgl", {
+const useGlobalStore = defineStore("global", {
     state: () => {
         return {
             isDebug: stringToBoolean(process.env.VUE_APP_DEBUG),
@@ -9,6 +9,7 @@ const useGlobalStore = defineStore("webgl", {
             showFullscreenBtn: !(/iPhone|iPad|iPod/i.test(navigator.userAgent) || /^((?!chrome|android).)*safari/i.test(navigator.userAgent)),
             isFullscreen: false,
             isLandscape: true,
+            modalShown: null,
         };
     },
 });

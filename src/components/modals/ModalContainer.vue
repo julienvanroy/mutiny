@@ -16,7 +16,12 @@
             <TheButton
               :label="btnLabel ? btnLabel : $t('ui.close')"
               color="primary"
-              @click="this.btnAction"
+              @click="
+                () => {
+                  this.modalShown = null;
+                  !!this.btnAction && this.btnAction;
+                }
+              "
             />
             <TheButton
               v-if="!!isPause"
@@ -24,7 +29,7 @@
               color="secondary"
             />
           </div>
-          <div class="timer-container">
+          <div v-if="!!isPause" class="timer-container">
             <p>{{ $t("ui.timeLeft") }}</p>
             <TheTimer />
           </div>
@@ -35,6 +40,8 @@
 </template>
 
 <script>
+import { mapWritableState } from "pinia";
+import useGlobalStore from "@/store/global";
 import TheButton from "@/components/ui/TheButton.vue";
 import TheTimer from "@/components/ui/TheTimer";
 
@@ -51,12 +58,16 @@ export default {
       required: false,
     },
     btnAction: {
-      required: true,
+      type: Function,
+      required: false,
     },
     isPause: {
       type: Boolean,
       default: false,
     },
+  },
+  computed: {
+    ...mapWritableState(useGlobalStore, ["modalShown"]),
   },
 };
 </script>

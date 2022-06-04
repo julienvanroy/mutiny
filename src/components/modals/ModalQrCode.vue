@@ -2,7 +2,6 @@
   <transition name="fade">
     <ModalContainer
       :title="$t('setup.modalQRCode.title')"
-      :btnAction="() => setShowModalQRCode(false)"
     >
       <div class="modal__qrcode">
         <div class="qrcode"><QrCode /></div>
@@ -20,9 +19,6 @@ export default {
   components: {
     ModalContainer,
     QrCode,
-  },
-  props: {
-    setShowModalQRCode: { type: Function },
   },
 };
 </script>
