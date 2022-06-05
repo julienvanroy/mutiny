@@ -1,37 +1,49 @@
-import {
-    Mesh,
-    Color,
-    AnimationClip,
-    AnimationMixer,
-    CircleGeometry,
-    MeshBasicMaterial,
-    MeshStandardMaterial,
-    LoopOnce,
-} from "three";
+import {Mesh, Color, AnimationClip, AnimationMixer, CircleGeometry, MeshBasicMaterial, MeshStandardMaterial, LoopOnce} from "three";
 import Experience from "../../Experience";
 import configs from "@/configs";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils";
+import {sample} from "@/utils";
 export default class Pirate {
-    constructor(body) {
+    constructor(body = null) {
         const experience = new Experience();
-        this._scene = experience.scene;
+        this._group = experience.world.group;
         this._resources = experience.resources.items;
         this.charaResource = experience.resources.items.characterModel;
 
-        if (body) {
-            this._initModel(body);
-            this._initAnimation();
+        this.body = body;
+
+        if (!this.body) this.generateBody()
+        this._initModel();
+        this._initAnimation();
+    }
+
+    generateBody() {
+        this.body = {}
+        for (const [key, value] of Object.entries(configs.character.body)) {
+            this.body[key] = {
+                tag: key,
+                alphaTexture: value.alphaTexture,
+                shuffleMesh: value.shuffleMesh,
+                addColor: value.addColor,
+                meshes: value.meshes,
+                mesh: value.shuffleMesh
+                    ? sample(
+                        value.meshes.map(({ name, texture, color: colors }) => ({
+                            name,
+                            texture,
+                            color: colors ? sample(colors) : undefined,
+                        }))
+                    )
+                    : undefined,
+            };
         }
     }
 
-    _initModel(body) {
+    _initModel() {
         this.mesh = clone(this.charaResource.scene);
 
         this.mesh.position.set(0, 0, 0);
-        this._scene.add(this.mesh);
-
-        // Generative chara
-        this.body = body;
+        this._group.add(this.mesh);
 
         let rangeColor;
 
@@ -132,14 +144,6 @@ export default class Pirate {
 
         this.animation.actions.current = this.animation.actions.walk;
         this.animation.play("walk");
-    }
-
-    _getPlayerData() {
-        const { bodyData } = this;
-        return {
-            id: this.id,
-            info: bodyData.map(({ tag, color, show }) => ({ tag, color, show })),
-        };
     }
 
     _getTargetData() {

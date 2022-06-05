@@ -1,7 +1,7 @@
 import Environment from "./Environment.js";
 import { component } from "bidello";
 import Experience from "@/webgl/Experience";
-import { Euler, Group, Quaternion, Vector2, Vector3 } from "three";
+import { Euler, Group, Quaternion, Vector3 } from "three";
 import PlayerPirate from "@/webgl/World/Pirate/PlayerPirate";
 //import Item from "@/webgl/World/Item";
 //import BoxCollision from "@/webgl/Collision/BoxCollision";
@@ -21,7 +21,6 @@ export default class World extends component() {
         this._renderer = experience.renderer;
         this._scene = experience.scene;
         this._camera = experience.camera;
-        this._controls = experience.controls;
         this.group = new Group();
 
         this._isLoaded = false;
@@ -150,25 +149,6 @@ export default class World extends component() {
         this.characters = shuffle(this.characters);
     }
 
-    _keyboard() {
-        const player = this.players.get("debug");
-        if (!this._debug.active || !this._controls.isPressed || !player) return;
-
-        const vectorControls = new Vector2();
-
-        if (this._controls.actions.up && this._controls.actions.down) vectorControls.y = 0;
-        else if (this._controls.actions.up) vectorControls.y = 1;
-        else if (this._controls.actions.down) vectorControls.y = -1;
-        else vectorControls.y = 0;
-
-        if (this._controls.actions.right && this._controls.actions.left) vectorControls.x = 0;
-        else if (this._controls.actions.right) vectorControls.x = 1;
-        else if (this._controls.actions.left) vectorControls.x = -1;
-        else vectorControls.x = 0;
-
-        player.vectorControls = vectorControls;
-    }
-
     waveRaf(delta) {
         const waveInfo = this.gerstnerWater.getWaveInfo(
             this.group.position.x,
@@ -187,8 +167,6 @@ export default class World extends component() {
         this._renderer.render(this._scene, this._camera);
 
         if (this._isLoaded) {
-            this._keyboard();
-
             this.waveRaf(delta);
 
             /*
@@ -227,7 +205,10 @@ export default class World extends component() {
         const btnAddPlayer = folderDebug.addButton({
             title: "addPlayer",
         });
-        btnAddPlayer.on("click", () => this.onAddPlayer({ playerId: "debug" }));
+        btnAddPlayer.on("click", () => {
+            this.onAddPlayer({ playerId: "debug" })
+            btnAddPlayer.dispose()
+        });
     }
 
     assignTargets() {

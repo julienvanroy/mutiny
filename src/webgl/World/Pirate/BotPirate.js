@@ -8,15 +8,17 @@ import { randomNumberInRange } from "@/utils";
 const { character: confCharacter } = configs;
 const { animation: confAnimation } = confCharacter;
 export default class BotPirate extends component(Pirate) {
-    constructor(botId, position, body, group) {
-        super(body);
-        this._group = group;
+    constructor(botId, position, body) {
+        super(body, botId, position);
+    }
 
-        this.id = botId;
+    init() {
+        this.id = this._args[1];
+        const position = this._args[2]
+
         this.isPlayer = false;
 
         const experience = new Experience();
-        this._group.add(this.mesh);
         this._pathfinding = experience.world.pathfinding;
 
         this._helper = new PathfindingHelper();

@@ -1,5 +1,5 @@
 import { component } from "bidello";
-import { Box3, Line3, Matrix4, Quaternion, Vector2, Vector3 } from "three";
+import {Box3, Line3, Matrix4, Quaternion, Vector2, Vector3} from "three";
 import Experience from "../../Experience";
 import Pirate from "./Pirate";
 import { mapToArray, sample } from "@/utils";
@@ -8,20 +8,23 @@ import BotPirate from "./BotPirate";
 import useColyseusStore from "@/store/colyseus";
 
 export default class PlayerPirate extends component(Pirate) {
-    constructor(playerId, collider) {
-        super();
-        this.id = playerId;
-        this._collider = collider;
+    constructor(playerId, collider, group, body) {
+        super(body, playerId, collider);
     }
 
     init() {
+        this.id = this._args[1];
+        this._collider = this._args[2];
+
         const experience = new Experience();
-        this._scene = experience.scene;
+        this._debug = experience.debug
+        this._controls = experience.controls;
 
         this._bots = experience.world.bots;
         this._players = experience.world.players;
 
         this._vectorControls = new Vector2();
+        this._speedMove = configs.character.speed
         this._targetQuaternion = new Quaternion();
         this._speedRotation = 10;
 
@@ -40,11 +43,31 @@ export default class PlayerPirate extends component(Pirate) {
             vector: new Vector3(),
             vector2: new Vector3(),
         };
+
+        this._useKeyboard = false
+
+        this.onDebug()
     }
 
     set vectorControls(value) {
         this._vectorControls.x = value.x;
         this._vectorControls.y = value.y;
+    }
+
+    _keyboard() {
+        if (!this._debug.active || !this._useKeyboard) return;
+
+        const vectorControls = this._vectorControls
+
+        if (this._controls.actions.up && this._controls.actions.down) vectorControls.y = 0;
+        else if (this._controls.actions.up) vectorControls.y = 1;
+        else if (this._controls.actions.down) vectorControls.y = -1;
+        else vectorControls.y = 0;
+
+        if (this._controls.actions.right && this._controls.actions.left) vectorControls.x = 0;
+        else if (this._controls.actions.right) vectorControls.x = 1;
+        else if (this._controls.actions.left) vectorControls.x = -1;
+        else vectorControls.x = 0;
     }
 
     get isMoving() {
@@ -53,8 +76,8 @@ export default class PlayerPirate extends component(Pirate) {
 
     _move(delta) {
         if (this.isMoving) {
-            this.mesh.position.z -= this._vectorControls.y * delta * configs.character.speed;
-            this.mesh.position.x += this._vectorControls.x * delta * configs.character.speed;
+            this.mesh.position.z -= this._vectorControls.y * delta * this._speedMove;
+            this.mesh.position.x += this._vectorControls.x * delta * this._speedMove;
         }
     }
 
@@ -155,6 +178,7 @@ export default class PlayerPirate extends component(Pirate) {
     }
 
     onRaf({ delta }) {
+        this._keyboard()
         this._move(delta);
         this._rotation(delta);
 
@@ -236,5 +260,39 @@ export default class PlayerPirate extends component(Pirate) {
                 this.target.bot ? `of bot ${this.target.bot.id}` : ""
             }`
         );
+    }
+
+    onDebug() {
+        if(!this._debug.active) return
+
+        const folderDebug = this._debug.pane.addFolder({
+            title: `Player ${this.id}`,
+            expanded: false,
+        });
+
+        folderDebug.addInput(this, '_useKeyboard', {
+            label: "Use Keyboard",
+        })
+
+        folderDebug.addInput(this, '_speedMove', {
+            label: "Speed Move",
+            step: 0.01,
+            min: 0,
+            max: 20,
+        })
+
+        folderDebug.addInput(this, '_speedRotation', {
+            label: "Speed Rotation",
+            step: 0.01,
+            min: 0,
+            max: 30,
+        })
+
+        folderDebug.addInput(this, '_gravity', {
+            label: "Gravity",
+            step: 0.01,
+            min: -100,
+            max: 0,
+        })
     }
 }
