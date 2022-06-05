@@ -44,7 +44,7 @@ export default class PlayerPirate extends component(Pirate) {
             vector2: new Vector3(),
         };
 
-        this._useKeyboard = false
+        this._useKeyboard = this.id === 'debug'
 
         this.onDebug()
     }
