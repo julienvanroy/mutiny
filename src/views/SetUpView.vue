@@ -1,7 +1,7 @@
 <template>
   <div class="setup">
     <div class="back">
-      <TheButton link="/" :label="$t('ui.back')" color="back" />
+      <TheButton link="/" :label="$t('ui.quit')" color="back" />
     </div>
 
     <div :class="`setup__under ${null !== selected ? 'details-open' : ''}`">
@@ -20,7 +20,8 @@
           @click="() => setSelected(mode)"
         >
           <div v-if="!!mode.isAvailable" class="content">
-            <p class="uptitle">Mode</p>
+            <img class="flag" :src="`images/setup/flag${idx === hovered ? '-hover' : ''}.png`" />
+            <p :class="`uptitle ${idx === hovered ? 'hovered' : ''}`">Mode</p>
             <h2>{{ $t(mode.name) }}</h2>
           </div>
           <img :src="`images/setup/boat_${idx + 1}.png`" />
@@ -33,9 +34,7 @@
       </div>
 
       <div class="catch-phrase">
-        <p v-if="hovered !== null">
-          {{ $t(modes[hovered].shortDescription) }}
-        </p>
+        <p v-if="hovered !== null" v-html="$t(modes[hovered].shortDescription)" />
       </div>
     </div>
 
@@ -43,7 +42,8 @@
       <div class="players">
         <h1>{{ $t("setup.playersTitle") }}</h1>
         <div class="placeholder" v-if="!colyseus.players.length">
-          <p v-html="$t('setup.playersPlaceholder')" />
+          <p class="placeholder" v-html="$t('setup.playersPlaceholder')" />
+          <p class="infos" v-html="$t('setup.infos')" />
         </div>
         <ul v-if="0 < colyseus.players.length">
           <li
@@ -65,7 +65,7 @@
         <h2>{{ $t("setup.codeTitle") }}</h2>
         <div class="connection__inner">
           <div class="code"><CopyCode :code="colyseus.currentRoom.id" /></div>
-          <div class="qrcode" @click="() => modalShown = 'qrcode'">
+          <div class="qrcode" @click="() => (modalShown = 'qrcode')">
             <QrCode />
           </div>
         </div>
@@ -78,14 +78,9 @@
       :mode="selected"
     />
 
-    <ModalJoin
-      v-if="'join' === modalShown"
-      :roomId="colyseus.currentRoom.id"
-    />
+    <ModalJoin v-if="'join' === modalShown" :roomId="colyseus.currentRoom.id" />
 
-    <ModalQrCode
-      v-if="'qrcode' === modalShown"
-    />
+    <ModalQrCode v-if="'qrcode' === modalShown" />
   </div>
 </template>
 
@@ -135,7 +130,7 @@ export default {
 
     this.colyseus.currentRoom.onMessage("getAllPlayers", () => {});
 
-    this.modalShown = 'join';
+    this.modalShown = "join";
   },
   methods: {
     mouseHover(isAvailable, value) {
@@ -173,7 +168,7 @@ export default {
     z-index: 14;
     top: 0;
     left: 0;
-    width: 480px;
+    width: 560px;
     height: 100%;
     display: flex;
     flex-flow: column nowrap;
@@ -186,20 +181,26 @@ export default {
       background-image: url("../assets/setup/player-board.png");
       background-repeat: no-repeat;
       background-size: 100% 100%;
-      padding: 70px;
+      padding: 70px 100px 100px;
       h1 {
         margin: 0;
         text-align: center;
         font-weight: $ft-w-bold;
       }
       .placeholder {
-        min-height: 320px;
+        min-height: 280px;
         display: flex;
+        flex-flow: column nowrap;
         justify-content: center;
         align-items: center;
-        p {
-          text-align: center;
-          font-size: $ft-s-small;
+        text-align: center;
+        font-size: $ft-s-small;
+        .placeholder {
+          color: rgba($purple, .4);
+        }
+        .infos {
+          border-top: 2px solid $purple;
+          padding-top: 32px;
         }
       }
       ul {
@@ -325,7 +326,7 @@ export default {
       position: absolute;
       right: 0;
       bottom: 0;
-      width: calc(100% - 480px);
+      width: calc(100% - 560px);
       height: 100%;
       display: flex;
       justify-content: center;
@@ -354,14 +355,24 @@ export default {
         }
         .content {
           position: absolute;
-          top: 27%;
+          top: 22%;
           left: 0;
           right: 0;
           width: 80%;
           margin: auto;
+          .flag {
+            width: 80px;
+            transition: .3s all ease-in-out;
+          }
           .uptitle {
             font-style: italic;
             font-size: $ft-s-xsmall;
+            color: rgba($purple, .4);
+            transition: .3s all ease-in-out;
+            &.hovered {
+              color: $purple;
+              transition: .3s all ease-in-out;
+            }
           }
           h2 {
             font-weight: $ft-w-bold;
