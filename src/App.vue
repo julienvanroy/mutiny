@@ -10,7 +10,7 @@
       <button @click="playMusic">
         <img src="images/icons/sound-on.png" />
       </button>
-      <button @click="() => modalShown = 'options'">
+      <button v-show="!isGamePath" @click="() => modalShown = 'options'">
         <img src="images/icons/parameters.png" />
       </button>
       <button v-show="isGamePath" @click="() => modalShown = 'pause'">
