@@ -16,21 +16,30 @@
   },
   "homepage": {
     "credits": "Crédits",
-    "createRoom": "Créer une partie",
-    "homePhraseDesktop": "Un téléphone par moussaillon est requis pour contrôler votre personnage",
-    "homePhraseMobile": "Rejoignez une partie depuis le jeu sur ordinateur"
+    "createRoom": "Créer un navire",
+    "homePhraseDesktop": "Un téléphone par joueur est requis pour contrôler son moussaillon.",
+    "homePhraseMobile": "Rejoignez une partie depuis le jeu sur ordinateur",
+    "infosPlayers": "3 à 8 joueurs",
+    "infosEquipments": "1 téléphone par joueur<br />+ 1 ordinateur"
   },
   "setup": {
-    "playersTitle": "Tonneaux",
-    "playersPlaceholder": "Pour rejoindre la partie, allez sur <strong>Mutiny.com</strong> avec <strong>votre téléphone</strong>.",
-    "codeTitle": "Votre navire",
+    "playersTitle": "L'équipage",
+    "playersPlaceholder": "Aucun moussaillon sur le pont...<br/>“bruits de criquets”",
+    "infos": "Pour intégrer l’équipage, va sur <strong>Mutiny.com</strong> avec <strong>ton téléphone</strong>.",
+    "codeTitle": "Rejoins le navire"
+  },
+  "modals": {
     "modalJoin": {
       "title": "Rejoins le navire",
-      "description": "Pour rejoindre la partie, allez sur <strong>Mutiny.com</strong> avec <strong>votre téléphone</strong> et entrez le code suivant :",
-      "or": "Ou"
+      "description": "Entre le code ci-dessous sur <strong>Mutiny.com</strong> avec <strong>ton téléphone</strong> ou bien flash directement le QR code.",
+      "or": "Ou",
+      "btnLabel": "Hissez oh !"
     },
     "modalQRCode": {
-      "title": "Votre navire"
+      "title": "Ton navire"
+    },
+    "modalOptions": {
+      "btnLabel": "Ohé !"
     }
   },
   "gamepad": {
@@ -43,7 +52,7 @@
     "options": "Options",
     "difficulty": "Difficulté",
     "duration": "Durée",
-    "graphics": "Résolution",
+    "graphics": "Performances",
     "quality": "Qualité",
     "controls": "Contrôles",
     "audio": "Audio",
@@ -62,8 +71,9 @@
   "modes": {
     "1": {
       "name": "Traqueurs Traqués",
-      "shortDescription": "je suis la short description je suis la short descriptionje suis la short descriptionje suis la short description",
-      "description": "Tu veux devenir le capitaine du navire ? Gagne le plus de points de terreur en attaquant tes adversaires. Les indices de ta prochaine cible sont sur ton tableau de bord. Bon vent !"
+      "shortDescription": "Faufile-toi parmi l’équipage, évince tes rivaux et renverse le cap’taine.<br/>Que la silencieuse mutinerie commence !",
+      "description": "Tu veux devenir le cap’taine du navire ? Gagne le plus de points de terreur en attaquant tes adversaires. Les indices de ta prochaine cible sont sur ton tableau de bord. Bon vent !",
+      "btnGo": "À l’aborrrdage !"
     }
   }
 }

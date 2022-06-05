@@ -110,7 +110,7 @@ export default {
       }
     }
   }
-  &.graphics {
+  /* &.graphics {
     .radios {
       .radio {
         input[type="radio"] {
@@ -120,6 +120,6 @@ export default {
         }
       }
     }
-  }
+  } */
 }
 </style>

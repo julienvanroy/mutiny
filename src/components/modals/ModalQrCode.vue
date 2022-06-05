@@ -1,7 +1,7 @@
 <template>
   <transition name="fade">
     <ModalContainer
-      :title="$t('setup.modalQRCode.title')"
+      :title="$t('modals.modalQRCode.title')"
     >
       <div class="modal__qrcode">
         <div class="qrcode"><QrCode /></div>

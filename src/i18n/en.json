@@ -16,21 +16,30 @@
   },
   "homepage": {
     "credits": "Credits",
-    "createRoom": "Create room",
-    "homePhraseDesktop": "One phone per shipwright is required to control your character",
-    "homePhraseMobile": "Join a game from a computer gascreenme"
+    "createRoom": "Create a vessel",
+    "homePhraseDesktop": "One phone per player is required to control their shipmate",
+    "homePhraseMobile": "Join a game from a computer gascreenme",
+    "infosPlayers": "3 to 8 players",
+    "infosEquipments": "1 phone per player<br />+ 1 computer"
   },
   "setup": {
-    "playersTitle": "Barrels",
-    "playersPlaceholder": "To join the game, go to <strong>Mutiny.com</strong> with <strong>your phone</strong>.",
-    "codeTitle": "Your vessel",
+    "playersTitle": "The crew",
+    "playersPlaceholder": "No sailors on deck...<br/>“sounds of crickets“",
+    "infos": "To join the crew, go to <strong>Mutiny.com</strong> with <strong>your phone</strong>.",
+    "codeTitle": "Join the vessel"
+  },
+  "modals": {
     "modalJoin": {
-      "title": "Join the ship",
-      "description": "To join the game, go to <strong>Mutiny.com</strong> with <strong>your phone</strong> and enter the following code:",
-      "or": "Or"
+      "title": "Join the vessel",
+      "description": "Enter the code below on <strong>Mutiny.com</strong> with <strong>your phone</strong> or flash the QR code directly.",
+      "or": "Or",
+      "btnLabel": "Heave-ho!"
     },
     "modalQRCode": {
       "title": "Your vessel"
+    },
+    "modalOptions": {
+      "btnLabel": "Ahoy!"
     }
   },
   "gamepad": {
@@ -43,7 +52,7 @@
     "options": "Options",
     "difficulty": "Difficulty",
     "duration": "Duration",
-    "graphics": "Graphics",
+    "graphics": "Performance",
     "quality": "Quality",
     "controls": "Controls",
     "audio": "Audio",
@@ -62,8 +71,9 @@
   "modes": {
     "1": {
       "name": "Stalkers Stalked",
-      "shortDescription": "i am the short description",
-      "description": "Do you want to be the captain of the ship? Earn the most terror points by attacking your opponents. The clues to your next target are on your dashboard. Have a nice trip!"
+      "shortDescription": "Sneak into the crew, oust your rivals and overthrow the captain.<br/>Let the silent mutiny begin!",
+      "description": "Do you want to be the captain of the ship? Earn the most terror points by attacking your opponents. The clues to your next target are on your dashboard. Have a nice trip!",
+      "btnGo": "On boooaard!"
     }
   }
 }
