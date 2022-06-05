@@ -20,7 +20,10 @@
           @click="() => setSelected(mode)"
         >
           <div v-if="!!mode.isAvailable" class="content">
-            <img class="flag" :src="`images/setup/flag${idx === hovered ? '-hover' : ''}.png`" />
+            <img
+              class="flag"
+              :src="`images/setup/flag${idx === hovered ? '-hover' : ''}.png`"
+            />
             <p :class="`uptitle ${idx === hovered ? 'hovered' : ''}`">Mode</p>
             <h2>{{ $t(mode.name) }}</h2>
           </div>
@@ -34,45 +37,19 @@
       </div>
 
       <div class="catch-phrase">
-        <p v-if="hovered !== null" v-html="$t(modes[hovered].shortDescription)" />
+        <p
+          v-if="hovered !== null"
+          v-html="$t(modes[hovered].shortDescription)"
+        />
       </div>
     </div>
 
     <div class="setup__over">
-      <div class="players">
-        <h1>{{ $t("setup.playersTitle") }}</h1>
-        <div class="placeholder" v-if="!colyseus.players.length">
-          <p class="placeholder" v-html="$t('setup.playersPlaceholder')" />
-          <p class="infos" v-html="$t('setup.infos')" />
-        </div>
-        <ul v-if="0 < colyseus.players.length">
-          <li
-            class="player"
-            v-for="player in colyseus.players"
-            :key="player.id"
-          >
-            <div class="player__infos">
-              <img :src="`images/players/${player.color}.png`" />
-              <span>{{ player.name }}</span>
-            </div>
-            <div class="player__state">
-              <img src="images/icons/valid.png" />
-            </div>
-          </li>
-        </ul>
-      </div>
-      <div class="connection">
-        <h2>{{ $t("setup.codeTitle") }}</h2>
-        <div class="connection__inner">
-          <div class="code"><CopyCode :code="colyseus.currentRoom.id" /></div>
-          <div class="qrcode" @click="() => (modalShown = 'qrcode')">
-            <QrCode />
-          </div>
-        </div>
-      </div>
+      <SetUpPlayers />
+      <SetUpConnection />
     </div>
 
-    <ModeDetails
+    <SetUpModeDetails
       v-if="null !== selected"
       v-on:set-selected="setSelected"
       :mode="selected"
@@ -90,22 +67,22 @@ import useColyseusStore from "@/store/colyseus";
 import useGlobalStore from "@/store/global";
 import bidello from "bidello";
 import { Modes } from "@/data/modes";
-import TheButton from "@/components/ui/TheButton.vue";
-import CopyCode from "@/components/ui/CopyCode";
-import QrCode from "@/components/ui/QrCode";
+import TheButton from "@/components/ui/TheButton";
 import ModalJoin from "@/components/modals/ModalJoin";
 import ModalQrCode from "@/components/modals/ModalQrCode";
-import ModeDetails from "@/components/ModeDetails.vue";
+import SetUpModeDetails from "@/components/SetUpModeDetails";
+import SetUpPlayers from "@/components/SetUpPlayers";
+import SetUpConnection from "@/components/SetUpConnection";
 
 export default {
   name: "SetUpView",
   components: {
     TheButton,
-    CopyCode,
-    QrCode,
     ModalJoin,
     ModalQrCode,
-    ModeDetails,
+    SetUpModeDetails,
+    SetUpPlayers,
+    SetUpConnection
   },
   setup() {
     const colyseus = useColyseusStore();
@@ -175,110 +152,6 @@ export default {
     justify-content: center;
     align-items: center;
     padding-left: 60px;
-
-    .players {
-      width: 100%;
-      background-image: url("../assets/setup/player-board.png");
-      background-repeat: no-repeat;
-      background-size: 100% 100%;
-      padding: 70px 100px 100px;
-      h1 {
-        margin: 0;
-        text-align: center;
-        font-weight: $ft-w-bold;
-      }
-      .placeholder {
-        min-height: 280px;
-        display: flex;
-        flex-flow: column nowrap;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        font-size: $ft-s-small;
-        .placeholder {
-          color: rgba($purple, .4);
-        }
-        .infos {
-          border-top: 2px solid $purple;
-          padding-top: 32px;
-        }
-      }
-      ul {
-        height: 320px;
-        padding: 0;
-        margin: 0;
-        overflow-y: scroll;
-        .player {
-          width: 100%;
-          list-style: none;
-          height: 50px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 10px 20px;
-          &__infos {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            img {
-              width: 30px;
-            }
-            span {
-              font-weight: $ft-w-bold;
-              margin-left: 16px;
-            }
-          }
-          &__state {
-            img {
-              width: 30px;
-            }
-          }
-        }
-      }
-    }
-    .connection {
-      background-image: url("../assets/setup/connection.png");
-      background-repeat: no-repeat;
-      background-size: 100% 100%;
-      padding: 20px 30px;
-      height: 160px;
-      width: 100%;
-      max-width: 380px;
-      margin: 20px auto 0;
-      display: flex;
-      flex-flow: column nowrap;
-      justify-content: space-around;
-      align-items: center;
-      h2 {
-        font-size: $ft-s-small;
-        font-weight: $ft-w-bold;
-        color: $white;
-        text-align: center;
-      }
-      &__inner {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        .code {
-          padding-right: 20px;
-        }
-        .qrcode {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border-left: 2px solid $salmon;
-          padding-left: 20px;
-          img {
-            width: 60px;
-          }
-          @media (any-hover: hover) {
-            &:hover {
-              cursor: pointer;
-            }
-          }
-        }
-      }
-    }
   }
 
   &__under {
@@ -362,16 +235,16 @@ export default {
           margin: auto;
           .flag {
             width: 80px;
-            transition: .3s all ease-in-out;
+            transition: 0.3s all ease-in-out;
           }
           .uptitle {
             font-style: italic;
             font-size: $ft-s-xsmall;
-            color: rgba($purple, .4);
-            transition: .3s all ease-in-out;
+            color: rgba($purple, 0.4);
+            transition: 0.3s all ease-in-out;
             &.hovered {
               color: $purple;
-              transition: .3s all ease-in-out;
+              transition: 0.3s all ease-in-out;
             }
           }
           h2 {

@@ -68,7 +68,7 @@ import OptionContainer from "@/components/parameters/OptionContainer.vue";
 import TheRadioer from "@/components/parameters/TheRadioer.vue";
 
 export default {
-  name: "ModeDetails",
+  name: "SetUpModeDetails",
   components: { TheButton, OptionContainer, TheRadioer },
   setup() {
     const colyseus = useColyseusStore();
