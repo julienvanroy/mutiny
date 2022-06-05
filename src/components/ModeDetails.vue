@@ -38,12 +38,12 @@
       </div>
       <div class="actions">
         <TheButton
-          :label="$t('back')"
+          :label="$t('ui.back')"
           color="back"
           @click="() => $emit('setSelected', null)"
         />
         <TheButton label="GO !" color="primary" @click="startGame()" />
-        <TheButton :label="$t('tutorial')" color="secondary" :disabled="true" />
+        <TheButton :label="$t('ui.tutorial')" color="secondary" :disabled="true" />
       </div>
     </div>
   </div>
@@ -54,9 +54,9 @@
 import useColyseusStore from "@/store/colyseus";
 import router from "@/router";
 import bidello from "bidello";
-import TheButton from "@/components/TheButton.vue";
-import OptionContainer from "@/components/OptionContainer.vue";
-import TheRadioer from "@/components/TheRadioer.vue";
+import TheButton from "@/components/ui/TheButton.vue";
+import OptionContainer from "@/components/parameters/OptionContainer.vue";
+import TheRadioer from "@/components/parameters/TheRadioer.vue";
 
 export default {
   name: "ModeDetails",

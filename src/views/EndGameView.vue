@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import TheButton from "@/components/TheButton.vue";
+import TheButton from "@/components/ui/TheButton.vue";
 import useColyseusStore from "@/store/colyseus";
 
 export default {

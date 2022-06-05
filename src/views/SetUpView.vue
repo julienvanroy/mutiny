@@ -1,7 +1,7 @@
 <template>
   <div class="setup">
     <div class="back">
-      <TheButton link="/" :label="$t('back')" color="back" />
+      <TheButton link="/" :label="$t('ui.back')" color="back" />
     </div>
 
     <div :class="`setup__under ${null !== selected ? 'details-open' : ''}`">
@@ -65,60 +65,53 @@
         <h2>{{ $t("setup.codeTitle") }}</h2>
         <div class="connection__inner">
           <div class="code"><CopyCode :code="colyseus.currentRoom.id" /></div>
-          <div class="qrcode">
-            <QrCode @click="() => (showModalQRCode = true)" />
+          <div class="qrcode" @click="() => modalShown = 'qrcode'">
+            <QrCode />
           </div>
         </div>
       </div>
     </div>
 
-    <ModeDetails v-if="null !== selected" v-on:set-selected="setSelected" :mode="selected" />
+    <ModeDetails
+      v-if="null !== selected"
+      v-on:set-selected="setSelected"
+      :mode="selected"
+    />
+
+    <ModalJoin
+      v-if="'join' === modalShown"
+      :roomId="colyseus.currentRoom.id"
+    />
+
+    <ModalQrCode
+      v-if="'qrcode' === modalShown"
+    />
   </div>
-
-  <ModalContainer
-    v-if="!!showModalJoin"
-    :title="$t('setup.modalJoin.title')"
-    btnLabel="Ok"
-    :btnAction="() => (showModalJoin = false)"
-  >
-    <div class="modal-join-content">
-      <p v-html="$t('setup.modalJoin.description')" />
-      <div class="connection">
-        <div class="connection__code">
-          <CopyCode :code="colyseus.currentRoom.id" />
-        </div>
-        <span>{{ $t("setup.modalJoin.or") }}</span>
-        <div class="connection__qrcode">
-          <div class="connection__qrcode_inner"><QrCode /></div>
-        </div>
-      </div>
-    </div>
-  </ModalContainer>
-
-  <ModalContainer
-    v-if="!!showModalQRCode"
-    :title="$t('setup.modalQRCode.title')"
-    :btnAction="() => (showModalQRCode = false)"
-  >
-    <div class="modal-qrcode-content">
-      <div class="qrcode"><QrCode /></div>
-    </div>
-  </ModalContainer>
 </template>
 
 <script>
+import { mapWritableState } from "pinia";
 import useColyseusStore from "@/store/colyseus";
-import TheButton from "@/components/TheButton.vue";
+import useGlobalStore from "@/store/global";
 import bidello from "bidello";
-import CopyCode from "@/components/CopyCode";
-import QrCode from "@/components/QrCode";
-import ModalContainer from "@/components/ModalContainer";
 import { Modes } from "@/data/modes";
+import TheButton from "@/components/ui/TheButton.vue";
+import CopyCode from "@/components/ui/CopyCode";
+import QrCode from "@/components/ui/QrCode";
+import ModalJoin from "@/components/modals/ModalJoin";
+import ModalQrCode from "@/components/modals/ModalQrCode";
 import ModeDetails from "@/components/ModeDetails.vue";
 
 export default {
   name: "SetUpView",
-  components: { CopyCode, QrCode, TheButton, ModalContainer, ModeDetails },
+  components: {
+    TheButton,
+    CopyCode,
+    QrCode,
+    ModalJoin,
+    ModalQrCode,
+    ModeDetails,
+  },
   setup() {
     const colyseus = useColyseusStore();
     return { colyseus };
@@ -141,6 +134,8 @@ export default {
     );
 
     this.colyseus.currentRoom.onMessage("getAllPlayers", () => {});
+
+    this.modalShown = 'join';
   },
   methods: {
     mouseHover(isAvailable, value) {
@@ -148,8 +143,11 @@ export default {
       this.hovered = value;
     },
     setSelected(val) {
-      this.selected = val
-    }
+      this.selected = val;
+    },
+  },
+  computed: {
+    ...mapWritableState(useGlobalStore, ["modalShown"]),
   },
 };
 </script>
@@ -416,58 +414,6 @@ export default {
         text-shadow: $purple 1px 0 10px;
       }
     }
-  }
-}
-
-.modal-join-content {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: space-evenly;
-  align-items: center;
-  p {
-    max-width: 560px;
-    text-align: center;
-    font-size: $ft-s-medium;
-  }
-  .connection {
-    width: 100%;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: stretch;
-    .connection__code,
-    .connection__qrcode {
-      min-width: 200px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      box-shadow: inset 0px 0px 16px rgba(222, 197, 204, 0.8);
-      border-radius: 4px;
-      padding: 50px;
-      .qrcode_inner {
-        width: 100px;
-      }
-    }
-    span {
-      height: 100%;
-      display: flex;
-      align-items: center;
-      font-size: $ft-s-small;
-      font-weight: $ft-w-bold;
-    }
-  }
-}
-
-.modal-qrcode-content {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: space-evenly;
-  align-items: center;
-  .qrcode {
-    width: 300px;
   }
 }
 

@@ -87,10 +87,10 @@ export default {
   &-primary {
     color: $white;
     &:before {
-      background-image: url("../assets/buttons/primary.png");
+      background-image: url("../../assets/buttons/primary.png");
     }
     &:after {
-      background-image: url("../assets/buttons/primary-shadow.png");
+      background-image: url("../../assets/buttons/primary-shadow.png");
     }
     a,
     span {
@@ -99,10 +99,10 @@ export default {
   }
   &-secondary {
     &:before {
-      background-image: url("../assets/buttons/secondary.png");
+      background-image: url("../../assets/buttons/secondary.png");
     }
     &:after {
-      background-image: url("../assets/buttons/secondary-shadow.png");
+      background-image: url("../../assets/buttons/secondary-shadow.png");
     }
   }
   &-tertiary {
@@ -113,10 +113,10 @@ export default {
       font-size: $ft-s-xsmall;
     }
     &:before {
-      background-image: url("../assets/buttons/tertiary.png");
+      background-image: url("../../assets/buttons/tertiary.png");
     }
     &:after {
-      background-image: url("../assets/buttons/tertiary-shadow.png");
+      background-image: url("../../assets/buttons/tertiary-shadow.png");
     }
   }
   &-back {
@@ -127,10 +127,10 @@ export default {
       font-size: $ft-s-xsmall;
     }
     &:before {
-      background-image: url("../assets/buttons/back.png");
+      background-image: url("../../assets/buttons/back.png");
     }
     &:after {
-      background-image: url("../assets/buttons/back-shadow.png");
+      background-image: url("../../assets/buttons/back-shadow.png");
     }
   }
 

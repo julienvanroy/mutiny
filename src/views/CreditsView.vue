@@ -1,7 +1,7 @@
 <template>
   <div class="credits">
     <div class="back">
-      <TheButton link="/" :label="$t('back')" color="back" />
+      <TheButton link="/" :label="$t('ui.back')" color="back" />
     </div>
     <div class="credits__under">
       <img src="images/background-home.png" />
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import TheButton from "@/components/TheButton.vue";
+import TheButton from "@/components/ui/TheButton.vue";
 
 export default {
   name: "CreditsView",

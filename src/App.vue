@@ -1,10 +1,7 @@
 <template>
   <div class="main-container" ref="fullscreenContainer">
     <div class="fullscreen">
-      <button
-        v-if="showFullscreenBtn"
-        @click="!!isFullscreen ? closeFullscreen() : goFullscreen()"
-      >
+      <button v-if="showFullscreenBtn" @click="setFullscreen()">
         <img src="images/icons/fullscreen-on.png" />
       </button>
     </div>
@@ -13,13 +10,24 @@
       <button @click="playMusic">
         <img src="images/icons/sound-on.png" />
       </button>
-      <button>
+      <button @click="() => modalShown = 'options'">
         <img src="images/icons/parameters.png" />
       </button>
-      <button v-show="isGamePath"><img src="images/icons/pause.png" /></button>
+      <button v-show="isGamePath" @click="() => modalShown = 'pause'">
+        <img src="images/icons/pause.png" />
+      </button>
     </div>
 
     <ModalLandscape />
+    <ModalOptions
+      v-if="'options' === modalShown"
+      :setFullscreen="setFullscreen"
+    />
+
+    <ModalPause
+      v-if="'pause' === modalShown"
+      :setFullscreen="setFullscreen"
+    />
 
     <div id="view">
       <router-view />
@@ -34,16 +42,24 @@
 import WebGl from "@/components/WebGl";
 import { useRoute } from "vue-router";
 import { computed } from "vue";
-import TheLoader from "@/components/TheLoader";
+import TheLoader from "@/components/ui/TheLoader";
 import { mapState } from "pinia";
-import { mapWritableState } from 'pinia'
+import { mapWritableState } from "pinia";
 import useWebglStore from "@/store/webgl";
-import ModalLandscape from "@/components/ModalLandscape";
+import ModalLandscape from "@/components/modals/ModalLandscape";
+import ModalOptions from "@/components/modals/ModalOptions";
+import ModalPause from "@/components/modals/ModalPause";
 import useGlobalStore from "@/store/global";
 
 export default {
   name: "App",
-  components: {ModalLandscape, TheLoader, WebGl },
+  components: {
+    ModalLandscape,
+    ModalOptions,
+    ModalPause,
+    TheLoader,
+    WebGl,
+  },
   setup() {
     const route = useRoute();
 
@@ -51,23 +67,24 @@ export default {
     return { path };
   },
   mounted() {
-    this.resize()
-    window.addEventListener('resize', this.resize, false);
+    this.resize();
+    window.addEventListener("resize", this.resize, false);
   },
   beforeUnmount() {
-    window.removeEventListener('resize', this.resize, false);
+    window.removeEventListener("resize", this.resize, false);
   },
   methods: {
     resize() {
-      this.isLandscape = window.innerWidth > window.innerHeight
+      this.isLandscape = window.innerWidth > window.innerHeight;
     },
-    goFullscreen() {
-      this.$refs.fullscreenContainer.requestFullscreen();
-      this.isFullscreen = true;
-    },
-    closeFullscreen() {
-      document.exitFullscreen();
-      this.isFullscreen = false;
+    setFullscreen() {
+      if (true === this.isFullscreen) {
+        document.exitFullscreen();
+        this.isFullscreen = false;
+      } else {
+        this.$refs.fullscreenContainer.requestFullscreen();
+        this.isFullscreen = true;
+      }
     },
     playMusic() {
       this.music.play();
@@ -76,7 +93,7 @@ export default {
   computed: {
     ...mapState(useWebglStore, ["audio"]),
     ...mapState(useGlobalStore, ["isMobile", "showFullscreenBtn"]),
-    ...mapWritableState(useGlobalStore, ["isFullscreen", "isLandscape"]),
+    ...mapWritableState(useGlobalStore, ["isFullscreen", "isLandscape", "modalShown"]),
     music() {
       return this.audio.musicGame;
     },

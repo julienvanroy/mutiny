@@ -1,9 +1,11 @@
 <template>
   <div class="homepage">
-        <LocaleChanger />
-
     <div class="credits">
-      <TheButton link="/credits" :label="$t('homepage.credits')" color="tertiary" />
+      <TheButton
+        link="/credits"
+        :label="$t('homepage.credits')"
+        color="tertiary"
+      />
     </div>
 
     <div class="homepage__under">
@@ -39,14 +41,13 @@
 
 <script>
 import useColyseusStore from "@/store/colyseus";
-import TheButton from "@/components/TheButton.vue";
+import TheButton from "@/components/ui/TheButton.vue";
 import { mapState } from "pinia/dist/pinia.esm-browser";
 import useGlobalStore from "@/store/global";
-import LocaleChanger from "@/components/LocaleChanger";
 
 export default {
   name: "App",
-  components: { TheButton, LocaleChanger },
+  components: { TheButton },
   setup() {
     const colyseus = useColyseusStore();
     return { colyseus };

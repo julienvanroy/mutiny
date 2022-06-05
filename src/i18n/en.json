@@ -1,8 +1,19 @@
 {
-  "back": "Back",
-  "close": "Close",
-  "tutorial": "Tutorial",
-  "waiting": "WAITING...",
+  "lang": {
+    "fr": "French",
+    "en": "English"
+  },
+  "ui": {
+    "back": "Back",
+    "close": "Close",
+    "continue": "Continue",
+    "restart": "Restart",
+    "quit": "Quit",
+    "timeLeft": "Remaining time",
+    "tutorial": "Tutorial",
+    "waiting": "WAITING...",
+    "landscape": "Turn your phone to landscape view !!!"
+  },
   "homepage": {
     "credits": "Credits",
     "createRoom": "Create room",
@@ -22,21 +33,31 @@
       "title": "Your vessel"
     }
   },
-  "landscape": "Turn your phone to landscape view !!!",
   "gamepad": {
     "youAre": "you are",
     "clues": "clues",
     "attack": "Attack",
     "power": "Power"
   },
-
   "parameters": {
+    "options": "Options",
     "difficulty": "Difficulty",
     "duration": "Duration",
+    "graphics": "Graphics",
+    "quality": "Quality",
     "controls": "Controls",
+    "audio": "Audio",
+    "languages": "Languages",
     "easy": "Easy",
     "normal": "Normal",
-    "hard": "Hard"
+    "hard": "Hard",
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "fullscreen": "Fullscreen",
+    "music": "Music",
+    "effects": "Effects",
+    "pause": "Paused"
   },
   "modes": {
     "1": {

@@ -1,8 +1,19 @@
 {
-  "back": "Retour",
-  "close": "Fermer",
-  "tutorial": "Tutoriel",
-  "waiting": "EN ATTENTE...",
+  "lang": {
+    "fr": "Français",
+    "en": "Anglais"
+  },
+  "ui": {
+    "back": "Retour",
+    "close": "Fermer",
+    "continue": "Continuer",
+    "restart": "Rejouer",
+    "quit": "Quitter",
+    "timeLeft": "Temps restant",
+    "tutorial": "Tutoriel",
+    "waiting": "EN ATTENTE...",
+    "landscape": "Tournez votre téléphone en vue paysage !!!"
+  },
   "homepage": {
     "credits": "Crédits",
     "createRoom": "Créer une partie",
@@ -22,21 +33,31 @@
       "title": "Votre navire"
     }
   },
-  "landscape": "Tournez votre téléphone en vue paysage !!!",
   "gamepad": {
     "youAre": "tu es",
     "clues": "indices",
     "attack": "Attaque",
     "power": "Pouvoir"
   },
-
   "parameters": {
+    "options": "Options",
     "difficulty": "Difficulté",
     "duration": "Durée",
+    "graphics": "Résolution",
+    "quality": "Qualité",
     "controls": "Contrôles",
+    "audio": "Audio",
+    "languages": "Langues",
     "easy": "Facile",
     "normal": "Normal",
-    "hard": "Difficile"
+    "hard": "Difficile",
+    "low": "Basse",
+    "medium": "Moyenne",
+    "high": "Haute",
+    "fullscreen": "Plein écran",
+    "music": "Musique",
+    "effects": "Effets",
+    "pause": "Pause"
   },
   "modes": {
     "1": {
