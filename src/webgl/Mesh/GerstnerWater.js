@@ -7,7 +7,7 @@ import fragmentShader from "@/shaders/water/water.frag"
 
 export default class GerstnerWater extends component() {
     init() {
-        const waterGeometry = new PlaneGeometry(4096, 4096, 256, 256)
+        const waterGeometry = new PlaneGeometry(256, 256, 256, 256)
         const experience = new Experience()
         this._debug = experience.debug
         this._scene = experience.scene
@@ -30,7 +30,7 @@ export default class GerstnerWater extends component() {
             distortionScale: 8,
             fog: true,
         })
-        
+
         this.water.material.wireframe = false
         this.water.rotation.x = -Math.PI / 2
         this.water.material.onBeforeCompile = (
