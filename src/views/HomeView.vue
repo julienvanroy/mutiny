@@ -22,6 +22,16 @@
         <p>
           {{ $t("homepage.homePhraseDesktop") }}
         </p>
+        <div class="infos">
+          <div>
+            <img src="images/icons/players.png" />
+            <span>{{ $t("homepage.infosPlayers") }}</span>
+          </div>
+          <div>
+            <img src="images/icons/equipments.png" />
+            <span v-html="$t('homepage.infosEquipments')"></span>
+          </div>
+        </div>
       </div>
       <div v-if="!!isMobile" class="btn-container">
         <TheButton
@@ -108,8 +118,36 @@ export default {
       p {
         color: $white;
         font-size: $ft-s-small;
+        font-weight: $ft-w-bold;
         text-align: center;
         margin-top: 30px;
+      }
+      .infos {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 64px;
+        div {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          img {
+            width: 30px;
+            margin-right: 16px;
+          }
+          span {
+            color: $white;
+            font-size: $ft-s-xsmall;
+            text-align: center;
+          }
+          &:first-of-type {
+            padding-right: 32px;
+          }
+          & + div {
+            padding-left: 32px;
+            border-left: 2px solid $white;
+          }
+        }
       }
     }
   }
