@@ -24,6 +24,7 @@ export default class PlayerPirate extends component(Pirate) {
         this._players = experience.world.players;
 
         this._vectorControls = new Vector2();
+        this._speedRun = 2
         this._speedMove = configs.character.speed
         this._targetQuaternion = new Quaternion();
         this._speedRotation = 10;
@@ -76,8 +77,9 @@ export default class PlayerPirate extends component(Pirate) {
 
     _move(delta) {
         if (this.isMoving) {
-            this.mesh.position.z -= this._vectorControls.y * delta * this._speedMove;
-            this.mesh.position.x += this._vectorControls.x * delta * this._speedMove;
+            const boostRun = this._vectorControls.length() > 0.5 ? this._speedRun : 1;
+            this.mesh.position.z -= this._vectorControls.y * delta * this._speedMove * boostRun
+            this.mesh.position.x += this._vectorControls.x * delta * this._speedMove * boostRun;
         }
     }
 
@@ -276,6 +278,13 @@ export default class PlayerPirate extends component(Pirate) {
 
         folderDebug.addInput(this, '_speedMove', {
             label: "Speed Move",
+            step: 0.01,
+            min: 0,
+            max: 20,
+        })
+
+        folderDebug.addInput(this, '_speedRun', {
+            label: "Speed Run",
             step: 0.01,
             min: 0,
             max: 20,
