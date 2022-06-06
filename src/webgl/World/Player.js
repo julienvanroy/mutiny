@@ -151,7 +151,7 @@ export default class Player extends component(Mover) {
         this.bot.isPlayer = true;
         this.mesh = this.bot.mesh;
 
-        super._initAnimation();
+        this._initAnimation();
     }
 
     onRaf({ delta }) {
@@ -163,7 +163,12 @@ export default class Player extends component(Mover) {
          */
         //this._updateCollision(delta)
 
-        if (this.animation && this.animation.mixer) this.animation.mixer.update(delta);
+        if (this.animation) {
+            if (this.animation.mixer) this.animation.mixer.update(delta);
+
+            if (!this.isMoving) this.animation.play("idle");
+            else if (this.animation.actions.current !== this.animation.actions.walk) this.animation.play("walk");
+        }
     }
 
     onKill({ playerId }) {
@@ -176,6 +181,7 @@ export default class Player extends component(Mover) {
             this.mesh.position.distanceTo(this.target.mesh.position) <= configs.character.range
         ) {
             console.log(`player ${this.id} killed their target ${this.target.id}`);
+            this.target.animation.play("dead");
             if (this.target instanceof Player) {
                 this.target.respawn(this);
 
