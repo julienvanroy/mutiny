@@ -1,7 +1,7 @@
 <template>
   <div class="switcher">
     <span class="label">{{ $t("parameters.fullscreen") }}</span>
-    <label class="switch">
+    <label :class="`switch ${!isFullscreen ? 'off' : ''}`">
       <input
         type="checkbox"
         :checked="isFullscreen"
@@ -13,8 +13,14 @@
 </template>
 
 <script>
+import useGlobalStore from "@/store/global";
+import { mapState } from "pinia";
+
 export default {
   name: "TheSwitcher",
+  computed: {
+    ...mapState(useGlobalStore, ["isFullscreen"]),
+  },
 };
 </script>
 
@@ -35,6 +41,11 @@ export default {
     background-image: url("../../assets/parameters/switcher.png");
     background-repeat: no-repeat;
     background-size: 100% 100%;
+    transition: 0.3s all ease-in-out;
+    &.off {
+      background-image: url("../../assets/parameters/switcher-off.png");
+      transition: 0.3s all ease-in-out;
+    }
     &::before,
     &::after {
       position: absolute;
