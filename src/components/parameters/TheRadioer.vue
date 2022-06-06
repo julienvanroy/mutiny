@@ -64,7 +64,7 @@ export default {
           display: block;
           width: 21px;
           height: 24px;
-          background-color: #fff3f2;
+          background-color: #FEF4F3;
           background-image: url("../../assets/parameters/radio.png");
           background-repeat: no-repeat;
           background-size: 100% 100%;
@@ -110,16 +110,5 @@ export default {
       }
     }
   }
-  /* &.graphics {
-    .radios {
-      .radio {
-        input[type="radio"] {
-          &:before {
-            background-color: #ecded9;
-          }
-        }
-      }
-    }
-  } */
 }
 </style>

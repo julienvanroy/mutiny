@@ -45,7 +45,7 @@ export default {
         display: block;
         width: 32px;
         height: 32px;
-        background-color: #ecded9;
+        background-color: #FEF4F3;
         background-image: url("../../assets/parameters/button-off.png");
         background-repeat: no-repeat;
         background-size: 100% 100%;
