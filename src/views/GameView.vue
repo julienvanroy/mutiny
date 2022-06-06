@@ -1,6 +1,10 @@
 <template>
   <ul class="players">
-    <li v-for="player in colyseus.players" :key="player.id" :class="`player ${player.color}`">
+    <li
+      v-for="player in colyseus.players"
+      :key="player.id"
+      :class="`player ${player.color}`"
+    >
       <div class="points">
         <img src="/images/players/points.png" />
         <span>{{ player.points }}</span>
@@ -8,8 +12,12 @@
       <span class="name">{{ player.name }}</span>
     </li>
   </ul>
-  <router-link to="end-game"><button class="end-btn">END GAME</button></router-link>
-  <TheTimer />
+  <router-link to="end-game"
+    ><button class="end-btn">END GAME</button></router-link
+  >
+  <div class="timer-container">
+    <TheTimer />
+  </div>
 </template>
 
 <script>
@@ -34,9 +42,15 @@ export default {
 
     this.colyseus.currentRoom.onMessage("getPlayer", () => {});
 
-    this.colyseus.currentRoom.onMessage("joystick", ({ playerSessionId, playerPosition }) => {
-      bidello.trigger({ name: "movePlayer" }, { playerId: playerSessionId, vector2: playerPosition });
-    });
+    this.colyseus.currentRoom.onMessage(
+      "joystick",
+      ({ playerSessionId, playerPosition }) => {
+        bidello.trigger(
+          { name: "movePlayer" },
+          { playerId: playerSessionId, vector2: playerPosition }
+        );
+      }
+    );
 
     this.colyseus.currentRoom.onMessage("kill", ({ playerSessionId }) => {
       bidello.trigger({ name: "kill" }, { playerId: playerSessionId });
@@ -108,5 +122,22 @@ export default {
   position: absolute;
   top: 80px;
   right: 20px;
+}
+
+.timer-container {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  z-index: 10;
+  transform: translateX(-50%);
+  background-image: url("../assets/timer/timer.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  width: 126px;
+  height: 80px;
+  padding-bottom: 12px
 }
 </style>
