@@ -108,26 +108,36 @@ export default class Mover {
         this.animation.actions = {};
 
         this.animation.actions.walk = this.animation.mixer.clipAction(
-            AnimationClip.findByName(this.charaResource.animations, "Arret_01")
+            AnimationClip.findByName(this.charaResource.animations, "Marche_01")
         );
+
         this.animation.actions.idle = this.animation.mixer.clipAction(
             AnimationClip.findByName(this.charaResource.animations, "Arret_01")
         );
+        this.animation.actions.idle.setLoop(LoopOnce);
+        this.animation.actions.idle.clampWhenFinished = true;
+
         this.animation.actions.attack = this.animation.mixer.clipAction(
             AnimationClip.findByName(this.charaResource.animations, "Attaque_01")
         );
+        this.animation.actions.attack.setLoop(LoopOnce);
+        this.animation.actions.attack.clampWhenFinished = true;
 
-        this.animation.play = (name, playOnce = true, duration = 1) => {
+        this.animation.actions.dead = this.animation.mixer.clipAction(
+            AnimationClip.findByName(this.charaResource.animations, "Mort_01")
+        );
+        this.animation.actions.dead.setLoop(LoopOnce);
+        this.animation.actions.dead.clampWhenFinished = true;
+
+        this.animation.play = (name, duration = 1) => {
             const newAction = this.animation.actions[name];
             const oldAction = this.animation.actions.current;
-
-            playOnce && newAction.setLoop(LoopOnce);
 
             newAction.reset();
             newAction.play();
             newAction.crossFadeFrom(oldAction, duration);
 
-            this.animation.actions.current = playOnce ? oldAction : newAction;
+            this.animation.actions.current = newAction;
         };
 
         this.animation.actions.current = this.animation.actions.walk;

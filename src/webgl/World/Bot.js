@@ -3,7 +3,6 @@ import { PathfindingHelper } from "three-pathfinding";
 import Mover from "./Mover";
 import Experience from "../Experience";
 import configs from "@/configs";
-import { randomNumberInRange } from "@/utils";
 
 const { character: confCharacter } = configs;
 const { animation: confAnimation } = confCharacter;
@@ -52,6 +51,8 @@ export default class Bot extends component(Mover) {
     }
 
     onRaf({ delta }) {
+        this.animation.mixer.update(delta);
+
         if (!this.isPlayer && !this.idle.active) {
             const oldPosition = this.position.clone();
 
@@ -75,8 +76,6 @@ export default class Bot extends component(Mover) {
                 this._setPath();
             }
 
-            if (this.animation && this.animation.mixer) this.animation.mixer.update(delta);
-
             if (this.mesh) {
                 this.mesh.position.set(this.position.x, this.position.y, this.position.z);
 
@@ -92,8 +91,11 @@ export default class Bot extends component(Mover) {
 
         if (!this.isPlayer) {
             if (this.idle.active) {
-                if (!this.idle.angle) this.idle.angle = randomNumberInRange(-Math.PI * 2, Math.PI * 2);
-                this.mesh.rotation.y += (this.idle.angle - this.mesh.rotation.y) * confCharacter.rotationSpeed * 3.2;
+                // if (!this.idle.angle) this.idle.angle = randomNumberInRange(-Math.PI * 2, Math.PI * 2);
+                // this.mesh.rotation.y += (this.idle.angle - this.mesh.rotation.y) * confCharacter.rotationSpeed * 3.2;
+                this.animation.play("idle");
+            } else if (this.animation.actions.current !== this.animation.actions.walk) {
+                this.animation.play("walk");
             }
 
             if (!this.idle.interval) {
