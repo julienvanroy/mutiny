@@ -1,19 +1,13 @@
 <template>
-  <div class="copy-code">
-    <input
-      class="input"
-      type="text"
-      v-on:focus="$event.target.select()"
-      ref="myinput"
-      readonly
-      :value="this.code"
-    />
+  <the-input class="copy-code" :on-focus="select" ref="input" :value="this.code" readonly>
     <button @click="copy"></button>
-  </div>
+  </the-input>
 </template>
 
 <script>
+import TheInput from "./TheInput.vue";
 export default {
+  components: { TheInput },
   name: "CopyCode",
   props: {
     code: {
@@ -23,8 +17,11 @@ export default {
   },
   methods: {
     copy() {
-      this.$refs.myinput.focus();
+      this.$refs.input.$refs.myinput.focus();
       document.execCommand("copy");
+    },
+    select() {
+      this.$event.target.select();
     },
   },
 };

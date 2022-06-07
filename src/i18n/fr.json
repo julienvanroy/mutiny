@@ -18,7 +18,18 @@
     "credits": "Crédits",
     "createRoom": "Créer une partie",
     "homePhraseDesktop": "Un téléphone par moussaillon est requis pour contrôler votre personnage",
-    "homePhraseMobile": "Rejoignez une partie depuis le jeu sur ordinateur"
+    "footer": {
+      "players-count": "3 à 8",
+      "players-unit": "joueurs",
+      "materials-1": "1 tél par joueur",
+      "materials-2": "1 ordinateur"
+    },
+    "content": {
+      "shipName": "Nom du navire",
+      "inputPlaceholder": "Fpdr36",
+      "instruction": "Pour jouer, lance d’abord une partie sur ordinateur. Un nom de navire te sera attribué.",
+      "cta": "Embarquez"
+    }
   },
   "setup": {
     "playersTitle": "Tonneaux",

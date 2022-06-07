@@ -18,7 +18,18 @@
     "credits": "Credits",
     "createRoom": "Create room",
     "homePhraseDesktop": "One phone per shipwright is required to control your character",
-    "homePhraseMobile": "Join a game from a computer gascreenme"
+    "footer": {
+      "players-count": "3 à 8",
+      "players-unit": "joueurs",
+      "materials-1": "1 tél par joueur",
+      "materials-2": "1 ordinateur"
+    },
+    "content": {
+      "shipName": "Nom du navire",
+      "inputPlaceholder": "Fpdr36",
+      "instruction": "Pour jouer, lance d’abord une partie sur ordinateur. Un nom de navire te sera attribué.",
+      "cta": "Embarquez"
+    }
   },
   "setup": {
     "playersTitle": "Barrels",

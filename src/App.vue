@@ -1,38 +1,34 @@
 <template>
   <div class="main-container" ref="fullscreenContainer">
-    <div class="fullscreen">
-      <button v-if="showFullscreenBtn" @click="setFullscreen()">
-        <img src="images/icons/fullscreen-on.png" />
-      </button>
-    </div>
+    <template v-if="!isMobile">
+      <div class="fullscreen">
+        <button v-if="showFullscreenBtn" @click="setFullscreen()">
+          <img src="images/icons/fullscreen-on.png" />
+        </button>
+      </div>
 
-    <div class="btn-parameters">
-      <button @click="playMusic">
-        <img src="images/icons/sound-on.png" />
-      </button>
-      <button @click="() => modalShown = 'options'">
-        <img src="images/icons/parameters.png" />
-      </button>
-      <button v-show="isGamePath" @click="() => modalShown = 'pause'">
-        <img src="images/icons/pause.png" />
-      </button>
-    </div>
+      <div class="btn-parameters">
+        <button @click="playMusic">
+          <img src="images/icons/sound-on.png" />
+        </button>
+        <button @click="() => (modalShown = 'options')">
+          <img src="images/icons/parameters.png" />
+        </button>
+        <button v-show="isGamePath" @click="() => (modalShown = 'pause')">
+          <img src="images/icons/pause.png" />
+        </button>
+      </div>
+      <ModalOptions v-if="'options' === modalShown" :setFullscreen="setFullscreen" />
 
-    <ModalLandscape />
-    <ModalOptions
-      v-if="'options' === modalShown"
-      :setFullscreen="setFullscreen"
-    />
-
-    <ModalPause
-      v-if="'pause' === modalShown"
-      :setFullscreen="setFullscreen"
-    />
+      <ModalPause v-if="'pause' === modalShown" :setFullscreen="setFullscreen" />
+    </template>
 
     <div id="view">
       <router-view />
       <WebGl v-if="!isMobile" v-show="isGamePath" />
     </div>
+
+    <!-- <ModalLandscape /> -->
 
     <TheLoader v-if="!isMobile" />
   </div>
@@ -46,7 +42,7 @@ import TheLoader from "@/components/ui/TheLoader";
 import { mapState } from "pinia";
 import { mapWritableState } from "pinia";
 import useWebglStore from "@/store/webgl";
-import ModalLandscape from "@/components/modals/ModalLandscape";
+// import ModalLandscape from "@/components/modals/ModalLandscape";
 import ModalOptions from "@/components/modals/ModalOptions";
 import ModalPause from "@/components/modals/ModalPause";
 import useGlobalStore from "@/store/global";
@@ -54,7 +50,7 @@ import useGlobalStore from "@/store/global";
 export default {
   name: "App",
   components: {
-    ModalLandscape,
+    // ModalLandscape,
     ModalOptions,
     ModalPause,
     TheLoader,
