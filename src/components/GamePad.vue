@@ -4,15 +4,16 @@
       <player-card :name="name" :color="color" :points="points" />
       <div ref="joystick" class="joystick"></div>
     </div>
-    <div class="gamepad__middle" v-if="clues">
-      <p>{{ $t("gamepad.clues") }}</p>
-      <div
-        class="clues"
-        :style="`background-color: ${clue.show ? clue.color : 'black'}`"
-        v-for="(clue, indexClue) in clues"
-        :key="indexClue"
-      >
-        {{ clue.show ? clue.tag : "?" }}
+    <div class="gamepad__middle">
+      <div class="clues-container">
+        <h2>{{ $t("gamepad.clues") }}</h2>
+        <p>{{ targetName }}</p>
+        <div class="clues">
+          <div class="clue" v-for="(clue, indexClue) in clues" :key="indexClue">
+            <span v-if="clue.show">{{ clue.tag }}</span>
+            <span v-else-if="nextClueIndex === indexClue">{{ $t("gamepad.clueInterval") }}</span>
+          </div>
+        </div>
       </div>
     </div>
     <div class="gamepad__right">
@@ -33,7 +34,6 @@
 <script>
 import useColyseusStore from "@/store/colyseus";
 import nipplejs from "nipplejs";
-import { sample } from "@/utils";
 import PlayerCard from "./ui/PlayerCard.vue";
 import StalkersCounter from "./ui/StalkersCounter.vue";
 
@@ -49,7 +49,9 @@ export default {
     return {
       joystick: [],
       interval: null,
-      stalkersCount: 0,
+      stalkersCount: 1,
+      targetName: "Captain Blue",
+      nextClueIndex: 0,
     };
   },
   watch: {
@@ -62,7 +64,28 @@ export default {
   },
   computed: {
     clues() {
-      return this.colyseus.playerTarget?.info;
+      return [
+        {
+          tag: "hat",
+          color: "#1E1D22",
+          show: false,
+        },
+        {
+          tag: "beard",
+          color: "#F86F43",
+          show: false,
+        },
+        {
+          tag: "barrel",
+          color: "#6B8CDB",
+          show: false,
+        },
+        {
+          tag: "weapon",
+          color: "#FFF",
+          show: false,
+        },
+      ]; //this.colyseus.playerTarget?.info;
     },
     cluesHide() {
       return this.clues?.filter((clue) => !clue.show);
@@ -83,12 +106,13 @@ export default {
       this.interval = setInterval(this.showOneClue, 10000);
     },
     showOneClue() {
-      if (!this.interval) return;
+      if (!this.interval || this.nextClueIndex === this.clues.length) return;
       if (this.cluesHide.length === 0) {
         clearInterval(this.interval);
         return;
       } else {
-        sample(this.cluesHide).show = true;
+        this.clues[this.nextClueIndex].show = true;
+        this.nextClueIndex++;
       }
     },
   },
@@ -159,33 +183,66 @@ export default {
 
   &__middle {
     flex: 1;
-    background-color: $grey-2;
-    border-radius: 8px;
-    padding: 20px;
     display: flex;
     flex-flow: column nowrap;
     justify-content: space-between;
     align-items: center;
 
-    p {
-      text-transform: uppercase;
-      text-align: center;
-      font-weight: $ft-w-bold;
-      font-size: $ft-s-medium;
-      letter-spacing: 0.01em;
-    }
-
-    .clues {
-      background: $grey-1;
-      border-radius: 8px;
-      width: 80px;
-      height: 80px;
-      color: $white;
+    .clues-container {
+      width: 100%;
+      height: 100%;
+      background-image: url("../assets/gamepad/bg-clues.png");
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      justify-content: space-between;
       align-items: center;
-      font-weight: $ft-w-bold;
-      margin: 3.2px 0;
+      padding: 32px;
+
+      h2 {
+        text-align: center;
+        font-weight: $ft-w-bold;
+        font-size: 12px;
+        letter-spacing: 0.01em;
+      }
+
+      p {
+        width: 160px;
+        height: 56px;
+        padding-top: 14px;
+        background-image: url("../assets/gamepad/bg-pirate-name.png");
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+        font-weight: $ft-w-bold;
+        font-size: 15px;
+        color: $white-beige;
+        text-align: center;
+      }
+
+      .clues {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+
+        .clue {
+          width: 80px;
+          height: 80px;
+          margin: 2%;
+          box-shadow: inset 0px 0px 4px rgba(222, 197, 204, 0.7);
+          border-radius: 2px;
+          color: $violet-clue;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          font-weight: $ft-w-regular;
+          font-size: 12px;
+        }
+      }
     }
   }
 

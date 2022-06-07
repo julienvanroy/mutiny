@@ -65,7 +65,8 @@
   },
   "gamepad": {
     "youAre": "tu es",
-    "clues": "indices",
+    "clues": "Ta cible",
+    "clueInterval": "Indice suivant",
     "attack": "Attaque",
     "power": "Pouvoir",
     "stalkersCounterLeft": "T’es traqué.e par",
