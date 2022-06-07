@@ -1,5 +1,5 @@
 <template>
-  <the-input class="copy-code" :on-focus="select" ref="input" :value="this.code" readonly>
+  <the-input class="copy-code" :on-focus="select" ref="input" :model-value="code" readonly>
     <button @click="copy"></button>
   </the-input>
 </template>
@@ -19,9 +19,6 @@ export default {
     copy() {
       this.$refs.input.$refs.myinput.focus();
       document.execCommand("copy");
-    },
-    select() {
-      this.$event.target.select();
     },
   },
 };

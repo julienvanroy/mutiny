@@ -3,13 +3,12 @@
     <input
       class="input"
       type="text"
-      v-on:focus="onFocus"
       ref="myinput"
       :value="modelValue"
       :placeholder="placeholder"
       :readonly="readonly"
-      @input="!readonly && $emit('update:modelValue', $event.target.value)"
-    />
+      @input="$emit('update:modelValue', $event.target.value)"
+      @focus="$event.target.select()"
     />
     <slot></slot>
   </div>
