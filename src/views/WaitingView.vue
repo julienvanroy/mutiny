@@ -53,7 +53,7 @@ export default {
     this.resize();
     window.addEventListener("resize", this.resize, false);
 
-    this.colyseus.currentRoom.onMessage("getPlayer", (player) => (this.colyseus.player = player));
+    this.colyseus.getPlayer(this.colyseus.currentRoom.sessionId);
   },
   beforeUnmount() {
     window.removeEventListener("resize", this.resize, false);

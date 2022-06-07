@@ -86,8 +86,6 @@ export default {
     },
   },
   mounted() {
-    this.colyseus.getPlayer(this.colyseus.currentRoom.sessionId);
-
     this.joystick = nipplejs.create({
       zone: this.$refs.joystick,
       size: 50,
