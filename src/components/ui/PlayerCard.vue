@@ -36,7 +36,7 @@ export default {
     img() {
       switch (this.color) {
         default:
-          return "/playerCard/purple.png";
+          return "/images/playerCard/purple.png";
       }
     },
   },
