@@ -31,6 +31,11 @@
       "cta": "Embarquez"
     }
   },
+  "getPseudo": {
+    "title": "Qui es-tu moussaillon ?",
+    "ctaRandom": "Nom aléatoire",
+    "cta": "Monter sur le pont"
+  },
   "setup": {
     "playersTitle": "Tonneaux",
     "playersPlaceholder": "Pour rejoindre la partie, allez sur <strong>Mutiny.com</strong> avec <strong>votre téléphone</strong>.",
