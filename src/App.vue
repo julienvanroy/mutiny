@@ -152,4 +152,22 @@ export default {
     align-items: center;
   }
 }
+
+.nipple {
+  .back {
+    opacity: 0 !important;
+  }
+  .front {
+    background-color: transparent !important;
+    background-image: url("assets/gamepad/joystick.png") !important;
+    background-size: contain !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    opacity: 1 !important;
+    width: 72px !important;
+    height: 72px !important;
+    margin-left: -36px !important;
+    margin-top: -36px !important;
+  }
+}
 </style>

@@ -1,9 +1,7 @@
 <template>
   <div class="gamepad">
     <div class="gamepad__left">
-      <div class="player">
-        <player-card :name="name" :color="color" :points="points" />
-      </div>
+      <player-card :name="name" :color="color" :points="points" />
       <div ref="joystick" class="joystick"></div>
     </div>
     <div class="gamepad__middle" v-if="clues">
@@ -128,43 +126,28 @@ export default {
     justify-content: space-between;
     align-items: flex-start;
 
-    .player {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      &__points {
-        position: relative;
-        img {
-          width: 60px;
-        }
-        span {
-          font-weight: $ft-w-bold;
-          font-size: $ft-s-medium;
-          color: $white;
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -60%);
-        }
-      }
-      &__name {
-        margin-left: 10px;
-        span {
-          display: block;
-          font-weight: $ft-w-bold;
-          font-size: $ft-s-small;
-          margin-top: 6px;
-        }
-      }
-    }
-
     .joystick {
       position: relative;
       width: 250px;
       height: 250px;
-      background-color: $grey-1;
-      border: 3px solid $grey-2;
-      border-radius: 100%;
+      background-image: url("../assets/gamepad/outer-ring.png");
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+
+      &::after {
+        position: absolute;
+        content: "";
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 100%;
+        background-image: url("../assets/gamepad/d-pad.png");
+        background-size: 72%;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
     }
   }
 
