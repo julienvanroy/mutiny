@@ -16,9 +16,14 @@
       </div>
     </div>
     <div class="gamepad__right">
+      <p class="stalkers-counter-container">
+        {{ $t("gamepad.stalkersCounterLeft") }}
+        <br />
+        <stalkers-counter :count="stalkersCount" />
+        <span>{{ $t("gamepad.stalkersCounterRight") }}</span>
+      </p>
       <button ref="attack" class="attack" @click="colyseus.sendData('kill', true)">
-        <img src="/images/pad/button.png" />
-        <span>{{ $t("gamepad.attack") }}</span>
+        <img src="/images/gamepad/btn-attack.png" />
       </button>
       <!-- <button ref="power" @click="colyseus.sendData('power', true)">{{$t("gamepad.power")}}</button> -->
     </div>
@@ -30,9 +35,10 @@ import useColyseusStore from "@/store/colyseus";
 import nipplejs from "nipplejs";
 import { sample } from "@/utils";
 import PlayerCard from "./ui/PlayerCard.vue";
+import StalkersCounter from "./ui/StalkersCounter.vue";
 
 export default {
-  components: { PlayerCard },
+  components: { PlayerCard, StalkersCounter },
   name: "GamePad",
   setup() {
     const colyseus = useColyseusStore();
@@ -43,6 +49,7 @@ export default {
     return {
       joystick: [],
       interval: null,
+      stalkersCount: 0,
     };
   },
   watch: {
@@ -116,7 +123,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: stretch;
-  background-color: $mobile-bg-white;
+  background-color: $white-beige;
 
   &__left {
     width: 32%;
@@ -185,10 +192,38 @@ export default {
   &__right {
     width: 32%;
     display: flex;
-    justify-content: center;
+    flex-flow: column nowrap;
+    justify-content: space-between;
     align-items: center;
 
+    .stalkers-counter-container {
+      position: relative;
+      width: 164px;
+      height: 57px;
+      background-image: url("../assets/gamepad/bg-stalker-count.png");
+      background-position: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+      font-size: 11px;
+      font-weight: $ft-w-bold;
+      text-align: center;
+      padding-top: 11px;
+    }
+
+    .stalkers-counter {
+      position: absolute;
+      top: 50%;
+      left: 18%;
+      transform: translateY(-20%);
+
+      + span {
+        display: inline-block;
+        margin-left: 16px;
+      }
+    }
+
     .attack {
+      flex: 1;
       position: relative;
       background-color: transparent;
       border: none;
@@ -199,16 +234,8 @@ export default {
       }
 
       img {
-        width: 100px;
-      }
-
-      span {
-        font-weight: $ft-w-bold;
-        font-size: $ft-s-medium;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -60%);
+        width: 152px;
+        height: auto;
       }
     }
   }

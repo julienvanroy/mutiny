@@ -67,7 +67,9 @@
     "youAre": "you are",
     "clues": "clues",
     "attack": "Attack",
-    "power": "Power"
+    "power": "Power",
+    "stalkersCounterLeft": "T’es traqué.e par",
+    "stalkersCounterRight": "mousse.s"
   },
   "parameters": {
     "options": "Options",

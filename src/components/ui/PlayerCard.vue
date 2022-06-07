@@ -76,7 +76,7 @@ export default {
     left: 9%;
     transform: translateY(-50%) rotate(-10deg);
     font-size: 28px;
-    color: $mobile-bg-white;
+    color: $white-beige;
     text-shadow: 3.37778px 2.53333px 1.68889px rgba(77, 8, 28, 0.2);
   }
 

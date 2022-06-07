@@ -71,7 +71,7 @@ export default {
   position: relative;
   width: 100%;
   height: 100vh;
-  background-color: $mobile-bg-white;
+  background-color: $white-beige;
   background-image: url("../assets/mobile/background.png");
   background-size: contain;
   background-position: center;

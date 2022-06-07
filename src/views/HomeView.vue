@@ -184,7 +184,7 @@ export default {
   }
 
   @media #{$mq-mobile} {
-    background-color: $mobile-bg-white;
+    background-color: $white-beige;
     background-image: url("../assets/mobile/background.png");
     background-size: contain;
     background-position: center;
