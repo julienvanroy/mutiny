@@ -1,6 +1,6 @@
 <template>
   <div class="get-pseudo">
-    <header class="get-pseudo__header">
+    <header>
       <img src="../assets/mobile/header-w-logo.svg" alt="" />
     </header>
     <h2>{{ $t("getPseudo.title") }}</h2>
@@ -15,7 +15,7 @@
       />
     </div>
     <TheButton :label="$t('getPseudo.cta')" color="primary" :disabled="pseudoNotValid" @click="sendPseudo()" />
-    <footer class="get-pseudo__header">
+    <footer>
       <img src="../assets/mobile/header.svg" alt="" />
     </footer>
   </div>
