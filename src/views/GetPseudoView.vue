@@ -95,7 +95,7 @@ export default {
       if ("" === this.pseudo) this.pseudo = this.placeholder;
       this.colyseus.addPseudo(this.pseudo);
       this.colyseus.addPlayer();
-      router.push(`/gamepad`);
+      router.push(`/waiting`);
     },
   },
 };
