@@ -1,8 +1,10 @@
-import {Mesh, Color, AnimationClip, AnimationMixer, CircleGeometry, MeshBasicMaterial, MeshStandardMaterial, LoopOnce} from "three";
+import {Mesh, Color, CircleGeometry, MeshBasicMaterial, MeshStandardMaterial, LoopOnce} from "three";
 import Experience from "../../Experience";
 import configs from "@/configs";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils";
 import {sample} from "@/utils";
+import Animation from "@/webgl/Animation";
+
 export default class Pirate {
     constructor(body = null) {
         const experience = new Experience();
@@ -111,46 +113,21 @@ export default class Pirate {
     }
 
     _initAnimation() {
-        this.animation = {};
+        this.animation = new Animation(this.mesh, this.charaResource.animations)
 
-        // Mixer
-        this.animation.mixer = new AnimationMixer(this.mesh);
+        this.animation.addAction('walk', "Marche_01")
 
-        // Actions
-        this.animation.actions = {};
-
-        this.animation.actions.walk = this.animation.mixer.clipAction(
-            AnimationClip.findByName(this.charaResource.animations, "Marche_01")
-        );
-
-        this.animation.actions.idle = this.animation.mixer.clipAction(
-            AnimationClip.findByName(this.charaResource.animations, "Arret_01")
-        );
+        this.animation.addAction('idle', "Arret_01")
         this.animation.actions.idle.setLoop(LoopOnce);
         this.animation.actions.idle.clampWhenFinished = true;
 
-        this.animation.actions.attack = this.animation.mixer.clipAction(
-            AnimationClip.findByName(this.charaResource.animations, "Attaque_01")
-        );
+        this.animation.addAction('attack', "Attaque_01")
         this.animation.actions.attack.setLoop(LoopOnce);
         this.animation.actions.attack.clampWhenFinished = true;
 
-        this.animation.actions.dead = this.animation.mixer.clipAction(
-            AnimationClip.findByName(this.charaResource.animations, "Mort_01")
-        );
+        this.animation.addAction('dead', "Mort_01")
         this.animation.actions.dead.setLoop(LoopOnce);
         this.animation.actions.dead.clampWhenFinished = true;
-
-        this.animation.play = (name, duration = 1) => {
-            const newAction = this.animation.actions[name];
-            const oldAction = this.animation.actions.current;
-
-            newAction.reset();
-            newAction.play();
-            newAction.crossFadeFrom(oldAction, duration);
-
-            this.animation.actions.current = newAction;
-        };
 
         this.animation.actions.current = this.animation.actions.walk;
         this.animation.play("walk");

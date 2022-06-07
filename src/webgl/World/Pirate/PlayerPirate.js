@@ -175,8 +175,6 @@ export default class PlayerPirate extends component(Pirate) {
 
         this.bot.isPlayer = true;
         this.mesh = this.bot.mesh;
-
-        super._initAnimation();
     }
 
     onRaf({ delta }) {
@@ -189,7 +187,9 @@ export default class PlayerPirate extends component(Pirate) {
          */
         //this._updateCollision(delta)
 
-        if (this.animation && this.animation.mixer) this.animation.mixer.update(delta);
+
+        if (!this.isMoving && this.animation.actions.current !== this.animation.actions.idle) this.animation.play("idle");
+        else if (this.animation.actions.current !== this.animation.actions.walk) this.animation.play("walk");
     }
 
     onKill({ playerId }) {

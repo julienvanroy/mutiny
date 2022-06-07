@@ -53,8 +53,6 @@ export default class BotPirate extends component(Pirate) {
     }
 
     onRaf({ delta }) {
-        this.animation.mixer.update(delta);
-
         if (!this.isPlayer && !this.idle.active) {
             const oldPosition = this.position.clone();
 
