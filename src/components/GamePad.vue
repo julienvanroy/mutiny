@@ -2,21 +2,19 @@
   <div class="gamepad">
     <div class="gamepad__left">
       <div class="player">
-        <div class="player__points">
-          <img :src="`/images/players/${color}.png`" />
-          <span>{{ points }}</span>
-        </div>
-        <div class="player__name">
-          {{ $t("gamepad.youAre") }}<br />
-          <span>{{ name }}</span>
-        </div>
+        <player-card :name="name" :color="color" :points="points" />
       </div>
       <div ref="joystick" class="joystick"></div>
     </div>
     <div class="gamepad__middle" v-if="clues">
       <p>{{ $t("gamepad.clues") }}</p>
-      <div class="clues" :style="`background-color: ${clue.show ? clue.color : 'black'}`" v-for="(clue, indexClue) in clues" :key="indexClue">
-        {{ clue.show ? clue.tag : '?' }}
+      <div
+        class="clues"
+        :style="`background-color: ${clue.show ? clue.color : 'black'}`"
+        v-for="(clue, indexClue) in clues"
+        :key="indexClue"
+      >
+        {{ clue.show ? clue.tag : "?" }}
       </div>
     </div>
     <div class="gamepad__right">
@@ -32,9 +30,11 @@
 <script>
 import useColyseusStore from "@/store/colyseus";
 import nipplejs from "nipplejs";
-import {sample} from "@/utils";
+import { sample } from "@/utils";
+import PlayerCard from "./ui/PlayerCard.vue";
 
 export default {
+  components: { PlayerCard },
   name: "GamePad",
   setup() {
     const colyseus = useColyseusStore();
@@ -44,23 +44,23 @@ export default {
   data() {
     return {
       joystick: [],
-      interval: null
+      interval: null,
     };
   },
   watch: {
     cluesHide(newValue) {
-      if(newValue.length === 4) {
-        this.showOneClue()
-        this.setIntervalClues()
+      if (newValue.length === 4) {
+        this.showOneClue();
+        this.setIntervalClues();
       }
-    }
+    },
   },
   computed: {
     clues() {
       return this.colyseus.playerTarget?.info;
     },
     cluesHide() {
-      return this.clues?.filter((clue) => !clue.show)
+      return this.clues?.filter((clue) => !clue.show);
     },
     points() {
       return this.colyseus.playerPoints;
@@ -74,18 +74,18 @@ export default {
   },
   methods: {
     setIntervalClues() {
-      if(this.interval) clearInterval(this.interval);
+      if (this.interval) clearInterval(this.interval);
       this.interval = setInterval(this.showOneClue, 10000);
     },
     showOneClue() {
-      if(!this.interval) return
-      if(this.cluesHide.length === 0) {
-        clearInterval(this.interval)
+      if (!this.interval) return;
+      if (this.cluesHide.length === 0) {
+        clearInterval(this.interval);
         return;
       } else {
-        sample(this.cluesHide).show = true
+        sample(this.cluesHide).show = true;
       }
-    }
+    },
   },
   mounted() {
     this.colyseus.getPlayer(this.colyseus.currentRoom.sessionId);
@@ -105,7 +105,7 @@ export default {
       this.colyseus.sendData("joystick", { x: 0, y: 0 });
     });
 
-    this.setIntervalClues()
+    this.setIntervalClues();
   },
   unmounted() {
     this.joystick.destroy();

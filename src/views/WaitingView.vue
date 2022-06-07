@@ -5,7 +5,7 @@
         <img src="../assets/mobile/header-w-logo.svg" alt="" />
       </header>
       <h2>{{ $t("waiting.portrait.title") }}</h2>
-      <player-card :name="colyseus.playerName" :color="colyseus.playerColor" large />
+      <player-card :name="colyseus.playerName" :color="colyseus.playerColor" large :showPoints="false" />
       <div class="waiting__instruction">
         <p>{{ $t("waiting.portrait.instruction") }}</p>
         <img src="../assets/mobile/icon-rotate.svg" alt="" />
