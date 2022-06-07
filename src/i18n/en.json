@@ -36,6 +36,18 @@
     "ctaRandom": "Nom aléatoire",
     "cta": "Monter sur le pont"
   },
+  "waiting": {
+    "portrait": {
+      "title": "Bienvenue !",
+      "instruction": "Pour être fin prêt, tourne ton téléphone."
+    },
+    "landscape": {
+      "titleLeft": "Tu es ",
+      "titleMiddle": "prêt.e",
+      "titleRight": " !",
+      "instruction": "Pour que la révolte commence, sélectionne un mode de jeu."
+    }
+  },
   "setup": {
     "playersTitle": "Barrels",
     "playersPlaceholder": "To join the game, go to <strong>Mutiny.com</strong> with <strong>your phone</strong>.",
