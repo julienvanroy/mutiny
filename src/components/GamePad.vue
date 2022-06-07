@@ -118,13 +118,14 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: stretch;
+  background-color: $mobile-bg-white;
 
   &__left {
-    width: 40%;
+    width: 32%;
     display: flex;
     flex-flow: column nowrap;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
 
     .joystick {
       position: relative;
@@ -152,7 +153,7 @@ export default {
   }
 
   &__middle {
-    width: 30%;
+    flex: 1;
     background-color: $grey-2;
     border-radius: 8px;
     padding: 20px;
@@ -184,7 +185,7 @@ export default {
   }
 
   &__right {
-    width: 30%;
+    width: 32%;
     display: flex;
     justify-content: center;
     align-items: center;

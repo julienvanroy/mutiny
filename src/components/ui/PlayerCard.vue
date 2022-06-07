@@ -64,7 +64,7 @@ export default {
   .name {
     position: absolute;
     top: 50%;
-    right: 16%;
+    right: 18%;
     padding-left: 32%;
     transform: translateY(-50%);
     font-size: 11px;

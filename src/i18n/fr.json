@@ -12,7 +12,9 @@
     "timeLeft": "Temps restant",
     "tutorial": "Tutoriel",
     "waiting": "EN ATTENTE...",
-    "landscape": "Tournez votre téléphone en vue paysage !!!"
+    "landscape": "Tournez votre téléphone en vue paysage !!!",
+    "dead": "Capt’ain {{player}} vous a évincé.e",
+    "stealTarget": "{{player}} a débusqué.e votre cible "
   },
   "homepage": {
     "credits": "Crédits",

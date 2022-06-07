@@ -154,6 +154,7 @@ export default {
 }
 
 .nipple {
+  z-index: 2 !important;
   .back {
     opacity: 0 !important;
   }

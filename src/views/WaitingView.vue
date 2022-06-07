@@ -52,6 +52,8 @@ export default {
   mounted() {
     this.resize();
     window.addEventListener("resize", this.resize, false);
+
+    this.colyseus.currentRoom.onMessage("getPlayer", (player) => (this.colyseus.player = player));
   },
   beforeUnmount() {
     window.removeEventListener("resize", this.resize, false);
