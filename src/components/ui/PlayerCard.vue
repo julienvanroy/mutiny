@@ -47,6 +47,7 @@ export default {
   overflow: visible;
   width: 240px;
   height: 111px;
+  text-align: left;
 
   p {
   }
