@@ -1,5 +1,5 @@
 <template>
-  <div :class="`player ${this.player.color}`">
+  <div class="player" :class="{ '--large': large }">
     <div class="points">
       <TheBottle background="red" lines="yellow" />
       <span>{{ this.player.points }}</span>
@@ -17,6 +17,10 @@ export default {
   props: {
     player: {
       required: true,
+    },
+    large: {
+      type: Boolean,
+      default: false,
     },
   },
 };
@@ -37,7 +41,7 @@ export default {
   height: 60px;
   .points {
     position: absolute;
-    top: 50%;
+    top: 45%;
     left: -10px;
     height: 70px;
     transform: translateY(-50%) rotate(-5deg);
@@ -58,6 +62,21 @@ export default {
     font-weight: $ft-w-bold;
     font-size: $ft-s-xxsmall;
     margin-left: 5px;
+    text-align: left;
+  }
+  &.--large {
+    width: 240px;
+    height: 100px;
+    padding: 12px 12px 12px 70px;
+    .points {
+      height: 110px;
+      span {
+        font-size: $ft-s-xlarge;
+      }
+    }
+    .name {
+      font-size: $ft-s-xsmall;
+    }
   }
 }
 </style>
