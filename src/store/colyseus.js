@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import * as Colyseus from "colyseus.js";
 import router from "@/router";
 import { mapToArray, sample } from "@/utils";
+import useGlobalStore from "./global";
 
 const useColyseusStore = defineStore("colyseus", {
     state: () => ({
@@ -25,6 +26,9 @@ const useColyseusStore = defineStore("colyseus", {
         },
         playerColor(state) {
             return state.player.name;
+        },
+        roomReadyToPlay(state) {
+            return state.players.length > 0 && state.players.every((player) => player.orientationReady);
         },
     },
     actions: {
@@ -113,7 +117,10 @@ const useColyseusStore = defineStore("colyseus", {
             });
         },
         addPlayer() {
-            this.sendData("addPlayer", { playerId: this.currentRoom.sessionId });
+            this.sendData("addPlayer", {
+                playerId: this.currentRoom.sessionId,
+                orientationReady: useGlobalStore().isLandscape,
+            });
         },
         getPlayer(playerId) {
             this.sendData("getPlayer", playerId);

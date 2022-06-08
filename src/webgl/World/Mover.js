@@ -94,7 +94,7 @@ export default class Mover {
             .map((bodyPartData) => ({
                 ...bodyPartData,
                 color: bodyPartData.mesh.color || "#FFF",
-                show: false
+                show: false,
             }));
     }
 
@@ -150,7 +150,7 @@ export default class Mover {
             else bodyData = this.target.bodyData;
 
             return {
-                id: this.id,
+                id: this.target.id,
                 info: bodyData.map(({ tag, color, show }) => ({ tag, color, show })),
             };
         } else return undefined;

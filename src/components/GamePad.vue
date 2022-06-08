@@ -23,7 +23,7 @@
         <stalkers-counter :count="stalkersCount" />
         <span>{{ $t("gamepad.stalkersCounterRight") }}</span>
       </p>
-      <button ref="attack" class="attack" @click="colyseus.sendData('kill', true)">
+      <button ref="attack" class="attack" @click="colyseus.sendData('attack')">
         <img src="/images/gamepad/btn-attack.png" />
       </button>
       <!-- <button ref="power" @click="colyseus.sendData('power', true)">{{$t("gamepad.power")}}</button> -->

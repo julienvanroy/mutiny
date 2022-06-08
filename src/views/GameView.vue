@@ -4,9 +4,7 @@
       <ThePlayer :player="player" />
     </li>
   </ul>
-  <router-link to="end-game"
-    ><button class="end-btn">END GAME</button></router-link
-  >
+  <router-link to="end-game"><button class="end-btn">END GAME</button></router-link>
   <div class="timer-container">
     <TheTimer />
   </div>
@@ -32,20 +30,28 @@ export default {
 
     this.colyseus.currentRoom.onMessage("startGame", () => {});
 
-    this.colyseus.currentRoom.onMessage("getPlayer", () => {});
+    this.colyseus.currentRoom.onMessage("joystick", ({ playerSessionId, playerPosition }) => {
+      bidello.trigger({ name: "movePlayer" }, { playerId: playerSessionId, vector2: playerPosition });
+    });
 
-    this.colyseus.currentRoom.onMessage(
-      "joystick",
-      ({ playerSessionId, playerPosition }) => {
-        bidello.trigger(
-          { name: "movePlayer" },
-          { playerId: playerSessionId, vector2: playerPosition }
-        );
-      }
-    );
+    this.colyseus.currentRoom.onMessage("attack", ({ playerSessionId }) => {
+      bidello.trigger({ name: "attack" }, { playerId: playerSessionId });
+    });
 
-    this.colyseus.currentRoom.onMessage("kill", ({ playerSessionId }) => {
-      bidello.trigger({ name: "kill" }, { playerId: playerSessionId });
+    this.colyseus.currentRoom.onMessage("kill", ({ player, target }) => {
+      console.log(
+        `Player ${this.colyseus.players.find((p) => p.id === player).name} killed Player ${
+          this.colyseus.players.find((p) => p.id === target).name
+        }`
+      );
+    });
+
+    this.colyseus.currentRoom.onMessage("updatePlayerTarget", ({ player, target }) => {
+      console.log(
+        `Player ${this.colyseus.players.find((p) => p.id === player).name} has new target Player ${
+          this.colyseus.players.find((p) => p.id === target).name
+        }`
+      );
     });
 
     this.colyseus.currentRoom.onMessage("power", ({ playerSessionId }) => {
