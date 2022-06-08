@@ -2,6 +2,7 @@
   <transition name="fade">
     <ModalContainer
       :title="$t('parameters.options')"
+      :btnLabel="$t('modals.modalOptions.btnLabel')"
     >
       <div class="modal__options">
         <div class="modal__options-left">

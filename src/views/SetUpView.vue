@@ -1,7 +1,7 @@
 <template>
   <div class="setup">
     <div class="back">
-      <TheButton link="/" :label="$t('ui.back')" color="back" />
+      <TheButton link="/" :label="$t('ui.quit')" color="back" />
     </div>
 
     <div :class="`setup__under ${null !== selected ? 'details-open' : ''}`">
@@ -20,7 +20,11 @@
           @click="() => setSelected(mode)"
         >
           <div v-if="!!mode.isAvailable" class="content">
-            <p class="uptitle">Mode</p>
+            <img
+              class="flag"
+              :src="`images/setup/flag${idx === hovered ? '-hover' : ''}.png`"
+            />
+            <p :class="`uptitle ${idx === hovered ? 'hovered' : ''}`">Mode</p>
             <h2>{{ $t(mode.name) }}</h2>
           </div>
           <img :src="`images/setup/boat_${idx + 1}.png`" />
@@ -33,59 +37,27 @@
       </div>
 
       <div class="catch-phrase">
-        <p v-if="hovered !== null">
-          {{ $t(modes[hovered].shortDescription) }}
-        </p>
+        <p
+          v-if="hovered !== null"
+          v-html="$t(modes[hovered].shortDescription)"
+        />
       </div>
     </div>
 
     <div class="setup__over">
-      <div class="players">
-        <h1>{{ $t("setup.playersTitle") }}</h1>
-        <div class="placeholder" v-if="!colyseus.players.length">
-          <p v-html="$t('setup.playersPlaceholder')" />
-        </div>
-        <ul v-if="0 < colyseus.players.length">
-          <li
-            class="player"
-            v-for="player in colyseus.players"
-            :key="player.id"
-          >
-            <div class="player__infos">
-              <img :src="`images/players/${player.color}.png`" />
-              <span>{{ player.name }}</span>
-            </div>
-            <div class="player__state">
-              <img src="images/icons/valid.png" />
-            </div>
-          </li>
-        </ul>
-      </div>
-      <div class="connection">
-        <h2>{{ $t("setup.codeTitle") }}</h2>
-        <div class="connection__inner">
-          <div class="code"><CopyCode :code="colyseus.currentRoom.id" /></div>
-          <div class="qrcode" @click="() => modalShown = 'qrcode'">
-            <QrCode />
-          </div>
-        </div>
-      </div>
+      <SetUpPlayers />
+      <SetUpConnection />
     </div>
 
-    <ModeDetails
+    <SetUpModeDetails
       v-if="null !== selected"
       v-on:set-selected="setSelected"
       :mode="selected"
     />
 
-    <ModalJoin
-      v-if="'join' === modalShown"
-      :roomId="colyseus.currentRoom.id"
-    />
+    <ModalJoin v-if="'join' === modalShown" :roomId="colyseus.currentRoom.id" />
 
-    <ModalQrCode
-      v-if="'qrcode' === modalShown"
-    />
+    <ModalQrCode v-if="'qrcode' === modalShown" />
   </div>
 </template>
 
@@ -95,22 +67,22 @@ import useColyseusStore from "@/store/colyseus";
 import useGlobalStore from "@/store/global";
 import bidello from "bidello";
 import { Modes } from "@/data/modes";
-import TheButton from "@/components/ui/TheButton.vue";
-import CopyCode from "@/components/ui/CopyCode";
-import QrCode from "@/components/ui/QrCode";
+import TheButton from "@/components/ui/TheButton";
 import ModalJoin from "@/components/modals/ModalJoin";
 import ModalQrCode from "@/components/modals/ModalQrCode";
-import ModeDetails from "@/components/ModeDetails.vue";
+import SetUpModeDetails from "@/components/SetUpModeDetails";
+import SetUpPlayers from "@/components/SetUpPlayers";
+import SetUpConnection from "@/components/SetUpConnection";
 
 export default {
   name: "SetUpView",
   components: {
     TheButton,
-    CopyCode,
-    QrCode,
     ModalJoin,
     ModalQrCode,
-    ModeDetails,
+    SetUpModeDetails,
+    SetUpPlayers,
+    SetUpConnection
   },
   setup() {
     const colyseus = useColyseusStore();
@@ -135,7 +107,7 @@ export default {
 
     this.colyseus.currentRoom.onMessage("getAllPlayers", () => {});
 
-    this.modalShown = 'join';
+    this.modalShown = "join";
   },
   methods: {
     mouseHover(isAvailable, value) {
@@ -173,111 +145,13 @@ export default {
     z-index: 14;
     top: 0;
     left: 0;
-    width: 480px;
+    width: 560px;
     height: 100%;
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
     padding-left: 60px;
-
-    .players {
-      width: 100%;
-      background-image: url("../assets/setup/player-board.png");
-      background-repeat: no-repeat;
-      background-size: 100% 100%;
-      padding: 70px;
-      h1 {
-        margin: 0;
-        text-align: center;
-        font-weight: $ft-w-bold;
-      }
-      .placeholder {
-        min-height: 320px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        p {
-          text-align: center;
-          font-size: $ft-s-small;
-        }
-      }
-      ul {
-        height: 320px;
-        padding: 0;
-        margin: 0;
-        overflow-y: scroll;
-        .player {
-          width: 100%;
-          list-style: none;
-          height: 50px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 10px 20px;
-          &__infos {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            img {
-              width: 30px;
-            }
-            span {
-              font-weight: $ft-w-bold;
-              margin-left: 16px;
-            }
-          }
-          &__state {
-            img {
-              width: 30px;
-            }
-          }
-        }
-      }
-    }
-    .connection {
-      background-image: url("../assets/setup/connection.png");
-      background-repeat: no-repeat;
-      background-size: 100% 100%;
-      padding: 20px 30px;
-      height: 160px;
-      width: 100%;
-      max-width: 380px;
-      margin: 20px auto 0;
-      display: flex;
-      flex-flow: column nowrap;
-      justify-content: space-around;
-      align-items: center;
-      h2 {
-        font-size: $ft-s-small;
-        font-weight: $ft-w-bold;
-        color: $white;
-        text-align: center;
-      }
-      &__inner {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        .code {
-          padding-right: 20px;
-        }
-        .qrcode {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border-left: 2px solid $salmon;
-          padding-left: 20px;
-          img {
-            width: 60px;
-          }
-          @media (any-hover: hover) {
-            &:hover {
-              cursor: pointer;
-            }
-          }
-        }
-      }
-    }
   }
 
   &__under {
@@ -325,7 +199,7 @@ export default {
       position: absolute;
       right: 0;
       bottom: 0;
-      width: calc(100% - 480px);
+      width: calc(100% - 560px);
       height: 100%;
       display: flex;
       justify-content: center;
@@ -354,14 +228,24 @@ export default {
         }
         .content {
           position: absolute;
-          top: 27%;
+          top: 22%;
           left: 0;
           right: 0;
           width: 80%;
           margin: auto;
+          .flag {
+            width: 80px;
+            transition: 0.3s all ease-in-out;
+          }
           .uptitle {
             font-style: italic;
             font-size: $ft-s-xsmall;
+            color: rgba($purple, 0.4);
+            transition: 0.3s all ease-in-out;
+            &.hovered {
+              color: $purple;
+              transition: 0.3s all ease-in-out;
+            }
           }
           h2 {
             font-weight: $ft-w-bold;

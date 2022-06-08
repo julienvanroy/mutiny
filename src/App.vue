@@ -1,27 +1,29 @@
 <template>
   <div class="main-container" ref="fullscreenContainer">
-    <template v-if="!isMobile">
-      <div class="fullscreen">
-        <button v-if="showFullscreenBtn" @click="setFullscreen()">
-          <img src="images/icons/fullscreen-on.png" />
-        </button>
-      </div>
+    <div v-if="!isMobile" class="fullscreen">
+      <button v-if="showFullscreenBtn" @click="setFullscreen()">
+        <img src="images/icons/fullscreen-on.png" />
+      </button>
+    </div>
 
-      <div class="btn-parameters">
-        <button @click="playMusic">
-          <img src="images/icons/sound-on.png" />
-        </button>
-        <button @click="() => (modalShown = 'options')">
-          <img src="images/icons/parameters.png" />
-        </button>
-        <button v-show="isGamePath" @click="() => (modalShown = 'pause')">
-          <img src="images/icons/pause.png" />
-        </button>
-      </div>
-      <ModalOptions v-if="'options' === modalShown" :setFullscreen="setFullscreen" />
+    <div class="btn-parameters">
+      <button @click="playMusic">
+        <img src="images/icons/sound-on.png" />
+      </button>
+      <button v-show="!isGamePath" @click="() => (modalShown = 'options')">
+        <img src="images/icons/parameters.png" />
+      </button>
+      <button v-show="isGamePath" @click="() => (modalShown = 'pause')">
+        <img src="images/icons/pause.png" />
+      </button>
+    </div>
 
-      <ModalPause v-if="'pause' === modalShown" :setFullscreen="setFullscreen" />
-    </template>
+    <ModalOptions
+      v-if="'options' === modalShown"
+      :setFullscreen="setFullscreen"
+    />
+
+    <ModalPause v-if="'pause' === modalShown" :setFullscreen="setFullscreen" />
 
     <div id="view">
       <router-view />
@@ -89,7 +91,11 @@ export default {
   computed: {
     ...mapState(useWebglStore, ["audio"]),
     ...mapState(useGlobalStore, ["isMobile", "showFullscreenBtn"]),
-    ...mapWritableState(useGlobalStore, ["isFullscreen", "isLandscape", "modalShown"]),
+    ...mapWritableState(useGlobalStore, [
+      "isFullscreen",
+      "isLandscape",
+      "modalShown",
+    ]),
     music() {
       return this.audio.musicGame;
     },
