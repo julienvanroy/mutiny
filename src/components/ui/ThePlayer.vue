@@ -1,10 +1,10 @@
 <template>
   <div class="player" :class="{ '--large': large }">
     <div class="points">
-      <TheBottle background="red" lines="yellow" />
-      <span>{{ this.player.points }}</span>
+      <TheBottle :background="player.color.bottle" :lines="player.color.bottleDetails" />
+      <span>{{ player.points }}</span>
     </div>
-    <span class="name">{{ this.player.name }}</span>
+    <span class="name">{{ player.name }}</span>
   </div>
 </template>
 
