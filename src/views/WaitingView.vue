@@ -54,6 +54,8 @@ export default {
     this.colyseus.getPlayer(this.colyseus.currentRoom.sessionId);
 
     this.colyseus.currentRoom.onMessage("startGame", () => this.$router.push("gamepad"));
+
+    this.colyseus.currentRoom.onMessage("updatePlayerTarget", () => {});
   },
   beforeUnmount() {
     window.removeEventListener("resize", this.resize, false);

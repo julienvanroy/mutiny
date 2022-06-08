@@ -46,11 +46,7 @@
           <p v-html="$t('setup.playersPlaceholder')" />
         </div>
         <ul v-if="0 < colyseus.players.length">
-          <li
-            class="player"
-            v-for="player in colyseus.players"
-            :key="player.id"
-          >
+          <li class="player" v-for="player in colyseus.players" :key="player.id">
             <div class="player__infos">
               <img :src="`images/players/${player.color}.png`" />
               <span>{{ player.name }}</span>
@@ -65,27 +61,18 @@
         <h2>{{ $t("setup.codeTitle") }}</h2>
         <div class="connection__inner">
           <div class="code"><CopyCode :code="colyseus.currentRoom.id" /></div>
-          <div class="qrcode" @click="() => modalShown = 'qrcode'">
+          <div class="qrcode" @click="() => (modalShown = 'qrcode')">
             <QrCode />
           </div>
         </div>
       </div>
     </div>
 
-    <ModeDetails
-      v-if="null !== selected"
-      v-on:set-selected="setSelected"
-      :mode="selected"
-    />
+    <ModeDetails v-if="null !== selected" v-on:set-selected="setSelected" :mode="selected" />
 
-    <ModalJoin
-      v-if="'join' === modalShown"
-      :roomId="colyseus.currentRoom.id"
-    />
+    <ModalJoin v-if="'join' === modalShown" :roomId="colyseus.currentRoom.id" />
 
-    <ModalQrCode
-      v-if="'qrcode' === modalShown"
-    />
+    <ModalQrCode v-if="'qrcode' === modalShown" />
   </div>
 </template>
 
@@ -126,16 +113,15 @@ export default {
     };
   },
   mounted() {
-    this.colyseus.currentRoom.onMessage(
-      "addPlayer",
-      ({ playerSessionId: playerId }) => {
-        bidello.trigger({ name: "addPlayer" }, { playerId });
-      }
-    );
+    this.colyseus.currentRoom.onMessage("addPlayer", ({ playerSessionId: playerId }) => {
+      bidello.trigger({ name: "addPlayer" }, { playerId });
+    });
 
     this.colyseus.currentRoom.onMessage("getAllPlayers", () => {});
 
-    this.modalShown = 'join';
+    this.colyseus.currentRoom.onMessage("getPlayer", () => {});
+
+    this.modalShown = "join";
   },
   methods: {
     mouseHover(isAvailable, value) {
@@ -342,12 +328,10 @@ export default {
           animation: boat 5s infinite cubic-bezier(0.455, 0.03, 0.515, 0.955);
         }
         &:nth-of-type(2) {
-          animation: boat 4.8s infinite cubic-bezier(0.455, 0.03, 0.515, 0.955)
-            reverse;
+          animation: boat 4.8s infinite cubic-bezier(0.455, 0.03, 0.515, 0.955) reverse;
         }
         &:nth-of-type(3) {
-          animation: boat 5.2s infinite cubic-bezier(0.455, 0.03, 0.515, 0.955)
-            alternate;
+          animation: boat 5.2s infinite cubic-bezier(0.455, 0.03, 0.515, 0.955) alternate;
         }
         img {
           width: 100%;
