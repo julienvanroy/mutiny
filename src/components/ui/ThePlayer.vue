@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import TheBottle from "@/components/ui/TheBottle";
+import TheBottle from "@/components/svg/TheBottle";
 
 export default {
   name: "ThePlayer",
