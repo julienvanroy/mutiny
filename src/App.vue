@@ -18,10 +18,7 @@
       </button>
     </div>
 
-    <ModalOptions
-      v-if="'options' === modalShown"
-      :setFullscreen="setFullscreen"
-    />
+    <ModalOptions v-if="'options' === modalShown" :setFullscreen="setFullscreen" />
 
     <ModalPause v-if="'pause' === modalShown" :setFullscreen="setFullscreen" />
 
@@ -71,8 +68,7 @@ export default {
   },
   watch: {
     isLandscape(newValue) {
-      this.colyseus.currentRoom &&
-        this.colyseus.sendData("orientationChange", { orientation: newValue ? "landscape" : "portrait" });
+      this.colyseus.currentRoom && this.colyseus.sendData("orientationChange", { orientationReady: newValue });
     },
   },
   methods: {
@@ -95,11 +91,7 @@ export default {
   computed: {
     ...mapState(useWebglStore, ["audio"]),
     ...mapState(useGlobalStore, ["isMobile", "showFullscreenBtn"]),
-    ...mapWritableState(useGlobalStore, [
-      "isFullscreen",
-      "isLandscape",
-      "modalShown",
-    ]),
+    ...mapWritableState(useGlobalStore, ["isFullscreen", "isLandscape", "modalShown"]),
     music() {
       return this.audio.musicGame;
     },
