@@ -28,7 +28,7 @@ const useColyseusStore = defineStore("colyseus", {
             return state.player.name;
         },
         roomReadyToPlay(state) {
-            return state.players.every((player) => player.orientationReady);
+            return state.players.length > 0 && state.players.every((player) => player.orientationReady);
         },
     },
     actions: {
@@ -102,7 +102,6 @@ const useColyseusStore = defineStore("colyseus", {
         },
         updatePlayers(players) {
             this.players = mapToArray(players, true).filter((p) => !!p.name);
-            console.log(this.players);
         },
         updateCurrentPlayer(players, playerId) {
             this.player = players.get(playerId);
