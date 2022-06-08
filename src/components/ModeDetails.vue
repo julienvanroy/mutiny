@@ -10,22 +10,14 @@
           <OptionContainer :title="$t('parameters.difficulty')">
             <TheRadioer
               label="difficulty"
-              :values="[
-                $t('parameters.easy'),
-                $t('parameters.normal'),
-                $t('parameters.hard'),
-              ]"
+              :values="[$t('parameters.easy'), $t('parameters.normal'), $t('parameters.hard')]"
               :defaultValue="$t('parameters.normal')"
             />
           </OptionContainer>
           <OptionContainer :title="$t('parameters.duration')">
             <TheRadioer
               label="duration"
-              :values="[
-                $t('parameters.easy'),
-                $t('parameters.normal'),
-                $t('parameters.hard'),
-              ]"
+              :values="[$t('parameters.easy'), $t('parameters.normal'), $t('parameters.hard')]"
               :defaultValue="$t('parameters.normal')"
             />
           </OptionContainer>
@@ -37,12 +29,8 @@
         </div>
       </div>
       <div class="actions">
-        <TheButton
-          :label="$t('ui.back')"
-          color="back"
-          @click="() => $emit('setSelected', null)"
-        />
-        <TheButton label="GO !" color="primary" @click="startGame()" />
+        <TheButton :label="$t('ui.back')" color="back" @click="() => $emit('setSelected', null)" />
+        <TheButton label="GO !" color="primary" @click="startGame()" :disabled="!colyseus.roomReadyToPlay" />
         <TheButton :label="$t('ui.tutorial')" color="secondary" :disabled="true" />
       </div>
     </div>
