@@ -36,6 +36,14 @@ export default {
         }`
       );
     });
+
+    this.colyseus.currentRoom.onMessage("updatePlayerTarget", ({ player, target }) => {
+      console.log(
+        `Player ${this.colyseus.players.find((p) => p.id === player).name} has new target Player ${
+          this.colyseus.players.find((p) => p.id === target).name
+        }`
+      );
+    });
   },
   unmounted() {
     this.colyseus.currentRoom?.leave();
