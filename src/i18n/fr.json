@@ -12,8 +12,8 @@
     "timeLeft": "Temps restant",
     "tutorial": "Tutoriel",
     "waiting": "EN ATTENTE...",
-    "dead": "{{player}} vous a évincé.e",
-    "stealTarget": "{{player}} a débusqué.e votre cible"
+    "dead": "{player} vous a évincé.e",
+    "stealTarget": "{player} a débusqué.e votre cible"
   },
   "homepage": {
     "credits": "Crédits",
