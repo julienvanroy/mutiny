@@ -72,7 +72,7 @@ export default {
     ModalQrCode,
     SetUpModeDetails,
     SetUpPlayers,
-    SetUpConnection
+    SetUpConnection,
   },
   setup() {
     const colyseus = useColyseusStore();
@@ -94,11 +94,8 @@ export default {
 
     this.colyseus.currentRoom.onMessage("getAllPlayers", () => {});
 
-<<<<<<< HEAD
-=======
     this.colyseus.currentRoom.onMessage("getPlayer", () => {});
 
->>>>>>> 8e4f6b4 (fix: remove event not registed warnings)
     this.modalShown = "join";
   },
   methods: {
