@@ -44,8 +44,16 @@ export default {
       }
     );
 
-    this.colyseus.currentRoom.onMessage("kill", ({ playerSessionId }) => {
-      bidello.trigger({ name: "kill" }, { playerId: playerSessionId });
+    this.colyseus.currentRoom.onMessage("attack", ({ playerSessionId }) => {
+      bidello.trigger({ name: "attack" }, { playerId: playerSessionId });
+    });
+
+    this.colyseus.currentRoom.onMessage("kill", ({ player, target }) => {
+      console.log(
+        `Player ${this.colyseus.players.find((p) => p.id === player).name} killed Player ${
+          this.colyseus.players.find((p) => p.id === target).name
+        }`
+      );
     });
 
     this.colyseus.currentRoom.onMessage("power", ({ playerSessionId }) => {

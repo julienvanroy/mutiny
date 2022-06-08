@@ -1,8 +1,8 @@
 const configs = {
     character: {
-        count: 32, //4
+        count: 4, //32
         colors: ["#3C365A", "#F3E3DD", "#FAA757", "#F86F43", "#6B8CDB"],
-        speed: 1.2, //1.2
+        speed: 3.2, //1.2
         rotationSpeed: 0.032,
         range: 3.2, //10
         animation: {
