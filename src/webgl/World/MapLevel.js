@@ -1,7 +1,7 @@
 import Experience from "../Experience";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils";
 import { MeshBVH, MeshBVHVisualizer } from "three-mesh-bvh";
-import {Color, Mesh, MeshBasicMaterial, MeshStandardMaterial} from "three";
+import { Color, Mesh, MeshBasicMaterial, MeshStandardMaterial } from "three";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils";
 import configs from "@/configs";
 
@@ -20,6 +20,7 @@ export default class MapLevel {
         // this.model.scale.set(6.4, 6.4, 6.4);
 
         this.navMesh = {};
+        this.planes = {};
 
         this._initCollider();
 
@@ -40,7 +41,7 @@ export default class MapLevel {
 
         this._group.add(this.model);
 
-        this._scene.add(this._group)
+        this._scene.add(this._group);
 
         this.onDebug();
     }
@@ -48,8 +49,9 @@ export default class MapLevel {
     _initNavMesh(mesh) {
         this.navMesh = mesh;
         this.navMesh.scale.set(-1, 1, 1);
+        this.navMesh.rotation.x = Math.PI / 2;
         this.navMesh.updateMatrixWorld();
-        this.navMesh.geometry.applyMatrix4(this.navMesh.matrix);
+        // this.navMesh.geometry.applyMatrix4(this.navMesh.matrix);
     }
 
     _initCollider() {
@@ -58,8 +60,9 @@ export default class MapLevel {
         this.model.updateMatrixWorld();
         this.model.traverse((child) => {
             if (configs.map.navMesh.includes(child.name)) {
-                child.visible = true;
-                this._initNavMesh(clone(child));
+                child.visible = false;
+                // this._initNavMesh(clone(child));
+                this.planes[child.name] = child;
             } else if (child.geometry) {
                 const cloned = child.geometry.clone();
                 cloned.applyMatrix4(child.matrixWorld);

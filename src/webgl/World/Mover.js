@@ -86,7 +86,7 @@ export default class Mover {
         );
         rangeCircle.geometry.rotateX(-Math.PI / 2);
         rangeCircle.position.y = 0.32;
-        this.mesh.add(rangeCircle);
+        // this.mesh.add(rangeCircle);
 
         // Body data (to send to gamepad)
         this.bodyData = Object.values(this.body)

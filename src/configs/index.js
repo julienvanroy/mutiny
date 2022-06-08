@@ -1,6 +1,6 @@
 const configs = {
     character: {
-        count: 32, //32
+        count: 16, //32
         colors: ["#3C365A", "#F3E3DD", "#FAA757", "#F86F43", "#6B8CDB"],
         speed: 1.2, //1.2
         rotationSpeed: 0.032,
@@ -124,7 +124,7 @@ const configs = {
         maxTime: 150, //150,
     },
     map: {
-        navMesh: ["NavMesh", "NavMeshShip"],
+        navMesh: ["A", "B", "C"], //["NavMesh", "NavMeshShip"],
         nearRange: 320,
         decors: ["Coffre", "Tonneau", "Canon", "Box", "Boulet"],
     },
