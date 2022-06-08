@@ -12,8 +12,8 @@
     "timeLeft": "Remaining time",
     "tutorial": "Tutorial",
     "waiting": "WAITING...",
-    "dead": "{{player}} ousted you",
-    "stealTarget": "{{player}} has found your target"
+    "dead": "{player} ousted you",
+    "stealTarget": "{player} has found your target"
   },
   "homepage": {
     "credits": "Credits",
