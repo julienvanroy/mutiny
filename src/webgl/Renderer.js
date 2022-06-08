@@ -7,7 +7,9 @@ export default class Renderer extends component(WebGLRenderer) {
         super({
             canvas: canvas,
             powerPreference: "high-performance",
-            antialias: true
+            antialias: false,
+            stencil: false,
+            depth: false
         });
     }
 
