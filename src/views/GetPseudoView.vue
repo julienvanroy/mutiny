@@ -1,36 +1,37 @@
 <template>
   <div class="get-pseudo">
-    <div class="under">
-      <img src="images/background.jpg" />
-    </div>
-    <div class="over">
-      <input v-model="pseudo" :placeholder="placeholder" />
+    <header>
+      <img src="../assets/mobile/header-w-logo.svg" alt="" />
+    </header>
+    <h2>{{ $t("getPseudo.title") }}</h2>
+    <div class="get-pseudo__content">
+      <the-input v-model="pseudo" :placeholder="placeholder" :width="236" :height="48" center />
       <span v-if="pseudoNotValid">Pseudo is already taken</span>
       <TheButton
-        label="Choose random"
-        color="light"
+        :label="$t('getPseudo.ctaRandom')"
+        icon="images/icons/random.svg"
+        color="tertiary"
         @click="chooseRandomPseudo()"
       />
-      <TheButton
-        label="Let's go !"
-        color="dark"
-        :disabled="pseudoNotValid"
-        @click="sendPseudo()"
-      />
     </div>
+    <TheButton :label="$t('getPseudo.cta')" color="primary" :disabled="pseudoNotValid" @click="sendPseudo()" />
+    <footer>
+      <img src="../assets/mobile/header.svg" alt="" />
+    </footer>
   </div>
 </template>
 
 <script>
 import useColyseusStore from "@/store/colyseus";
 import { PiratesNames } from "@/data/pirates-name";
-import TheButton from "@/components/TheButton.vue";
-import { sample } from "@/utils";
+import TheButton from "@/components/ui/TheButton.vue";
+import { diffArray, sample } from "@/utils";
 import router from "@/router";
+import TheInput from "@/components/ui/TheInput.vue";
 
 export default {
   name: "GetPseudoView",
-  components: { TheButton },
+  components: { TheButton, TheInput },
   setup() {
     const colyseus = useColyseusStore();
     return { colyseus };
@@ -44,11 +45,18 @@ export default {
     };
   },
   mounted() {
-    this.placeholder = sample(PiratesNames);
+    this.colyseus.sendData("getAllPlayers");
 
     this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
       delete players[this.colyseus.currentRoom.sessionId];
       this.players = players;
+
+      this.placeholder = sample(
+        diffArray(
+          PiratesNames,
+          Object.values(this.players).map(({ name }) => name)
+        )
+      );
     });
     this.colyseus.currentRoom.onMessage("addPlayer", () => {
       this.colyseus.sendData("getAllPlayers");
@@ -65,9 +73,7 @@ export default {
   },
   methods: {
     checkIsPseudoValid(pseudoToCheck) {
-      const isValid = !Object.values(this.players).some(
-        (player) => player.name === pseudoToCheck
-      );
+      const isValid = !Object.values(this.players).some((player) => player.name === pseudoToCheck);
       if (!isValid) {
         this.pseudoNotValid = true;
       } else {
@@ -77,6 +83,7 @@ export default {
     },
     chooseRandomPseudo() {
       let newPseudo = sample(PiratesNames);
+
       // if pseudo is already used for another player, try another, else, assign pseudo
       if (!this.checkIsPseudoValid(newPseudo)) {
         this.chooseRandomPseudo();
@@ -86,11 +93,9 @@ export default {
     },
     sendPseudo() {
       if ("" === this.pseudo) this.pseudo = this.placeholder;
-      this.colyseus.sendData("addPseudo", {
-        playerId: this.colyseus.currentRoom.sessionId,
-        playerName: this.pseudo,
-      });
-      router.push(`/gamepad`);
+      this.colyseus.addPseudo(this.pseudo);
+      this.colyseus.addPlayer();
+      router.push(`/waiting`);
     },
   },
 };
@@ -101,53 +106,31 @@ export default {
   position: relative;
   width: 100%;
   height: 100vh;
-  .over {
-    position: absolute;
-    z-index: 14;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
+  background-color: $white-beige;
+  background-image: url("../assets/mobile/background.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32px;
+
+  h2 {
+    font-weight: $ft-w-bold;
+    font-size: 30px;
+    text-align: center;
+  }
+
+  &__content {
     display: flex;
-    flex-flow: column nowrap;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-  }
-  .under {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    &:after {
-      content: "";
-      display: block;
-      background-color: rgba($white, 0.6);
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-    }
-  }
-  .credits {
-    position: absolute;
-    z-index: 20;
-    bottom: 20px;
-    left: 20px;
-    a {
-      color: $black;
-      font-size: $ft-s-small;
-      font-weight: $ft-w-medium;
-      letter-spacing: 0.01em;
-      text-decoration-line: underline;
+
+    .the-input {
+      margin: 32px 0;
     }
   }
 }

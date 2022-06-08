@@ -1,36 +1,57 @@
-uniform float uTime;
-uniform float uBigWavesElevation;
-uniform vec2 uBigWavesFrequency;
-uniform float uBigWavesSpeed;
+uniform mat4 textureMatrix;
+uniform float time;
 
-uniform float uSmallWavesElevation;
-uniform float uSmallWavesFrequency;
-uniform float uSmallWavesSpeed;
-uniform float uSmallIterations;
+varying vec4 mirrorCoord;
+varying vec4 worldPosition;
 
-varying float vElevation;
+#include <common>
+#include <fog_pars_vertex>
+#include <shadowmap_pars_vertex>
+#include <logdepthbuf_pars_vertex>
 
-#pragma glslify: cnoise = require("../cnoise.glsl")
+uniform vec4 waveA;
+uniform vec4 waveB;
+uniform vec4 waveC;
 
-void main()
-{
-    vec4 modelPosition = modelMatrix * vec4(position, 1.0);
+uniform float offsetX;
+uniform float offsetZ;
 
-    // Elevation
-    float elevation = sin(modelPosition.x * uBigWavesFrequency.x + uTime * uBigWavesSpeed) *
-    sin(modelPosition.z * uBigWavesFrequency.y + uTime * uBigWavesSpeed) *
-    uBigWavesElevation;
+vec3 GerstnerWave (vec4 wave, vec3 p) {
+    float steepness = wave.z;
+    float wavelength = wave.w;
+    float k = 2.0 * PI / wavelength;
+    float c = sqrt(9.8 / k);
+    vec2 d = normalize(wave.xy);
+    float f = k * (dot(d, vec2(p.x, p.y)) - c * time);
+    float a = steepness / k;
 
-    for(float i = 1.0; i <= uSmallIterations; i++)
-    {
-        elevation -= abs(cnoise(vec3(modelPosition.xz * uSmallWavesFrequency * i, uTime * uSmallWavesSpeed)) * uSmallWavesElevation / i);
-    }
+    return vec3(
+    d.x * (a * cos(f)),
+    d.y * (a * cos(f)),
+    a * sin(f)
+    );
+}
 
-    modelPosition.y += elevation;
+void main() {
 
-    vec4 viewPosition = viewMatrix * modelPosition;
-    vec4 projectedPosition = projectionMatrix * viewPosition;
-    gl_Position = projectedPosition;
+    mirrorCoord = modelMatrix * vec4( position, 1.0 );
+    worldPosition = mirrorCoord.xyzw;
+    mirrorCoord = textureMatrix * mirrorCoord;
 
-    vElevation = elevation;
+    vec3 gridPoint = position.xyz;
+    vec3 tangent = vec3(1, 0, 0);
+    vec3 binormal = vec3(0, 0, 1);
+    vec3 p = gridPoint;
+    gridPoint.x += offsetX;//*2.0;
+    gridPoint.y -= offsetZ;//*2.0;
+    p += GerstnerWave(waveA, gridPoint);
+    p += GerstnerWave(waveB, gridPoint);
+    p += GerstnerWave(waveC, gridPoint);
+    gl_Position = projectionMatrix * modelViewMatrix * vec4( p.x, p.y, p.z, 1.0);
+
+    #include <beginnormal_vertex>
+    #include <defaultnormal_vertex>
+    #include <logdepthbuf_vertex>
+    #include <fog_vertex>
+    #include <shadowmap_vertex>
 }

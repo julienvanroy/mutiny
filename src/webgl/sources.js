@@ -1,35 +1,129 @@
+import {sRGBEncoding} from "three";
+
 export default [
     {
-        name: "environmentMapTexture",
-        type: "cubeTexture",
-        path: [
-            "textures/environmentMap/px.jpg",
-            "textures/environmentMap/nx.jpg",
-            "textures/environmentMap/py.jpg",
-            "textures/environmentMap/ny.jpg",
-            "textures/environmentMap/pz.jpg",
-            "textures/environmentMap/nz.jpg",
-        ],
-    },
-    {
-        name: "grassColorTexture",
+        name: "woodTexture",
         type: "texture",
-        path: "textures/dirt/color.jpg",
+        path: "textures/wood.jpeg",
     },
     {
-        name: "grassNormalTexture",
+        name: "waterTexture",
         type: "texture",
-        path: "textures/dirt/normal.jpg",
+        path: "textures/water/normals.jpeg",
     },
     {
-        name: "mapModel",
+        name: "mapTutoModel",
         type: "gltfModel",
         path: "models/Map/hextile.glb",
     },
     {
+        name: "mapModel",
+        type: "gltfModel",
+        path: "models/Map/pirate-ship-with-navmesh-2.glb",
+    },
+    {
         name: "characterModel",
         type: "gltfModel",
-        path: "models/Character/personnage01_binary.glb",
+        path: "models/Character/personnage02_binary.glb",
+    },
+    {
+        name: "barbeAlphaTexture",
+        type: "texture",
+        path: "textures/character/Barbe_alpha.png",
+        options: {
+            encoding: sRGBEncoding,
+            flipY: false
+        }
+    },
+    {
+        name: "cintureBas01Texture",
+        type: "texture",
+        path: "textures/character/Cinture_bas_01.png",
+        options: {
+            encoding: sRGBEncoding,
+            flipY: false
+        }
+    },
+    {
+        name: "barbeBlancTexture",
+        type: "texture",
+        path: "textures/character/Barbe_blanc.jpg",
+        options: {
+            encoding: sRGBEncoding,
+            flipY: false
+        }
+    },
+    {
+        name: "barbeJauneTexture",
+        type: "texture",
+        path: "textures/character/Barbe_jaune.jpg",
+        options: {
+            encoding: sRGBEncoding,
+            flipY: false
+        }
+    },
+    {
+        name: "barbeOrangeTexture",
+        type: "texture",
+        path: "textures/character/Barbe_orange.jpg",
+        options: {
+            encoding: sRGBEncoding,
+            flipY: false
+        }
+    },
+    {
+        name: "barbeVioletTexture",
+        type: "texture",
+        path: "textures/character/Barbe_violet.jpg",
+        options: {
+            encoding: sRGBEncoding,
+            flipY: false
+        }
+    },
+    {
+        name: "epee01Texture",
+        type: "texture",
+        path: "textures/character/Epee_01.jpg",
+        options: {
+            encoding: sRGBEncoding,
+            flipY: false
+        }
+    },
+    {
+        name: "tonneauBlancTexture",
+        type: "texture",
+        path: "textures/character/Tonneau_blanc.jpg",
+        options: {
+            encoding: sRGBEncoding,
+            flipY: false
+        }
+    },
+    {
+        name: "tonneauBleuTexture",
+        type: "texture",
+        path: "textures/character/Tonneau_bleu.jpg",
+        options: {
+            encoding: sRGBEncoding,
+            flipY: false
+        }
+    },
+    {
+        name: "tonneauJauneTexture",
+        type: "texture",
+        path: "textures/character/Tonneau_jaune.jpg",
+        options: {
+            encoding: sRGBEncoding,
+            flipY: false
+        }
+    },
+    {
+        name: "tonneauOrangeTexture",
+        type: "texture",
+        path: "textures/character/Tonneau_orange.jpg",
+        options: {
+            encoding: sRGBEncoding,
+            flipY: false
+        }
     },
     {
         name: "musicGame",

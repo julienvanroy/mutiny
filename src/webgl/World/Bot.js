@@ -8,27 +8,28 @@ import { randomNumberInRange } from "@/utils";
 const { character: confCharacter } = configs;
 const { animation: confAnimation } = confCharacter;
 export default class Bot extends component(Mover) {
-    constructor(botId, position) {
-        super();
+    constructor(botId, position, body, group) {
+        super(body);
+        this._group = group;
 
         this.id = botId;
         this.isPlayer = false;
 
         const experience = new Experience();
-        experience.scene.add(this.mesh);
+        this._group.add(this.mesh);
         this._pathfinding = experience.world.pathfinding;
 
         this._helper = new PathfindingHelper();
         // this._scene.add(this._helper);
 
-        this.position = position;
+        this.position = position.clone();
 
         this.mesh.position.set(this.position.x, this.position.y, this.position.z);
 
         this.path = [];
 
         this.idle = {
-            active: Math.random() < confAnimation.idle.chance(),
+            active: confAnimation.idle.chance(),
             duration: 0,
             interval: null,
             angle: 0,
@@ -36,12 +37,18 @@ export default class Bot extends component(Mover) {
     }
 
     _setPath() {
-        this.targetPosition = this._pathfinding.getRandomNode(this._pathfinding.zone, 0, this.position, 32);
         const groupID = this._pathfinding.getGroup(this._pathfinding.zone, this.position);
-        const newPath = this._pathfinding.findPath(this.position, this.targetPosition, this._pathfinding.zone, groupID);
+
+        this.targetPosition = this._pathfinding.getRandomNode(
+            this._pathfinding.zone,
+            groupID,
+            this.position,
+            configs.map.nearRange
+        );
+
+        let newPath = this._pathfinding.findPath(this.position, this.targetPosition, this._pathfinding.zone, groupID);
 
         if (newPath && newPath.length > 0) this.path.push(...newPath);
-        // else this._setPath(); // this causes infinite stack.
     }
 
     onRaf({ delta }) {
@@ -68,10 +75,10 @@ export default class Bot extends component(Mover) {
                 this._setPath();
             }
 
-            // if (this.animation && this.animation.mixer) this.animation.mixer.update(delta);
+            if (this.animation && this.animation.mixer) this.animation.mixer.update(delta);
 
             if (this.mesh) {
-                this.mesh.position.set(this.position.x, 0, this.position.z);
+                this.mesh.position.set(this.position.x, this.position.y, this.position.z);
 
                 // common way to get the  angle between two vectors
                 const deltaPosition = this.position.clone();

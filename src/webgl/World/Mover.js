@@ -1,72 +1,101 @@
 import {
     Mesh,
-    MeshStandardMaterial,
     Color,
     AnimationClip,
     AnimationMixer,
     CircleGeometry,
     MeshBasicMaterial,
+    MeshStandardMaterial,
+    LoopOnce,
 } from "three";
 import Experience from "../Experience";
 import configs from "@/configs";
-import { sample, sampleSize, shuffle } from "@/utils";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils";
-
 export default class Mover {
-    constructor() {
+    constructor(body) {
         const experience = new Experience();
         this._scene = experience.scene;
-        this.resource = experience.resources.items.characterModel;
+        this._resources = experience.resources.items;
+        this.charaResource = experience.resources.items.characterModel;
 
-        this._initModel();
-        // this._initAnimation();
+        if (body) {
+            this._initModel(body);
+            this._initAnimation();
+        }
     }
 
-    _initModel() {
-        const colors = shuffle(sampleSize(configs.character.colors, Object.entries(configs.character.body).length));
-
-        this.mesh = clone(this.resource.scene);
+    _initModel(body) {
+        this.mesh = clone(this.charaResource.scene);
 
         this.mesh.position.set(0, 0, 0);
         this._scene.add(this.mesh);
 
-        const circle = new Mesh(
+        // Generative chara
+        this.body = body;
+
+        let rangeColor;
+
+        this.mesh.children[0].traverse((child) => {
+            if (child instanceof Mesh) {
+                const bodyPart = Object.values(this.body).find(({ meshes }) =>
+                    Object.values(meshes)
+                        .map(({ name }) => name)
+                        .includes(child.name)
+                );
+
+                if (bodyPart.shuffleMesh) {
+                    if (bodyPart.mesh.name !== child.name) child.visible = false;
+
+                    child.material = new MeshStandardMaterial();
+
+                    child.material.map = this._resources[bodyPart.mesh.texture];
+                    if (bodyPart.addColor) {
+                        child.material.color = new Color(bodyPart.mesh.color).convertSRGBToLinear();
+                    }
+
+                    if (bodyPart.alphaTexture) {
+                        child.material.transparent = true;
+                        child.material.alphaMap = this._resources[bodyPart.alphaTexture];
+                    }
+                } else {
+                    const mesh = bodyPart.meshes.find(({ name }) => name === child.name);
+                    if (mesh.texture) {
+                        child.material.map = this._resources[mesh.texture];
+                    }
+                }
+
+                if (child.name === "Tonneau") rangeColor = bodyPart.mesh.color;
+
+                if (child.name === "Barbe")
+                    this.mesh.children[0].getObjectByName("Sourcil").material = child.material.clone();
+
+                child.receiveShadow = true;
+                child.castShadow = true;
+            }
+        });
+
+        // Attack range
+        const rangeCircle = new Mesh(
             new CircleGeometry(configs.character.range / 2, 32),
             new MeshBasicMaterial({
-                color: new Color(sample(colors)).convertSRGBToLinear(),
-                opacity: 0.64,
+                color: new Color(rangeColor).convertSRGBToLinear(),
+                opacity: 0.32,
                 transparent: true,
                 wireframe: true,
             })
         );
-        circle.geometry.rotateX(-Math.PI / 2);
-        circle.position.y = 0.32;
-        this.mesh.add(circle);
+        rangeCircle.geometry.rotateX(-Math.PI / 2);
+        rangeCircle.position.y = 0.32;
+        this.mesh.add(rangeCircle);
 
-        this.body = {};
-
-        let i = 0;
-        for (const [key, value] of Object.entries(configs.character.body)) {
-            this.body[key] = {
-                tag: value.tag,
-                color: colors[i],
-                modelNames: value.modelNames,
-            };
-            i++;
-        }
-
-        this.mesh.children[0].traverse((child) => {
-            if (child instanceof Mesh) {
-                const bodyPart = Object.values(this.body).find(({ modelNames }) => modelNames.includes(child.name));
-
-                child.castShadow = true;
-                child.material = new MeshStandardMaterial({
-                    color: new Color(bodyPart.color || sample(configs.character.colors)).convertSRGBToLinear(),
-                });
-            }
-        });
-
-        this.bodyData = Object.values(this.body).filter(({ tag }) => tag !== "Others");
+        // Body data (to send to gamepad)
+        this.bodyData = Object.values(this.body)
+            .filter((bodyPart) => bodyPart.shuffleMesh)
+            .map((bodyPartData) => ({
+                ...bodyPartData,
+                color: bodyPartData.mesh.color || "#FFF",
+                show: false
+            }));
     }
 
     _initAnimation() {
@@ -79,18 +108,26 @@ export default class Mover {
         this.animation.actions = {};
 
         this.animation.actions.walk = this.animation.mixer.clipAction(
-            AnimationClip.findByName(this.resource.animations, "marche")
+            AnimationClip.findByName(this.charaResource.animations, "Arret_01")
+        );
+        this.animation.actions.idle = this.animation.mixer.clipAction(
+            AnimationClip.findByName(this.charaResource.animations, "Arret_01")
+        );
+        this.animation.actions.attack = this.animation.mixer.clipAction(
+            AnimationClip.findByName(this.charaResource.animations, "Attaque_01")
         );
 
-        this.animation.play = (name, duration = 1) => {
+        this.animation.play = (name, playOnce = true, duration = 1) => {
             const newAction = this.animation.actions[name];
             const oldAction = this.animation.actions.current;
+
+            playOnce && newAction.setLoop(LoopOnce);
 
             newAction.reset();
             newAction.play();
             newAction.crossFadeFrom(oldAction, duration);
 
-            this.animation.actions.current = newAction;
+            this.animation.actions.current = playOnce ? oldAction : newAction;
         };
 
         this.animation.actions.current = this.animation.actions.walk;
@@ -101,7 +138,7 @@ export default class Mover {
         const { bodyData } = this;
         return {
             id: this.id,
-            info: bodyData.map(({ tag, color }) => ({ tag, color })),
+            info: bodyData.map(({ tag, color, show }) => ({ tag, color, show })),
         };
     }
 
@@ -114,7 +151,7 @@ export default class Mover {
 
             return {
                 id: this.id,
-                info: bodyData.map(({ tag, color }) => ({ tag, color })),
+                info: bodyData.map(({ tag, color, show }) => ({ tag, color, show })),
             };
         } else return undefined;
     }

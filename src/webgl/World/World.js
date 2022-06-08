@@ -1,18 +1,19 @@
 import Environment from "./Environment.js";
 import { component } from "bidello";
 import Experience from "@/webgl/Experience";
-import { GridHelper, Vector2, Vector3 } from "three";
+import { Euler, Group, Quaternion, Vector2, Vector3 } from "three";
 import Player from "@/webgl/World/Player";
 //import Item from "@/webgl/World/Item";
 //import BoxCollision from "@/webgl/Collision/BoxCollision";
 import { Pathfinding } from "three-pathfinding";
-import { diffArray, sample, shuffle, uuid } from "@/utils/index.js";
+import { diffArray, randomIntegerInRange, sample, shuffle, uuid } from "@/utils/index.js";
 import Bot from "./Bot.js";
 import MapLevel from "@/webgl/World/MapLevel";
 import configs from "@/configs";
 import useColyseusStore from "@/store/colyseus.js";
-import Water from "@/webgl/Mesh/Water";
 import Fireflies from "@/webgl/Mesh/Fireflies";
+import GerstnerWater from "@/webgl/Mesh/GerstnerWater";
+// import FogCustom from './Fog'
 
 export default class World extends component() {
     init() {
@@ -22,6 +23,7 @@ export default class World extends component() {
         this._scene = experience.scene;
         this._camera = experience.camera;
         this._controls = experience.controls;
+        this.group = new Group();
 
         this._isLoaded = false;
     }
@@ -29,9 +31,10 @@ export default class World extends component() {
     onResourcesIsReady() {
         console.log("world is ready");
         this.environment = new Environment();
-        this.water = new Water();
-        this.fireflies = new Fireflies(100)
-        this.mapLevel = new MapLevel();
+        // this.fog = new FogCustom();
+        this.gerstnerWater = new GerstnerWater();
+        this.fireflies = new Fireflies(100);
+        this.mapLevel = new MapLevel(this.group);
 
         this.players = new Map();
         /*
@@ -40,11 +43,10 @@ export default class World extends component() {
         this.boxCollision = new BoxCollision();
         */
         this._initPathfinding();
+        this._initCharacters();
         this._initBots();
 
-        const grid = new GridHelper(20, 20);
-        this._scene.add(grid);
-
+        this._scene.add(this.group);
         this.onDebug();
         this._isLoaded = true;
     }
@@ -52,25 +54,102 @@ export default class World extends component() {
     _initPathfinding() {
         this.pathfinding = new Pathfinding();
         this.pathfinding.zone = "map";
-        this.pathfinding.setZoneData(this.pathfinding.zone, Pathfinding.createZone(this.mapLevel.navMesh.geometry));
+        this.pathfinding.setZoneData(
+            this.pathfinding.zone,
+            Pathfinding.createZone(this.mapLevel.navMesh.geometry, Number.EPSILON)
+        );
+
+        let tempGroups = [];
+        this.pathfinding.zones.map.groups.forEach((group) => group.length >= 64 && tempGroups.push(group));
+        this.pathfinding.zones.map.groups = tempGroups;
     }
 
     _initBots() {
         this.bots = {};
         const initialPositions = [];
+        const zonesCount = this.pathfinding.zones.map.groups.length - 1;
 
         for (let i = 0; i < configs.character.count; i++) {
-            let position = this.pathfinding.getRandomNode(this.pathfinding.zone, 0, new Vector3(), 64);
+            let position = this.pathfinding.getRandomNode(
+                this.pathfinding.zone,
+                randomIntegerInRange(0, zonesCount),
+                new Vector3(),
+                configs.map.nearRange
+            );
 
-            while (initialPositions.some((pos) => pos.distanceTo(position) < configs.character.sizes.radius * 3.2)) {
-                position = this.pathfinding.getRandomNode(this.pathfinding.zone, 0, new Vector3(), 64);
+            while (
+                !initialPositions.every((pos) => pos.distanceTo(position) > configs.character.range) &&
+                !this.mapLevel.decors.every((mesh) => mesh.position.distanceTo(position) < configs.character.range * 2)
+            ) {
+                position = this.pathfinding.getRandomNode(
+                    this.pathfinding.zone,
+                    randomIntegerInRange(0, zonesCount),
+                    new Vector3(),
+                    32
+                );
             }
 
             initialPositions.push(position);
 
             const botId = uuid();
-            this.bots[botId] = new Bot(botId, position);
+            this.bots[botId] = new Bot(botId, position, this.characters[i], this.group);
         }
+    }
+
+    // Generative chara
+    _initCharacters() {
+        this.characters = [];
+
+        for (let i = 0; i < configs.character.count; i++) {
+            let body = {};
+            for (const [key, value] of Object.entries(configs.character.body)) {
+                body[key] = {
+                    tag: key,
+                    alphaTexture: value.alphaTexture,
+                    shuffleMesh: value.shuffleMesh,
+                    addColor: value.addColor,
+                    meshes: value.meshes,
+                    mesh: value.shuffleMesh
+                        ? sample(
+                              value.meshes.map(({ name, texture, color: colors }) => ({
+                                  name,
+                                  texture,
+                                  color: colors ? sample(colors) : undefined,
+                              }))
+                          )
+                        : undefined,
+                };
+            }
+
+            let duplicataCount = 0;
+            while (this.characters.find((charaBody) => JSON.stringify(charaBody) === JSON.stringify(body))) {
+                duplicataCount++;
+                body = {};
+                for (const [key, value] of Object.entries(configs.character.body)) {
+                    body[key] = {
+                        tag: key,
+                        alphaTexture: value.alphaTexture,
+                        shuffleMesh: value.shuffleMesh,
+                        addColor: value.addColor,
+                        meshes: value.meshes,
+                        mesh: value.shuffleMesh
+                            ? sample(
+                                  value.meshes.map(({ name, texture, color: colors }) => ({
+                                      name,
+                                      texture,
+                                      color: colors ? sample(colors) : undefined,
+                                  }))
+                              )
+                            : undefined,
+                    };
+                }
+            }
+
+            console.log(`Generative characters ${i + 1}: ${duplicataCount} duplicata times`);
+            this.characters.push(body);
+        }
+
+        this.characters = shuffle(this.characters);
     }
 
     _keyboard() {
@@ -92,11 +171,27 @@ export default class World extends component() {
         player.vectorControls = vectorControls;
     }
 
-    onRaf() {
+    waveRaf(delta) {
+        const waveInfo = this.gerstnerWater.getWaveInfo(
+            this.group.position.x,
+            this.group.position.z,
+            this.gerstnerWater.water.material.uniforms.time.value
+        );
+        this.group.position.y = waveInfo.position.y + 2;
+        const quaternion = new Quaternion().setFromEuler(
+            new Euler(waveInfo.normal.x, waveInfo.normal.y, waveInfo.normal.z)
+        );
+        this.group.quaternion.rotateTowards(quaternion, delta * 0.5);
+        this.group.updateMatrixWorld();
+    }
+
+    onRaf({ delta }) {
         this._renderer.render(this._scene, this._camera);
 
         if (this._isLoaded) {
             this._keyboard();
+
+            this.waveRaf(delta);
 
             /*
             TODO: Collision Items

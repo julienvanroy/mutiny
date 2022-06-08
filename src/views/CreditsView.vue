@@ -1,14 +1,12 @@
 <template>
   <div class="credits">
     <div class="back">
-      <router-link to="/"
-        ><img src="images/icons/arrow-back.png" />back to home</router-link
-      >
+      <TheButton link="/" :label="$t('ui.back')" color="back" />
     </div>
-    <div class="under">
-      <img src="images/background.jpg" />
+    <div class="credits__under">
+      <img src="images/background-home.png" />
     </div>
-    <div class="over">
+    <div class="credits__over">
       <h1>Crédits</h1>
       <ul>
         <li class="subtitle">Design</li>
@@ -24,8 +22,11 @@
 </template>
 
 <script>
+import TheButton from "@/components/ui/TheButton.vue";
+
 export default {
   name: "CreditsView",
+  components: { TheButton },
 };
 </script>
 
@@ -44,7 +45,7 @@ export default {
       align-items: center;
     }
   }
-  .over {
+  &__over {
     position: absolute;
     z-index: 14;
     top: 0;
@@ -60,12 +61,12 @@ export default {
     text-align: center;
     h1 {
       font-size: $ft-s-xlarge;
+      font-weight: $ft-w-bold;
     }
     ul {
       padding: 0;
       li {
         list-style: none;
-        font-weight: $ft-w-medium;
         font-size: $ft-s-small;
         &.subtitle {
           font-weight: $ft-w-bold;
@@ -74,7 +75,7 @@ export default {
       }
     }
   }
-  .under {
+  &__under {
     position: relative;
     z-index: 1;
     width: 100%;

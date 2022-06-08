@@ -1,14 +1,16 @@
 <template>
-  <div class="modal-waiting">WAITING...</div>
+  <ModalWaiting/>
 </template>
 
 <script>
 import useColyseusStore from "@/store/colyseus";
 import {onMounted} from "vue";
 import {useRoute} from "vue-router";
+import ModalWaiting from "@/components/modals/ModalWaiting";
 
 export default {
   name: "ConnectionView",
+  components: {ModalWaiting},
   setup() {
     const store = useColyseusStore()
     const route = useRoute()
@@ -16,24 +18,6 @@ export default {
     onMounted(() => {
       store.joinRoom(route.params.roomId)
     })
-
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.modal-waiting {
-  position: absolute;
-  z-index: 16;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: $black;
-  color: $white;
-  font-weight: $ft-w-bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-</style>

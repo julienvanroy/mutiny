@@ -1,35 +1,36 @@
 <template>
   <div class="main-container" ref="fullscreenContainer">
-    <LocaleChanger />
-
-    <div class="fullscreen">
-      <button
-        v-if="showFullscreenBtn"
-        @click="!!isFullscreen ? closeFullscreen() : goFullscreen()"
-      >
+    <div v-if="!isMobile" class="fullscreen">
+      <button v-if="showFullscreenBtn" @click="setFullscreen()">
         <img src="images/icons/fullscreen-on.png" />
       </button>
     </div>
 
     <div class="btn-parameters">
-      <button v-show="!isGamePath" @click="playMusic">
+      <button @click="playMusic">
         <img src="images/icons/sound-on.png" />
       </button>
-      <button v-show="!isGamePath">
+      <button v-show="!isGamePath" @click="() => (modalShown = 'options')">
         <img src="images/icons/parameters.png" />
       </button>
-      <button v-show="isGamePath">
-        <img src="images/icons/sound-game-on.png" />
+      <button v-show="isGamePath" @click="() => (modalShown = 'pause')">
+        <img src="images/icons/pause.png" />
       </button>
-      <button v-show="isGamePath"><img src="images/icons/pause.png" /></button>
     </div>
 
-    <ModalLandscape />
+    <ModalOptions
+      v-if="'options' === modalShown"
+      :setFullscreen="setFullscreen"
+    />
+
+    <ModalPause v-if="'pause' === modalShown" :setFullscreen="setFullscreen" />
 
     <div id="view">
       <router-view />
-      <WebGl v-if="!isMobile" v-show="path === ('/game' || '/game#debug')" />
+      <WebGl v-if="!isMobile" v-show="isGamePath" />
     </div>
+
+    <!-- <ModalLandscape /> -->
 
     <TheLoader v-if="!isMobile" />
   </div>
@@ -39,17 +40,24 @@
 import WebGl from "@/components/WebGl";
 import { useRoute } from "vue-router";
 import { computed } from "vue";
-import TheLoader from "@/components/TheLoader";
+import TheLoader from "@/components/ui/TheLoader";
 import { mapState } from "pinia";
-import { mapWritableState } from 'pinia'
+import { mapWritableState } from "pinia";
 import useWebglStore from "@/store/webgl";
-import LocaleChanger from "@/components/LocaleChanger";
-import ModalLandscape from "@/components/ModalLandscape";
+// import ModalLandscape from "@/components/modals/ModalLandscape";
+import ModalOptions from "@/components/modals/ModalOptions";
+import ModalPause from "@/components/modals/ModalPause";
 import useGlobalStore from "@/store/global";
 
 export default {
   name: "App",
-  components: {ModalLandscape, LocaleChanger, TheLoader, WebGl },
+  components: {
+    // ModalLandscape,
+    ModalOptions,
+    ModalPause,
+    TheLoader,
+    WebGl,
+  },
   setup() {
     const route = useRoute();
 
@@ -57,23 +65,24 @@ export default {
     return { path };
   },
   mounted() {
-    this.resize()
-    window.addEventListener('resize', this.resize, false);
+    this.resize();
+    window.addEventListener("resize", this.resize, false);
   },
   beforeUnmount() {
-    window.removeEventListener('resize', this.resize, false);
+    window.removeEventListener("resize", this.resize, false);
   },
   methods: {
     resize() {
-      this.isLandscape = window.innerWidth > window.innerHeight
+      this.isLandscape = window.innerWidth > window.innerHeight;
     },
-    goFullscreen() {
-      this.$refs.fullscreenContainer.requestFullscreen();
-      this.isFullscreen = true;
-    },
-    closeFullscreen() {
-      document.exitFullscreen();
-      this.isFullscreen = false;
+    setFullscreen() {
+      if (true === this.isFullscreen) {
+        document.exitFullscreen();
+        this.isFullscreen = false;
+      } else {
+        this.$refs.fullscreenContainer.requestFullscreen();
+        this.isFullscreen = true;
+      }
     },
     playMusic() {
       this.music.play();
@@ -82,12 +91,16 @@ export default {
   computed: {
     ...mapState(useWebglStore, ["audio"]),
     ...mapState(useGlobalStore, ["isMobile", "showFullscreenBtn"]),
-    ...mapWritableState(useGlobalStore, ["isFullscreen", "isLandscape"]),
+    ...mapWritableState(useGlobalStore, [
+      "isFullscreen",
+      "isLandscape",
+      "modalShown",
+    ]),
     music() {
       return this.audio.musicGame;
     },
     isGamePath() {
-      return this.path === ("/game" || "/game#debug");
+      return this.path === "/game" || this.path === "/debug";
     },
   },
 };
@@ -95,12 +108,12 @@ export default {
 
 <style lang="scss">
 #app {
-  color: $black;
+  color: $purple;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: $ft-body;
+  font-family: $font;
   font-weight: $ft-w-regular;
-  box-sizing: border-box;
+  line-height: 1.5;
 }
 
 .main-container {
@@ -143,6 +156,25 @@ export default {
     display: flex;
     justify-content: flex-end;
     align-items: center;
+  }
+}
+
+.nipple {
+  z-index: 2 !important;
+  .back {
+    opacity: 0 !important;
+  }
+  .front {
+    background-color: transparent !important;
+    background-image: url("assets/gamepad/joystick.png") !important;
+    background-size: contain !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    opacity: 1 !important;
+    width: 72px !important;
+    height: 72px !important;
+    margin-left: -36px !important;
+    margin-top: -36px !important;
   }
 }
 </style>

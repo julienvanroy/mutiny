@@ -1,22 +1,32 @@
-import {defineStore} from "pinia";
+import { defineStore } from "pinia";
 import * as Colyseus from "colyseus.js";
 import router from "@/router";
-import {mapToArray, sample} from "@/utils";
+import { mapToArray, sample } from "@/utils";
 
 const useColyseusStore = defineStore("colyseus", {
-    state: () => {
-        return {
-            client: new Colyseus.Client(process.env.VUE_APP_COLYSEUS),
-            rooms: [],
-            currentRoom: null,
-            lobbyRoom: null,
-            players: {},
-            player: {},
-            playerPoints: 0,
-            playerTarget: {},
-        };
+    state: () => ({
+        client: new Colyseus.Client(process.env.VUE_APP_COLYSEUS),
+        rooms: [],
+        currentRoom: null,
+        lobbyRoom: null,
+        players: [],
+        player: null,
+        playerTarget: null,
+    }),
+    getters: {
+        rankedPlayers(state) {
+            return [...state.players].sort((a, b) => (a.points < b.points ? 1 : -1));
+        },
+        playerPoints(state) {
+            return state.player.points;
+        },
+        playerName(state) {
+            return state.player.name;
+        },
+        playerColor(state) {
+            return state.player.name;
+        },
     },
-    getters: {},
     actions: {
         async initLobbyRoom() {
             this.lobbyRoom = await this.client.joinOrCreate("lobby_room");
@@ -72,11 +82,14 @@ const useColyseusStore = defineStore("colyseus", {
                 if (roomId) room = await this.client.joinById(roomId);
                 else room = await this.client.joinById(sample(this.rooms).roomId);
 
-                room.onStateChange((state) => this.updateCurrentPlayer(state.players.$items, room.sessionId));
+                room.onStateChange((state) => {
+                    this.updateCurrentPlayer(state.players.$items, room.sessionId);
+                    this.updatePlayers(state.players.$items);
+                });
+
+                room.onMessage("getPlayer", (player) => (this.player = player));
 
                 this.currentRoom = room;
-
-                this.sendData("addPlayer", { playerId: this.currentRoom.sessionId });
 
                 router.push(`/get-pseudo`);
             } catch (e) {
@@ -88,14 +101,19 @@ const useColyseusStore = defineStore("colyseus", {
         },
         updateCurrentPlayer(players, playerId) {
             this.player = players.get(playerId);
-            this.playerPoints = this.player.points;
-            if (this.player.target) {
-                console.log(this.player.target);
-                this.playerTarget = JSON.parse(this.player.target);
-            }
+            this.playerTarget = this.player?.target ? JSON.parse(this.player.target) : null;
         },
         sendData(type, value) {
             this.currentRoom.send(type, value);
+        },
+        addPseudo(pseudo) {
+            this.sendData("addPseudo", {
+                playerId: this.currentRoom.sessionId,
+                playerName: pseudo,
+            });
+        },
+        addPlayer() {
+            this.sendData("addPlayer", { playerId: this.currentRoom.sessionId });
         },
         getPlayer(playerId) {
             this.sendData("getPlayer", playerId);

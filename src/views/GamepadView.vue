@@ -1,36 +1,30 @@
 <template>
-  <game-pad v-if="!!showGamePad" />
-  <div v-if="!showGamePad" class="modal-waiting">WAITING...</div>
+  <game-pad />
+  <modal-dead v-show="showModalDead" />
+  <modal-steal-target v-show="showModalStealTarget" />
 </template>
 
 <script>
-import GamePad from "@/components/GamePad/GamePad.vue";
 import useColyseusStore from "@/store/colyseus";
+import GamePad from "@/components/GamePad.vue";
+import ModalDead from "@/components/modals/ModalDead.vue";
+import ModalStealTarget from "@/components/modals/ModalStealTarget.vue";
 
 export default {
-  components: { GamePad },
+  components: { GamePad, ModalDead, ModalStealTarget },
   name: "GamepadView",
+  data() {
+    return {
+      showModalDead: false,
+      showModalStealTarget: false,
+    };
+  },
   setup() {
     const colyseus = useColyseusStore();
 
     return { colyseus };
   },
-  data() {
-    return {
-      showGamePad: false,
-      playerTarget: {},
-    };
-  },
   mounted() {
-    this.colyseus.currentRoom.onMessage("startGame", () => {
-      this.showGamePad = true;
-    });
-
-    this.colyseus.currentRoom.onMessage(
-        "getPlayer",
-        (player) => (this.colyseus.player = player)
-    );
-
     this.colyseus.currentRoom.onMessage("joystick", () => {});
 
     this.colyseus.currentRoom.onMessage("kill", () => {});
@@ -40,20 +34,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.modal-waiting {
-  position: absolute;
-  z-index: 16;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: $black;
-  color: $white;
-  font-weight: $ft-w-bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-</style>
