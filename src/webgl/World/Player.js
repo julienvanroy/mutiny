@@ -166,7 +166,7 @@ export default class Player extends component(Mover) {
         if (this.animation && this.animation.mixer) this.animation.mixer.update(delta);
     }
 
-    onKill({ playerId }) {
+    onAttack({ playerId }) {
         if (playerId === this.id) {
             this.animation.play("attack");
         }
@@ -176,6 +176,8 @@ export default class Player extends component(Mover) {
             this.mesh.position.distanceTo(this.target.mesh.position) <= configs.character.range
         ) {
             console.log(`player ${this.id} killed their target ${this.target.id}`);
+            useColyseusStore().sendData("kill", { player: this.id, target: this.target.id });
+
             if (this.target instanceof Player) {
                 this.target.respawn(this);
 
