@@ -11,7 +11,7 @@ const useColyseusStore = defineStore("colyseus", {
         lobbyRoom: null,
         players: [],
         player: null,
-        playerTarget: null
+        playerTarget: null,
     }),
     getters: {
         rankedPlayers(state) {
@@ -86,6 +86,8 @@ const useColyseusStore = defineStore("colyseus", {
                     this.updateCurrentPlayer(state.players.$items, room.sessionId);
                     this.updatePlayers(state.players.$items);
                 });
+
+                room.onMessage("getPlayer", (player) => (this.player = player));
 
                 this.currentRoom = room;
 

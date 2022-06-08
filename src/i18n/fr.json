@@ -12,7 +12,8 @@
     "timeLeft": "Temps restant",
     "tutorial": "Tutoriel",
     "waiting": "EN ATTENTE...",
-    "landscape": "Tournez votre téléphone en vue paysage !!!"
+    "dead": "Capt’ain {{player}} vous a évincé.e",
+    "stealTarget": "{{player}} a débusqué.e votre cible "
   },
   "homepage": {
     "credits": "Crédits",
@@ -21,6 +22,35 @@
     "homePhraseMobile": "Rejoignez une partie depuis le jeu sur ordinateur",
     "infosPlayers": "3 à 8 joueurs",
     "infosEquipments": "1 téléphone par joueur<br />+ 1 ordinateur"
+    "footer": {
+      "players-count": "3 à 8",
+      "players-unit": "joueurs",
+      "materials-1": "1 tél par joueur",
+      "materials-2": "1 ordinateur"
+    },
+    "content": {
+      "shipName": "Nom du navire",
+      "inputPlaceholder": "Fpdr36",
+      "instruction": "Pour jouer, lance d’abord une partie sur ordinateur. Un nom de navire te sera attribué.",
+      "cta": "Embarquez"
+    }
+  },
+  "getPseudo": {
+    "title": "Qui es-tu moussaillon ?",
+    "ctaRandom": "Nom aléatoire",
+    "cta": "Monter sur le pont"
+  },
+  "waiting": {
+    "portrait": {
+      "title": "Bienvenue !",
+      "instruction": "Pour être fin prêt, tourne ton téléphone."
+    },
+    "landscape": {
+      "titleLeft": "Tu es ",
+      "titleMiddle": "prêt.e",
+      "titleRight": " !",
+      "instruction": "Pour que la révolte commence, sélectionne un mode de jeu."
+    }
   },
   "setup": {
     "playersTitle": "L'équipage",
@@ -44,9 +74,12 @@
   },
   "gamepad": {
     "youAre": "tu es",
-    "clues": "indices",
+    "clues": "Ta cible",
+    "clueInterval": "Indice suivant",
     "attack": "Attaque",
-    "power": "Pouvoir"
+    "power": "Pouvoir",
+    "stalkersCounterLeft": "T’es traqué.e par",
+    "stalkersCounterRight": "mousse.s"
   },
   "parameters": {
     "options": "Options",

@@ -1,36 +1,30 @@
 <template>
-  <game-pad v-if="!!showGamePad" />
-  <ModalWaiting v-if="!showGamePad" />
+  <game-pad />
+  <modal-dead v-show="showModalDead" />
+  <modal-steal-target v-show="showModalStealTarget" />
 </template>
 
 <script>
-import GamePad from "@/components/GamePad.vue";
 import useColyseusStore from "@/store/colyseus";
-import ModalWaiting from "@/components/modals/ModalWaiting";
+import GamePad from "@/components/GamePad.vue";
+import ModalDead from "@/components/modals/ModalDead.vue";
+import ModalStealTarget from "@/components/modals/ModalStealTarget.vue";
 
 export default {
-  components: {ModalWaiting, GamePad },
+  components: { GamePad, ModalDead, ModalStealTarget },
   name: "GamepadView",
+  data() {
+    return {
+      showModalDead: false,
+      showModalStealTarget: false,
+    };
+  },
   setup() {
     const colyseus = useColyseusStore();
 
     return { colyseus };
   },
-  data() {
-    return {
-      showGamePad: false
-    };
-  },
   mounted() {
-    this.colyseus.currentRoom.onMessage("startGame", () => {
-      this.showGamePad = true;
-    });
-
-    this.colyseus.currentRoom.onMessage(
-        "getPlayer",
-        (player) => (this.colyseus.player = player)
-    );
-
     this.colyseus.currentRoom.onMessage("joystick", () => {});
 
     this.colyseus.currentRoom.onMessage("kill", () => {});

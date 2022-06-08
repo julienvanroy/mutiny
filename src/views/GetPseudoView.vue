@@ -1,14 +1,23 @@
 <template>
   <div class="get-pseudo">
-    <div class="get-pseudo__under">
-      <img src="images/background-home.png" />
-    </div>
-    <div class="get-pseudo__over">
-      <input v-model="pseudo" :placeholder="placeholder" />
+    <header>
+      <img src="../assets/mobile/header-w-logo.svg" alt="" />
+    </header>
+    <h2>{{ $t("getPseudo.title") }}</h2>
+    <div class="get-pseudo__content">
+      <the-input v-model="pseudo" :placeholder="placeholder" :width="236" :height="48" center />
       <span v-if="pseudoNotValid">Pseudo is already taken</span>
-      <TheButton label="Choose random" color="tertiary" @click="chooseRandomPseudo()" />
-      <TheButton label="Let's go !" color="primary" :disabled="pseudoNotValid" @click="sendPseudo()" />
+      <TheButton
+        :label="$t('getPseudo.ctaRandom')"
+        icon="images/icons/random.svg"
+        color="tertiary"
+        @click="chooseRandomPseudo()"
+      />
     </div>
+    <TheButton :label="$t('getPseudo.cta')" color="primary" :disabled="pseudoNotValid" @click="sendPseudo()" />
+    <footer>
+      <img src="../assets/mobile/header.svg" alt="" />
+    </footer>
   </div>
 </template>
 
@@ -18,10 +27,11 @@ import { PiratesNames } from "@/data/pirates-name";
 import TheButton from "@/components/ui/TheButton.vue";
 import { diffArray, sample } from "@/utils";
 import router from "@/router";
+import TheInput from "@/components/ui/TheInput.vue";
 
 export default {
   name: "GetPseudoView",
-  components: { TheButton },
+  components: { TheButton, TheInput },
   setup() {
     const colyseus = useColyseusStore();
     return { colyseus };
@@ -85,7 +95,7 @@ export default {
       if ("" === this.pseudo) this.pseudo = this.placeholder;
       this.colyseus.addPseudo(this.pseudo);
       this.colyseus.addPlayer();
-      router.push(`/gamepad`);
+      router.push(`/waiting`);
     },
   },
 };
@@ -96,40 +106,31 @@ export default {
   position: relative;
   width: 100%;
   height: 100vh;
-  &__over {
-    position: absolute;
-    z-index: 14;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
+  background-color: $white-beige;
+  background-image: url("../assets/mobile/background.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32px;
+
+  h2 {
+    font-weight: $ft-w-bold;
+    font-size: 30px;
+    text-align: center;
+  }
+
+  &__content {
     display: flex;
-    flex-flow: column nowrap;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-  }
-  &__under {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    &:after {
-      content: "";
-      display: block;
-      background-color: rgba($white, 0.6);
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
+
+    .the-input {
+      margin: 32px 0;
     }
   }
 }

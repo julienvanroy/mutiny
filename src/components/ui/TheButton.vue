@@ -1,8 +1,6 @@
 <template>
-  <button
-    :class="`btn btn-${color} ${disabled ? `disabled` : ''}`"
-    :disabled="disabled"
-  >
+  <button :class="`btn btn-${color} ${disabled ? `disabled` : ''}`" :disabled="disabled">
+    <img v-if="icon" :src="icon" alt="" />
     <router-link v-if="this.link" :to="link">
       {{ this.label }}
     </router-link>
@@ -26,6 +24,10 @@ export default {
       type: Boolean,
       required: false,
       default: false,
+    },
+    icon: {
+      type: String,
+      default: "",
     },
     color: {
       type: String,
@@ -53,6 +55,11 @@ export default {
   color: $white;
   text-align: center;
   transition: 0.3s all ease-in-out;
+  img {
+    z-index: 2;
+    display: inline-block;
+    margin-right: 8px;
+  }
   a,
   span {
     z-index: 2;

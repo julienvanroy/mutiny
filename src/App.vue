@@ -1,6 +1,6 @@
 <template>
   <div class="main-container" ref="fullscreenContainer">
-    <div class="fullscreen">
+    <div v-if="!isMobile" class="fullscreen">
       <button v-if="showFullscreenBtn" @click="setFullscreen()">
         <img src="images/icons/fullscreen-on.png" />
       </button>
@@ -18,21 +18,28 @@
       </button>
     </div>
 
-    <ModalLandscape />
-    <ModalOptions
-      v-if="'options' === modalShown"
-      :setFullscreen="setFullscreen"
-    />
+      <div class="btn-parameters">
+        <button @click="playMusic">
+          <img src="images/icons/sound-on.png" />
+        </button>
+        <button @click="() => (modalShown = 'options')">
+          <img src="images/icons/parameters.png" />
+        </button>
+        <button v-show="isGamePath" @click="() => (modalShown = 'pause')">
+          <img src="images/icons/pause.png" />
+        </button>
+      </div>
+      <ModalOptions v-if="'options' === modalShown" :setFullscreen="setFullscreen" />
 
-    <ModalPause
-      v-if="'pause' === modalShown"
-      :setFullscreen="setFullscreen"
-    />
+      <ModalPause v-if="'pause' === modalShown" :setFullscreen="setFullscreen" />
+    </template>
 
     <div id="view">
       <router-view />
       <WebGl v-if="!isMobile" v-show="isGamePath" />
     </div>
+
+    <!-- <ModalLandscape /> -->
 
     <TheLoader v-if="!isMobile" />
   </div>
@@ -46,7 +53,7 @@ import TheLoader from "@/components/ui/TheLoader";
 import { mapState } from "pinia";
 import { mapWritableState } from "pinia";
 import useWebglStore from "@/store/webgl";
-import ModalLandscape from "@/components/modals/ModalLandscape";
+// import ModalLandscape from "@/components/modals/ModalLandscape";
 import ModalOptions from "@/components/modals/ModalOptions";
 import ModalPause from "@/components/modals/ModalPause";
 import useGlobalStore from "@/store/global";
@@ -54,7 +61,7 @@ import useGlobalStore from "@/store/global";
 export default {
   name: "App",
   components: {
-    ModalLandscape,
+    // ModalLandscape,
     ModalOptions,
     ModalPause,
     TheLoader,
@@ -154,6 +161,25 @@ export default {
     display: flex;
     justify-content: flex-end;
     align-items: center;
+  }
+}
+
+.nipple {
+  z-index: 2 !important;
+  .back {
+    opacity: 0 !important;
+  }
+  .front {
+    background-color: transparent !important;
+    background-image: url("assets/gamepad/joystick.png") !important;
+    background-size: contain !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    opacity: 1 !important;
+    width: 72px !important;
+    height: 72px !important;
+    margin-left: -36px !important;
+    margin-top: -36px !important;
   }
 }
 </style>
