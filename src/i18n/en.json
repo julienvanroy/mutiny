@@ -12,13 +12,43 @@
     "timeLeft": "Remaining time",
     "tutorial": "Tutorial",
     "waiting": "WAITING...",
-    "landscape": "Turn your phone to landscape view !!!"
+    "landscape": "Turn your phone to landscape view !!!",
+    "dead": "Capt’ain {player} vous a évincé.e",
+    "stealTarget": "{player} a débusqué.e votre cible "
   },
   "homepage": {
     "credits": "Credits",
     "createRoom": "Create room",
     "homePhraseDesktop": "One phone per shipwright is required to control your character",
-    "homePhraseMobile": "Join a game from a computer gascreenme"
+    "footer": {
+      "players-count": "3 à 8",
+      "players-unit": "joueurs",
+      "materials-1": "1 tél par joueur",
+      "materials-2": "1 ordinateur"
+    },
+    "content": {
+      "shipName": "Nom du navire",
+      "inputPlaceholder": "Fpdr36",
+      "instruction": "Pour jouer, lance d’abord une partie sur ordinateur. Un nom de navire te sera attribué.",
+      "cta": "Embarquez"
+    }
+  },
+  "getPseudo": {
+    "title": "Qui es-tu moussaillon ?",
+    "ctaRandom": "Nom aléatoire",
+    "cta": "Monter sur le pont"
+  },
+  "waiting": {
+    "portrait": {
+      "title": "Bienvenue !",
+      "instruction": "Pour être fin prêt, tourne ton téléphone."
+    },
+    "landscape": {
+      "titleLeft": "Tu es ",
+      "titleMiddle": "prêt.e",
+      "titleRight": " !",
+      "instruction": "Pour que la révolte commence, sélectionne un mode de jeu."
+    }
   },
   "setup": {
     "playersTitle": "Barrels",
@@ -35,9 +65,12 @@
   },
   "gamepad": {
     "youAre": "you are",
-    "clues": "clues",
+    "clues": "Ta cible",
+    "clueInterval": "Indice suivant",
     "attack": "Attack",
-    "power": "Power"
+    "power": "Power",
+    "stalkersCounterLeft": "T’es traqué.e par",
+    "stalkersCounterRight": "mousse.s"
   },
   "parameters": {
     "options": "Options",
