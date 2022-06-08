@@ -12,8 +12,8 @@
     "timeLeft": "Temps restant",
     "tutorial": "Tutoriel",
     "waiting": "EN ATTENTE...",
-    "dead": "Capt’ain {{player}} vous a évincé.e",
-    "stealTarget": "{{player}} a débusqué.e votre cible "
+    "dead": "{{player}} vous a évincé.e",
+    "stealTarget": "{{player}} a débusqué.e votre cible"
   },
   "homepage": {
     "credits": "Crédits",
@@ -22,17 +22,11 @@
     "homePhraseMobile": "Rejoignez une partie depuis le jeu sur ordinateur",
     "infosPlayers": "3 à 8 joueurs",
     "infosEquipments": "1 téléphone par joueur<br />+ 1 ordinateur",
-    "footer": {
-      "players-count": "3 à 8",
-      "players-unit": "joueurs",
-      "materials-1": "1 tél par joueur",
-      "materials-2": "1 ordinateur"
-    },
-    "content": {
+    "mobileContent": {
       "shipName": "Nom du navire",
       "inputPlaceholder": "Fpdr36",
       "instruction": "Pour jouer, lance d’abord une partie sur ordinateur. Un nom de navire te sera attribué.",
-      "cta": "Embarquez"
+      "cta": "Embarquer"
     }
   },
   "getPseudo": {

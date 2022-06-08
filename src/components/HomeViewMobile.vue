@@ -8,21 +8,21 @@
         <img src="../assets/mobile/logo.svg" alt="Logo Mutiny" />
       </h1>
       <div class="content-container">
-        <h2>{{ $t("homepage.content.shipName") }}</h2>
+        <h2>{{ $t("homepage.mobileContent.shipName") }}</h2>
         <TheInput
-          :placeholder="$t('homepage.content.inputPlaceholder')"
+          :placeholder="$t('homepage.mobileContent.inputPlaceholder')"
           :width="236"
           :height="48"
           v-model="roomId"
           center
         />
         <p>
-          {{ $t("homepage.content.instruction") }}
+          {{ $t("homepage.mobileContent.instruction") }}
         </p>
       </div>
       <div class="btn-container">
         <TheButton
-          :label="$t('homepage.content.cta')"
+          :label="$t('homepage.mobileContent.cta')"
           color="primary"
           @click="joinRoom(roomId)"
         />
@@ -38,19 +38,11 @@
     <footer class="homepage__footer">
       <div class="homepage__footer__left">
         <img src="../assets/mobile/icon-players.svg" />
-        <p>
-          {{ $t("homepage.footer.players-count") }}
-          <br />
-          {{ $t("homepage.footer.players-unit") }}
-        </p>
+        <p v-html="$t('homepage.infosPlayers')"/>
       </div>
       <div class="homepage__footer__right">
         <img src="../assets/mobile/icon-matos.svg" />
-        <p>
-          {{ $t("homepage.footer.materials-1") }}
-          <br />
-          {{ $t("homepage.footer.materials-2") }}
-        </p>
+        <p v-html="$t('homepage.infosEquipments')"/>
       </div>
     </footer>
   </div>

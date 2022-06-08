@@ -12,8 +12,8 @@
     "timeLeft": "Remaining time",
     "tutorial": "Tutorial",
     "waiting": "WAITING...",
-    "dead": "Capt’ain {player} vous a évincé.e",
-    "stealTarget": "{player} a débusqué.e votre cible "
+    "dead": "{{player}} ousted you",
+    "stealTarget": "{{player}} has found your target"
   },
   "homepage": {
     "credits": "Credits",
@@ -22,34 +22,28 @@
     "homePhraseMobile": "Join a game from a computer gascreenme",
     "infosPlayers": "3 to 8 players",
     "infosEquipments": "1 phone per player<br />+ 1 computer",
-    "footer": {
-      "players-count": "3 à 8",
-      "players-unit": "joueurs",
-      "materials-1": "1 tél par joueur",
-      "materials-2": "1 ordinateur"
-    },
-    "content": {
-      "shipName": "Nom du navire",
+    "mobileContent": {
+      "shipName": "Name of the vessel",
       "inputPlaceholder": "Fpdr36",
-      "instruction": "Pour jouer, lance d’abord une partie sur ordinateur. Un nom de navire te sera attribué.",
-      "cta": "Embarquez"
+      "instruction": "To play, first start a game on the computer. You will be given a ship name.",
+      "cta": "Boarding"
     }
   },
   "getPseudo": {
-    "title": "Qui es-tu moussaillon ?",
-    "ctaRandom": "Nom aléatoire",
-    "cta": "Monter sur le pont"
+    "title": "Who are you, sailor?",
+    "ctaRandom": "Random name",
+    "cta": "Getting on the bridge"
   },
   "waiting": {
     "portrait": {
-      "title": "Bienvenue !",
-      "instruction": "Pour être fin prêt, tourne ton téléphone."
+      "title": "Welcome !",
+      "instruction": "To be ready, turn your phone around."
     },
     "landscape": {
-      "titleLeft": "Tu es ",
-      "titleMiddle": "prêt.e",
-      "titleRight": " !",
-      "instruction": "Pour que la révolte commence, sélectionne un mode de jeu."
+      "titleLeft": "You are ",
+      "titleMiddle": "ready",
+      "titleRight": "!",
+      "instruction": "To start the revolt, select a game mode."
     }
   },
   "setup": {
