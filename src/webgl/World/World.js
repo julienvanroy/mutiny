@@ -7,7 +7,6 @@ import PlayerPirate from "@/webgl/World/Pirate/PlayerPirate";
 //import BoxCollision from "@/webgl/Collision/BoxCollision";
 import { Pathfinding } from "three-pathfinding";
 import { diffArray, randomIntegerInRange, sample, shuffle, uuid } from "@/utils/index.js";
-<<<<<<< HEAD
 import BotPirate from "./Pirate/BotPirate.js";
 import MapLevel from "@/webgl/World/MapLevel";
 import configs from "@/configs";
@@ -16,16 +15,6 @@ import Fireflies from "@/webgl/Mesh/Fireflies";
 import GerstnerWater from "@/webgl/Mesh/GerstnerWater";
 import MapCollider from "@/webgl/World/MapCollider";
 import Fog from "@/webgl/Mesh/Fog";
-=======
-import Bot from "./Bot.js";
-// import MapLevel from "@/webgl/World/MapLevel";
-import configs from "@/configs";
-import useColyseusStore from "@/store/colyseus.js";
-import Test from "@/webgl/Test";
-// import Fireflies from "@/webgl/Mesh/Fireflies";
-// import GerstnerWater from "@/webgl/Mesh/GerstnerWater";
-// import FogCustom from './Fog'
->>>>>>> f1f8439 (feat: test steer)
 
 export default class World extends component() {
     init() {
@@ -42,13 +31,8 @@ export default class World extends component() {
     onResourcesIsReady() {
         console.log("world is ready");
         this.environment = new Environment();
-<<<<<<< HEAD
         this.fog = new Fog(20);
         this.fog.mesh.position.y += 1;
-=======
-        // this.fog = new FogCustom();
-        /*
->>>>>>> f1f8439 (feat: test steer)
         this.gerstnerWater = new GerstnerWater();
         this.fireflies = new Fireflies(100);
         this.fireflies.mesh.position.y += 5;
@@ -61,23 +45,14 @@ export default class World extends component() {
         this.item = new Item();
         this.boxCollision = new BoxCollision();
         */
-<<<<<<< HEAD
         if (this.mapLevel.navMesh) {
             this._initPathfinding();
             this._initCharacters();
             this._initBots();
         }
-=======
-        /*
-        this._initPathfinding();
-        this._initCharacters();
-        this._initBots();
->>>>>>> f1f8439 (feat: test steer)
 
         this._scene.add(this.group);
         this.onDebug();
-        */
-        new Test()
         this._isLoaded = true;
     }
 
@@ -198,13 +173,11 @@ export default class World extends component() {
         this.group.updateMatrixWorld();
     }
 
-    onRaf( ) {
+    onRaf({ delta }) {
         this._renderer.render(this._scene, this._camera);
 
         if (this._isLoaded) {
-            // this._keyboard();
-
-            // this.waveRaf(delta);
+            this.waveRaf(delta);
 
             /*
             TODO: Collision Items

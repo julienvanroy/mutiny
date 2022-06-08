@@ -143,6 +143,7 @@ export default [
             flipY: false,
         },
 <<<<<<< HEAD
+<<<<<<< HEAD
     },
     {
         name: "fog",
@@ -154,6 +155,8 @@ export default [
         }
 =======
 >>>>>>> 6c58489 (feat: big implementation - wander & collision avoidance with bots in 3 zones)
+=======
+>>>>>>> cd8730e (feat: big implementation - wander & collision avoidance with bots in 3 zones)
     },
     {
         name: "musicGame",
