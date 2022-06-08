@@ -126,7 +126,7 @@ const configs = {
         cluesTime: [0, 5, 10, 10],
     },
     map: {
-        navMesh: ["NavMesh", "NavMeshShip"],
+        navMesh: ["A", "B", "C"], //["NavMesh", "NavMeshShip"],
         nearRange: 320,
         decors: ["Coffre", "Tonneau", "Canon", "Box", "Boulet"],
     },

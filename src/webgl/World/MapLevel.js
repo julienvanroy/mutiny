@@ -1,7 +1,7 @@
 import Experience from "../Experience";
 import { Mesh } from "three";
 import configs from "@/configs";
-import {SailMaterial} from "@/webgl/Materials/SailMaterial";
+import { SailMaterial } from "@/webgl/Materials/SailMaterial";
 
 export default class MapLevel {
     constructor(group) {
@@ -20,8 +20,8 @@ export default class MapLevel {
 
         this.model.traverse((child) => {
             if (child instanceof Mesh) {
-                if (child.name.includes('voile')) {
-                    child.material = new SailMaterial()
+                if (child.name.includes("voile")) {
+                    child.material = new SailMaterial();
                 }
                 if (configs.map.decors.some((name) => child.name.includes(name))) this.decors.push(child);
                 if (configs.map.navMesh.includes(child.name)) {
@@ -37,7 +37,8 @@ export default class MapLevel {
     _initNavMesh(mesh) {
         this.navMesh = mesh;
         this.navMesh.scale.set(-1, 1, 1);
+        this.navMesh.rotation.x = Math.PI / 2;
         this.navMesh.updateMatrixWorld();
-        this.navMesh.geometry.applyMatrix4(this.navMesh.matrix);
+        // this.navMesh.geometry.applyMatrix4(this.navMesh.matrix);
     }
 }

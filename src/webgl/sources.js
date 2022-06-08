@@ -142,6 +142,7 @@ export default [
             encoding: sRGBEncoding,
             flipY: false,
         },
+<<<<<<< HEAD
     },
     {
         name: "fog",
@@ -151,6 +152,8 @@ export default [
             encoding: sRGBEncoding,
             flipY: false
         }
+=======
+>>>>>>> 6c58489 (feat: big implementation - wander & collision avoidance with bots in 3 zones)
     },
     {
         name: "musicGame",
