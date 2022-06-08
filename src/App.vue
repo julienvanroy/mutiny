@@ -10,29 +10,20 @@
       <button @click="playMusic">
         <img src="images/icons/sound-on.png" />
       </button>
-      <button v-show="!isGamePath" @click="() => modalShown = 'options'">
+      <button v-show="!isGamePath" @click="() => (modalShown = 'options')">
         <img src="images/icons/parameters.png" />
       </button>
-      <button v-show="isGamePath" @click="() => modalShown = 'pause'">
+      <button v-show="isGamePath" @click="() => (modalShown = 'pause')">
         <img src="images/icons/pause.png" />
       </button>
     </div>
 
-      <div class="btn-parameters">
-        <button @click="playMusic">
-          <img src="images/icons/sound-on.png" />
-        </button>
-        <button @click="() => (modalShown = 'options')">
-          <img src="images/icons/parameters.png" />
-        </button>
-        <button v-show="isGamePath" @click="() => (modalShown = 'pause')">
-          <img src="images/icons/pause.png" />
-        </button>
-      </div>
-      <ModalOptions v-if="'options' === modalShown" :setFullscreen="setFullscreen" />
+    <ModalOptions
+      v-if="'options' === modalShown"
+      :setFullscreen="setFullscreen"
+    />
 
-      <ModalPause v-if="'pause' === modalShown" :setFullscreen="setFullscreen" />
-    </template>
+    <ModalPause v-if="'pause' === modalShown" :setFullscreen="setFullscreen" />
 
     <div id="view">
       <router-view />
@@ -100,7 +91,11 @@ export default {
   computed: {
     ...mapState(useWebglStore, ["audio"]),
     ...mapState(useGlobalStore, ["isMobile", "showFullscreenBtn"]),
-    ...mapWritableState(useGlobalStore, ["isFullscreen", "isLandscape", "modalShown"]),
+    ...mapWritableState(useGlobalStore, [
+      "isFullscreen",
+      "isLandscape",
+      "modalShown",
+    ]),
     music() {
       return this.audio.musicGame;
     },
