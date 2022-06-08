@@ -4,9 +4,7 @@
       <ThePlayer :player="player" />
     </li>
   </ul>
-  <router-link to="end-game"
-    ><button class="end-btn">END GAME</button></router-link
-  >
+  <router-link to="end-game"><button class="end-btn">END GAME</button></router-link>
   <div class="timer-container">
     <TheTimer />
   </div>
@@ -34,15 +32,9 @@ export default {
 
     this.colyseus.currentRoom.onMessage("getPlayer", () => {});
 
-    this.colyseus.currentRoom.onMessage(
-      "joystick",
-      ({ playerSessionId, playerPosition }) => {
-        bidello.trigger(
-          { name: "movePlayer" },
-          { playerId: playerSessionId, vector2: playerPosition }
-        );
-      }
-    );
+    this.colyseus.currentRoom.onMessage("joystick", ({ playerSessionId, playerPosition }) => {
+      bidello.trigger({ name: "movePlayer" }, { playerId: playerSessionId, vector2: playerPosition });
+    });
 
     this.colyseus.currentRoom.onMessage("attack", ({ playerSessionId }) => {
       bidello.trigger({ name: "attack" }, { playerId: playerSessionId });
