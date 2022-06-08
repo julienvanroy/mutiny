@@ -30,8 +30,6 @@
       <WebGl v-if="!isMobile" v-show="isGamePath" />
     </div>
 
-    <!-- <ModalLandscape /> -->
-
     <TheLoader v-if="!isMobile" />
   </div>
 </template>
@@ -44,15 +42,14 @@ import TheLoader from "@/components/ui/TheLoader";
 import { mapState } from "pinia";
 import { mapWritableState } from "pinia";
 import useWebglStore from "@/store/webgl";
-// import ModalLandscape from "@/components/modals/ModalLandscape";
 import ModalOptions from "@/components/modals/ModalOptions";
 import ModalPause from "@/components/modals/ModalPause";
 import useGlobalStore from "@/store/global";
+import useColyseusStore from "./store/colyseus";
 
 export default {
   name: "App",
   components: {
-    // ModalLandscape,
     ModalOptions,
     ModalPause,
     TheLoader,
@@ -60,9 +57,10 @@ export default {
   },
   setup() {
     const route = useRoute();
+    const colyseus = useColyseusStore();
 
     const path = computed(() => route.path);
-    return { path };
+    return { path, colyseus };
   },
   mounted() {
     this.resize();
@@ -70,6 +68,12 @@ export default {
   },
   beforeUnmount() {
     window.removeEventListener("resize", this.resize, false);
+  },
+  watch: {
+    isLandscape(newValue) {
+      this.colyseus.currentRoom &&
+        this.colyseus.sendData("orientationChange", { orientation: newValue ? "landscape" : "portrait" });
+    },
   },
   methods: {
     resize() {
