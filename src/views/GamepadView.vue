@@ -27,7 +27,23 @@ export default {
   mounted() {
     this.colyseus.currentRoom.onMessage("joystick", () => {});
 
-    this.colyseus.currentRoom.onMessage("kill", () => {});
+    this.colyseus.currentRoom.onMessage("attack", () => {});
+
+    this.colyseus.currentRoom.onMessage("kill", ({ player, target }) => {
+      console.log(
+        `Player ${this.colyseus.players.find((p) => p.id === player).name} killed Player ${
+          this.colyseus.players.find((p) => p.id === target).name
+        }`
+      );
+    });
+
+    this.colyseus.currentRoom.onMessage("updatePlayerTarget", ({ player, target }) => {
+      console.log(
+        `Player ${this.colyseus.players.find((p) => p.id === player).name} has new target Player ${
+          this.colyseus.players.find((p) => p.id === target).name
+        }`
+      );
+    });
   },
   unmounted() {
     this.colyseus.currentRoom?.leave();

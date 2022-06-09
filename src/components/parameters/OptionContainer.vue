@@ -19,7 +19,6 @@ export default {
 
 <style lang="scss" scoped>
 .option-container {
-  background: rgba(237, 223, 216, 0.08);
   box-shadow: inset 0px 0px 11px rgba(222, 197, 204, 0.7);
   border-radius: 4px;
   padding: 24px 30px;

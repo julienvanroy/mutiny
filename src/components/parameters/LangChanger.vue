@@ -5,7 +5,7 @@
       v-for="locale in $i18n.availableLocales"
       :key="`locale-${locale}`"
     >
-      <input type="radio" :id="locale" name="lang" :value="locale" checked v-model="$i18n.locale"/>
+      <input type="radio" :id="locale" name="lang" :value="locale" :checked="$i18n.locale === locale" v-model="$i18n.locale"/>
       <label :for="locale">{{ "en" === locale ? $t('lang.en') : $t('lang.fr') }}</label>
     </div>
   </div>
@@ -45,7 +45,7 @@ export default {
         display: block;
         width: 32px;
         height: 32px;
-        background-color: #ecded9;
+        background-color: #FEF4F3;
         background-image: url("../../assets/parameters/button-off.png");
         background-repeat: no-repeat;
         background-size: 100% 100%;

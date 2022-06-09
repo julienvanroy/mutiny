@@ -1,16 +1,16 @@
 <template>
   <transition name="fade">
     <ModalContainer
-      :title="$t('setup.modalJoin.title')"
-      btnLabel="Ok"
+      :title="$t('modals.modalJoin.title')"
+      :btnLabel="$t('modals.modalJoin.btnLabel')"
     >
       <div class="modal__join">
-        <p v-html="$t('setup.modalJoin.description')" />
+        <p v-html="$t('modals.modalJoin.description')" />
         <div class="connection">
           <div class="connection__code">
             <CopyCode :code="roomId" />
           </div>
-          <span>{{ $t("setup.modalJoin.or") }}</span>
+          <span>{{ $t("modals.modalJoin.or") }}</span>
           <div class="connection__qrcode">
             <div class="connection__qrcode_inner"><QrCode /></div>
           </div>
