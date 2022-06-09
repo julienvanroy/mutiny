@@ -5,7 +5,7 @@
         <img src="../assets/mobile/header-w-logo.svg" alt="" />
       </header>
       <h2>{{ $t("waiting.portrait.title") }}</h2>
-      <ThePlayer v-if="null !== player" :player="player" large />
+      <ThePlayer v-if="null !== player" :player="player" :large="true" />
       <div class="waiting__instruction">
         <p>{{ $t("waiting.portrait.instruction") }}</p>
         <img src="../assets/mobile/icon-rotate.svg" alt="" />

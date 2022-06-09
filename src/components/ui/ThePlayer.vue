@@ -1,7 +1,16 @@
 <template>
-  <div class="player" :class="{ '--large': large }">
+  <div
+    :class="`player
+    ${!!large ? 'large' : ''}
+    ${!!player.isKilled ? 'killed' : ''}
+    ${!!player.targetChanged ? 'changed' : ''}
+    `"
+  >
     <div class="points">
-      <TheBottle :background="player.color.bottle" :lines="player.color.bottleDetails" />
+      <TheBottle
+        :background="player.color.bottle"
+        :lines="player.color.bottleDetails"
+      />
       <span>{{ player.points }}</span>
     </div>
     <span class="name">{{ player.name }}</span>
@@ -39,6 +48,7 @@ export default {
   background-size: 100% 100%;
   width: 160px;
   height: 60px;
+  transition: .3s all ease-in-out;
   .points {
     position: absolute;
     top: 45%;
@@ -56,6 +66,7 @@ export default {
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+      transition: .3s all ease-in-out;
     }
   }
   .name {
@@ -63,8 +74,9 @@ export default {
     font-size: $ft-s-xxsmall;
     margin-left: 5px;
     text-align: left;
+    transition: .3s all ease-in-out;
   }
-  &.--large {
+  &.large {
     width: 240px;
     height: 100px;
     padding: 12px 12px 12px 70px;
@@ -76,6 +88,34 @@ export default {
     }
     .name {
       font-size: $ft-s-xsmall;
+    }
+  }
+  &.killed {
+    background-image: url("../../assets/player/background-killed.png");
+    transition: .3s all ease-in-out;
+    .points {
+      span {
+        color: $red-dead;
+        transition: .3s all ease-in-out;
+      }
+    }
+    .name {
+      color: $white-beige;
+      transition: .3s all ease-in-out;
+    }
+  }
+  &.changed {
+    background-image: url("../../assets/player/background-changed.png");
+    transition: .3s all ease-in-out;
+    .points {
+      span {
+        color: $violet-target;
+        transition: .3s all ease-in-out;
+      }
+    }
+    .name {
+      color: $white-beige;
+      transition: .3s all ease-in-out;
     }
   }
 }
