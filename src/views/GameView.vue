@@ -1,6 +1,6 @@
 <template>
   <ul class="players">
-    <li v-for="player in colyseus.players" :key="player.id">
+    <li v-for="player in players" :key="player.id">
       <ThePlayer :player="player" />
     </li>
   </ul>
@@ -23,8 +23,15 @@ export default {
     const colyseus = useColyseusStore();
     return { colyseus };
   },
+  data() {
+    return {
+      players: {},
+    }
+  },
   mounted() {
     if (!this.colyseus.currentRoom) return;
+
+    this.colyseus.sendData("getAllPlayers");
 
     this.colyseus.currentRoom.onMessage("updatePlayerTarget", () => {});
 
@@ -45,6 +52,10 @@ export default {
         }`
       );
     });
+    this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
+      delete players[this.colyseus.currentRoom.sessionId];
+      this.players = players;
+    })
 
     this.colyseus.currentRoom.onMessage("updatePlayerTarget", ({ player, target }) => {
       console.log(
