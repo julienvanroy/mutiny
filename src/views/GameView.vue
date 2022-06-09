@@ -26,14 +26,12 @@ export default {
   data() {
     return {
       players: {},
-    }
+    };
   },
   mounted() {
     if (!this.colyseus.currentRoom) return;
 
     this.colyseus.sendData("getAllPlayers");
-
-    this.colyseus.currentRoom.onMessage("updatePlayerTarget", () => {});
 
     this.colyseus.currentRoom.onMessage("startGame", () => {});
 
@@ -55,7 +53,7 @@ export default {
     this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
       delete players[this.colyseus.currentRoom.sessionId];
       this.players = players;
-    })
+    });
 
     this.colyseus.currentRoom.onMessage("updatePlayerTarget", ({ player, target }) => {
       console.log(
