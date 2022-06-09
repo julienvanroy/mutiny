@@ -22,6 +22,11 @@ export default [
         path: "models/Map/pirate-ship-with-navmesh-2.glb",
     },
     {
+        name: "mapCollider",
+        type: "gltfModel",
+        path: "models/MapCollision/index.glb",
+    },
+    {
         name: "characterModel",
         type: "gltfModel",
         path: "models/Character/personnage03_binary.glb",

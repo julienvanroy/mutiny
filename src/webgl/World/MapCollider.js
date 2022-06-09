@@ -10,7 +10,7 @@ export default class MapCollider {
         this._debug = experience.debug;
 
         const resource = experience.resources.items.mapCollider;
-        const collider = resource.scene;
+        const collider = resource.scene.children[0];
 
         // Geometry
         const geometry = collider.geometry.clone()
@@ -27,7 +27,7 @@ export default class MapCollider {
 
         // Collider
         this.collider = new Mesh(geometry, material);
-        this.collider.position.set(0, 0, 0);
+        this.collider.position.x = 3.75
 
         this._group.add(this.collider);
 

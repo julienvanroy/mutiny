@@ -13,6 +13,7 @@ import configs from "@/configs";
 import useColyseusStore from "@/store/colyseus.js";
 import Fireflies from "@/webgl/Mesh/Fireflies";
 import GerstnerWater from "@/webgl/Mesh/GerstnerWater";
+import MapCollider from "@/webgl/World/MapCollider";
 
 export default class World extends component() {
     init() {
@@ -32,6 +33,7 @@ export default class World extends component() {
         this.gerstnerWater = new GerstnerWater();
         this.fireflies = new Fireflies(100);
         this.mapLevel = new MapLevel(this.group);
+        this.mapCollider = new MapCollider(this.group)
 
         this.players = new Map();
         /*
@@ -184,7 +186,7 @@ export default class World extends component() {
     }
 
     onAddPlayer({ playerId }) {
-        this.players.set(playerId, new PlayerPirate(playerId, this.mapLevel.collider));
+        this.players.set(playerId, new PlayerPirate(playerId, this.mapCollider.collider));
         console.log(`player ${playerId} added`, this.players.get(playerId));
     }
 
