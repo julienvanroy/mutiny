@@ -20,17 +20,22 @@ export default class GerstnerWater extends component() {
             {direction: 60, steepness: 0.15, wavelength: 25},
         ]
 
+        this._params = {
+            sunColor: "#ffffff",
+            waterColor: "#001e0f",
+        }
+
         this.water = new Water(waterGeometry, {
             textureWidth: 512,
             textureHeight: 512,
             waterNormals: this.texture,
             sunDirection: new Vector3(),
-            sunColor: 0xffffff,
-            waterColor: 0x001e0f,
+            sunColor: this._params.sunColor,
+            waterColor: this._params.waterColor,
             distortionScale: 8,
             fog: true,
         })
-        
+
         this.water.material.wireframe = false
         this.water.rotation.x = -Math.PI / 2
         this.water.material.onBeforeCompile = (
@@ -105,19 +110,18 @@ export default class GerstnerWater extends component() {
         const folderWater = folderDebug.addFolder({
             title: "Water",
             expanded: false,
-        });
+        })
 
-
-        folderWater.addInput(waterUniforms.waterColor, 'value', {
+        folderWater.addInput(this._params, 'waterColor', {
             label: "Color",
-        }).on('change', (ev) => {
-            waterUniforms.waterColor.value = new Color(ev.value)
+        }).on('change', ({value}) => {
+            waterUniforms.waterColor.value = new Color(value)
         });
 
-        folderWater.addInput(waterUniforms.sunColor, 'value', {
+        folderWater.addInput(this._params, 'sunColor', {
             label: "Sun Color",
-        }).on('change', (ev) => {
-            waterUniforms.sunColor.value = new Color(ev.value)
+        }).on('change', ({value}) => {
+            waterUniforms.sunColor.value = new Color(value)
         });
 
         folderWater.addInput(waterUniforms.distortionScale, 'value', {
