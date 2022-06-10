@@ -128,10 +128,11 @@ const useColyseusStore = defineStore("colyseus", {
         getAllPlayers() {
             this.sendData("getAllPlayers");
         },
-        updatePlayerTarget(playerId, playerTarget) {
+        updatePlayerTarget(playerId, playerTarget, onGameStart = false) {
             this.sendData("updatePlayerTarget", {
                 playerId,
                 playerTarget,
+                onGameStart,
             });
         },
     },

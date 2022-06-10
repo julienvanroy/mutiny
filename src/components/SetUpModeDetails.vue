@@ -25,7 +25,7 @@
         </div>
         <div class="parameters__right">
           <OptionContainer :title="$t('parameters.controls')">
-            <img src="images/parameters/controls-mode-1.png" />
+            <img :src="`images/parameters/controls-mode-1-${$i18n.locale}.png`" />
           </OptionContainer>
         </div>
       </div>
