@@ -3,6 +3,7 @@ import { createApp } from "vue";
 import { createI18n } from 'vue-i18n'
 import App from "./App.vue";
 import router from "./router";
+import { createMetaManager, plugin as metaPlugin } from 'vue-meta'
 import { createPinia } from "pinia";
 // TODO: Delete comments... Just for prototype
 //import './registerServiceWorker'
@@ -20,8 +21,12 @@ const i18n = createI18n({
     }
 })
 
+const metaManager = createMetaManager()
+
 const app = createApp(App);
 app.use(i18n)
 app.use(router);
+app.use(metaManager)
+app.use(metaPlugin) // optional, only needed for OptionsAPI (see below)
 app.use(createPinia());
 app.mount("#app");

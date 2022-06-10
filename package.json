@@ -31,6 +31,7 @@
     "tweakpane": "^3.0.8",
     "vue": "^3.2.13",
     "vue-i18n": "^9.1.10",
+    "vue-meta": "v3.0.0-alpha.10",
     "vue-router": "^4.0.14"
   },
   "devDependencies": {
