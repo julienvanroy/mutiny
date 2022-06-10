@@ -3,6 +3,10 @@
     "fr": "French",
     "en": "English"
   },
+  "meta": {
+    "title": "Mutiny - Hidden Barrels",
+    "description": "To play, first start a game on the computer. You will be given a ship name. Boarding. 3 to 8 players."
+  },
   "ui": {
     "back": "Back",
     "close": "Close",
