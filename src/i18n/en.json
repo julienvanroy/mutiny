@@ -54,7 +54,9 @@
     "playersTitle": "The crew",
     "playersPlaceholder": "No sailors on deck...<br/>“sounds of crickets“",
     "infos": "To join the crew, go to <strong>Mutiny.com</strong> with <strong>your phone</strong>.",
-    "codeTitle": "Join the vessel"
+    "codeTitle": "Join the vessel",
+    "ready": "Ready",
+    "vacancy": "Vacancy"
   },
   "modals": {
     "modalJoin": {

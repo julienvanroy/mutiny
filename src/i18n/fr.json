@@ -54,7 +54,9 @@
     "playersTitle": "L'équipage",
     "playersPlaceholder": "Aucun moussaillon sur le pont...<br/>“bruits de criquets”",
     "infos": "Pour intégrer l’équipage, va sur <strong>Mutiny.com</strong> avec <strong>ton téléphone</strong>.",
-    "codeTitle": "Rejoins le navire"
+    "codeTitle": "Rejoins le navire",
+    "ready": "Prêt",
+    "vacancy": "Poste à pourvoir"
   },
   "modals": {
     "modalJoin": {
