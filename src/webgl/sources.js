@@ -19,7 +19,7 @@ export default [
     {
         name: "mapModel",
         type: "gltfModel",
-        path: "models/Map/pirate-ship-with-navmesh-2.glb",
+        path: "models/Map/pirate-ship.glb",
     },
     {
         name: "characterModel",

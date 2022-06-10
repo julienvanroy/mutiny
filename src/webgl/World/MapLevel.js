@@ -1,7 +1,7 @@
 import Experience from "../Experience";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils";
 import { MeshBVH, MeshBVHVisualizer } from "three-mesh-bvh";
-import {Color, Mesh, MeshBasicMaterial, MeshStandardMaterial} from "three";
+import {Mesh, MeshBasicMaterial} from "three";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils";
 import configs from "@/configs";
 
@@ -19,7 +19,7 @@ export default class MapLevel {
         this.model.position.set(0, 0, 0);
         // this.model.scale.set(6.4, 6.4, 6.4);
 
-        this.navMesh = {};
+        this.navMesh = null;
 
         this._initCollider();
 
@@ -27,13 +27,6 @@ export default class MapLevel {
 
         this.model.traverse((child) => {
             if (child instanceof Mesh) {
-                child.receiveShadow = true;
-                child.castShadow = true;
-                child.material = new MeshStandardMaterial({
-                    color: new Color(0xffceb0).convertSRGBToLinear().getHex(),
-                    map: this.texture,
-                });
-
                 if (configs.map.decors.some((name) => child.name.includes(name))) this.decors.push(child);
             }
         });

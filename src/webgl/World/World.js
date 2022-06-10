@@ -42,9 +42,11 @@ export default class World extends component() {
         this.item = new Item();
         this.boxCollision = new BoxCollision();
         */
-        this._initPathfinding();
-        this._initCharacters();
-        this._initBots();
+        if(this.mapLevel.navMesh) {
+            this._initPathfinding();
+            this._initCharacters();
+            this._initBots();
+        }
 
         this._scene.add(this.group);
         this.onDebug();
