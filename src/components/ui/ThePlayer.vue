@@ -2,16 +2,16 @@
   <div
     :class="`player
     ${!!large ? 'large' : ''}
-    ${!!player.isKilled ? 'killed' : ''}
     ${!!player.targetChanged ? 'changed' : ''}
+    ${!!player.isKilled ? 'killed' : ''}
+    ${!player.connected ? 'disconnected' : ''}
+    disconnected
     `"
   >
     <div class="points">
       <TheBottle
         :background="
-          !!player.isKilled
-            ? '#FFF6F4'
-            : !!player.targetChanged
+          !!player.isKilled || !!player.targetChanged || !player.connected
             ? '#FFF6F4'
             : player.color.bottle
         "
@@ -20,6 +20,8 @@
             ? '#903238'
             : !!player.targetChanged
             ? '#622B75'
+            : !player.connected
+            ? '#6B6587'
             : player.color.bottleDetails
         "
       />
@@ -43,6 +45,9 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  mounted() {
+    console.log(this.player);
   },
 };
 </script>
@@ -122,6 +127,20 @@ export default {
     .points {
       span {
         color: $violet-target;
+        transition: 0.3s all ease-in-out;
+      }
+    }
+    .name {
+      color: $white-beige;
+      transition: 0.3s all ease-in-out;
+    }
+  }
+  &.disconnected {
+    background-image: url("../../assets/player/background-disconnected.png");
+    transition: 0.3s all ease-in-out;
+    .points {
+      span {
+        color: $violet-clue;
         transition: 0.3s all ease-in-out;
       }
     }
