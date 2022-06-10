@@ -5,7 +5,6 @@
     ${!!player.targetChanged ? 'changed' : ''}
     ${!!player.isKilled ? 'killed' : ''}
     ${!player.connected ? 'disconnected' : ''}
-    disconnected
     `"
   >
     <div class="points">
@@ -25,18 +24,31 @@
             : player.color.bottleDetails
         "
       />
-      <span>{{ player.points }}</span>
+      <span>{{ !player.connected ? "!" : player.points }}</span>
     </div>
     <span class="name">{{ player.name }}</span>
+    <ThePins
+      class="pin"
+      :state="
+        !!player.isKilled
+          ? 'killed'
+          : !!player.targetChanged
+          ? 'switched'
+          : !player.connected
+          ? 'disconnected'
+          : ''
+      "
+    />
   </div>
 </template>
 
 <script>
 import TheBottle from "@/components/svg/TheBottle";
+import ThePins from "@/components/svg/ThePins";
 
 export default {
   name: "ThePlayer",
-  components: { TheBottle },
+  components: { TheBottle, ThePins },
   props: {
     player: {
       required: true,
@@ -45,9 +57,6 @@ export default {
       type: Boolean,
       default: false,
     },
-  },
-  mounted() {
-    console.log(this.player);
   },
 };
 </script>
@@ -84,6 +93,7 @@ export default {
       left: 50%;
       transform: translate(-50%, -50%);
       transition: 0.3s all ease-in-out;
+      text-shadow: 4px 3px 2px rgba(77, 8, 28, 0.2);
     }
   }
   .name {
@@ -92,6 +102,12 @@ export default {
     margin-left: 5px;
     text-align: left;
     transition: 0.3s all ease-in-out;
+  }
+  .pin {
+    position: absolute;
+    width: 26px;
+    top: -6px;
+    right: -4px;
   }
   &.large {
     width: 240px;
