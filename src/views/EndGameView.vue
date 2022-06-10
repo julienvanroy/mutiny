@@ -9,7 +9,7 @@
         <ul>
           <li v-for="(player, index) in colyseus.rankedPlayers" :key="index">
             <div class="points">
-              <img :src="`/images/players/${player.color}.png`" />
+              <!-- <img :src="`/images/players/${player.color}.png`" /> -->
               <span>{{ player.points }}</span>
             </div>
             <span class="name">{{ player.name }}</span>
