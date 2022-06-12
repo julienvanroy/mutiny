@@ -25,7 +25,8 @@
     "homePhraseDesktop": "One phone per player is required to control their shipmate",
     "homePhraseMobile": "Join a game from a computer gascreenme",
     "infosPlayers": "3 to 8 players",
-    "infosEquipments": "1 phone per player<br />+ 1 computer",
+    "infosEquipments1": "1 phone per player",
+    "infosEquipments2": "+ 1 computer",
     "mobileContent": {
       "shipName": "Name of the vessel",
       "inputPlaceholder": "Fpdr36",
@@ -52,8 +53,12 @@
   },
   "setup": {
     "playersTitle": "The crew",
-    "playersPlaceholder": "No sailors on deck...<br/>“sounds of crickets“",
-    "infos": "To join the crew, go to <strong>Mutiny.com</strong> with <strong>your phone</strong>.",
+    "playersPlaceholder1": "No sailors on deck...",
+    "playersPlaceholder2": "“sounds of crickets“",
+    "infos1": "To join the crew, go to ",
+    "infos2": "mutinyparty.com",
+    "infos3": " with ",
+    "infos4": "your phone.",
     "codeTitle": "Join the vessel",
     "ready": "Ready",
     "vacancy": "Vacancy"
@@ -61,7 +66,11 @@
   "modals": {
     "modalJoin": {
       "title": "Join the vessel",
-      "description": "Enter the code below on <strong>Mutiny.com</strong> with <strong>your phone</strong> or flash the QR code directly.",
+      "description1": "Enter the code below on ",
+      "description2": "mutinyparty.com",
+      "description3": " with ",
+      "description4": "your phone",
+      "description5": " or flash the QR code directly.",
       "or": "Or",
       "btnLabel": "Heave-ho!"
     },
@@ -104,7 +113,7 @@
   "modes": {
     "1": {
       "name": "Stalkers Stalked",
-      "shortDescription": "Sneak into the crew, oust your rivals and overthrow the captain.<br/>Let the silent mutiny begin!",
+      "shortDescription": "Sneak into the crew, oust your rivals and overthrow the captain... Let the silent mutiny begin!",
       "description": "Do you want to be the captain of the ship? Earn the most terror points by attacking your opponents. The clues to your next target are on your dashboard. Have a nice trip!",
       "btnGo": "On boooaard!"
     }

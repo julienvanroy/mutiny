@@ -2,8 +2,17 @@
   <div class="players">
     <h1>{{ $t("setup.playersTitle") }}</h1>
     <div class="placeholder" v-if="!colyseus.players.length">
-      <p class="placeholder" v-html="$t('setup.playersPlaceholder')" />
-      <p class="infos" v-html="$t('setup.infos')" />
+      <p class="placeholder">
+        {{ $t("setup.playersPlaceholder1") }}
+        <br />
+        {{ $t("setup.playersPlaceholder2") }}
+      </p>
+      <p class="infos">
+        {{ $t("setup.infos1") }}
+        <strong>{{ $t("setup.infos2") }}</strong>
+        {{ $t("setup.infos3") }}
+        <strong>{{ $t("setup.infos4") }}</strong>
+      </p>
     </div>
     <ul v-if="0 < colyseus.players.length" class="players-list">
       <li class="player" v-for="(n, index) in 8" :key="index">
@@ -18,15 +27,30 @@
           </div>
           <div class="player__state">
             <div class="state">
-              {{ !!colyseus.players[index].orientationReady ? $t("setup.ready") : '' }}
-              <div v-if="!colyseus.players[index].orientationReady" class="dots">
+              {{
+                !!colyseus.players[index].orientationReady
+                  ? $t("setup.ready")
+                  : ""
+              }}
+              <div
+                v-if="!colyseus.players[index].orientationReady"
+                class="dots"
+              >
                 <span class="dot">.</span>
                 <span class="dot">.</span>
                 <span class="dot">.</span>
               </div>
             </div>
             <!-- TODO: onclick eject player from room -->
-            <div class="remove" @click="this.colyseus.sendData('ejectPlayer', colyseus.players[index].id)">
+            <div
+              class="remove"
+              @click="
+                this.colyseus.sendData(
+                  'ejectPlayer',
+                  colyseus.players[index].id
+                )
+              "
+            >
               <img src="images/icons/remove-player.png" />
             </div>
           </div>

@@ -32,11 +32,15 @@
     <footer class="homepage__footer">
       <div class="homepage__footer__left">
         <img src="../assets/mobile/icon-players.svg" />
-        <p v-html="$t('homepage.infosPlayers')" />
+        <span>{{ $t("homepage.infosPlayers") }}</span>
       </div>
       <div class="homepage__footer__right">
         <img src="../assets/mobile/icon-matos.svg" />
-        <p v-html="$t('homepage.infosEquipments')" />
+        <span>
+          {{ $t("homepage.infosEquipments1") }}
+          <br />
+          {{ $t("homepage.infosEquipments2") }}
+        </span>
       </div>
     </footer>
   </div>
