@@ -25,7 +25,8 @@
     "homePhraseDesktop": "Un téléphone par joueur est requis pour contrôler son moussaillon.",
     "homePhraseMobile": "Rejoignez une partie depuis le jeu sur ordinateur",
     "infosPlayers": "3 à 8 joueurs",
-    "infosEquipments": "1 téléphone par joueur<br />+ 1 ordinateur",
+    "infosEquipments1": "1 téléphone par joueur",
+    "infosEquipments2": "+ 1 ordinateur",
     "mobileContent": {
       "shipName": "Nom du navire",
       "inputPlaceholder": "Fpdr36",
@@ -52,8 +53,12 @@
   },
   "setup": {
     "playersTitle": "L'équipage",
-    "playersPlaceholder": "Aucun moussaillon sur le pont...<br/>“bruits de criquets”",
-    "infos": "Pour intégrer l’équipage, va sur <strong>Mutiny.com</strong> avec <strong>ton téléphone</strong>.",
+    "playersPlaceholder1": "Aucun moussaillon sur le pont...",
+    "playersPlaceholder2": "“bruits de criquets”",
+    "infos1": "Pour intégrer l’équipage, va sur ",
+    "infos2": "mutinyparty.com",
+    "infos3": " avec ",
+    "infos4": "ton téléphone.",
     "codeTitle": "Rejoins le navire",
     "ready": "Prêt",
     "vacancy": "Poste à pourvoir"
@@ -61,7 +66,11 @@
   "modals": {
     "modalJoin": {
       "title": "Rejoins le navire",
-      "description": "Entre le code ci-dessous sur <strong>Mutiny.com</strong> avec <strong>ton téléphone</strong> ou bien flash directement le QR code.",
+      "description1": "Entre le code ci-dessous sur ",
+      "description2": "mutinyparty.com",
+      "description3": " avec ",
+      "description4": "ton téléphone",
+      "description5": " ou bien flash directement le QR code.",
       "or": "Ou",
       "btnLabel": "Hissez oh !"
     },
@@ -104,7 +113,7 @@
   "modes": {
     "1": {
       "name": "Traqueurs Traqués",
-      "shortDescription": "Faufile-toi parmi l’équipage, évince tes rivaux et renverse le cap’taine.<br/>Que la silencieuse mutinerie commence !",
+      "shortDescription": "Faufile-toi parmi l’équipage, évince tes rivaux et renverse le cap’taine... Que la silencieuse mutinerie commence !",
       "description": "Tu veux devenir le cap’taine du navire ? Gagne le plus de points de terreur en attaquant tes adversaires. Les indices de ta prochaine cible sont sur ton tableau de bord. Bon vent !",
       "btnGo": "À l’aborrrdage !"
     }

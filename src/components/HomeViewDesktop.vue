@@ -29,7 +29,11 @@
           </div>
           <div>
             <img src="images/icons/equipments.png" />
-            <span v-html="$t('homepage.infosEquipments')"></span>
+            <span>
+              {{ $t("homepage.infosEquipments1") }}
+              <br />
+              {{ $t("homepage.infosEquipments2") }}
+            </span>
           </div>
         </div>
       </div>

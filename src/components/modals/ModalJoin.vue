@@ -5,7 +5,13 @@
       :btnLabel="$t('modals.modalJoin.btnLabel')"
     >
       <div class="modal__join">
-        <p v-html="$t('modals.modalJoin.description')" />
+        <p>
+          {{ $t("modals.modalJoin.description1") }}
+          <strong>{{ $t("modals.modalJoin.description2") }}</strong>
+          {{ $t("modals.modalJoin.description3") }}
+          <strong>{{ $t("modals.modalJoin.description4") }}</strong>
+          {{ $t("modals.modalJoin.description5") }}
+        </p>
         <div class="connection">
           <div class="connection__code">
             <CopyCode :code="roomId" />

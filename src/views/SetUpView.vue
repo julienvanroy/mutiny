@@ -20,7 +20,10 @@
           @click="() => setSelected(mode)"
         >
           <div v-if="!!mode.isAvailable" class="content">
-            <img class="flag" :src="`images/setup/flag${idx === hovered ? '-hover' : ''}.png`" />
+            <img
+              class="flag"
+              :src="`images/setup/flag${idx === hovered ? '-hover' : ''}.png`"
+            />
             <p :class="`uptitle ${idx === hovered ? 'hovered' : ''}`">Mode</p>
             <h2>{{ $t(mode.name) }}</h2>
           </div>
@@ -34,7 +37,7 @@
       </div>
 
       <div class="catch-phrase">
-        <p v-if="hovered !== null" v-html="$t(modes[hovered].shortDescription)" />
+        <p v-if="hovered !== null">{{ $t(modes[hovered].shortDescription) }}</p>
       </div>
     </div>
 
@@ -43,7 +46,11 @@
       <SetUpConnection />
     </div>
 
-    <SetUpModeDetails v-if="null !== selected" v-on:set-selected="setSelected" :mode="selected" />
+    <SetUpModeDetails
+      v-if="null !== selected"
+      v-on:set-selected="setSelected"
+      :mode="selected"
+    />
 
     <ModalJoin v-if="'join' === modalShown" :roomId="colyseus.currentRoom.id" />
 
@@ -88,9 +95,12 @@ export default {
     };
   },
   mounted() {
-    this.colyseus.currentRoom.onMessage("addPlayer", ({ playerSessionId: playerId }) => {
-      bidello.trigger({ name: "addPlayer" }, { playerId });
-    });
+    this.colyseus.currentRoom.onMessage(
+      "addPlayer",
+      ({ playerSessionId: playerId }) => {
+        bidello.trigger({ name: "addPlayer" }, { playerId });
+      }
+    );
 
     this.colyseus.currentRoom.onMessage("getAllPlayers", () => {});
 
@@ -207,10 +217,12 @@ export default {
           animation: boat 5s infinite cubic-bezier(0.455, 0.03, 0.515, 0.955);
         }
         &:nth-of-type(2) {
-          animation: boat 4.8s infinite cubic-bezier(0.455, 0.03, 0.515, 0.955) reverse;
+          animation: boat 4.8s infinite cubic-bezier(0.455, 0.03, 0.515, 0.955)
+            reverse;
         }
         &:nth-of-type(3) {
-          animation: boat 5.2s infinite cubic-bezier(0.455, 0.03, 0.515, 0.955) alternate;
+          animation: boat 5.2s infinite cubic-bezier(0.455, 0.03, 0.515, 0.955)
+            alternate;
         }
         img {
           width: 100%;
