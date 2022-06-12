@@ -14,7 +14,7 @@
             ? '#FFF6F4'
             : player.color.bottle
         "
-        :lines="
+        :details="
           !!player.isKilled
             ? '#903238'
             : !!player.targetChanged

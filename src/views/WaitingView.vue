@@ -60,12 +60,18 @@ export default {
 
     this.colyseus.getPlayer(this.colyseus.currentRoom.sessionId);
 
-    this.colyseus.currentRoom.onMessage("startGame", () => this.$router.push("gamepad"));
+    this.colyseus.currentRoom.onMessage("startGame", () =>
+      this.$router.push("gamepad")
+    );
 
     this.colyseus.currentRoom.onMessage("updatePlayerTarget", () => {});
 
     this.colyseus.currentRoom.onMessage("getPlayer", (player) => {
       this.player = player;
+    });
+
+    this.colyseus.currentRoom.onMessage("leaveRoom", () => {
+      this.colyseus.currentRoom.leave();
     });
   },
   beforeUnmount() {
