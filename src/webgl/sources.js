@@ -139,6 +139,15 @@ export default [
         }
     },
     {
+        name: "fog",
+        type: "texture",
+        path: "textures/fog/blue.png",
+        options: {
+            encoding: sRGBEncoding,
+            flipY: false
+        }
+    },
+    {
         name: "musicGame",
         type: "audio",
         path: "sound/music.mp3",
