@@ -1,4 +1,4 @@
-import {DirectionalLight} from 'three'
+import {DirectionalLight, sRGBEncoding} from 'three'
 import Experience from '../Experience.js'
 
 export default class Environment {
@@ -6,6 +6,11 @@ export default class Environment {
         const experience = new Experience()
         this._scene = experience.scene
         this._initSunLight()
+
+        // Skybox
+        const environmentMapTexture = experience.resources.items.environmentMapTexture
+        environmentMapTexture.encoding = sRGBEncoding
+        this._scene.background = environmentMapTexture
     }
 
     _initSunLight() {

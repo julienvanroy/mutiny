@@ -156,7 +156,16 @@ export default {
 
   &.disabled {
     pointer-events: none;
-    opacity: 0.7;
+    &:before {
+      opacity: 0.2;
+      mix-blend-mode: darken;
+    }
+    &:after {
+      background-image: none;
+    }
+    span {
+      color: $disabled;
+    }
     @media (any-hover: hover) {
       &:hover {
         cursor: not-allowed;

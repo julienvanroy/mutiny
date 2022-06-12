@@ -2,6 +2,19 @@ import { sRGBEncoding } from "three";
 
 export default [
     {
+        name: 'environmentMapTexture',
+        type: 'cubeTexture',
+        path:
+            [
+                'textures/environmentMap/px.png',
+                'textures/environmentMap/nx.png',
+                'textures/environmentMap/py.png',
+                'textures/environmentMap/ny.png',
+                'textures/environmentMap/pz.png',
+                'textures/environmentMap/nz.png'
+            ]
+    },
+    {
         name: "woodTexture",
         type: "texture",
         path: "textures/wood.jpeg",
@@ -19,7 +32,7 @@ export default [
     {
         name: "mapModel",
         type: "gltfModel",
-        path: "models/Map/pirate-ship-with-navmesh-2.glb",
+        path: "models/Map/pirate-ship.glb",
     },
     {
         name: "mapCollider",

@@ -1,4 +1,8 @@
 <template>
+  <metainfo>
+    <template v-slot:title="{ content }">{{ content }}</template>
+    <template v-slot:description="{ content }">{{ content }}</template>
+  </metainfo>
   <div class="main-container" ref="fullscreenContainer">
     <div v-if="!isMobile" class="fullscreen">
       <button v-if="showFullscreenBtn" @click="setFullscreen()">
@@ -52,11 +56,21 @@ export default {
     TheLoader,
     WebGl,
   },
+  metaInfo() {
+    return {
+      title: this.$t('meta.title'),
+      description: this.$t('meta.description'),
+      htmlAttrs: {
+        lang: this.$i18n.locale,
+      }
+    }
+  },
   setup() {
     const route = useRoute();
     const colyseus = useColyseusStore();
 
     const path = computed(() => route.path);
+
     return { path, colyseus };
   },
   mounted() {

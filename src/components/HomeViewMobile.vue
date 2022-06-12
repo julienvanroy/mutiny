@@ -23,26 +23,20 @@
       <div class="btn-container">
         <TheButton
           :label="$t('homepage.mobileContent.cta')"
+          :disabled="!roomId"
           color="primary"
           @click="joinRoom(roomId)"
-        />
-        <TheButton
-          v-for="(room, roomIndex) in colyseus.rooms"
-          :key="roomIndex"
-          @click="joinRoom(room.roomId)"
-          :label="`Join room ` + room.roomId"
-          color="primary"
         />
       </div>
     </div>
     <footer class="homepage__footer">
       <div class="homepage__footer__left">
         <img src="../assets/mobile/icon-players.svg" />
-        <p v-html="$t('homepage.infosPlayers')"/>
+        <p v-html="$t('homepage.infosPlayers')" />
       </div>
       <div class="homepage__footer__right">
         <img src="../assets/mobile/icon-matos.svg" />
-        <p v-html="$t('homepage.infosEquipments')"/>
+        <p v-html="$t('homepage.infosEquipments')" />
       </div>
     </footer>
   </div>

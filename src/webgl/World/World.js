@@ -41,9 +41,11 @@ export default class World extends component() {
         this.item = new Item();
         this.boxCollision = new BoxCollision();
         */
-        this._initPathfinding();
-        this._initCharacters();
-        this._initBots();
+        if(this.mapLevel.navMesh) {
+            this._initPathfinding();
+            this._initCharacters();
+            this._initBots();
+        }
 
         this._scene.add(this.group);
         this.onDebug();
@@ -267,7 +269,7 @@ export default class World extends component() {
             if (p.target instanceof PlayerPirate) p.target._setBot();
             else if (p.target instanceof BotPirate) p._setBot();
 
-            useColyseusStore().updatePlayerTarget(p.id, p._getTargetData());
+            useColyseusStore().updatePlayerTarget(p.id, p._getTargetData(), true);
 
             console.log(`player ${p.id} has target ${p.target.id} ${p.target.bot ? `of bot ${p.target.bot.id}` : ""}`);
         });

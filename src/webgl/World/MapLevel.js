@@ -14,23 +14,12 @@ export default class MapLevel {
         this.model = this.resource.scene.clone();
         this.model.position.set(0, 0, 0);
 
-        this.navMesh = {};
+        this.navMesh = null;
 
         this.decors = [];
 
         this.model.traverse((child) => {
             if (child instanceof Mesh) {
-                if (configs.map.navMesh.includes(child.name)) {
-                    child.visible = true;
-                    this._initNavMesh(clone(child));
-                }
-                child.receiveShadow = true;
-                child.castShadow = true;
-                child.material = new MeshStandardMaterial({
-                    color: new Color(0xffceb0).convertSRGBToLinear().getHex(),
-                    map: this.texture,
-                });
-
                 if (configs.map.decors.some((name) => child.name.includes(name))) this.decors.push(child);
             }
         });

@@ -1,7 +1,7 @@
 <template>
   <div class="gamepad">
     <div class="gamepad__left">
-      <player-card :name="name" :color="color" :points="points" />
+      <ThePlayer :player="this.colyseus.player" />
       <div ref="joystick" class="joystick"></div>
     </div>
     <div class="gamepad__middle">
@@ -34,11 +34,11 @@
 <script>
 import useColyseusStore from "@/store/colyseus";
 import nipplejs from "nipplejs";
-import PlayerCard from "./ui/PlayerCard.vue";
-import StalkersCounter from "./ui/StalkersCounter.vue";
+import ThePlayer from "./ui/ThePlayer";
+import StalkersCounter from "./ui/StalkersCounter";
 
 export default {
-  components: { PlayerCard, StalkersCounter },
+  components: { ThePlayer, StalkersCounter },
   name: "GamePad",
   setup() {
     const colyseus = useColyseusStore();
@@ -89,15 +89,6 @@ export default {
     },
     cluesHide() {
       return this.clues?.filter((clue) => !clue.show);
-    },
-    points() {
-      return this.colyseus.playerPoints;
-    },
-    color() {
-      return this.colyseus.playerColor;
-    },
-    name() {
-      return this.colyseus.playerName;
     },
   },
   methods: {

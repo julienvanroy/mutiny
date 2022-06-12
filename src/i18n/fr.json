@@ -3,6 +3,10 @@
     "fr": "Français",
     "en": "Anglais"
   },
+  "meta": {
+    "title": "Mutiny - Barils cachés",
+    "description": "Pour jouer, lancez d'abord une partie sur l'ordinateur. Vous recevrez un nom de navire. Embarquement. 3 à 8 joueurs."
+  },
   "ui": {
     "back": "Retour",
     "close": "Fermer",
@@ -50,7 +54,9 @@
     "playersTitle": "L'équipage",
     "playersPlaceholder": "Aucun moussaillon sur le pont...<br/>“bruits de criquets”",
     "infos": "Pour intégrer l’équipage, va sur <strong>Mutiny.com</strong> avec <strong>ton téléphone</strong>.",
-    "codeTitle": "Rejoins le navire"
+    "codeTitle": "Rejoins le navire",
+    "ready": "Prêt",
+    "vacancy": "Poste à pourvoir"
   },
   "modals": {
     "modalJoin": {
