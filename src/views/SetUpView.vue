@@ -96,6 +96,8 @@ export default {
 
     this.colyseus.currentRoom.onMessage("getPlayer", () => {});
 
+    this.colyseus.currentRoom.onMessage("leaveRoom", () => {});
+
     this.modalShown = "join";
   },
   methods: {
