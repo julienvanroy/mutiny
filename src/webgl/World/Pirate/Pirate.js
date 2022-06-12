@@ -1,37 +1,51 @@
-import {
-    Mesh,
-    Color,
-    AnimationClip,
-    AnimationMixer,
-    CircleGeometry,
-    MeshBasicMaterial,
-    MeshStandardMaterial,
-    LoopOnce,
-} from "three";
-import Experience from "../Experience";
+import {Mesh, Color, CircleGeometry, MeshBasicMaterial, MeshStandardMaterial, LoopOnce} from "three";
+import Experience from "../../Experience";
 import configs from "@/configs";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils";
-export default class Mover {
-    constructor(body) {
+import {sample} from "@/utils";
+import Animation from "@/webgl/Animation";
+
+export default class Pirate {
+    constructor(body = null) {
         const experience = new Experience();
-        this._scene = experience.scene;
+        this._group = experience.world.group;
         this._resources = experience.resources.items;
         this.charaResource = experience.resources.items.characterModel;
 
-        if (body) {
-            this._initModel(body);
-            this._initAnimation();
+        this.body = body;
+
+        if (!this.body) this.generateBody()
+        this._initModel();
+        this._initAnimation();
+    }
+
+    generateBody() {
+        this.body = {}
+        for (const [key, value] of Object.entries(configs.character.body)) {
+            this.body[key] = {
+                tag: key,
+                alphaTexture: value.alphaTexture,
+                shuffleMesh: value.shuffleMesh,
+                addColor: value.addColor,
+                meshes: value.meshes,
+                mesh: value.shuffleMesh
+                    ? sample(
+                        value.meshes.map(({ name, texture, color: colors }) => ({
+                            name,
+                            texture,
+                            color: colors ? sample(colors) : undefined,
+                        }))
+                    )
+                    : undefined,
+            };
         }
     }
 
-    _initModel(body) {
+    _initModel() {
         this.mesh = clone(this.charaResource.scene);
 
         this.mesh.position.set(0, 0, 0);
-        this._scene.add(this.mesh);
-
-        // Generative chara
-        this.body = body;
+        this._group.add(this.mesh);
 
         let rangeColor;
 
@@ -99,47 +113,24 @@ export default class Mover {
     }
 
     _initAnimation() {
-        this.animation = {};
+        this.animation = new Animation(this.mesh, this.charaResource.animations)
 
-        // Mixer
-        this.animation.mixer = new AnimationMixer(this.mesh);
+        this.animation.addAction('walk', "Marche_01")
 
-        // Actions
-        this.animation.actions = {};
+        this.animation.addAction('idle', "Arret_01")
+        this.animation.actions.idle.setLoop(LoopOnce);
+        this.animation.actions.idle.clampWhenFinished = true;
 
-        this.animation.actions.walk = this.animation.mixer.clipAction(
-            AnimationClip.findByName(this.charaResource.animations, "Arret_01")
-        );
-        this.animation.actions.idle = this.animation.mixer.clipAction(
-            AnimationClip.findByName(this.charaResource.animations, "Arret_01")
-        );
-        this.animation.actions.attack = this.animation.mixer.clipAction(
-            AnimationClip.findByName(this.charaResource.animations, "Attaque_01")
-        );
+        this.animation.addAction('attack', "Attaque_01")
+        this.animation.actions.attack.setLoop(LoopOnce);
+        this.animation.actions.attack.clampWhenFinished = true;
 
-        this.animation.play = (name, playOnce = true, duration = 1) => {
-            const newAction = this.animation.actions[name];
-            const oldAction = this.animation.actions.current;
-
-            playOnce && newAction.setLoop(LoopOnce);
-
-            newAction.reset();
-            newAction.play();
-            newAction.crossFadeFrom(oldAction, duration);
-
-            this.animation.actions.current = playOnce ? oldAction : newAction;
-        };
+        this.animation.addAction('dead', "Mort_01")
+        this.animation.actions.dead.setLoop(LoopOnce);
+        this.animation.actions.dead.clampWhenFinished = true;
 
         this.animation.actions.current = this.animation.actions.walk;
         this.animation.play("walk");
-    }
-
-    _getPlayerData() {
-        const { bodyData } = this;
-        return {
-            id: this.id,
-            info: bodyData.map(({ tag, color, show }) => ({ tag, color, show })),
-        };
     }
 
     _getTargetData() {

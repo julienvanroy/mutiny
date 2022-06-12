@@ -1,18 +1,19 @@
 import Environment from "./Environment.js";
 import { component } from "bidello";
 import Experience from "@/webgl/Experience";
-import { Euler, Group, Quaternion, Vector2, Vector3 } from "three";
-import Player from "@/webgl/World/Player";
+import { Euler, Group, Quaternion, Vector3 } from "three";
+import PlayerPirate from "@/webgl/World/Pirate/PlayerPirate";
 //import Item from "@/webgl/World/Item";
 //import BoxCollision from "@/webgl/Collision/BoxCollision";
 import { Pathfinding } from "three-pathfinding";
 import { diffArray, randomIntegerInRange, sample, shuffle, uuid } from "@/utils/index.js";
-import Bot from "./Bot.js";
+import BotPirate from "./Pirate/BotPirate.js";
 import MapLevel from "@/webgl/World/MapLevel";
 import configs from "@/configs";
 import useColyseusStore from "@/store/colyseus.js";
 import Fireflies from "@/webgl/Mesh/Fireflies";
 import GerstnerWater from "@/webgl/Mesh/GerstnerWater";
+import MapCollider from "@/webgl/World/MapCollider";
 import Fog from "@/webgl/Mesh/Fog";
 
 export default class World extends component() {
@@ -22,7 +23,6 @@ export default class World extends component() {
         this._renderer = experience.renderer;
         this._scene = experience.scene;
         this._camera = experience.camera;
-        this._controls = experience.controls;
         this.group = new Group();
 
         this._isLoaded = false;
@@ -35,6 +35,7 @@ export default class World extends component() {
         this.gerstnerWater = new GerstnerWater();
         this.fireflies = new Fireflies(100);
         this.mapLevel = new MapLevel(this.group);
+        this.mapCollider = new MapCollider(this.group)
 
         this.players = new Map();
         /*
@@ -94,7 +95,7 @@ export default class World extends component() {
             initialPositions.push(position);
 
             const botId = uuid();
-            this.bots[botId] = new Bot(botId, position, this.characters[i], this.group);
+            this.bots[botId] = new BotPirate(botId, position, this.characters[i], this.group);
         }
     }
 
@@ -154,30 +155,11 @@ export default class World extends component() {
         this.characters = shuffle(this.characters);
     }
 
-    _keyboard() {
-        const player = this.players.get("debug");
-        if (!this._debug.active || !this._controls.isPressed || !player) return;
-
-        const vectorControls = new Vector2();
-
-        if (this._controls.actions.up && this._controls.actions.down) vectorControls.y = 0;
-        else if (this._controls.actions.up) vectorControls.y = 1;
-        else if (this._controls.actions.down) vectorControls.y = -1;
-        else vectorControls.y = 0;
-
-        if (this._controls.actions.right && this._controls.actions.left) vectorControls.x = 0;
-        else if (this._controls.actions.right) vectorControls.x = 1;
-        else if (this._controls.actions.left) vectorControls.x = -1;
-        else vectorControls.x = 0;
-
-        player.vectorControls = vectorControls;
-    }
-
     waveRaf(delta) {
         const waveInfo = this.gerstnerWater.getWaveInfo(
             this.group.position.x,
             this.group.position.z,
-            this.gerstnerWater.water.material.uniforms.time.value
+            this.gerstnerWater.mesh.material.uniforms.time.value
         );
         this.group.position.y = waveInfo.position.y + 2;
         const quaternion = new Quaternion().setFromEuler(
@@ -191,8 +173,6 @@ export default class World extends component() {
         this._renderer.render(this._scene, this._camera);
 
         if (this._isLoaded) {
-            this._keyboard();
-
             this.waveRaf(delta);
 
             /*
@@ -210,7 +190,7 @@ export default class World extends component() {
     }
 
     onAddPlayer({ playerId }) {
-        this.players.set(playerId, new Player(playerId, this.mapLevel.collider));
+        this.players.set(playerId, new PlayerPirate(playerId, this.mapCollider.collider));
         console.log(`player ${playerId} added`, this.players.get(playerId));
     }
 
@@ -231,7 +211,10 @@ export default class World extends component() {
         const btnAddPlayer = folderDebug.addButton({
             title: "addPlayer",
         });
-        btnAddPlayer.on("click", () => this.onAddPlayer({ playerId: "debug" }));
+        btnAddPlayer.on("click", () => {
+            this.onAddPlayer({ playerId: "debug" })
+            btnAddPlayer.dispose()
+        });
     }
 
     assignTargets() {
@@ -285,8 +268,8 @@ export default class World extends component() {
 
         console.log(this.players);
         this.players.forEach((p) => {
-            if (p.target instanceof Player) p.target._setBot();
-            else if (p.target instanceof Bot) p._setBot();
+            if (p.target instanceof PlayerPirate) p.target._setBot();
+            else if (p.target instanceof BotPirate) p._setBot();
 
             useColyseusStore().updatePlayerTarget(p.id, p._getTargetData(), true);
 

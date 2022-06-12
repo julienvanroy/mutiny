@@ -1,4 +1,5 @@
 import bidello from "bidello";
+import Experience from "@/webgl/Experience";
 
 export default class Raf {
     constructor() {
@@ -9,6 +10,8 @@ export default class Raf {
         this.onTick = this.onTick.bind(this);
         this.start();
         this.onTick(this.startTime);
+
+        this.onDebug()
     }
 
     start() {
@@ -42,5 +45,22 @@ export default class Raf {
         }
 
         window.requestAnimationFrame(this.onTick);
+    }
+
+    onDebug() {
+        const experience = new Experience()
+        const debug = experience.debug
+        if(!debug.active) return
+
+        const folderDebug = debug.pane.addFolder({
+            title: "RAF",
+            expanded: false,
+        });
+
+        const playPauseDebug = folderDebug.addButton({title: this.isPaused ? "Play" : "Pause"}).on("click", () => {
+            if(this.isPaused) this.start()
+            else this.pause()
+            playPauseDebug.title = this.isPaused ? "Play" : "Pause"
+        });
     }
 }

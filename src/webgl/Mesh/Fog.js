@@ -23,8 +23,8 @@ export default class Fog extends component() {
         const count = this._args[0];
 
         const params = {
-            size: 1000,
-            halfBoxSize: 100,
+            size: 100,
+            halfBoxSize: 50,
         };
 
         const texture = experience.resources.items.fog
@@ -44,7 +44,7 @@ export default class Fog extends component() {
                 params.halfBoxSize * 2
             );
 
-            scaleArray[i] = MathUtils.randFloat(0, 1);
+            scaleArray[i] = 1;
 
         }
 
@@ -74,7 +74,7 @@ export default class Fog extends component() {
 
         // Mesh
         this.mesh = new Points(this.geometry, this.material);
-        this.mesh.position.y += 0
+        this.mesh.position.y += 5
         this.mesh.frustumCulled = false;
         this._scene.add(this.mesh);
     }

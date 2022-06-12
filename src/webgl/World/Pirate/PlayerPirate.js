@@ -1,27 +1,31 @@
 import { component } from "bidello";
-import { Box3, Line3, Matrix4, Quaternion, Vector2, Vector3 } from "three";
-import Experience from "../Experience";
-import Mover from "./Mover";
+import {Box3, Line3, Matrix4, Quaternion, Vector2, Vector3} from "three";
+import Experience from "../../Experience";
+import Pirate from "./Pirate";
 import { mapToArray, sample } from "@/utils";
 import configs from "@/configs";
-import Bot from "./Bot";
+import BotPirate from "./BotPirate";
 import useColyseusStore from "@/store/colyseus";
 
-export default class Player extends component(Mover) {
-    constructor(playerId, collider) {
-        super();
-        this.id = playerId;
-        this._collider = collider;
+export default class PlayerPirate extends component(Pirate) {
+    constructor(playerId, collider, group, body) {
+        super(body, playerId, collider);
     }
 
     init() {
+        this.id = this._args[1];
+        this._collider = this._args[2];
+
         const experience = new Experience();
-        this._scene = experience.scene;
+        this._debug = experience.debug
+        this._controls = experience.controls;
 
         this._bots = experience.world.bots;
         this._players = experience.world.players;
 
         this._vectorControls = new Vector2();
+        this._speedRun = 2
+        this._speedMove = configs.character.speed
         this._targetQuaternion = new Quaternion();
         this._speedRotation = 10;
 
@@ -40,11 +44,31 @@ export default class Player extends component(Mover) {
             vector: new Vector3(),
             vector2: new Vector3(),
         };
+
+        this._useKeyboard = this.id === 'debug'
+
+        this.onDebug()
     }
 
     set vectorControls(value) {
         this._vectorControls.x = value.x;
         this._vectorControls.y = value.y;
+    }
+
+    _keyboard() {
+        if (!this._debug.active || !this._useKeyboard) return;
+
+        const vectorControls = this._vectorControls
+
+        if (this._controls.actions.up && this._controls.actions.down) vectorControls.y = 0;
+        else if (this._controls.actions.up) vectorControls.y = 1;
+        else if (this._controls.actions.down) vectorControls.y = -1;
+        else vectorControls.y = 0;
+
+        if (this._controls.actions.right && this._controls.actions.left) vectorControls.x = 0;
+        else if (this._controls.actions.right) vectorControls.x = 1;
+        else if (this._controls.actions.left) vectorControls.x = -1;
+        else vectorControls.x = 0;
     }
 
     get isMoving() {
@@ -53,8 +77,9 @@ export default class Player extends component(Mover) {
 
     _move(delta) {
         if (this.isMoving) {
-            this.mesh.position.z -= this._vectorControls.y * delta * configs.character.speed;
-            this.mesh.position.x += this._vectorControls.x * delta * configs.character.speed;
+            const boostRun = this._vectorControls.length() > 0.5 ? this._speedRun : 1;
+            this.mesh.position.z -= this._vectorControls.y * delta * this._speedMove * boostRun
+            this.mesh.position.x += this._vectorControls.x * delta * this._speedMove * boostRun;
         }
     }
 
@@ -150,11 +175,10 @@ export default class Player extends component(Mover) {
 
         this.bot.isPlayer = true;
         this.mesh = this.bot.mesh;
-
-        super._initAnimation();
     }
 
     onRaf({ delta }) {
+        this._keyboard()
         this._move(delta);
         this._rotation(delta);
 
@@ -163,10 +187,12 @@ export default class Player extends component(Mover) {
          */
         //this._updateCollision(delta)
 
-        if (this.animation && this.animation.mixer) this.animation.mixer.update(delta);
+
+        if (!this.isMoving && this.animation.actions.current !== this.animation.actions.idle) this.animation.play("idle");
+        else if (this.animation.actions.current !== this.animation.actions.walk) this.animation.play("walk");
     }
 
-    onAttack({ playerId }) {
+    onKill({ playerId }) {
         if (playerId === this.id) {
             this.animation.play("attack");
         }
@@ -176,9 +202,7 @@ export default class Player extends component(Mover) {
             this.mesh.position.distanceTo(this.target.mesh.position) <= configs.character.range
         ) {
             console.log(`player ${this.id} killed their target ${this.target.id}`);
-            useColyseusStore().sendData("kill", { player: this.id, target: this.target.id });
-
-            if (this.target instanceof Player) {
+            if (this.target instanceof PlayerPirate) {
                 this.target.respawn(this);
 
                 const playersWithSameTarget = mapToArray(this._players, true).filter(
@@ -219,11 +243,11 @@ export default class Player extends component(Mover) {
     }
 
     switchTarget() {
-        if (this.target instanceof Bot) {
+        if (this.target instanceof BotPirate) {
             this.target = sample(
                 Object.values(this._bots).filter((bot) => bot.id !== this.target.id && bot.id !== this.bot.id)
             );
-        } else if (this.target instanceof Player) {
+        } else if (this.target instanceof PlayerPirate) {
             this.target = sample(
                 mapToArray(this._players, true).filter((p) =>
                     this._players.size === 2 ? p.id !== this.id : p.id !== this.target.id && p.id !== this.id
@@ -238,5 +262,46 @@ export default class Player extends component(Mover) {
                 this.target.bot ? `of bot ${this.target.bot.id}` : ""
             }`
         );
+    }
+
+    onDebug() {
+        if(!this._debug.active) return
+
+        const folderDebug = this._debug.pane.addFolder({
+            title: `Player ${this.id}`,
+            expanded: false,
+        });
+
+        folderDebug.addInput(this, '_useKeyboard', {
+            label: "Use Keyboard",
+        })
+
+        folderDebug.addInput(this, '_speedMove', {
+            label: "Speed Move",
+            step: 0.01,
+            min: 0,
+            max: 20,
+        })
+
+        folderDebug.addInput(this, '_speedRun', {
+            label: "Speed Run",
+            step: 0.01,
+            min: 0,
+            max: 20,
+        })
+
+        folderDebug.addInput(this, '_speedRotation', {
+            label: "Speed Rotation",
+            step: 0.01,
+            min: 0,
+            max: 30,
+        })
+
+        folderDebug.addInput(this, '_gravity', {
+            label: "Gravity",
+            step: 0.01,
+            min: -100,
+            max: 0,
+        })
     }
 }

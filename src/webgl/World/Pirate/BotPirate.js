@@ -1,22 +1,23 @@
 import { component } from "bidello";
 import { PathfindingHelper } from "three-pathfinding";
-import Mover from "./Mover";
-import Experience from "../Experience";
+import Pirate from "./Pirate";
+import Experience from "../../Experience";
 import configs from "@/configs";
-import { randomNumberInRange } from "@/utils";
 
 const { character: confCharacter } = configs;
 const { animation: confAnimation } = confCharacter;
-export default class Bot extends component(Mover) {
-    constructor(botId, position, body, group) {
-        super(body);
-        this._group = group;
+export default class BotPirate extends component(Pirate) {
+    constructor(botId, position, body) {
+        super(body, botId, position);
+    }
 
-        this.id = botId;
+    init() {
+        this.id = this._args[1];
+        const position = this._args[2]
+
         this.isPlayer = false;
 
         const experience = new Experience();
-        this._group.add(this.mesh);
         this._pathfinding = experience.world.pathfinding;
 
         this._helper = new PathfindingHelper();
@@ -75,8 +76,6 @@ export default class Bot extends component(Mover) {
                 this._setPath();
             }
 
-            if (this.animation && this.animation.mixer) this.animation.mixer.update(delta);
-
             if (this.mesh) {
                 this.mesh.position.set(this.position.x, this.position.y, this.position.z);
 
@@ -92,8 +91,11 @@ export default class Bot extends component(Mover) {
 
         if (!this.isPlayer) {
             if (this.idle.active) {
-                if (!this.idle.angle) this.idle.angle = randomNumberInRange(-Math.PI * 2, Math.PI * 2);
-                this.mesh.rotation.y += (this.idle.angle - this.mesh.rotation.y) * confCharacter.rotationSpeed * 3.2;
+                // if (!this.idle.angle) this.idle.angle = randomNumberInRange(-Math.PI * 2, Math.PI * 2);
+                // this.mesh.rotation.y += (this.idle.angle - this.mesh.rotation.y) * confCharacter.rotationSpeed * 3.2;
+                this.animation.play("idle");
+            } else if (this.animation.actions.current !== this.animation.actions.walk) {
+                this.animation.play("walk");
             }
 
             if (!this.idle.interval) {

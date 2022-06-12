@@ -71,7 +71,7 @@ export default class Fireflies extends component() {
 
         // Mesh
         this.mesh = new Points(this.geometry, this.material);
-        this.mesh.position.y += 2
+        this.mesh.position.y += 5
         this.mesh.frustumCulled = false;
         this._scene.add(this.mesh);
     }
