@@ -1,6 +1,5 @@
 import Experience from "../Experience";
-import {Color, Mesh, MeshStandardMaterial} from "three";
-import { clone } from "three/examples/jsm/utils/SkeletonUtils";
+import {Mesh} from "three";
 import configs from "@/configs";
 
 export default class MapLevel {
