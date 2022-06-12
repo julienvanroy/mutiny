@@ -1,7 +1,7 @@
 <template>
-  <the-input class="copy-code" :on-focus="select" ref="input" :model-value="code" readonly>
+  <TheInput class="copy-code" ref="input" :model-value="code" readonly>
     <button @click="copy"></button>
-  </the-input>
+  </TheInput>
 </template>
 
 <script>

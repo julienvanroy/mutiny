@@ -24,7 +24,7 @@
         {{ $t("waiting.landscape.titleRight") }}
       </h2>
       <p>{{ $t("waiting.landscape.instruction") }}</p>
-      <TheButton @click="$router.push('/gamepad')" />
+      <TheButton @click="$router.push('/gamepad')" label="show gamepad" />
       <footer>
         <img src="../assets/mobile/header.svg" alt="" />
       </footer>
