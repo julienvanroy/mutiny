@@ -12,7 +12,7 @@
             <TheBottle
               class="bottle"
               :background="colyseus.players[index].color.bottle"
-              :lines="colyseus.players[index].color.bottleDetails"
+              :details="colyseus.players[index].color.bottleDetails"
             />
             <span>{{ colyseus.players[index].name }}</span>
           </div>
@@ -26,7 +26,7 @@
               </div>
             </div>
             <!-- TODO: onclick eject player from room -->
-            <div class="remove">
+            <div class="remove" @click="this.colyseus.sendData('ejectPlayer', colyseus.players[index].id)">
               <img src="images/icons/remove-player.png" />
             </div>
           </div>

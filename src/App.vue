@@ -6,7 +6,7 @@
   <div class="main-container" ref="fullscreenContainer">
     <div v-if="!isMobile" class="fullscreen">
       <button v-if="showFullscreenBtn" @click="setFullscreen()">
-        <img src="images/icons/fullscreen-on.png" />
+        <img :src="`images/icons/fullscreen-${isFullscreen ? 'off' : 'on'}.png`" />
       </button>
     </div>
 

@@ -14,6 +14,7 @@ import useColyseusStore from "@/store/colyseus.js";
 import Fireflies from "@/webgl/Mesh/Fireflies";
 import GerstnerWater from "@/webgl/Mesh/GerstnerWater";
 import MapCollider from "@/webgl/World/MapCollider";
+import Fog from "@/webgl/Mesh/Fog";
 
 export default class World extends component() {
     init() {
@@ -30,6 +31,7 @@ export default class World extends component() {
     onResourcesIsReady() {
         console.log("world is ready");
         this.environment = new Environment();
+        this.fog = new Fog(100);
         this.gerstnerWater = new GerstnerWater();
         this.fireflies = new Fireflies(100);
         this.mapLevel = new MapLevel(this.group);
