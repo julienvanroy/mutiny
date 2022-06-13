@@ -56,17 +56,13 @@ export default {
       type: Boolean,
       default: false,
     },
+    currentPoints: {
+      type: Number,
+    },
   },
   computed: {
     points() {
-      let points;
-      console.log(this.player.points);
-      if (this.dontUpdateState) {
-        points = this.player.points === 0 ? 0 : this.player.points + 1;
-      } else {
-        points = this.player.points;
-      }
-      return points;
+      return !this.dontUpdateState ? this.player.points : this.currentPoints;
     },
   },
 };
