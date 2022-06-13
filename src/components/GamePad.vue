@@ -1,7 +1,7 @@
 <template>
   <div class="gamepad">
     <div class="gamepad__left">
-      <ThePlayer :player="colyseus.player" :key="thePlayerKey" dont-update-state />
+      <ThePlayer :player="colyseus.player" dont-update-state :current-points="colyseus.playerPoints" />
       <div ref="joystick" class="joystick"></div>
     </div>
     <div class="gamepad__middle">
@@ -113,10 +113,6 @@ export default {
     },
   },
   mounted() {
-    this.colyseus.currentRoom.onMessage("kill", ({ player }) => {
-      if (player === this.colyseus.player.id) this.forceRerender();
-    });
-
     this.joystick = nipplejs.create({
       zone: this.$refs.joystick,
       size: 50,
