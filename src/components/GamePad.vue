@@ -23,7 +23,7 @@
         <stalkers-counter :count="stalkersCount" />
         <span>{{ $t("gamepad.stalkersCounterRight") }}</span>
       </p>
-      <button ref="attack" class="attack" @click="attack">
+      <button ref="attack" class="attack" @click="colyseus.sendData('attack')">
         <img src="/images/gamepad/btn-attack.png" />
       </button>
       <!-- <button ref="power" @click="colyseus.sendData('power', true)">{{$t("gamepad.power")}}</button> -->
@@ -111,12 +111,12 @@ export default {
     forceRerender() {
       this.thePlayerKey = uuid();
     },
-    attack() {
-      this.forceRerender();
-      this.colyseus.sendData("attack");
-    },
   },
   mounted() {
+    this.colyseus.currentRoom.onMessage("kill", ({ player }) => {
+      if (player === this.colyseus.player.id) this.forceRerender();
+    });
+
     this.joystick = nipplejs.create({
       zone: this.$refs.joystick,
       size: 50,

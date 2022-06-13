@@ -24,9 +24,7 @@
             : player.color.bottleDetails
         "
       />
-      <span>{{
-        !player.connected ? "!" : player.points === 0 ? player.points : player.points + (!dontUpdateState ? 0 : 1)
-      }}</span>
+      <span>{{ !player.connected ? "!" : points }}</span>
     </div>
     <span class="name">{{ player.name }}</span>
     <ThePins
@@ -57,6 +55,18 @@ export default {
     dontUpdateState: {
       type: Boolean,
       default: false,
+    },
+  },
+  computed: {
+    points() {
+      let points;
+      console.log(this.player.points);
+      if (this.dontUpdateState) {
+        points = this.player.points === 0 ? 0 : this.player.points + 1;
+      } else {
+        points = this.player.points;
+      }
+      return points;
     },
   },
 };
