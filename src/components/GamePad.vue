@@ -1,7 +1,7 @@
 <template>
   <div class="gamepad">
     <div class="gamepad__left">
-      <ThePlayer :player="this.colyseus.player" />
+      <ThePlayer :player="colyseus.player" :key="thePlayerKey" dont-update-state />
       <div ref="joystick" class="joystick"></div>
     </div>
     <div class="gamepad__middle">
@@ -23,7 +23,7 @@
         <stalkers-counter :count="stalkersCount" />
         <span>{{ $t("gamepad.stalkersCounterRight") }}</span>
       </p>
-      <button ref="attack" class="attack" @click="colyseus.sendData('attack')">
+      <button ref="attack" class="attack" @click="attack">
         <img src="/images/gamepad/btn-attack.png" />
       </button>
       <!-- <button ref="power" @click="colyseus.sendData('power', true)">{{$t("gamepad.power")}}</button> -->
@@ -36,6 +36,7 @@ import useColyseusStore from "@/store/colyseus";
 import nipplejs from "nipplejs";
 import ThePlayer from "./ui/ThePlayer";
 import StalkersCounter from "./ui/StalkersCounter";
+import { uuid } from "@/utils";
 
 export default {
   components: { ThePlayer, StalkersCounter },
@@ -52,6 +53,7 @@ export default {
       stalkersCount: 1,
       targetName: "Captain Blue",
       nextClueIndex: 0,
+      thePlayerKey: uuid(),
     };
   },
   watch: {
@@ -105,6 +107,13 @@ export default {
         this.clues[this.nextClueIndex].show = true;
         this.nextClueIndex++;
       }
+    },
+    forceRerender() {
+      this.thePlayerKey = uuid();
+    },
+    attack() {
+      this.forceRerender();
+      this.colyseus.sendData("attack");
     },
   },
   mounted() {

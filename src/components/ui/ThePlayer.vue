@@ -2,41 +2,38 @@
   <div
     :class="`player
     ${!!large ? 'large' : ''}
-    ${!!player.targetChanged ? 'changed' : ''}
-    ${!!player.isKilled ? 'killed' : ''}
+    ${!dontUpdateState && !!player.targetChanged ? 'changed' : ''}
+    ${!dontUpdateState && !!player.isKilled ? 'killed' : ''}
     ${!player.connected ? 'disconnected' : ''}
     `"
   >
     <div class="points">
       <TheBottle
         :background="
-          !!player.isKilled || !!player.targetChanged || !player.connected
+          !dontUpdateState && (!!player.isKilled || !!player.targetChanged || !player.connected)
             ? '#FFF6F4'
             : player.color.bottle
         "
         :details="
-          !!player.isKilled
+          !dontUpdateState && !!player.isKilled
             ? '#903238'
-            : !!player.targetChanged
+            : !dontUpdateState && !!player.targetChanged
             ? '#622B75'
             : !player.connected
             ? '#6B6587'
             : player.color.bottleDetails
         "
       />
-      <span>{{ !player.connected ? "!" : player.points }}</span>
+      <span>{{
+        !player.connected ? "!" : player.points === 0 ? player.points : player.points + (!dontUpdateState ? 0 : 1)
+      }}</span>
     </div>
     <span class="name">{{ player.name }}</span>
     <ThePins
+      v-if="!dontUpdateState"
       class="pin"
       :state="
-        !!player.isKilled
-          ? 'killed'
-          : !!player.targetChanged
-          ? 'switched'
-          : !player.connected
-          ? 'disconnected'
-          : ''
+        !!player.isKilled ? 'killed' : !!player.targetChanged ? 'switched' : !player.connected ? 'disconnected' : ''
       "
     />
   </div>
@@ -54,6 +51,10 @@ export default {
       required: true,
     },
     large: {
+      type: Boolean,
+      default: false,
+    },
+    dontUpdateState: {
       type: Boolean,
       default: false,
     },
