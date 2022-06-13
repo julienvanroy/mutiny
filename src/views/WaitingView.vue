@@ -24,7 +24,6 @@
         {{ $t("waiting.landscape.titleRight") }}
       </h2>
       <p>{{ $t("waiting.landscape.instruction") }}</p>
-      <TheButton @click="$router.push('/gamepad')" label="show gamepad" />
       <footer>
         <img src="../assets/mobile/header.svg" alt="" />
       </footer>
@@ -37,10 +36,9 @@ import useColyseusStore from "@/store/colyseus";
 import { mapWritableState } from "pinia";
 import useGlobalStore from "@/store/global";
 import ThePlayer from "@/components/ui/ThePlayer.vue";
-import TheButton from "@/components/ui/TheButton.vue";
 
 export default {
-  components: { ThePlayer, TheButton },
+  components: { ThePlayer },
   name: "WaitingView",
   setup() {
     const colyseus = useColyseusStore();
@@ -60,9 +58,7 @@ export default {
 
     this.colyseus.getPlayer(this.colyseus.currentRoom.sessionId);
 
-    this.colyseus.currentRoom.onMessage("startGame", () =>
-      this.$router.push("gamepad")
-    );
+    this.colyseus.currentRoom.onMessage("startGame", () => this.$router.push("gamepad"));
 
     this.colyseus.currentRoom.onMessage("updatePlayerTarget", () => {});
 
