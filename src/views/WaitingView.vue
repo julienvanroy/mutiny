@@ -29,6 +29,7 @@
       </footer>
     </template>
   </div>
+  <modal-ejected v-if="ejected" />
 </template>
 
 <script>
@@ -36,9 +37,10 @@ import useColyseusStore from "@/store/colyseus";
 import { mapWritableState } from "pinia";
 import useGlobalStore from "@/store/global";
 import ThePlayer from "@/components/ui/ThePlayer.vue";
+import ModalEjected from "@/components/modals/ModalEjected.vue";
 
 export default {
-  components: { ThePlayer },
+  components: { ThePlayer, ModalEjected },
   name: "WaitingView",
   setup() {
     const colyseus = useColyseusStore();
@@ -47,6 +49,7 @@ export default {
   data() {
     return {
       player: null,
+      ejected: false,
     };
   },
   computed: {
@@ -68,6 +71,7 @@ export default {
 
     this.colyseus.currentRoom.onMessage("leaveRoom", () => {
       this.colyseus.currentRoom.leave();
+      this.ejected = true;
     });
   },
   beforeUnmount() {

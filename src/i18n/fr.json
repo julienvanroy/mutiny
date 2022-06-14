@@ -80,7 +80,11 @@
     "modalOptions": {
       "btnLabel": "Ohé !"
     },
-    "modalLockGamepad": "Retourne ta manette pour jouer."
+    "modalLockGamepad": "Retourne ta manette pour jouer.",
+    "modalEjected": {
+      "title": "Tu as été jeté par dessus bord",
+      "cta": "Retourner sur le quai"
+    }
   },
   "gamepad": {
     "youAre": "tu es",
