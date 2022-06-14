@@ -24,7 +24,7 @@
             : player.color.bottleDetails
         "
       />
-      <span>{{ !player.connected ? "!" : points }}</span>
+      <span>{{ !player.connected ? "!" : player.points }}</span>
     </div>
     <span class="name">{{ player.name }}</span>
     <ThePins
@@ -55,14 +55,6 @@ export default {
     dontUpdateState: {
       type: Boolean,
       default: false,
-    },
-    currentPoints: {
-      type: Number,
-    },
-  },
-  computed: {
-    points() {
-      return !this.dontUpdateState ? this.player.points : this.currentPoints;
     },
   },
 };

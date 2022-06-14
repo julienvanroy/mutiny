@@ -1,7 +1,7 @@
 <template>
   <div class="gamepad">
     <div class="gamepad__left">
-      <ThePlayer :player="colyseus.player" dont-update-state :current-points="colyseus.playerPoints" />
+      <ThePlayer :player="colyseus.player" dont-update-state />
       <div ref="joystick" class="joystick"></div>
     </div>
     <div class="gamepad__middle">
