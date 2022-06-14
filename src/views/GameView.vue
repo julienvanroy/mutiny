@@ -1,6 +1,6 @@
 <template>
   <ul class="players">
-    <li v-for="player in players" :key="player.id">
+    <li v-for="player in colyseus.playersArray" :key="player.id">
       <ThePlayer :player="player" />
     </li>
   </ul>
@@ -43,6 +43,7 @@ export default {
 
     this.colyseus.currentRoom.onMessage("attack", ({ playerSessionId }) => {
       bidello.trigger({ name: "attack" }, { playerId: playerSessionId });
+      this.colyseus.sendData("getAllPlayers");
     });
 
     this.colyseus.currentRoom.onMessage("kill", () => {});

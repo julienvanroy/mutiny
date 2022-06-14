@@ -1,7 +1,7 @@
 <template>
   <div class="players">
     <h1>{{ $t("setup.playersTitle") }}</h1>
-    <div class="placeholder" v-if="colyseus.playersArray.length === 0">
+    <div class="placeholder" v-if="colyseus.players.size === 1">
       <p class="placeholder">
         {{ $t("setup.playersPlaceholder1") }}
         <br />
@@ -14,7 +14,7 @@
         <strong>{{ $t("setup.infos4") }}</strong>
       </p>
     </div>
-    <ul v-if="0 < colyseus.playersArray.length" class="players-list">
+    <ul v-if="1 < colyseus.players.size" class="players-list">
       <li class="player" v-for="(n, index) in 8" :key="index">
         <div class="player__inner" v-if="!!colyseus.playersArray[index]">
           <div class="player__infos">
