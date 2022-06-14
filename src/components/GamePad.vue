@@ -4,7 +4,7 @@
       <ThePlayer :player="colyseus.player" dont-update-state />
       <div ref="joystick" class="joystick"></div>
     </div>
-    <div class="gamepad__middle">
+    <div class="gamepad__middle" :class="{ '--new-target': hasNewTarget }">
       <div class="clues-container">
         <h2>{{ $t("gamepad.clues") }}</h2>
         <p>{{ targetName }}</p>
@@ -45,6 +45,12 @@ export default {
     const colyseus = useColyseusStore();
 
     return { colyseus };
+  },
+  props: {
+    hasNewTarget: {
+      type: Boolean,
+      required: true,
+    },
   },
   data() {
     return {
@@ -184,6 +190,34 @@ export default {
     justify-content: space-between;
     align-items: center;
 
+    &.--new-target {
+      .clues-container {
+        background-image: url("../assets/gamepad/bg-clues-new.png");
+
+        h2 {
+          color: $white-beige;
+        }
+
+        p {
+          background-image: url("../assets/gamepad/bg-pirate-name-w.png");
+          color: $purple;
+
+          &::after {
+            background-image: url("../assets/gamepad/tag-new.svg");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            opacity: 1;
+          }
+        }
+
+        .clue {
+          background: $violet-clue-bg;
+          box-shadow: inset 0px 0px 5px rgba(222, 197, 204, 0.7);
+        }
+      }
+    }
+
     .clues-container {
       width: 100%;
       height: 100%;
@@ -205,6 +239,7 @@ export default {
       }
 
       p {
+        position: relative;
         width: 160px;
         height: 56px;
         padding-top: 14px;
@@ -216,6 +251,17 @@ export default {
         font-size: 15px;
         color: $white-beige;
         text-align: center;
+
+        &::after {
+          content: "";
+          display: block;
+          position: absolute;
+          top: -10%;
+          right: -10%;
+          width: 34px;
+          height: 34px;
+          opacity: 0;
+        }
       }
 
       .clues {

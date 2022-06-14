@@ -58,12 +58,12 @@ export default {
   },
   metaInfo() {
     return {
-      title: this.$t('meta.title'),
-      description: this.$t('meta.description'),
+      title: this.$t("meta.title"),
+      description: this.$t("meta.description"),
       htmlAttrs: {
         lang: this.$i18n.locale,
-      }
-    }
+      },
+    };
   },
   setup() {
     const route = useRoute();
@@ -124,6 +124,11 @@ export default {
   font-family: $font;
   font-weight: $ft-w-regular;
   line-height: 1.5;
+
+  *,
+  * * {
+    transition: all 0.64s ease;
+  }
 }
 
 .main-container {
