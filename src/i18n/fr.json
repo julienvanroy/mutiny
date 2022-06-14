@@ -117,5 +117,23 @@
       "description": "Tu veux devenir le cap’taine du navire ? Gagne le plus de points de terreur en attaquant tes adversaires. Les indices de ta prochaine cible sont sur ton tableau de bord. Bon vent !",
       "btnGo": "À l’aborrrdage !"
     }
+  },
+  "end": {
+    "mobile": {
+      "title": {
+        "win": "Victoire !",
+        "lose": "Morbleu !"
+      },
+      "description": {
+        "0": "Le capitaine, c’est toi !",
+        "1": "Second, tu resteras...",
+        "2": "Canonnier, tu resteras...",
+        "3": "Matelot, tu resteras...",
+        "4": "Matelot, tu resteras...",
+        "5": "Mousse, tu resteras...",
+        "6": "Mousse, tu resteras...",
+        "7": "Espèce de marin d’eau douce..."
+      }
+    }
   }
 }

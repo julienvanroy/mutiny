@@ -117,5 +117,23 @@
       "description": "Do you want to be the captain of the ship? Earn the most terror points by attacking your opponents. The clues to your next target are on your dashboard. Have a nice trip!",
       "btnGo": "On boooaard!"
     }
+  },
+  "end": {
+    "mobile": {
+      "title": {
+        "win": "Victoire !",
+        "lose": "Morbleu !"
+      },
+      "description": {
+        "0": "Le capitaine, c’est toi !",
+        "1": "Second, tu resteras...",
+        "2": "Canonnier, tu resteras...",
+        "3": "Matelot, tu resteras...",
+        "4": "Matelot, tu resteras...",
+        "5": "Mousse, tu resteras...",
+        "6": "Mousse, tu resteras...",
+        "7": "Espèce de marin d’eau douce..."
+      }
+    }
   }
 }

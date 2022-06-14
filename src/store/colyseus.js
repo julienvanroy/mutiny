@@ -21,6 +21,13 @@ const useColyseusStore = defineStore("colyseus", {
         roomReadyToPlay(state) {
             return state.playersArray.length > 0 && state.playersArray.every((player) => player.orientationReady);
         },
+        playerRanking(state) {
+            let rank = state.playersArray.findIndex((p) => p.id === state.player.id);
+            return {
+                isWinner: rank === 0,
+                rank,
+            };
+        },
     },
     actions: {
         async initLobbyRoom() {
