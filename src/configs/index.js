@@ -20,7 +20,7 @@ const configs = {
                 meshes: [
                     {
                         name: "Chapeau_01",
-                        color: ["#1E1D22"],
+                        color: ["#F86F43", "#1E1D22"],
                     },
                     {
                         name: "Chapeau_02",
