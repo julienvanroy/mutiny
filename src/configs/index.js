@@ -1,6 +1,6 @@
 const configs = {
     character: {
-        count: 24, //24
+        count: 4, //24
         colors: ["#3C365A", "#F3E3DD", "#FAA757", "#F86F43", "#6B8CDB"],
         speed: 1.2, //1.2
         rotationSpeed: 0.032,
@@ -121,7 +121,7 @@ const configs = {
         },
     },
     game: {
-        maxTime: 150, //150,
+        maxTime: 10, //150,
         maxPlayers: 8,
         cluesTime: [0, 5, 10, 10],
     },

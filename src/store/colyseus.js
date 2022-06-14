@@ -3,6 +3,7 @@ import * as Colyseus from "colyseus.js";
 import router from "@/router";
 import { mapToArray, sample } from "@/utils";
 import useGlobalStore from "./global";
+import configs from "@/configs";
 
 const useColyseusStore = defineStore("colyseus", {
     state: () => ({
@@ -25,7 +26,7 @@ const useColyseusStore = defineStore("colyseus", {
             let rank = state.playersArray.findIndex((p) => p.id === state.player.id);
             let isLast = rank === state.playersArray.length - 1;
             return {
-                isWinner: rank === 0,
+                isWinner: rank === 0 && state.player.points !== 0,
                 rank,
                 isLast,
             };

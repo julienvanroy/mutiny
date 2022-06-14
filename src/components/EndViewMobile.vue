@@ -37,7 +37,9 @@ export default {
       return this.colyseus.playerRanking.isWinner;
     },
     rank() {
-      return this.colyseus.playerRanking.isLast ? configs.game.maxPlayers - 1 : this.colyseus.playerRanking.rank;
+      return this.colyseus.playerRanking.isLast || this.colyseus.players.points === 0
+        ? configs.game.maxPlayers - 1
+        : this.colyseus.playerRanking.rank;
     },
   },
 };
