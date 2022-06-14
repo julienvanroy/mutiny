@@ -2,7 +2,7 @@
   <div
     :class="`player
     ${!!large ? 'large' : ''}
-    ${!dontUpdateState && !!player.targetChanged ? 'changed' : ''}
+    ${!dontUpdateState && !!player.targetChanged && !player.isKilled ? 'changed' : ''}
     ${!dontUpdateState && !!player.isKilled ? 'killed' : ''}
     ${!player.connected ? 'disconnected' : ''}
     `"
