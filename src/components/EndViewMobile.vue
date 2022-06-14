@@ -69,6 +69,9 @@ export default {
     width: 100%;
     height: 100%;
     padding-bottom: 6.4%;
+    padding-left: 16%;
+    padding-right: 16%;
+    text-align: center;
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
