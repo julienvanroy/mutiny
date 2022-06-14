@@ -1,5 +1,6 @@
 import {component} from "bidello";
-import {PlaneGeometry, RepeatWrapping, Vector2, Vector3, Color, Mesh, ShaderMaterial, UniformsLib} from "three";
+import {Water} from './Water'
+import {PlaneGeometry, RepeatWrapping, Vector2, Vector3, Color} from "three";
 import Experience from "@/webgl/Experience";
 import vertexShader from "@/shaders/water/water.vert"
 import fragmentShader from "@/shaders/water/water.frag"
@@ -14,37 +15,30 @@ export default class GerstnerWater extends component() {
         this.texture.wrapS = this.texture.wrapT = RepeatWrapping
 
         this.waves = [
-            {direction: 0, steepness: 0.05, wavelength: 100},
-            {direction: 30, steepness: 0.05, wavelength: 50},
-            {direction: 60, steepness: 0.05, wavelength: 25},
+            {direction: 0, steepness: 0.15, wavelength: 100},
+            {direction: 30, steepness: 0.15, wavelength: 50},
+            {direction: 60, steepness: 0.15, wavelength: 25},
         ]
 
         this._params = {
-            time: 0.0,
-            offsetX: 0,
-            offsetZ: 0,
-            depthColor: '#3C365A',
-            surfaceColor: '#F86F43',
-            colorOffset: 0.08,
-            colorMultiplier: 1,
+            sunColor: "#ffffff",
+            waterColor: "#001e0f",
         }
 
-        this.material = new ShaderMaterial({
-            fog: false,
-            uniforms: {
-                normalSampler: {value: this.texture},
-                time: { value: this._params.time },
-                offsetX: {value: this._params.offsetX},
-                offsetZ: {value: this._params.offsetZ},
-                depthColor: {value: new Color(this._params.depthColor)},
-                surfaceColor: {value: new Color(this._params.surfaceColor)},
-                colorOffset: {value: this._params.colorOffset},
-                colorMultiplier: {value: this._params.colorMultiplier},
-                ...UniformsLib["fog"]
-            }
+        this.water = new Water(waterGeometry, {
+            textureWidth: 512,
+            textureHeight: 512,
+            waterNormals: this.texture,
+            sunDirection: new Vector3(),
+            sunColor: this._params.sunColor,
+            waterColor: this._params.waterColor,
+            distortionScale: 8,
+            fog: true,
         })
 
-        this.material.onBeforeCompile = (
+        this.water.material.wireframe = false
+        this.water.rotation.x = -Math.PI / 2
+        this.water.material.onBeforeCompile = (
             shader
         ) => {
             shader.uniforms.fogTime = {value: 0}
@@ -65,12 +59,10 @@ export default class GerstnerWater extends component() {
             setupWave("waveC", 2)
             shader.vertexShader = vertexShader
             shader.fragmentShader = fragmentShader
+            shader.uniforms.size.value = 10.0
         }
 
-        this.mesh = new Mesh(waterGeometry, this.material)
-        this.mesh.rotation.x = -Math.PI / 2
-
-        this._scene.add(this.mesh)
+        this._scene.add(this.water)
 
         this.onDebug()
     }
@@ -108,7 +100,7 @@ export default class GerstnerWater extends component() {
 
     onDebug() {
         if (!this._debug.active) return
-        const waterUniforms = this.mesh.material.uniforms
+        const waterUniforms = this.water.material.uniforms
 
         // TweakPane
         const folderDebug = this._debug.pane.addFolder({
@@ -120,33 +112,37 @@ export default class GerstnerWater extends component() {
             expanded: false,
         })
 
-        folderWater.addInput(this._params, 'surfaceColor', {
-            label: "Surface",
+        folderWater.addInput(this._params, 'waterColor', {
+            label: "Color",
         }).on('change', ({value}) => {
-            waterUniforms.surfaceColor.value = new Color(value)
+            waterUniforms.waterColor.value = new Color(value)
         });
 
-        folderWater.addInput(this._params, 'depthColor', {
-            label: "Depth",
+        folderWater.addInput(this._params, 'sunColor', {
+            label: "Sun Color",
         }).on('change', ({value}) => {
-            waterUniforms.depthColor.value = new Color(value)
+            waterUniforms.sunColor.value = new Color(value)
         });
 
-        folderWater.addInput(waterUniforms.colorOffset, 'value', {
-            label: "color offset",
-            step: 0.0001,
+        folderWater.addInput(waterUniforms.distortionScale, 'value', {
+            label: "distortionScale",
+            step: 0.1,
             min: 0,
-            max: 0.15,
-        })
+            max: 8,
+        }).on('change', (ev) => {
+            waterUniforms.distortionScale.value = ev.value
+        });
 
-        folderWater.addInput(waterUniforms.colorMultiplier, 'value', {
-            label: "color Multiplier",
-            step: 0.0001,
-            min: 0,
+        folderWater.addInput(waterUniforms.size, 'value', {
+            label: "size",
+            step: 0.1,
+            min: 0.1,
             max: 10,
-        })
+        }).on('change', (ev) => {
+            waterUniforms.size.value = ev.value
+        });
 
-        folderWater.addInput(this.mesh.material, 'wireframe')
+        folderWater.addInput(this.water.material, 'wireframe')
 
         const setupWave = (waveFolder, uniform, index) => {
             waveFolder.addInput(this.waves[index], 'direction', {
@@ -200,7 +196,7 @@ export default class GerstnerWater extends component() {
     }
 
     onRaf({delta}) {
-        this.mesh.material.uniforms['time'].value += delta
-        if(this.mesh.material.fog) this.mesh.material.uniforms['fogTime'].value += delta * 0.05
+        this.water.material.uniforms['time'].value += delta
+        this.water.material.uniforms['fogTime'].value += delta * 0.05
     }
 }

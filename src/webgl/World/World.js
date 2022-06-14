@@ -161,7 +161,7 @@ export default class World extends component() {
         const waveInfo = this.gerstnerWater.getWaveInfo(
             this.group.position.x,
             this.group.position.z,
-            this.gerstnerWater.mesh.material.uniforms.time.value
+            this.gerstnerWater.water.material.uniforms.time.value
         );
         this.group.position.y = waveInfo.position.y + 2;
         const quaternion = new Quaternion().setFromEuler(
