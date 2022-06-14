@@ -45,6 +45,7 @@ export default class Pirate {
         this.mesh = clone(this.charaResource.scene);
 
         this.mesh.position.set(0, 0, 0);
+        this.mesh.scale.set(1.4, 1.4, 1.4);
         this._group.add(this.mesh);
 
         let rangeColor;
@@ -83,8 +84,8 @@ export default class Pirate {
                 if (child.name === "Barbe")
                     this.mesh.children[0].getObjectByName("Sourcil").material = child.material.clone();
 
-                child.receiveShadow = true;
-                child.castShadow = true;
+                child.receiveShadow = false;
+                child.castShadow = false;
             }
         });
 

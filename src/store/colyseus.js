@@ -100,8 +100,6 @@ const useColyseusStore = defineStore("colyseus", {
                     this.players.set(key, p);
                 }
                 this.playersArray = mapToArray(this.players, true).filter((p) => !!p.name);
-
-                console.log(this.players, this.playersArray);
             });
 
             room.state.players.onAdd = (player, key) => {
