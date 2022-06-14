@@ -23,9 +23,11 @@ const useColyseusStore = defineStore("colyseus", {
         },
         playerRanking(state) {
             let rank = state.playersArray.findIndex((p) => p.id === state.player.id);
+            let isLast = rank === state.playersArray.length - 1;
             return {
                 isWinner: rank === 0,
                 rank,
+                isLast,
             };
         },
     },
