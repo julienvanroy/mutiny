@@ -10,7 +10,7 @@
         <p>{{ targetName }}</p>
         <div class="clues">
           <div class="clue" v-for="(clue, indexClue) in clues" :key="indexClue">
-            <span v-if="clue.show">{{ clue.tag }}</span>
+            <span v-if="clue.show"><img :src="`/images/clues/${clue.img}.png`" alt="" /></span>
             <span v-else-if="nextClueIndex === indexClue">{{ $t("gamepad.clueInterval") }}</span>
           </div>
         </div>
@@ -72,28 +72,7 @@ export default {
   },
   computed: {
     clues() {
-      return [
-        {
-          tag: "hat",
-          color: "#1E1D22",
-          show: false,
-        },
-        {
-          tag: "beard",
-          color: "#F86F43",
-          show: false,
-        },
-        {
-          tag: "barrel",
-          color: "#6B8CDB",
-          show: false,
-        },
-        {
-          tag: "weapon",
-          color: "#FFF",
-          show: false,
-        },
-      ]; //this.colyseus.playerTarget?.info;
+      return this.colyseus.player.target ? JSON.parse(this.colyseus.player.target)?.info : [];
     },
     cluesHide() {
       return this.clues?.filter((clue) => !clue.show);
@@ -283,6 +262,11 @@ export default {
           text-align: center;
           font-weight: $ft-w-regular;
           font-size: 12px;
+
+          img {
+            width: 72px;
+            height: auto;
+          }
         }
       }
     }

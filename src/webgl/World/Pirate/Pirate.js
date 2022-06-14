@@ -1,8 +1,8 @@
-import {Mesh, Color, CircleGeometry, MeshBasicMaterial, MeshStandardMaterial, LoopOnce} from "three";
+import { Mesh, Color, CircleGeometry, MeshBasicMaterial, MeshStandardMaterial, LoopOnce } from "three";
 import Experience from "../../Experience";
 import configs from "@/configs";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils";
-import {sample} from "@/utils";
+import { sample } from "@/utils";
 import Animation from "@/webgl/Animation";
 
 export default class Pirate {
@@ -14,13 +14,13 @@ export default class Pirate {
 
         this.body = body;
 
-        if (!this.body) this.generateBody()
+        if (!this.body) this.generateBody();
         this._initModel();
         this._initAnimation();
     }
 
     generateBody() {
-        this.body = {}
+        this.body = {};
         for (const [key, value] of Object.entries(configs.character.body)) {
             this.body[key] = {
                 tag: key,
@@ -30,12 +30,12 @@ export default class Pirate {
                 meshes: value.meshes,
                 mesh: value.shuffleMesh
                     ? sample(
-                        value.meshes.map(({ name, texture, color: colors }) => ({
-                            name,
-                            texture,
-                            color: colors ? sample(colors) : undefined,
-                        }))
-                    )
+                          value.meshes.map(({ name, texture, color: colors }) => ({
+                              name,
+                              texture,
+                              color: colors ? sample(colors) : undefined,
+                          }))
+                      )
                     : undefined,
             };
         }
@@ -107,25 +107,26 @@ export default class Pirate {
             .filter((bodyPart) => bodyPart.shuffleMesh)
             .map((bodyPartData) => ({
                 ...bodyPartData,
+                name: bodyPartData.mesh.name,
                 color: bodyPartData.mesh.color || "#FFF",
                 show: false,
             }));
     }
 
     _initAnimation() {
-        this.animation = new Animation(this.mesh, this.charaResource.animations)
+        this.animation = new Animation(this.mesh, this.charaResource.animations);
 
-        this.animation.addAction('walk', "Marche_01")
+        this.animation.addAction("walk", "Marche_01");
 
-        this.animation.addAction('idle', "Arret_01")
+        this.animation.addAction("idle", "Arret_01");
         this.animation.actions.idle.setLoop(LoopOnce);
         this.animation.actions.idle.clampWhenFinished = true;
 
-        this.animation.addAction('attack', "Attaque_01")
+        this.animation.addAction("attack", "Attaque_01");
         this.animation.actions.attack.setLoop(LoopOnce);
         this.animation.actions.attack.clampWhenFinished = true;
 
-        this.animation.addAction('dead', "Mort_01")
+        this.animation.addAction("dead", "Mort_01");
         this.animation.actions.dead.setLoop(LoopOnce);
         this.animation.actions.dead.clampWhenFinished = true;
 
@@ -142,7 +143,11 @@ export default class Pirate {
 
             return {
                 id: this.target.id,
-                info: bodyData.map(({ tag, color, show }) => ({ tag, color, show })),
+                info: bodyData.map(({ tag, name, color, show }) => ({
+                    tag,
+                    img: tag !== "weapon" ? `${name}_${color.replace("#", "")}` : name,
+                    show,
+                })),
             };
         } else return undefined;
     }
