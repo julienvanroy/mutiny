@@ -62,7 +62,7 @@ const router = createRouter({
             path: "/end-game",
             name: "end-game",
             component: EndGameView,
-            meta: { requiresDesktop: true, requiresMobile: false, requiresRoom: true, requiresDebug: false },
+            meta: { requiresDesktop: true, requiresMobile: true, requiresRoom: true, requiresDebug: false },
         },
         {
             path: "/credits",

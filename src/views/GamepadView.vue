@@ -62,6 +62,8 @@ export default {
     this.colyseus.currentRoom.onMessage("kill", () => {});
 
     this.colyseus.currentRoom.onMessage("updatePlayerTarget", () => {});
+
+    this.colyseus.currentRoom.onMessage("endGame", () => this.$router.push("/end-game"));
   },
   unmounted() {
     this.colyseus.currentRoom?.leave();

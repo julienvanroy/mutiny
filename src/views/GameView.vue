@@ -35,6 +35,8 @@ export default {
 
     this.colyseus.currentRoom.onMessage("startGame", () => {});
 
+    this.colyseus.currentRoom.onMessage("endGame", () => this.$router.push("/end-game"));
+
     this.colyseus.currentRoom.onMessage("joystick", ({ playerSessionId, playerPosition }) => {
       bidello.trigger({ name: "movePlayer" }, { playerId: playerSessionId, vector2: playerPosition });
     });
