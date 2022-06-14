@@ -24,7 +24,7 @@
             : player.color.bottleDetails
         "
       />
-      <span>{{ !player.connected ? "!" : player.points }}</span>
+      <span v-if="!hidePoints">{{ !player.connected ? "!" : player.points }}</span>
     </div>
     <span class="name">{{ player.name }}</span>
     <ThePins
@@ -53,6 +53,10 @@ export default {
       default: false,
     },
     dontUpdateState: {
+      type: Boolean,
+      default: false,
+    },
+    hidePoints: {
       type: Boolean,
       default: false,
     },
