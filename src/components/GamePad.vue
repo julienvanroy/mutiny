@@ -57,7 +57,6 @@ export default {
       joystick: [],
       interval: null,
       stalkersCount: 1,
-      targetName: "Captain Blue",
       nextClueIndex: 0,
       thePlayerKey: uuid(),
     };
@@ -71,11 +70,17 @@ export default {
     },
   },
   computed: {
+    targetInfo() {
+      return JSON.parse(this.colyseus.player.target);
+    },
     clues() {
-      return this.colyseus.player.target ? JSON.parse(this.colyseus.player.target)?.info : [];
+      return this.targetInfo?.info || [];
     },
     cluesHide() {
       return this.clues?.filter((clue) => !clue.show);
+    },
+    targetName() {
+      return this.colyseus.playersArray.find((p) => p.id === this.targetInfo?.id)?.name || "";
     },
   },
   methods: {
