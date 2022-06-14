@@ -10,7 +10,7 @@
       </button>
     </div>
 
-    <div class="btn-parameters">
+    <div class="btn-parameters" v-if="!isMobile">
       <button @click="playMusic">
         <img src="images/icons/sound-on.png" />
       </button>
