@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import * as Colyseus from "colyseus.js";
 import router from "@/router";
-import { sample } from "@/utils";
+import { mapToArray, sample } from "@/utils";
 import useGlobalStore from "./global";
 
 const useColyseusStore = defineStore("colyseus", {
@@ -16,7 +16,7 @@ const useColyseusStore = defineStore("colyseus", {
     }),
     getters: {
         rankedPlayers(state) {
-            return [...state.players].sort((a, b) => (a.points < b.points ? 1 : -1));
+            return [...state.playersArray].sort((a, b) => (a.points < b.points ? 1 : -1));
         },
         roomReadyToPlay(state) {
             return state.playersArray.length > 0 && state.playersArray.every((player) => player.orientationReady);
@@ -87,6 +87,23 @@ const useColyseusStore = defineStore("colyseus", {
             }
         },
         updatePlayers(room) {
+            room.onStateChange((state) => {
+                this.players = new Map();
+
+                for (const [key, value] of state.players.$items) {
+                    const p = this.players.get(key) || {};
+                    const values = Object.values(value);
+
+                    Object.keys(value).forEach((k, i) => {
+                        p[k] = values[i];
+                    });
+                    this.players.set(key, p);
+                }
+                this.playersArray = mapToArray(this.players, true).filter((p) => !!p.name);
+
+                console.log(this.players, this.playersArray);
+            });
+
             room.state.players.onAdd = (player, key) => {
                 this.players[key] = {};
 
@@ -95,9 +112,7 @@ const useColyseusStore = defineStore("colyseus", {
                         if (key === room.sessionId) {
                             this.player[change.field] = change.value;
                         }
-                        if (this.players[key]) this.players[key][change.field] = change.value;
                     });
-                    this.playersArray = Object.values(this.players).filter((p) => !!p.name);
                 };
             };
         },
