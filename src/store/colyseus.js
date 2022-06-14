@@ -88,8 +88,6 @@ const useColyseusStore = defineStore("colyseus", {
         },
         updatePlayers(room) {
             room.onStateChange((state) => {
-                this.players = new Map();
-
                 for (const [key, value] of state.players.$items) {
                     const p = this.players.get(key) || {};
                     const values = Object.values(value);
