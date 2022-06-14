@@ -1,7 +1,7 @@
 <template>
   <div class="gamepad">
     <div class="gamepad__left">
-      <ThePlayer :player="this.colyseus.player" />
+      <ThePlayer :player="colyseus.player" :key="thePlayerKey" dont-update-state />
       <div ref="joystick" class="joystick"></div>
     </div>
     <div class="gamepad__middle">
@@ -36,6 +36,7 @@ import useColyseusStore from "@/store/colyseus";
 import nipplejs from "nipplejs";
 import ThePlayer from "./ui/ThePlayer";
 import StalkersCounter from "./ui/StalkersCounter";
+import { uuid } from "@/utils";
 
 export default {
   components: { ThePlayer, StalkersCounter },
@@ -52,6 +53,7 @@ export default {
       stalkersCount: 1,
       targetName: "Captain Blue",
       nextClueIndex: 0,
+      thePlayerKey: uuid(),
     };
   },
   watch: {
@@ -106,8 +108,15 @@ export default {
         this.nextClueIndex++;
       }
     },
+    forceRerender() {
+      this.thePlayerKey = uuid();
+    },
   },
   mounted() {
+    this.colyseus.currentRoom.onMessage("kill", ({ player }) => {
+      if (player === this.colyseus.player.id) this.forceRerender();
+    });
+
     this.joystick = nipplejs.create({
       zone: this.$refs.joystick,
       size: 50,

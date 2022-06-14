@@ -13,14 +13,15 @@ const useColyseusStore = defineStore("colyseus", {
         players: [],
         player: null,
         playerTarget: null,
+        playerPoints: 0,
     }),
     getters: {
         rankedPlayers(state) {
             return [...state.players].sort((a, b) => (a.points < b.points ? 1 : -1));
         },
-        playerPoints(state) {
-            return state.player.points;
-        },
+        // playerPoints(state) {
+        //     return state.player.points;
+        // },
         playerName(state) {
             return state.player.name;
         },
@@ -106,6 +107,7 @@ const useColyseusStore = defineStore("colyseus", {
         updateCurrentPlayer(players, playerId) {
             this.player = players.get(playerId);
             this.playerTarget = this.player?.target ? JSON.parse(this.player.target) : null;
+            this.playerPoints = this.player?.points;
         },
         sendData(type, value) {
             this.currentRoom.send(type, value);

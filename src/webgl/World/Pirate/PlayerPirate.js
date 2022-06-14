@@ -1,5 +1,5 @@
 import { component } from "bidello";
-import {Box3, Line3, Matrix4, Quaternion, Vector2, Vector3} from "three";
+import { Box3, Line3, Matrix4, Quaternion, Vector2, Vector3 } from "three";
 import Experience from "../../Experience";
 import Pirate from "./Pirate";
 import { mapToArray, sample } from "@/utils";
@@ -17,15 +17,15 @@ export default class PlayerPirate extends component(Pirate) {
         this._collider = this._args[2];
 
         const experience = new Experience();
-        this._debug = experience.debug
+        this._debug = experience.debug;
         this._controls = experience.controls;
 
         this._bots = experience.world.bots;
         this._players = experience.world.players;
 
         this._vectorControls = new Vector2();
-        this._speedRun = 2
-        this._speedMove = configs.character.speed
+        this._speedRun = 2;
+        this._speedMove = configs.character.speed;
         this._targetQuaternion = new Quaternion();
         this._speedRotation = 10;
 
@@ -45,9 +45,9 @@ export default class PlayerPirate extends component(Pirate) {
             vector2: new Vector3(),
         };
 
-        this._useKeyboard = this.id === 'debug'
+        this._useKeyboard = this.id === "debug";
 
-        this.onDebug()
+        this.onDebug();
     }
 
     set vectorControls(value) {
@@ -58,7 +58,7 @@ export default class PlayerPirate extends component(Pirate) {
     _keyboard() {
         if (!this._debug.active || !this._useKeyboard) return;
 
-        const vectorControls = this._vectorControls
+        const vectorControls = this._vectorControls;
 
         if (this._controls.actions.up && this._controls.actions.down) vectorControls.y = 0;
         else if (this._controls.actions.up) vectorControls.y = 1;
@@ -78,7 +78,7 @@ export default class PlayerPirate extends component(Pirate) {
     _move(delta) {
         if (this.isMoving) {
             const boostRun = this._vectorControls.length() > 0.5 ? this._speedRun : 1;
-            this.mesh.position.z -= this._vectorControls.y * delta * this._speedMove * boostRun
+            this.mesh.position.z -= this._vectorControls.y * delta * this._speedMove * boostRun;
             this.mesh.position.x += this._vectorControls.x * delta * this._speedMove * boostRun;
         }
     }
@@ -178,7 +178,7 @@ export default class PlayerPirate extends component(Pirate) {
     }
 
     onRaf({ delta }) {
-        this._keyboard()
+        this._keyboard();
         this._move(delta);
         this._rotation(delta);
 
@@ -187,12 +187,12 @@ export default class PlayerPirate extends component(Pirate) {
          */
         //this._updateCollision(delta)
 
-
-        if (!this.isMoving && this.animation.actions.current !== this.animation.actions.idle) this.animation.play("idle");
+        if (!this.isMoving && this.animation.actions.current !== this.animation.actions.idle)
+            this.animation.play("idle");
         else if (this.animation.actions.current !== this.animation.actions.walk) this.animation.play("walk");
     }
 
-    onKill({ playerId }) {
+    onAttack({ playerId }) {
         if (playerId === this.id) {
             this.animation.play("attack");
         }
@@ -202,6 +202,9 @@ export default class PlayerPirate extends component(Pirate) {
             this.mesh.position.distanceTo(this.target.mesh.position) <= configs.character.range
         ) {
             console.log(`player ${this.id} killed their target ${this.target.id}`);
+
+            useColyseusStore().sendData("kill", { player: playerId, target: this.target.id });
+
             if (this.target instanceof PlayerPirate) {
                 this.target.respawn(this);
 
@@ -265,43 +268,43 @@ export default class PlayerPirate extends component(Pirate) {
     }
 
     onDebug() {
-        if(!this._debug.active) return
+        if (!this._debug.active) return;
 
         const folderDebug = this._debug.pane.addFolder({
             title: `Player ${this.id}`,
             expanded: false,
         });
 
-        folderDebug.addInput(this, '_useKeyboard', {
+        folderDebug.addInput(this, "_useKeyboard", {
             label: "Use Keyboard",
-        })
+        });
 
-        folderDebug.addInput(this, '_speedMove', {
+        folderDebug.addInput(this, "_speedMove", {
             label: "Speed Move",
             step: 0.01,
             min: 0,
             max: 20,
-        })
+        });
 
-        folderDebug.addInput(this, '_speedRun', {
+        folderDebug.addInput(this, "_speedRun", {
             label: "Speed Run",
             step: 0.01,
             min: 0,
             max: 20,
-        })
+        });
 
-        folderDebug.addInput(this, '_speedRotation', {
+        folderDebug.addInput(this, "_speedRotation", {
             label: "Speed Rotation",
             step: 0.01,
             min: 0,
             max: 30,
-        })
+        });
 
-        folderDebug.addInput(this, '_gravity', {
+        folderDebug.addInput(this, "_gravity", {
             label: "Gravity",
             step: 0.01,
             min: -100,
             max: 0,
-        })
+        });
     }
 }

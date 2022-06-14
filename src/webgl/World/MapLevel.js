@@ -1,5 +1,5 @@
 import Experience from "../Experience";
-import {Mesh} from "three";
+import { Mesh } from "three";
 import configs from "@/configs";
 
 export default class MapLevel {
@@ -20,6 +20,10 @@ export default class MapLevel {
         this.model.traverse((child) => {
             if (child instanceof Mesh) {
                 if (configs.map.decors.some((name) => child.name.includes(name))) this.decors.push(child);
+                if (configs.map.navMesh.includes(child.name)) {
+                    this._initNavMesh(child);
+                    child.visible = false;
+                }
             }
         });
 
