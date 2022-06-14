@@ -37,7 +37,8 @@
   "getPseudo": {
     "title": "Qui es-tu moussaillon ?",
     "ctaRandom": "Nom aléatoire",
-    "cta": "Monter sur le pont"
+    "cta": "Monter sur le pont",
+    "error": "Pseudo is already taken"
   },
   "waiting": {
     "portrait": {
