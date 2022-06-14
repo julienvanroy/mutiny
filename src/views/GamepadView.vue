@@ -6,16 +6,20 @@
   <transition>
     <modal-target-changed v-show="showModalTargetChanged" />
   </transition>
+  <modal-lock-gamepad v-if="!isLandscape" />
 </template>
 
 <script>
 import useColyseusStore from "@/store/colyseus";
+import useGlobalStore from "@/store/global";
+import { mapWritableState } from "pinia";
 import GamePad from "@/components/GamePad.vue";
 import ModalDead from "@/components/modals/ModalDead.vue";
 import ModalTargetChanged from "@/components/modals/ModalTargetChanged.vue";
+import ModalLockGamepad from "@/components/modals/ModalLockGamepad.vue";
 
 export default {
-  components: { GamePad, ModalDead, ModalTargetChanged },
+  components: { GamePad, ModalDead, ModalTargetChanged, ModalLockGamepad },
   name: "GamepadView",
   data() {
     return {
@@ -24,6 +28,7 @@ export default {
     };
   },
   computed: {
+    ...mapWritableState(useGlobalStore, ["isLandscape"]),
     showModalDead() {
       return this.colyseus.player.isKilled;
     },
@@ -55,6 +60,9 @@ export default {
     return { colyseus };
   },
   mounted() {
+    this.resize();
+    window.addEventListener("resize", this.resize, false);
+
     this.colyseus.currentRoom.onMessage("joystick", () => {});
 
     this.colyseus.currentRoom.onMessage("attack", () => {});
@@ -67,6 +75,12 @@ export default {
   },
   unmounted() {
     this.colyseus.currentRoom?.leave();
+    window.removeEventListener("resize", this.resize, false);
+  },
+  methods: {
+    resize() {
+      this.isLandscape = window.innerWidth > window.innerHeight;
+    },
   },
 };
 </script>

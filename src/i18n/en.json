@@ -79,7 +79,8 @@
     },
     "modalOptions": {
       "btnLabel": "Ahoy!"
-    }
+    },
+    "modalLockGamepad": "Retourne ta manette pour jouer."
   },
   "gamepad": {
     "youAre": "you are",
