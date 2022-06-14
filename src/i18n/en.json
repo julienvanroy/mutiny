@@ -34,6 +34,11 @@
       "cta": "Boarding"
     }
   },
+  "credits": {
+    "p": "This game was created as part of the end-of-study project for the Master's degree in Interactive Design and Innovation Management at Gobelins.",
+    "thanks": "Acknowledgements",
+    "pThanks": "Many thanks to Louis-Jean Teitelbaum, Adrien Havet, Olivier Drouet, Marc Petska, Chlovis Lobre, Frédéric Coispeau, Framboise Fronty-Gilles, Nicolas Rouit-Leduc, Rosa Rocca-Serra, Tatiana Vilela dos Santos, Rémy Bourçois, Bastien Robert, Julien Dargelos, Bruno Simon, Nina Chaulet, Mathieu Ehrsam, Adrien Melchior, Lisa Schaeffer for having followed us throughout this project"
+  },
   "getPseudo": {
     "title": "Who are you, sailor?",
     "ctaRandom": "Random name",

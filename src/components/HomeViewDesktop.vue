@@ -2,9 +2,9 @@
   <div class="homepage">
     <div class="credits">
       <TheButton
-        link="/credits"
         :label="$t('homepage.credits')"
         color="tertiary"
+        @click="creditsOpen = true"
       />
     </div>
 
@@ -39,15 +39,20 @@
       </div>
     </div>
   </div>
+
+  <CreditsOverlay :isOpen="creditsOpen" />
 </template>
 
 <script>
 import useColyseusStore from "@/store/colyseus";
+import { mapWritableState } from "pinia";
+import useGlobalStore from "@/store/global";
 import TheButton from "@/components/ui/TheButton.vue";
+import CreditsOverlay from "@/components/CreditsOverlay";
 
 export default {
   name: "HomeViewDesktop",
-  components: { TheButton },
+  components: { TheButton, CreditsOverlay },
   setup() {
     const colyseus = useColyseusStore();
     return { colyseus };
@@ -64,6 +69,9 @@ export default {
     createRoom(doJoinRoom = true) {
       this.colyseus.createRoom("play_room", doJoinRoom);
     },
+  },
+  computed: {
+    ...mapWritableState(useGlobalStore, ["creditsOpen"]),
   },
 };
 </script>
