@@ -1,6 +1,6 @@
 <template>
   <ul class="players">
-    <li v-for="player in players" :key="player.id">
+    <li v-for="player in colyseus.playersArray" :key="player.id">
       <ThePlayer :player="player" />
     </li>
   </ul>
@@ -35,37 +35,29 @@ export default {
 
     this.colyseus.currentRoom.onMessage("startGame", () => {});
 
+    this.colyseus.currentRoom.onMessage("endGame", () => this.$router.push("/end-game"));
+
     this.colyseus.currentRoom.onMessage("joystick", ({ playerSessionId, playerPosition }) => {
       bidello.trigger({ name: "movePlayer" }, { playerId: playerSessionId, vector2: playerPosition });
     });
 
     this.colyseus.currentRoom.onMessage("attack", ({ playerSessionId }) => {
       bidello.trigger({ name: "attack" }, { playerId: playerSessionId });
+      this.colyseus.sendData("getAllPlayers");
     });
 
-    this.colyseus.currentRoom.onMessage("kill", ({ player, target }) => {
-      console.log(
-        `Player ${this.colyseus.players.find((p) => p.id === player).name} killed Player ${
-          this.colyseus.players.find((p) => p.id === target).name
-        }`
-      );
-    });
+    this.colyseus.currentRoom.onMessage("kill", () => {});
+
     this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
       delete players[this.colyseus.currentRoom.sessionId];
       this.players = players;
     });
 
-    this.colyseus.currentRoom.onMessage("updatePlayerTarget", ({ player, target }) => {
-      console.log(
-        `Player ${this.colyseus.players.find((p) => p.id === player).name} has new target Player ${
-          this.colyseus.players.find((p) => p.id === target).name
-        }`
-      );
-    });
+    this.colyseus.currentRoom.onMessage("updatePlayerTarget", () => {});
 
-    this.colyseus.currentRoom.onMessage("power", ({ playerSessionId }) => {
-      bidello.trigger({ name: "respawn" }, { playerId: playerSessionId });
-    });
+    // this.colyseus.currentRoom.onMessage("power", ({ playerSessionId }) => {
+    //   bidello.trigger({ name: "respawn" }, { playerId: playerSessionId });
+    // });
   },
 };
 </script>

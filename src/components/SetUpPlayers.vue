@@ -1,7 +1,7 @@
 <template>
   <div class="players">
     <h1>{{ $t("setup.playersTitle") }}</h1>
-    <div class="placeholder" v-if="!colyseus.players.length">
+    <div class="placeholder" v-if="colyseus.playersArray.length === 0">
       <p class="placeholder">
         {{ $t("setup.playersPlaceholder1") }}
         <br />
@@ -14,49 +14,34 @@
         <strong>{{ $t("setup.infos4") }}</strong>
       </p>
     </div>
-    <ul v-if="0 < colyseus.players.length" class="players-list">
+    <ul v-if="0 < colyseus.playersArray.length" class="players-list">
       <li class="player" v-for="(n, index) in 8" :key="index">
-        <div class="player__inner" v-if="!!colyseus.players[index]">
+        <div class="player__inner" v-if="!!colyseus.playersArray[index]">
           <div class="player__infos">
             <TheBottle
               class="bottle"
-              :background="colyseus.players[index].color.bottle"
-              :details="colyseus.players[index].color.bottleDetails"
+              :background="colyseus.playersArray[index].color.bottle"
+              :details="colyseus.playersArray[index].color.bottleDetails"
             />
-            <span>{{ colyseus.players[index].name }}</span>
+            <span>{{ colyseus.playersArray[index].name }}</span>
           </div>
           <div class="player__state">
             <div class="state">
-              {{
-                !!colyseus.players[index].orientationReady
-                  ? $t("setup.ready")
-                  : ""
-              }}
-              <div
-                v-if="!colyseus.players[index].orientationReady"
-                class="dots"
-              >
+              {{ !!colyseus.playersArray[index].orientationReady ? $t("setup.ready") : "" }}
+              <div v-if="!colyseus.playersArray[index].orientationReady" class="dots">
                 <span class="dot">.</span>
                 <span class="dot">.</span>
                 <span class="dot">.</span>
               </div>
             </div>
             <!-- TODO: onclick eject player from room -->
-            <div
-              class="remove"
-              @click="
-                this.colyseus.sendData(
-                  'ejectPlayer',
-                  colyseus.players[index].id
-                )
-              "
-            >
+            <div class="remove" @click="this.colyseus.sendData('ejectPlayer', colyseus.playersArray[index].id)">
               <img src="images/icons/remove-player.png" />
             </div>
           </div>
         </div>
 
-        <div class="player__inner empty" v-if="!colyseus.players[index]">
+        <div class="player__inner empty" v-if="!colyseus.playersArray[index]">
           <div class="player__infos">
             <TheBottle class="bottle" :isEmpty="true" />
             <span>{{ $t("setup.vacancy") }}</span>

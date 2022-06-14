@@ -35,7 +35,7 @@ export default class World extends component() {
         this.gerstnerWater = new GerstnerWater();
         this.fireflies = new Fireflies(100);
         this.mapLevel = new MapLevel(this.group);
-        this.mapCollider = new MapCollider(this.group)
+        this.mapCollider = new MapCollider(this.group);
 
         this.players = new Map();
         /*
@@ -43,7 +43,7 @@ export default class World extends component() {
         this.item = new Item();
         this.boxCollision = new BoxCollision();
         */
-        if(this.mapLevel.navMesh) {
+        if (this.mapLevel.navMesh) {
             this._initPathfinding();
             this._initCharacters();
             this._initBots();
@@ -108,6 +108,7 @@ export default class World extends component() {
             for (const [key, value] of Object.entries(configs.character.body)) {
                 body[key] = {
                     tag: key,
+
                     alphaTexture: value.alphaTexture,
                     shuffleMesh: value.shuffleMesh,
                     addColor: value.addColor,
@@ -131,6 +132,7 @@ export default class World extends component() {
                 for (const [key, value] of Object.entries(configs.character.body)) {
                     body[key] = {
                         tag: key,
+
                         alphaTexture: value.alphaTexture,
                         shuffleMesh: value.shuffleMesh,
                         addColor: value.addColor,
@@ -212,8 +214,8 @@ export default class World extends component() {
             title: "addPlayer",
         });
         btnAddPlayer.on("click", () => {
-            this.onAddPlayer({ playerId: "debug" })
-            btnAddPlayer.dispose()
+            this.onAddPlayer({ playerId: "debug" });
+            btnAddPlayer.dispose();
         });
     }
 

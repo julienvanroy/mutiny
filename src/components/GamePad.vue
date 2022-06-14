@@ -1,17 +1,21 @@
 <template>
   <div class="gamepad">
     <div class="gamepad__left">
-      <ThePlayer :player="colyseus.player" :key="thePlayerKey" dont-update-state />
+      <ThePlayer :player="colyseus.player" dont-update-state />
       <div ref="joystick" class="joystick"></div>
     </div>
-    <div class="gamepad__middle">
+    <div class="gamepad__middle" :class="{ '--new-target': hasNewTarget }">
       <div class="clues-container">
         <h2>{{ $t("gamepad.clues") }}</h2>
         <p>{{ targetName }}</p>
         <div class="clues">
           <div class="clue" v-for="(clue, indexClue) in clues" :key="indexClue">
-            <span v-if="clue.show">{{ clue.tag }}</span>
-            <span v-else-if="nextClueIndex === indexClue">{{ $t("gamepad.clueInterval") }}</span>
+            <span v-if="clue.show"><img :src="`/images/clues/${clue.img}.png`" alt="" /></span>
+            <span v-else-if="nextClueIndex === indexClue">
+              {{ $t("gamepad.clueInterval") }}
+              <br />
+              <em>{{ `${countdown}''` }}</em>
+            </span>
           </div>
         </div>
       </div>
@@ -36,7 +40,7 @@ import useColyseusStore from "@/store/colyseus";
 import nipplejs from "nipplejs";
 import ThePlayer from "./ui/ThePlayer";
 import StalkersCounter from "./ui/StalkersCounter";
-import { uuid } from "@/utils";
+import configs from "@/configs";
 
 export default {
   components: { ThePlayer, StalkersCounter },
@@ -46,14 +50,20 @@ export default {
 
     return { colyseus };
   },
+  props: {
+    hasNewTarget: {
+      type: Boolean,
+      required: true,
+    },
+  },
   data() {
     return {
       joystick: [],
       interval: null,
       stalkersCount: 1,
-      targetName: "Captain Blue",
-      nextClueIndex: 0,
-      thePlayerKey: uuid(),
+      nextClueIndex: 1,
+      countdown: configs.game.clueTime,
+      countdownInterval: null,
     };
   },
   watch: {
@@ -63,60 +73,51 @@ export default {
         this.setIntervalClues();
       }
     },
+    targetInfo() {
+      this.nextClueIndex = 1;
+      this.countdown = configs.game.clueTime;
+      this.setIntervalClues();
+    },
   },
   computed: {
+    targetInfo() {
+      return this.colyseus.player.target ? JSON.parse(this.colyseus.player.target) : "";
+    },
     clues() {
-      return [
-        {
-          tag: "hat",
-          color: "#1E1D22",
-          show: false,
-        },
-        {
-          tag: "beard",
-          color: "#F86F43",
-          show: false,
-        },
-        {
-          tag: "barrel",
-          color: "#6B8CDB",
-          show: false,
-        },
-        {
-          tag: "weapon",
-          color: "#FFF",
-          show: false,
-        },
-      ]; //this.colyseus.playerTarget?.info;
+      return this.targetInfo?.info || [];
     },
     cluesHide() {
       return this.clues?.filter((clue) => !clue.show);
+    },
+    targetName() {
+      return this.colyseus.playersArray.find((p) => p.id === this.targetInfo?.id)?.name || "";
     },
   },
   methods: {
     setIntervalClues() {
       if (this.interval) clearInterval(this.interval);
+      if (this.countdownInterval) {
+        clearInterval(this.countdownInterval);
+      }
       this.interval = setInterval(this.showOneClue, 10000);
+      this.countdownInterval = setInterval(() => {
+        this.countdown--;
+        if (this.countdown === 0) this.countdown = configs.game.clueTime;
+      }, 1000);
     },
     showOneClue() {
       if (!this.interval || this.nextClueIndex === this.clues.length) return;
       if (this.cluesHide.length === 0) {
         clearInterval(this.interval);
+        clearInterval(this.countdownInterval);
         return;
       } else {
         this.clues[this.nextClueIndex].show = true;
         this.nextClueIndex++;
       }
     },
-    forceRerender() {
-      this.thePlayerKey = uuid();
-    },
   },
   mounted() {
-    this.colyseus.currentRoom.onMessage("kill", ({ player }) => {
-      if (player === this.colyseus.player.id) this.forceRerender();
-    });
-
     this.joystick = nipplejs.create({
       zone: this.$refs.joystick,
       size: 50,
@@ -188,6 +189,34 @@ export default {
     justify-content: space-between;
     align-items: center;
 
+    &.--new-target {
+      .clues-container {
+        background-image: url("../assets/gamepad/bg-clues-new.png");
+
+        h2 {
+          color: $white-beige;
+        }
+
+        p {
+          background-image: url("../assets/gamepad/bg-pirate-name-w.png");
+          color: $purple;
+
+          &::after {
+            background-image: url("../assets/gamepad/tag-new.svg");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            opacity: 1;
+          }
+        }
+
+        .clue {
+          background: $violet-clue-bg;
+          box-shadow: inset 0px 0px 5px rgba(222, 197, 204, 0.7);
+        }
+      }
+    }
+
     .clues-container {
       width: 100%;
       height: 100%;
@@ -209,6 +238,7 @@ export default {
       }
 
       p {
+        position: relative;
         width: 160px;
         height: 56px;
         padding-top: 14px;
@@ -220,6 +250,17 @@ export default {
         font-size: 15px;
         color: $white-beige;
         text-align: center;
+
+        &::after {
+          content: "";
+          display: block;
+          position: absolute;
+          top: -10%;
+          right: -10%;
+          width: 34px;
+          height: 34px;
+          opacity: 0;
+        }
       }
 
       .clues {
@@ -241,6 +282,16 @@ export default {
           text-align: center;
           font-weight: $ft-w-regular;
           font-size: 12px;
+
+          img {
+            width: 72px;
+            height: auto;
+          }
+
+          em {
+            font-size: 18px;
+            font-weight: $ft-w-bold;
+          }
         }
       }
     }

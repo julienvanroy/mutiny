@@ -3,8 +3,9 @@
 </template>
 
 <script>
-import {ref, watch} from "vue";
+import { ref, watch } from "vue";
 import configs from "@/configs";
+import useColyseusStore from "@/store/colyseus";
 
 export default {
   name: "TheTimer",
@@ -12,29 +13,34 @@ export default {
     return {
       isRunning: false,
       timer: null,
-    }
+    };
   },
   props: {
     duration: {
       type: Number,
-      default: configs.game.maxTime
-    }
+      default: configs.game.maxTime,
+    },
   },
   setup(props) {
-    const time = ref(0)
+    const time = ref(0);
+    const colyseus = useColyseusStore();
 
     const setTimeWithDuration = () => {
-      time.value = props.duration
-    }
+      time.value = props.duration;
+    };
 
-    watch(() => props.duration, () => {
-      setTimeWithDuration()
-    });
+    watch(
+      () => props.duration,
+      () => {
+        setTimeWithDuration();
+      }
+    );
 
     return {
       time,
-      setTimeWithDuration
-    }
+      setTimeWithDuration,
+      colyseus,
+    };
   },
   computed: {
     prettify() {
@@ -48,35 +54,35 @@ export default {
       };
 
       return `${toString(minutes)}'${toString(seconds)}''`;
-    }
+    },
   },
   mounted() {
-    this.setTimeWithDuration()
-    this.start()
+    this.setTimeWithDuration();
+    this.start();
   },
   methods: {
-    start () {
-      this.isRunning = true
+    start() {
+      this.isRunning = true;
       if (!this.timer) {
-        this.timer = setInterval( () => {
+        this.timer = setInterval(() => {
           if (this.time > 0) {
-            this.time--
+            this.time--;
           } else {
-            clearInterval(this.timer)
-            this.$router.push('/end-game')
-            this.reset()
+            clearInterval(this.timer);
+            this.colyseus.sendData("endGame");
+            this.reset();
           }
-        }, 1000 )
+        }, 1000);
       }
     },
-    stop () {
-      this.isRunning = false
-      clearInterval(this.timer)
-      this.timer = null
+    stop() {
+      this.isRunning = false;
+      clearInterval(this.timer);
+      this.timer = null;
     },
-    reset () {
-      this.stop()
-      this.setTimeWithDuration()
+    reset() {
+      this.stop();
+      this.setTimeWithDuration();
     },
   },
 };

@@ -10,26 +10,16 @@ const useColyseusStore = defineStore("colyseus", {
         rooms: [],
         currentRoom: null,
         lobbyRoom: null,
-        players: [],
-        player: null,
-        playerTarget: null,
-        playerPoints: 0,
+        players: new Map(),
+        player: {},
+        playersArray: [],
     }),
     getters: {
         rankedPlayers(state) {
-            return [...state.players].sort((a, b) => (a.points < b.points ? 1 : -1));
-        },
-        // playerPoints(state) {
-        //     return state.player.points;
-        // },
-        playerName(state) {
-            return state.player.name;
-        },
-        playerColor(state) {
-            return state.player.name;
+            return [...state.playersArray].sort((a, b) => (a.points < b.points ? 1 : -1));
         },
         roomReadyToPlay(state) {
-            return state.players.length > 0 && state.players.every((player) => player.orientationReady);
+            return state.playersArray.length > 0 && state.playersArray.every((player) => player.orientationReady);
         },
     },
     actions: {
@@ -74,7 +64,7 @@ const useColyseusStore = defineStore("colyseus", {
                     this.currentRoom = null;
                 }
 
-                newRoom.onStateChange((state) => this.updatePlayers(state.players.$items));
+                this.updatePlayers(newRoom);
 
                 return newRoom;
             } catch (e) {
@@ -87,12 +77,7 @@ const useColyseusStore = defineStore("colyseus", {
                 if (roomId) room = await this.client.joinById(roomId);
                 else room = await this.client.joinById(sample(this.rooms).roomId);
 
-                room.onStateChange((state) => {
-                    this.updateCurrentPlayer(state.players.$items, room.sessionId);
-                    this.updatePlayers(state.players.$items);
-                });
-
-                room.onMessage("getPlayer", (player) => (this.player = player));
+                this.updatePlayers(room);
 
                 this.currentRoom = room;
 
@@ -101,13 +86,33 @@ const useColyseusStore = defineStore("colyseus", {
                 console.error("join error", e);
             }
         },
-        updatePlayers(players) {
-            this.players = mapToArray(players, true).filter((p) => !!p.name);
-        },
-        updateCurrentPlayer(players, playerId) {
-            this.player = players.get(playerId);
-            this.playerTarget = this.player?.target ? JSON.parse(this.player.target) : null;
-            this.playerPoints = this.player?.points;
+        updatePlayers(room) {
+            room.onStateChange((state) => {
+                this.players = new Map();
+
+                for (const [key, value] of state.players.$items) {
+                    const p = this.players.get(key) || {};
+                    const values = Object.values(value);
+
+                    Object.keys(value).forEach((k, i) => {
+                        p[k] = values[i];
+                    });
+                    this.players.set(key, p);
+                }
+                this.playersArray = mapToArray(this.players, true).filter((p) => !!p.name);
+            });
+
+            room.state.players.onAdd = (player, key) => {
+                this.players[key] = {};
+
+                player.onChange = (changes) => {
+                    changes.forEach((change) => {
+                        if (key === room.sessionId) {
+                            this.player[change.field] = change.value;
+                        }
+                    });
+                };
+            };
         },
         sendData(type, value) {
             this.currentRoom.send(type, value);
