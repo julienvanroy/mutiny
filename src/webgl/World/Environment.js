@@ -1,25 +1,82 @@
-import {DirectionalLight, sRGBEncoding} from 'three'
+import {Color, DirectionalLight, DirectionalLightHelper, sRGBEncoding} from 'three'
 import Experience from '../Experience.js'
 
 export default class Environment {
     constructor() {
         const experience = new Experience()
+        this._debug = experience.debug
         this._scene = experience.scene
+
+        this._params = {
+            sunLight: {
+                color: '#ffffff',
+                intensity: 1
+            }
+        }
+
         this._initSunLight()
 
         // Skybox
         const environmentMapTexture = experience.resources.items.environmentMapTexture
         environmentMapTexture.encoding = sRGBEncoding
         this._scene.background = environmentMapTexture
+
+        this.onDebug()
     }
 
     _initSunLight() {
-        this.sunLight = new DirectionalLight('#ffffff', 1)
+        this.sunLight = new DirectionalLight(this._params.sunLight.color, this._params.sunLight.intensity)
         this.sunLight.castShadow = true
-        this.sunLight.shadow.camera.far = 15
+        this.sunLight.shadow.camera.far = 50
         this.sunLight.shadow.mapSize.set(1024, 1024)
         this.sunLight.shadow.normalBias = 0.05
         this.sunLight.position.set(3.5, 2, -1.25)
         this._scene.add(this.sunLight)
+    }
+
+    onDebug() {
+        if (!this._debug.active) return;
+
+        const helper = new DirectionalLightHelper( this.sunLight, 10 );
+        this._scene.add(helper)
+        helper.visible = false
+
+        // TweakPane
+        const folderDebug = this._debug.pane.addFolder({
+            title: this.constructor.name,
+            expanded: false,
+        });
+        const folderSun = folderDebug.addFolder({
+            title: "Directional Light / Sun",
+            expanded: false,
+        });
+        folderSun.addInput(this.sunLight, "visible",
+            {
+                label: "active",
+            });
+        folderSun.addInput(this._params.sunLight, 'color', {
+            label: "Color",
+        }).on('change', ({value}) => {
+            this.sunLight.color = new Color(value)
+        });
+        folderSun.addInput(this.sunLight, "intensity",
+            {
+                label: "Intensity",
+                step: 0.001,
+                min: 0,
+                max: 100,
+            });
+        folderSun.addInput(this.sunLight, "position",
+            {
+                title: "Position",
+            });
+        folderSun.addInput(this.sunLight, "rotation",
+            {
+                title: "Rotation",
+            });
+        folderSun.addInput(helper, "visible",
+            {
+                label: "helper",
+            });
     }
 }
