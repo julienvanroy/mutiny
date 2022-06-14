@@ -1,10 +1,12 @@
 uniform mat4 textureMatrix;
 uniform float time;
 
+varying vec4 mirrorCoord;
 varying vec4 worldPosition;
 
 #include <common>
 #include <fog_pars_vertex>
+#include <shadowmap_pars_vertex>
 #include <logdepthbuf_pars_vertex>
 
 uniform vec4 waveA;
@@ -13,8 +15,6 @@ uniform vec4 waveC;
 
 uniform float offsetX;
 uniform float offsetZ;
-
-varying float vElevation;
 
 vec3 GerstnerWave (vec4 wave, vec3 p) {
     float steepness = wave.z;
@@ -33,7 +33,11 @@ vec3 GerstnerWave (vec4 wave, vec3 p) {
 }
 
 void main() {
-    worldPosition = (modelMatrix * vec4( position, 1.0 )).xyzw;
+
+    mirrorCoord = modelMatrix * vec4( position, 1.0 );
+    worldPosition = mirrorCoord.xyzw;
+    mirrorCoord = textureMatrix * mirrorCoord;
+
     vec3 gridPoint = position.xyz;
     vec3 tangent = vec3(1, 0, 0);
     vec3 binormal = vec3(0, 0, 1);
@@ -45,10 +49,9 @@ void main() {
     p += GerstnerWave(waveC, gridPoint);
     gl_Position = projectionMatrix * modelViewMatrix * vec4( p.x, p.y, p.z, 1.0);
 
-    vElevation = p.z;
-
     #include <beginnormal_vertex>
     #include <defaultnormal_vertex>
     #include <logdepthbuf_vertex>
     #include <fog_vertex>
+    #include <shadowmap_vertex>
 }

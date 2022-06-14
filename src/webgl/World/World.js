@@ -31,9 +31,11 @@ export default class World extends component() {
     onResourcesIsReady() {
         console.log("world is ready");
         this.environment = new Environment();
-        this.fog = new Fog(100);
+        this.fog = new Fog(20);
+        this.fog.mesh.position.y += 1;
         this.gerstnerWater = new GerstnerWater();
         this.fireflies = new Fireflies(100);
+        this.fireflies.mesh.position.y += 5
         this.mapLevel = new MapLevel(this.group);
         this.mapCollider = new MapCollider(this.group);
 
@@ -161,7 +163,7 @@ export default class World extends component() {
         const waveInfo = this.gerstnerWater.getWaveInfo(
             this.group.position.x,
             this.group.position.z,
-            this.gerstnerWater.mesh.material.uniforms.time.value
+            this.gerstnerWater.water.material.uniforms.time.value
         );
         this.group.position.y = waveInfo.position.y + 2;
         const quaternion = new Quaternion().setFromEuler(
