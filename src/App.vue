@@ -118,6 +118,7 @@ export default {
 
 <style lang="scss">
 #app {
+  background-color: $white-beige;
   color: $purple;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
