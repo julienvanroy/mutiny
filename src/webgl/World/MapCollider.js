@@ -37,16 +37,16 @@ export default class MapCollider {
     onDebug() {
         if (!this._debug.active) return;
 
-        this._debug.params = {
+        const configDebug = {
             displayCollider: false,
             displayBVH: false,
             visualizeDepth: 10,
         };
 
-        this.collider.visible = this._debug.params.displayCollider;
+        this.collider.visible = configDebug.displayCollider;
 
-        const visualizer = new MeshBVHVisualizer(this.collider, this._debug.params.visualizeDepth);
-        visualizer.visible = this._debug.params.displayBVH;
+        const visualizer = new MeshBVHVisualizer(this.collider, configDebug.visualizeDepth);
+        visualizer.visible = configDebug.displayBVH;
         this._group.add(visualizer);
 
         // TweakPane
@@ -54,7 +54,11 @@ export default class MapCollider {
             title: "Map Collider",
             expanded: false,
         });
-        folderDebug.addInput(this.collider, "visible", { label: "Display Collider" });
-        folderDebug.addInput(visualizer, "visible", { label: "Display BVH" });
+        folderDebug.addInput(configDebug, "displayCollider", { label: "Display Collider" }).on('change', ({value}) => {
+            this.collider.visible = value
+        });
+        folderDebug.addInput(configDebug, "displayBVH", { label: "Display BVH" }).on('change', ({value}) => {
+            visualizer.visible = value
+        });
     }
 }

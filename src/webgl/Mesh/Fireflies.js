@@ -103,52 +103,71 @@ export default class Fireflies extends component() {
     onDebug() {
         if (!this._debug.active) return;
 
+        const configDebug = {
+            firefliesColor: this._params.color,
+            firefliesPosition: this.mesh.position,
+            firefliesRotation: this.mesh.rotation,
+            firefliesSize: this.mesh.material.uniforms.uSize.value,
+            firefliesHalfBoxSize: this._params.halfBoxSize,
+            firefliesCount: this._params.count
+        }
+
         // TweakPane
-        this._folderDebug = this._debug.pane.addFolder({
+        const folderDebug = this._debug.pane.addFolder({
             title: this.constructor.name,
             expanded: false,
         });
-        this._folderDebug.addInput(this._params, 'color', {
+        folderDebug.addInput(configDebug, 'firefliesColor', {
             label: "Color",
         }).on('change', ({value}) => {
             this.mesh.material.uniforms.uColor.value = new Color(value)
         });
-        this._folderDebug.addInput(this.mesh, "position",
+        folderDebug.addInput(configDebug, "firefliesPosition",
             {
-                title: "Position",
-            });
-        this._folderDebug.addInput(this.mesh, "rotation",
+                label: "position",
+            })
+        folderDebug.addInput(configDebug, "firefliesRotation",
             {
-                title: "Rotation",
-            });
-        this._folderDebug.addInput(this.mesh.material.uniforms.uSize, "value",
+                label: "rotation",
+            })
+        folderDebug.addInput(configDebug, "firefliesSize",
             {
                 label: "Size",
                 step: 0.1,
                 min: 0,
                 max: 100,
-            });
-        this._folderDebug.addInput(this._params, "halfBoxSize",
+            }).on('change', ({value}) => {
+            this.mesh.material.uniforms.uSize.value = value
+        });
+        folderDebug.addInput(configDebug, "firefliesHalfBoxSize",
             {
                 label: "halfBoxSize",
                 step: 0.1,
                 min: 0,
                 max: 100,
-            }).on('change', () => {
-                this._scene.remove(this.mesh)
+            }).on('change', ({value}) => {
+            this._params.halfBoxSize = value
+            this._scene.remove(this.mesh)
                 this.setGeometry()
                 this.setMesh()
+
+                configDebug.firefliesPosition = this.mesh.position
+                configDebug.firefliesRotation = this.mesh.rotation
         });
-        this._folderDebug.addInput(this._params, "count",
+        folderDebug.addInput(configDebug, "firefliesCount",
             {
                 label: "count",
                 step: 1,
                 min: 0,
                 max: 10000,
-            }).on('change', () => {
+            }).on('change', ({value}) => {
+            this._params.count = value
             this._scene.remove(this.mesh)
             this.setGeometry()
             this.setMesh()
+
+            configDebug.firefliesPosition = this.mesh.position
+            configDebug.firefliesRotation = this.mesh.rotation
         });
     }
 }

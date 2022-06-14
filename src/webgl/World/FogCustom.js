@@ -28,8 +28,13 @@ export default class FogCustom {
         this.onDebug()
     }
 
-    onDebug () {
+    onDebug() {
         if(!this._debug.active) return
+
+        const configDebug = {
+            fogCustomDensity: this._scene.fog.density,
+            fogCustomColor: this._settings.color,
+        }
 
         // TweakPane
         const folderDebug = this._debug.pane.addFolder({
@@ -37,17 +42,18 @@ export default class FogCustom {
             expanded: false,
         });
 
-        folderDebug.addInput(this._scene.fog, 'density', {
+        folderDebug.addInput(configDebug, 'fogCustomDensity', {
             label: "distortionScale",
             step: 0.0001,
             min: 0,
             max: 1,
+        }).on('change', ({value}) => {
+            this._scene.fog.density = value
         });
 
-        folderDebug.addInput(this._settings, 'color', {
+        folderDebug.addInput(configDebug, 'fogCustomColor', {
             label: "Color",
         }).on('change', (ev) => {
-            this._settings.color = ev.value
             this._scene.fog.color = new Color(ev.value)
         });
     }
