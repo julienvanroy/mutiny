@@ -41,6 +41,15 @@ export default class Environment {
         this._scene.add(helper)
         helper.visible = false
 
+        const configDebug = {
+            environmentSunVisible: this.sunLight.visible,
+            environmentSunColor: this._params.sunLight.color,
+            environmentSunIntensity: this.sunLight.intensity,
+            environmentSunPosition: this.sunLight.position,
+            environmentSunRotation: this.sunLight.rotation,
+            environmentSunHelperVisible: helper.visible,
+        }
+
         // TweakPane
         const folderDebug = this._debug.pane.addFolder({
             title: this.constructor.name,
@@ -50,33 +59,39 @@ export default class Environment {
             title: "Directional Light / Sun",
             expanded: false,
         });
-        folderSun.addInput(this.sunLight, "visible",
+        folderSun.addInput(configDebug, "environmentSunVisible",
             {
                 label: "active",
-            });
-        folderSun.addInput(this._params.sunLight, 'color', {
+            }).on('change', ({value}) => {
+            this.sunLight.visible = value
+        });
+        folderSun.addInput(configDebug, 'environmentSunColor', {
             label: "Color",
         }).on('change', ({value}) => {
             this.sunLight.color = new Color(value)
         });
-        folderSun.addInput(this.sunLight, "intensity",
+        folderSun.addInput(configDebug, "environmentSunIntensity",
             {
                 label: "Intensity",
                 step: 0.001,
                 min: 0,
                 max: 100,
-            });
-        folderSun.addInput(this.sunLight, "position",
+            }).on('change', ({value}) => {
+            this.sunLight.intensity = value
+        });
+        folderSun.addInput(configDebug, "environmentSunPosition",
             {
-                title: "Position",
+                label: "position",
             });
-        folderSun.addInput(this.sunLight, "rotation",
+        folderSun.addInput(configDebug, "environmentSunRotation",
             {
-                title: "Rotation",
+                label: "rotation",
             });
-        folderSun.addInput(helper, "visible",
+        folderSun.addInput(configDebug, "environmentSunHelperVisible",
             {
                 label: "helper",
-            });
+            }).on('change', ({value}) => {
+            helper.visible = value
+        });
     }
 }

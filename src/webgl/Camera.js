@@ -34,18 +34,23 @@ export default class Camera extends component(PerspectiveCamera) {
         this.controls.enable= true;
         this.controls.enableDamping = true;
 
+        const configDebug = {
+            cameraPosition: this.position,
+            cameraRotation: this.rotation
+        }
+
         // TweakPane
         const folderDebug = this._debug.pane.addFolder({
             title: "Camera",
             expanded: false,
         });
-        folderDebug.addInput(this, "position",
+        folderDebug.addInput(configDebug, "cameraPosition",
             {
-                title: "Position",
+                label: "position",
             });
-        folderDebug.addInput(this, "rotation",
+        folderDebug.addInput(configDebug, "cameraRotation",
             {
-                title: "Rotation",
+                label: "rotation",
             });
     }
 
