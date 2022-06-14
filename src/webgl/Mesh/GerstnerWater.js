@@ -15,14 +15,14 @@ export default class GerstnerWater extends component() {
         this.texture.wrapS = this.texture.wrapT = RepeatWrapping
 
         this.waves = [
-            {direction: 0, steepness: 0.15, wavelength: 100},
-            {direction: 30, steepness: 0.15, wavelength: 50},
-            {direction: 60, steepness: 0.15, wavelength: 25},
+            {direction: 0, steepness: 0.05, wavelength: 100},
+            {direction: 30, steepness: 0.05, wavelength: 50},
+            {direction: 60, steepness: 0.05, wavelength: 25},
         ]
 
         this._params = {
             sunColor: "#ffffff",
-            waterColor: "#001e0f",
+            waterColor: "#06063c",
         }
 
         this.water = new Water(waterGeometry, {
@@ -32,7 +32,7 @@ export default class GerstnerWater extends component() {
             sunDirection: new Vector3(),
             sunColor: this._params.sunColor,
             waterColor: this._params.waterColor,
-            distortionScale: 8,
+            distortionScale: 2,
             fog: true,
         })
 
