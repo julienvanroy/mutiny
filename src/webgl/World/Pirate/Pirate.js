@@ -105,11 +105,11 @@ export default class Pirate {
         // Body data (to send to gamepad)
         this.bodyData = Object.values(this.body)
             .filter((bodyPart) => bodyPart.shuffleMesh)
-            .map((bodyPartData) => ({
+            .map((bodyPartData, index) => ({
                 ...bodyPartData,
                 name: bodyPartData.mesh.name,
                 color: bodyPartData.mesh.color || "#FFF",
-                show: false,
+                show: index === 0,
             }));
     }
 

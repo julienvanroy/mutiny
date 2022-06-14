@@ -1,10 +1,10 @@
 const configs = {
     character: {
-        count: 4, //32
+        count: 32, //32
         colors: ["#3C365A", "#F3E3DD", "#FAA757", "#F86F43", "#6B8CDB"],
         speed: 1.2, //1.2
         rotationSpeed: 0.032,
-        range: 3.2, //10
+        range: 1.2, //10
         animation: {
             idle: {
                 chance() {
@@ -122,6 +122,7 @@ const configs = {
     },
     game: {
         maxTime: 150, //150,
+        clueTime: 10,
     },
     map: {
         navMesh: ["NavMesh", "NavMeshShip"],

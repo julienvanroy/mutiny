@@ -11,7 +11,11 @@
         <div class="clues">
           <div class="clue" v-for="(clue, indexClue) in clues" :key="indexClue">
             <span v-if="clue.show"><img :src="`/images/clues/${clue.img}.png`" alt="" /></span>
-            <span v-else-if="nextClueIndex === indexClue">{{ $t("gamepad.clueInterval") }}</span>
+            <span v-else-if="nextClueIndex === indexClue">
+              {{ $t("gamepad.clueInterval") }}
+              <br />
+              <em>{{ `${countdown}''` }}</em>
+            </span>
           </div>
         </div>
       </div>
@@ -36,7 +40,7 @@ import useColyseusStore from "@/store/colyseus";
 import nipplejs from "nipplejs";
 import ThePlayer from "./ui/ThePlayer";
 import StalkersCounter from "./ui/StalkersCounter";
-import { uuid } from "@/utils";
+import configs from "@/configs";
 
 export default {
   components: { ThePlayer, StalkersCounter },
@@ -57,8 +61,9 @@ export default {
       joystick: [],
       interval: null,
       stalkersCount: 1,
-      nextClueIndex: 0,
-      thePlayerKey: uuid(),
+      nextClueIndex: 1,
+      countdown: configs.game.clueTime,
+      countdownInterval: null,
     };
   },
   watch: {
@@ -71,7 +76,7 @@ export default {
   },
   computed: {
     targetInfo() {
-      return JSON.parse(this.colyseus.player.target);
+      return this.colyseus.player.target ? JSON.parse(this.colyseus.player.target) : "";
     },
     clues() {
       return this.targetInfo?.info || [];
@@ -86,20 +91,25 @@ export default {
   methods: {
     setIntervalClues() {
       if (this.interval) clearInterval(this.interval);
+      if (this.countdownInterval) {
+        clearInterval(this.countdownInterval);
+      }
       this.interval = setInterval(this.showOneClue, 10000);
+      this.countdownInterval = setInterval(() => {
+        this.countdown--;
+        if (this.countdown === 0) this.countdown = configs.game.clueTime;
+      }, 1000);
     },
     showOneClue() {
       if (!this.interval || this.nextClueIndex === this.clues.length) return;
       if (this.cluesHide.length === 0) {
         clearInterval(this.interval);
+        clearInterval(this.countdownInterval);
         return;
       } else {
         this.clues[this.nextClueIndex].show = true;
         this.nextClueIndex++;
       }
-    },
-    forceRerender() {
-      this.thePlayerKey = uuid();
     },
   },
   mounted() {
@@ -271,6 +281,11 @@ export default {
           img {
             width: 72px;
             height: auto;
+          }
+
+          em {
+            font-size: 18px;
+            font-weight: $ft-w-bold;
           }
         }
       }

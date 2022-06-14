@@ -95,7 +95,7 @@ export default class World extends component() {
             initialPositions.push(position);
 
             const botId = uuid();
-            this.bots[botId] = new BotPirate(botId, new Vector3(), this.characters[i], this.group);
+            this.bots[botId] = new BotPirate(botId, position, this.characters[i], this.group);
         }
     }
 
@@ -108,7 +108,7 @@ export default class World extends component() {
             for (const [key, value] of Object.entries(configs.character.body)) {
                 body[key] = {
                     tag: key,
-                    name: value.name,
+
                     alphaTexture: value.alphaTexture,
                     shuffleMesh: value.shuffleMesh,
                     addColor: value.addColor,
@@ -132,7 +132,7 @@ export default class World extends component() {
                 for (const [key, value] of Object.entries(configs.character.body)) {
                     body[key] = {
                         tag: key,
-                        name: value.name,
+
                         alphaTexture: value.alphaTexture,
                         shuffleMesh: value.shuffleMesh,
                         addColor: value.addColor,
