@@ -32,8 +32,10 @@ export default class World extends component() {
         console.log("world is ready");
         this.environment = new Environment();
         this.fog = new Fog(20);
+        this.fog.mesh.position.y += 1;
         this.gerstnerWater = new GerstnerWater();
         this.fireflies = new Fireflies(100);
+        this.fireflies.mesh.position.y += 5
         this.mapLevel = new MapLevel(this.group);
         this.mapCollider = new MapCollider(this.group);
 
