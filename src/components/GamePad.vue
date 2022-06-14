@@ -73,6 +73,11 @@ export default {
         this.setIntervalClues();
       }
     },
+    targetInfo() {
+      this.nextClueIndex = 1;
+      this.countdown = configs.game.clueTime;
+      this.setIntervalClues();
+    },
   },
   computed: {
     targetInfo() {
