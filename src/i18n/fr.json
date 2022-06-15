@@ -146,6 +146,16 @@
         "6": "Mousse, tu resteras...",
         "7": "Espèce de marin d’eau douce..."
       }
+    },
+    "desktop": {
+      "0": "Capitaine",
+      "1": "Second",
+      "2": "Canonnier",
+      "3": "Matelot",
+      "4": "Matelot",
+      "5": "Mousse",
+      "6": "Mousse",
+      "7": "Espèce de marin d’eau douce..."
     }
   }
 }

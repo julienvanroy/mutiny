@@ -146,6 +146,16 @@
         "6": "Mousse, tu resteras...",
         "7": "Espèce de marin d’eau douce..."
       }
+    },
+    "desktop": {
+      "0": "Captain",
+      "1": "Second",
+      "2": "Gunner",
+      "3": "Sailor",
+      "4": "Sailor",
+      "5": "Apprentice sailor",
+      "6": "Apprentice sailor",
+      "7": "You freshwater sailor..."
     }
   }
 }
