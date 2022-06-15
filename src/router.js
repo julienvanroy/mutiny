@@ -9,8 +9,9 @@ import EndGameView from "@/views/EndGameView";
 import CreditsView from "@/views/CreditsView";
 import NotFound from "@/views/NotFound";
 import useColyseusStore from "@/store/colyseus";
-import useGlobalStore from "@/store/global";
+import ConnectionView from "@/views/ConnectionView";
 import DebugView from "@/views/DebugView";
+import useGlobalStore from "@/store/global";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -38,6 +39,12 @@ const router = createRouter({
             name: "game",
             component: GameView,
             meta: { requiresDesktop: true, requiresMobile: false, requiresRoom: true, requiresDebug: false },
+        },
+        {
+            path: "/room/:roomId",
+            name: "connection",
+            component: ConnectionView,
+            meta: { requiresDesktop: false, requiresMobile: true, requiresRoom: false, requiresDebug: false },
         },
         {
             path: "/waiting",
