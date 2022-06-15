@@ -264,7 +264,7 @@ export default {
       z-index: 2;
       .mode {
         position: relative;
-        margin-bottom: 18%;
+        margin-bottom: 20%;
         .boat-container {
           position: relative;
           width: 300px;
