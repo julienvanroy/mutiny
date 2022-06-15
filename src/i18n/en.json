@@ -14,10 +14,7 @@
     "restart": "Restart",
     "quit": "Quit",
     "timeLeft": "Remaining time",
-    "tutorial": "Tutorial",
-    "waiting": "WAITING...",
-    "dead": "{player} ousted you",
-    "stealTarget": "{player} has found your target"
+    "tutorial": "Tutorial"
   },
   "homepage": {
     "credits": "Credits",
@@ -42,7 +39,8 @@
   "getPseudo": {
     "title": "Who are you, sailor?",
     "ctaRandom": "Random name",
-    "cta": "Getting on the bridge"
+    "cta": "Getting on the bridge",
+    "error": "Pseudo is already taken"
   },
   "waiting": {
     "portrait": {
@@ -84,7 +82,16 @@
     },
     "modalOptions": {
       "btnLabel": "Ahoy!"
-    }
+    },
+    "modalLockGamepad": "Retourne ta manette pour jouer.",
+    "modalEjected": {
+      "title": "Tu as été jeté par dessus bord",
+      "cta": "Retourner sur le quai"
+    },
+    "modalDead": "{player} ousted you",
+    "modalTargetStolen": "{player} has found your target",
+    "modalTargetSwitched": "Quel pirate sanguinolant !",
+    "modalWaiting": "WAITING..."
   },
   "gamepad": {
     "youAre": "you are",
@@ -121,6 +128,24 @@
       "shortDescription": "Sneak into the crew, oust your rivals and overthrow the captain... Let the silent mutiny begin!",
       "description": "Do you want to be the captain of the ship? Earn the most terror points by attacking your opponents. The clues to your next target are on your dashboard. Have a nice trip!",
       "btnGo": "On boooaard!"
+    }
+  },
+  "end": {
+    "mobile": {
+      "title": {
+        "win": "Victoire !",
+        "lose": "Morbleu !"
+      },
+      "description": {
+        "0": "Le capitaine, c’est toi !",
+        "1": "Second, tu resteras...",
+        "2": "Canonnier, tu resteras...",
+        "3": "Matelot, tu resteras...",
+        "4": "Matelot, tu resteras...",
+        "5": "Mousse, tu resteras...",
+        "6": "Mousse, tu resteras...",
+        "7": "Espèce de marin d’eau douce..."
+      }
     }
   }
 }

@@ -275,7 +275,7 @@ export default class World extends component() {
             if (p.target instanceof PlayerPirate) p.target._setBot();
             else if (p.target instanceof BotPirate) p._setBot();
 
-            useColyseusStore().updatePlayerTarget(p.id, p._getTargetData(), true);
+            useColyseusStore().updatePlayerTarget(p.id, p._getTargetData(), false, true);
 
             console.log(`player ${p.id} has target ${p.target.id} ${p.target.bot ? `of bot ${p.target.bot.id}` : ""}`);
         });

@@ -21,6 +21,15 @@ const useColyseusStore = defineStore("colyseus", {
         roomReadyToPlay(state) {
             return state.playersArray.length > 0 && state.playersArray.every((player) => player.orientationReady);
         },
+        playerRanking(state) {
+            let rank = state.playersArray.findIndex((p) => p.id === state.player.id);
+            let isLast = rank === state.playersArray.length - 1;
+            return {
+                isWinner: rank === 0 && state.player.points !== 0,
+                rank,
+                isLast,
+            };
+        },
     },
     actions: {
         async initLobbyRoom() {
@@ -88,8 +97,6 @@ const useColyseusStore = defineStore("colyseus", {
         },
         updatePlayers(room) {
             room.onStateChange((state) => {
-                this.players = new Map();
-
                 for (const [key, value] of state.players.$items) {
                     const p = this.players.get(key) || {};
                     const values = Object.values(value);
@@ -135,10 +142,11 @@ const useColyseusStore = defineStore("colyseus", {
         getAllPlayers() {
             this.sendData("getAllPlayers");
         },
-        updatePlayerTarget(playerId, playerTarget, onGameStart = false) {
+        updatePlayerTarget(playerId, playerTarget, targetGotStolen = false, onGameStart = false) {
             this.sendData("updatePlayerTarget", {
                 playerId,
                 playerTarget,
+                targetGotStolen,
                 onGameStart,
             });
         },

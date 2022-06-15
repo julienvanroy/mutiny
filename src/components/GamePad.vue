@@ -62,20 +62,17 @@ export default {
       interval: null,
       stalkersCount: 1,
       nextClueIndex: 1,
-      countdown: configs.game.clueTime,
+      countdown: configs.game.cluesTime[0],
       countdownInterval: null,
     };
   },
   watch: {
-    cluesHide(newValue) {
-      if (newValue.length === 4) {
-        this.showOneClue();
-        this.setIntervalClues();
-      }
+    cluesHide() {
+      this.setIntervalClues();
     },
     targetInfo() {
       this.nextClueIndex = 1;
-      this.countdown = configs.game.clueTime;
+      this.countdown = configs.game.cluesTime[this.nextClueIndex];
       this.setIntervalClues();
     },
   },
@@ -99,10 +96,9 @@ export default {
       if (this.countdownInterval) {
         clearInterval(this.countdownInterval);
       }
-      this.interval = setInterval(this.showOneClue, 10000);
+      this.interval = setInterval(this.showOneClue, 1000 * configs.game.cluesTime[this.nextClueIndex]);
       this.countdownInterval = setInterval(() => {
         this.countdown--;
-        if (this.countdown === 0) this.countdown = configs.game.clueTime;
       }, 1000);
     },
     showOneClue() {
@@ -114,6 +110,8 @@ export default {
       } else {
         this.clues[this.nextClueIndex].show = true;
         this.nextClueIndex++;
+        this.countdown = configs.game.cluesTime[this.nextClueIndex];
+        this.setIntervalClues();
       }
     },
   },

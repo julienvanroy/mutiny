@@ -5,7 +5,7 @@
         <img src="../assets/mobile/header-w-logo.svg" alt="" />
       </header>
       <h2>{{ $t("waiting.portrait.title") }}</h2>
-      <ThePlayer v-if="null !== player" :player="player" :large="true" dont-update-state />
+      <ThePlayer v-if="null !== player" :player="player" large dont-update-state hide-points />
       <div class="waiting__instruction">
         <p>{{ $t("waiting.portrait.instruction") }}</p>
         <img src="../assets/mobile/icon-rotate.svg" alt="" />
@@ -16,29 +16,33 @@
     </template>
     <template v-else>
       <header>
-        <img src="../assets/mobile/header.svg" alt="" />
+        <img src="../assets/mobile/header-w-logo.svg" alt="" />
       </header>
+      <ThePlayer v-if="null !== player" :player="player" dont-update-state hide-points />
       <h2>
         {{ $t("waiting.landscape.titleLeft") }}
         <em>{{ $t("waiting.landscape.titleMiddle") }}</em>
         {{ $t("waiting.landscape.titleRight") }}
       </h2>
+
       <p>{{ $t("waiting.landscape.instruction") }}</p>
       <footer>
         <img src="../assets/mobile/header.svg" alt="" />
       </footer>
     </template>
   </div>
+  <modal-ejected v-if="ejected" />
 </template>
 
 <script>
 import useColyseusStore from "@/store/colyseus";
-import { mapWritableState } from "pinia";
+import { mapState } from "pinia";
 import useGlobalStore from "@/store/global";
 import ThePlayer from "@/components/ui/ThePlayer.vue";
+import ModalEjected from "@/components/modals/ModalEjected.vue";
 
 export default {
-  components: { ThePlayer },
+  components: { ThePlayer, ModalEjected },
   name: "WaitingView",
   setup() {
     const colyseus = useColyseusStore();
@@ -47,15 +51,13 @@ export default {
   data() {
     return {
       player: null,
+      ejected: false,
     };
   },
   computed: {
-    ...mapWritableState(useGlobalStore, ["isLandscape"]),
+    ...mapState(useGlobalStore, ["isLandscape"]),
   },
   mounted() {
-    this.resize();
-    window.addEventListener("resize", this.resize, false);
-
     this.colyseus.getPlayer(this.colyseus.currentRoom.sessionId);
 
     this.colyseus.currentRoom.onMessage("startGame", () => this.$router.push("gamepad"));
@@ -68,15 +70,8 @@ export default {
 
     this.colyseus.currentRoom.onMessage("leaveRoom", () => {
       this.colyseus.currentRoom.leave();
+      this.ejected = true;
     });
-  },
-  beforeUnmount() {
-    window.removeEventListener("resize", this.resize, false);
-  },
-  methods: {
-    resize() {
-      this.isLandscape = window.innerWidth > window.innerHeight;
-    },
   },
 };
 </script>

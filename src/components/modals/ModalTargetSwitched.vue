@@ -1,15 +1,15 @@
 <template>
   <transition name="fade">
     <div>
-      <img src="/images/modals/icon-steal.svg/" alt="" />
-      {{ $t("ui.stealTarget", { player: "Jacky Chan" }) }}
+      <img src="/images/modals/icon-new-target.svg/" alt="" />
+      {{ $t("modals.modalTargetSwitched") }}
     </div>
   </transition>
 </template>
 
 <script>
 export default {
-  name: "ModalStealTarget",
+  name: "ModalTargetSwitched",
 };
 </script>
 
@@ -21,7 +21,7 @@ div {
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgba($violet-target, 0.9);
+  background-color: rgba($orange-target, 0.9);
   color: $white;
   font-weight: $ft-w-bold;
   font-size: 20px;

@@ -1,15 +1,15 @@
 <template>
   <transition name="fade">
     <div>
-      <img src="/images/modals/icon-dead.svg/" alt="" />
-      {{ $t("modals.modalDead", { player }) }}
+      <img src="/images/modals/icon-steal.svg/" alt="" />
+      {{ $t("modals.modalTargetStolen", { player }) }}
     </div>
   </transition>
 </template>
 
 <script>
 export default {
-  name: "ModalDead",
+  name: "ModalTargetStolen",
   props: {
     player: {
       type: String,
@@ -27,7 +27,7 @@ div {
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgba($red-dead, 0.9);
+  background-color: rgba($violet-target, 0.9);
   color: $white;
   font-weight: $ft-w-bold;
   font-size: 20px;

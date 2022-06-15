@@ -10,7 +10,7 @@
       </button>
     </div>
 
-    <div class="btn-parameters">
+    <div class="btn-parameters" v-if="!isMobile">
       <button @click="playMusic">
         <img src="images/icons/sound-on.png" />
       </button>
@@ -118,6 +118,7 @@ export default {
 
 <style lang="scss">
 #app {
+  background-color: $white-beige;
   color: $purple;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

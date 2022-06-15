@@ -122,7 +122,8 @@ const configs = {
     },
     game: {
         maxTime: 150, //150,
-        clueTime: 10,
+        maxPlayers: 8,
+        cluesTime: [0, 5, 10, 10],
     },
     map: {
         navMesh: ["NavMesh", "NavMeshShip"],

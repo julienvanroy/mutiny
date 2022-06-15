@@ -1,7 +1,7 @@
 <template>
   <div class="homepage">
     <header class="homepage__header">
-      <img src="../assets/mobile/header.svg" alt="" />
+      <img src="../assets/mobile/header-w-logo.svg" alt="" />
     </header>
     <div class="homepage__content">
       <h1 class="homepage__content__logo">
@@ -123,6 +123,7 @@ export default {
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      margin-bottom: 56px;
       * {
         margin: 8px 0;
       }
@@ -130,15 +131,38 @@ export default {
   }
 
   &__footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     font-size: 12px;
+    padding: 0 32px 20px 32px;
+    text-align: left;
 
     div {
       display: flex;
 
       img {
-        margin-right: 8px;
+        margin-right: 7px;
+      }
+    }
+  }
+
+  @media (orientation: landscape) {
+    &__content {
+      padding: 16px 0;
+
+      &__logo {
+        display: none;
+        visibility: hidden;
+      }
+
+      .content-container {
+        p {
+          padding: 0 16%;
+          margin-bottom: 16px;
+        }
       }
     }
   }

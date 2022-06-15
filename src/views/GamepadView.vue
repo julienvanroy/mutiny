@@ -1,34 +1,42 @@
 <template>
   <game-pad :has-new-target="hasNewTarget" />
-  <transition>
-    <modal-dead v-show="showModalDead" />
-  </transition>
-  <transition>
-    <modal-target-changed v-show="showModalTargetChanged" />
-  </transition>
+  <modal-dead v-show="showModalDead" :player="targetDead" />
+  <modal-target-switched v-show="showModalTargetSwitched" />
+  <modal-target-stolen v-show="showModalTargetStolen" :player="targetStolen" />
+  <modal-lock-gamepad v-if="!isLandscape" />
 </template>
 
 <script>
 import useColyseusStore from "@/store/colyseus";
+import useGlobalStore from "@/store/global";
+import { mapState } from "pinia";
 import GamePad from "@/components/GamePad.vue";
 import ModalDead from "@/components/modals/ModalDead.vue";
-import ModalTargetChanged from "@/components/modals/ModalTargetChanged.vue";
+import ModalTargetStolen from "@/components/modals/ModalTargetStolen.vue";
+import ModalTargetSwitched from "@/components/modals/ModalTargetSwitched.vue";
+import ModalLockGamepad from "@/components/modals/ModalLockGamepad.vue";
 
 export default {
-  components: { GamePad, ModalDead, ModalTargetChanged },
+  components: { GamePad, ModalDead, ModalTargetStolen, ModalTargetSwitched, ModalLockGamepad },
   name: "GamepadView",
   data() {
     return {
       hasNewTarget: false,
       timeout: null,
+      targetDead: "",
+      targetStolen: "",
     };
   },
   computed: {
+    ...mapState(useGlobalStore, ["isLandscape"]),
     showModalDead() {
       return this.colyseus.player.isKilled;
     },
-    showModalTargetChanged() {
-      return !this.colyseus.player.isKilled && this.colyseus.player.targetChanged;
+    showModalTargetSwitched() {
+      return !this.colyseus.player.isKilled && this.colyseus.player.targetChanged && !this.showModalTargetStolen;
+    },
+    showModalTargetStolen() {
+      return !this.colyseus.player.isKilled && this.colyseus.player.targetGotStolen;
     },
   },
   watch: {
@@ -59,14 +67,17 @@ export default {
 
     this.colyseus.currentRoom.onMessage("attack", () => {});
 
-    this.colyseus.currentRoom.onMessage("kill", () => {});
+    this.colyseus.currentRoom.onMessage("kill", ({ target }) => {
+      this.targetDead = target;
+    });
 
-    this.colyseus.currentRoom.onMessage("updatePlayerTarget", () => {});
+    this.colyseus.currentRoom.onMessage("updatePlayerTarget", ({ target }) => (this.targetStolen = target));
 
     this.colyseus.currentRoom.onMessage("endGame", () => this.$router.push("/end-game"));
   },
   unmounted() {
     this.colyseus.currentRoom?.leave();
+    window.removeEventListener("resize", this.resize, false);
   },
 };
 </script>

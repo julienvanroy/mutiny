@@ -8,9 +8,9 @@ import GamepadView from "@/views/GamepadView";
 import EndGameView from "@/views/EndGameView";
 import NotFound from "@/views/NotFound";
 import useColyseusStore from "@/store/colyseus";
-import useGlobalStore from "@/store/global";
 import ConnectionView from "@/views/ConnectionView";
 import DebugView from "@/views/DebugView";
+import useGlobalStore from "@/store/global";
 
 const router = createRouter({
     history: createWebHistory(),

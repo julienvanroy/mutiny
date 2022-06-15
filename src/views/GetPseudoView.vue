@@ -6,7 +6,7 @@
     <h2>{{ $t("getPseudo.title") }}</h2>
     <div class="get-pseudo__content">
       <TheInput v-model="pseudo" :placeholder="placeholder" :width="236" :height="48" center />
-      <span v-if="pseudoNotValid">Pseudo is already taken</span>
+      <span v-if="pseudoNotValid">{{ $t("getPseudo.error") }}</span>
       <TheButton
         :label="$t('getPseudo.ctaRandom')"
         icon="images/icons/random.svg"
@@ -129,8 +129,44 @@ export default {
     justify-content: center;
     align-items: center;
 
+    & > span {
+      margin-top: -16px;
+      font-size: 12px;
+    }
+
     .the-input {
       margin: 32px 0;
+    }
+
+    .btn.btn-tertiary {
+      width: 192px;
+      padding: 10px 5px;
+    }
+  }
+
+  .btn.btn-primary {
+    width: 243px;
+    padding: 0 54px;
+    span {
+      font-size: 20px;
+    }
+  }
+
+  @media (orientation: landscape) {
+    &__content {
+      margin-bottom: 16px;
+
+      .the-input {
+        margin: 16px 0;
+      }
+    }
+    h2 {
+      font-size: 18px;
+    }
+
+    footer {
+      display: none;
+      visibility: hidden;
     }
   }
 }
