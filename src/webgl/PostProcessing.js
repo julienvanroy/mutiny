@@ -5,8 +5,7 @@ import {
     RenderPass,
     SMAAEffect,
     SMAAPreset,
-    ToneMappingEffect,
-    Gau
+    ToneMappingEffect
 } from "postprocessing";
 import {component} from "bidello";
 import Experience from "@/webgl/Experience";
@@ -22,6 +21,9 @@ export default class PostProcessing extends component() {
                     hight: SMAAPreset.HIGH,
                     ultra: SMAAPreset.ULTRA,
                 }
+            },
+            bloom: {
+                intensity: 1
             }
         }
 
@@ -32,15 +34,18 @@ export default class PostProcessing extends component() {
         this._scene = experience.scene
         this._camera = experience.camera
         this.renderPass = new RenderPass(this._scene, this._camera)
-        this.smaaEffect = new SMAAEffect({preset: this._params.smaa.preset.hight})
-        this.bloomEffect = new BloomEffect()
-        this.toonEffect = new ToneMappingEffect()
-        this.effectPass = new EffectPass(this._camera, this.smaaEffect, this.bloomEffect);
+        const smaaEffect = new SMAAEffect({preset: this._params.smaa.preset.medium})
+        const bloomEffect = new BloomEffect({intensity: this._params.bloom.intensity})
+        const toonEffect = new ToneMappingEffect()
+        this.effectPass = new EffectPass(this._camera, smaaEffect, bloomEffect, toonEffect);
         this.effectComposer = new EffectComposer(this._renderer)
 
         this.effectComposer.addPass(this.renderPass);
         this.effectComposer.addPass(this.effectPass);
-        this.effectComposer.addPass(this.effectPass);
+
+        this.smaaEffect = this.effectComposer.passes[1].effects[0]
+        this.bloomEffect = this.effectComposer.passes[1].effects[1]
+        this.toneEffect = this.effectComposer.passes[1].effects[2]
 
         this.onDebug()
     }
@@ -67,23 +72,42 @@ export default class PostProcessing extends component() {
                 {text: 'Hight', value: 'hight'},
                 {text: 'Ultra', value: 'ultra'},
             ],
-            value: 'hight',
+            value: 'medium',
         }).on('change', ({value}) => {
-            this.effectComposer.passes[1].effects[0].applyPreset(this._params.smaa.preset[value])
+            this.smaaEffect.applyPreset(this._params.smaa.preset[value])
         });
 
         const folderBloom = folderDebug.addFolder({
             title: "Bloom",
             expanded: false,
         });
-        folderBloom.addInput(this.effectComposer.passes[1].effects[1], 'intensity')
-        const folderToon = folderDebug.addFolder({
-            title: "Toon",
+        folderBloom.addInput(this.bloomEffect.luminanceMaterial, 'threshold',{
+            label: "threshold",
+            step: 0.001,
+            min: 0,
+            max: 1,
+        })
+        folderBloom.addInput(this.bloomEffect.luminanceMaterial, 'smoothing',
+            {
+                label: "smoothing",
+                step: 0.001,
+                min: 0,
+                max: 1,
+            })
+        folderBloom.addInput(this.bloomEffect, 'intensity',
+            {
+                label: "intensity",
+                step: 0.001,
+                min: 0,
+                max: 20,
+            })
+
+        const folderTone = folderDebug.addFolder({
+            title: "ToneMapping",
             expanded: false,
         });
-        folderToon.addButton({title: "Dispose"}).on("click", () => {
+        console.log(folderTone)
 
-        });
     }
 
     onRaf() {
