@@ -11,7 +11,7 @@ import Resources from "./Utils/Resources.js";
 import sources from "./sources";
 import settings from "./settings";
 import Controls from "./Controls";
-import Composer from "@/webgl/Composer";
+import PostProcessing from "@/webgl/PostProcessing";
 
 let instance = null;
 
@@ -43,7 +43,7 @@ export default class Experience {
         this.camera = new Camera();
         this.renderer = new Renderer(this.canvas);
         this.world = new World();
-        this.composer = new Composer(this.renderer)
+        this.composer = new PostProcessing(this.renderer)
     }
 
     destroy() {
