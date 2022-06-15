@@ -95,7 +95,7 @@ export default class World extends component() {
             initialPositions.push(position);
 
             const botId = uuid();
-            this.bots[botId] = new BotPirate(botId, new Vector3(), this.characters[i], this.group);
+            this.bots[botId] = new BotPirate(botId, position, this.characters[i], this.group);
         }
     }
 
