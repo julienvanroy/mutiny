@@ -5,7 +5,8 @@ import {
     RenderPass,
     SMAAEffect,
     SMAAPreset,
-    ToneMappingEffect
+    ToneMappingEffect,
+    ToneMappingMode
 } from "postprocessing";
 import {component} from "bidello";
 import Experience from "@/webgl/Experience";
@@ -24,6 +25,15 @@ export default class PostProcessing extends component() {
             },
             bloom: {
                 intensity: 1
+            },
+            tone: {
+                mode: {
+                    REINHARD: ToneMappingMode.REINHARD,
+                    REINHARD2: ToneMappingMode.REINHARD2,
+                    REINHARD2_ADAPTIVE: ToneMappingMode.REINHARD2_ADAPTIVE,
+                    OPTIMIZED_CINEON: ToneMappingMode.OPTIMIZED_CINEON,
+                    ACES_FILMIC: ToneMappingMode.ACES_FILMIC
+                }
             }
         }
 
@@ -36,7 +46,7 @@ export default class PostProcessing extends component() {
         this.renderPass = new RenderPass(this._scene, this._camera)
         const smaaEffect = new SMAAEffect({preset: this._params.smaa.preset.medium})
         const bloomEffect = new BloomEffect({intensity: this._params.bloom.intensity})
-        const toonEffect = new ToneMappingEffect()
+        const toonEffect = new ToneMappingEffect({mode: this._params.tone.mode.ACES_FILMIC})
         this.effectPass = new EffectPass(this._camera, smaaEffect, bloomEffect, toonEffect);
         this.effectComposer = new EffectComposer(this._renderer)
 
@@ -106,8 +116,44 @@ export default class PostProcessing extends component() {
             title: "ToneMapping",
             expanded: false,
         });
-        console.log(folderTone)
-
+        folderTone.addBlade({
+            view: 'list',
+            label: 'mode',
+            options: [
+                {text: 'REINHARD', value: 'REINHARD'},
+                {text: 'REINHARD2', value: 'REINHARD2'},
+                {text: 'REINHARD2_ADAPTIVE', value: 'REINHARD2_ADAPTIVE'},
+                {text: 'OPTIMIZED_CINEON', value: 'OPTIMIZED_CINEON'},
+                {text: 'ACES_FILMIC', value: 'ACES_FILMIC'},
+            ],
+            value: 'ACES_FILMIC',
+        }).on('change', ({value}) => {
+            this.toneEffect.mode = this._params.tone.mode[value]
+        });
+        folderTone.addInput(this.effectComposer.getRenderer(), 'toneMappingExposure', {
+            label: "exposure",
+            step: 0.001,
+            min: 0,
+            max: 2,
+        })
+        folderTone.addInput(this.toneEffect, 'whitePoint', {
+            label: "whitePoint",
+            step: 0.01,
+            min: 0,
+            max: 32,
+        })
+        folderTone.addInput(this.toneEffect, 'middleGrey', {
+            label: "middleGrey",
+            step: 0.0001,
+            min: 0,
+            max: 1,
+        })
+        folderTone.addInput(this.toneEffect, 'averageLuminance', {
+            label: "averageLuminance",
+            step: 0.0001,
+            min: 0,
+            max: 1,
+        })
     }
 
     onRaf() {
