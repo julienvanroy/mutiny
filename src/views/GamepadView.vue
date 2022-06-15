@@ -1,8 +1,8 @@
 <template>
   <game-pad :has-new-target="hasNewTarget" />
   <modal-dead v-show="showModalDead" :player="targetDead" />
-  <modal-target-stolen v-show="showModalTargetStolen" :player="targetStolen" />
   <modal-target-switched v-show="showModalTargetSwitched" />
+  <modal-target-stolen v-show="showModalTargetStolen" :player="targetStolen" />
   <modal-lock-gamepad v-if="!isLandscape" />
 </template>
 
@@ -36,7 +36,7 @@ export default {
       return !this.colyseus.player.isKilled && this.colyseus.player.targetChanged;
     },
     showModalTargetStolen() {
-      return this.colyseus.player.targetGotStolen && this.colyseus.player.targetChanged;
+      return !this.colyseus.player.isKilled && this.colyseus.player.targetGotStolen;
     },
   },
   watch: {
