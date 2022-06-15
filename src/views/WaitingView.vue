@@ -73,9 +73,6 @@ export default {
       this.ejected = true;
     });
   },
-  beforeUnmount() {
-    window.removeEventListener("resize", this.resize, false);
-  },
 };
 </script>
 
