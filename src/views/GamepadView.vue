@@ -9,7 +9,7 @@
 <script>
 import useColyseusStore from "@/store/colyseus";
 import useGlobalStore from "@/store/global";
-import { mapWritableState } from "pinia";
+import { mapState } from "pinia";
 import GamePad from "@/components/GamePad.vue";
 import ModalDead from "@/components/modals/ModalDead.vue";
 import ModalTargetStolen from "@/components/modals/ModalTargetStolen.vue";
@@ -28,7 +28,7 @@ export default {
     };
   },
   computed: {
-    ...mapWritableState(useGlobalStore, ["isLandscape"]),
+    ...mapState(useGlobalStore, ["isLandscape"]),
     showModalDead() {
       return this.colyseus.player.isKilled;
     },
@@ -63,9 +63,6 @@ export default {
     return { colyseus };
   },
   mounted() {
-    this.resize();
-    window.addEventListener("resize", this.resize, false);
-
     this.colyseus.currentRoom.onMessage("joystick", () => {});
 
     this.colyseus.currentRoom.onMessage("attack", () => {});
@@ -81,11 +78,6 @@ export default {
   unmounted() {
     this.colyseus.currentRoom?.leave();
     window.removeEventListener("resize", this.resize, false);
-  },
-  methods: {
-    resize() {
-      this.isLandscape = window.innerWidth > window.innerHeight;
-    },
   },
 };
 </script>

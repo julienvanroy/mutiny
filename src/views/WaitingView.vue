@@ -36,7 +36,7 @@
 
 <script>
 import useColyseusStore from "@/store/colyseus";
-import { mapWritableState } from "pinia";
+import { mapState } from "pinia";
 import useGlobalStore from "@/store/global";
 import ThePlayer from "@/components/ui/ThePlayer.vue";
 import ModalEjected from "@/components/modals/ModalEjected.vue";
@@ -55,12 +55,9 @@ export default {
     };
   },
   computed: {
-    ...mapWritableState(useGlobalStore, ["isLandscape"]),
+    ...mapState(useGlobalStore, ["isLandscape"]),
   },
   mounted() {
-    this.resize();
-    window.addEventListener("resize", this.resize, false);
-
     this.colyseus.getPlayer(this.colyseus.currentRoom.sessionId);
 
     this.colyseus.currentRoom.onMessage("startGame", () => this.$router.push("gamepad"));
@@ -78,11 +75,6 @@ export default {
   },
   beforeUnmount() {
     window.removeEventListener("resize", this.resize, false);
-  },
-  methods: {
-    resize() {
-      this.isLandscape = window.innerWidth > window.innerHeight;
-    },
   },
 };
 </script>
