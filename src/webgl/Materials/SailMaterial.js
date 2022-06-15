@@ -12,7 +12,7 @@ export class SailMaterial extends ShaderMaterial {
             uniforms:
                 {
                     uColor: { value: new THREE.Color('#ffffff') },
-                    uFrequency: {value: new Vector2(1, 1)},
+                    uFrequency: {value: new Vector2(5, 5)},
                     uTime: {value: 0},
                 }
         });
