@@ -33,7 +33,7 @@ export default {
       return this.colyseus.player.isKilled;
     },
     showModalTargetSwitched() {
-      return !this.colyseus.player.isKilled && this.colyseus.player.targetChanged;
+      return !this.colyseus.player.isKilled && this.colyseus.player.targetChanged && !this.showModalTargetStolen;
     },
     showModalTargetStolen() {
       return !this.colyseus.player.isKilled && this.colyseus.player.targetGotStolen;
