@@ -2,7 +2,7 @@
   <transition name="fade">
     <div>
       <img src="/images/modals/icon-dead.svg/" alt="" />
-      {{ $t("ui.dead", { player: "Patate" }) }}
+      {{ $t("modals.modalDead", { player }) }}
     </div>
   </transition>
 </template>
@@ -10,6 +10,12 @@
 <script>
 export default {
   name: "ModalDead",
+  props: {
+    player: {
+      type: String,
+      required: true,
+    },
+  },
 };
 </script>
 

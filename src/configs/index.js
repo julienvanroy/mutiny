@@ -121,7 +121,7 @@ const configs = {
         },
     },
     game: {
-        maxTime: 10, //150,
+        maxTime: 150, //150,
         maxPlayers: 8,
         cluesTime: [0, 5, 10, 10],
     },

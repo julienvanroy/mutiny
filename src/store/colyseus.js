@@ -3,7 +3,6 @@ import * as Colyseus from "colyseus.js";
 import router from "@/router";
 import { mapToArray, sample } from "@/utils";
 import useGlobalStore from "./global";
-import configs from "@/configs";
 
 const useColyseusStore = defineStore("colyseus", {
     state: () => ({

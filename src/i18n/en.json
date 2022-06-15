@@ -15,9 +15,7 @@
     "quit": "Quit",
     "timeLeft": "Remaining time",
     "tutorial": "Tutorial",
-    "waiting": "WAITING...",
-    "dead": "{player} ousted you",
-    "stealTarget": "{player} has found your target"
+    "waiting": "WAITING..."
   },
   "homepage": {
     "credits": "Credits",
@@ -85,7 +83,10 @@
     "modalEjected": {
       "title": "Tu as été jeté par dessus bord",
       "cta": "Retourner sur le quai"
-    }
+    },
+    "modalDead": "{player} ousted you",
+    "modalTargetStolen": "{player} has found your target",
+    "modalTargetSwitched": "Quel pirate sanguinolant !"
   },
   "gamepad": {
     "youAre": "you are",

@@ -2,14 +2,20 @@
   <transition name="fade">
     <div>
       <img src="/images/modals/icon-steal.svg/" alt="" />
-      {{ $t("ui.stealTarget", { player: "Jacky Chan" }) }}
+      {{ $t("modals.modalTargetStolen", { player }) }}
     </div>
   </transition>
 </template>
 
 <script>
 export default {
-  name: "ModalStealTarget",
+  name: "ModalTargetStolen",
+  props: {
+    player: {
+      type: String,
+      required: true,
+    },
+  },
 };
 </script>
 
