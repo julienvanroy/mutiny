@@ -7,13 +7,12 @@
     <div :class="`setup__under ${null !== selected ? 'details-open' : ''}`">
       <div class="background">
         <img
-          class="sky bottom parallax"
-          data-parallax="1"
+          class="sky bottom"
           src="images/setup/sky_5.jpg"
         />
         <img
           class="sky bottom parallax"
-          data-parallax="2"
+          data-parallax="1"
           src="images/setup/sky_4.png"
         />
         <img
@@ -23,7 +22,7 @@
         />
         <img
           class="sky bottom parallax"
-          data-parallax="3"
+          data-parallax="1"
           src="images/setup/sky_2.png"
         />
         <img
@@ -36,6 +35,11 @@
           data-parallax="-1"
           src="images/setup/sea_3.png"
         />
+        <img
+          class="sea bottom parallax"
+          data-parallax="-1"
+          src="images/setup/sea_2.png"
+        />
       </div>
 
       <div class="modes">
@@ -47,12 +51,12 @@
           @mouseleave="() => mouseHover(mode.isAvailable, null)"
           @click="() => setSelected(mode)"
         >
-          <div class="boat-container parallax" data-parallax="1">
+          <div class="boat-container parallax" :data-parallax="`${4 - idx}`">
             <div :class="`boat ${idx === hovered ? 'boat-hover' : ''}`"></div>
           </div>
           <img
             class="wave parallax"
-            data-parallax="1"
+            :data-parallax="`${3 - idx + .5}`"
             :src="`images/setup/wave_${idx + 1}.png`"
           />
         </div>
@@ -61,12 +65,7 @@
       <div class="front">
         <img
           class="sea parallax"
-          data-parallax="-2"
-          src="images/setup/sea_2.png"
-        />
-        <img
-          class="sea parallax"
-          data-parallax="1"
+          data-parallax="-4"
           src="images/setup/sea_1.png"
         />
       </div>
@@ -236,13 +235,13 @@ export default {
       left: 0;
       right: 0;
       bottom: 0;
-      width: 110%;
+      width: 106%;
       height: 100%;
-      transform: translateX(-5%);
       z-index: 1;
       .sky,
       .sea {
         position: absolute;
+        left: -3%;
         width: 100%;
         &.top {
           bottom: unset;
@@ -265,7 +264,7 @@ export default {
       z-index: 2;
       .mode {
         position: relative;
-        margin-bottom: 22%;
+        margin-bottom: 18%;
         .boat-container {
           position: relative;
           width: 300px;
@@ -282,9 +281,9 @@ export default {
 
         .wave {
           position: absolute;
-          bottom: -6%;
         }
         &:nth-of-type(1) {
+          z-index: 5;
           .boat {
             background-image: url("../assets/setup/parallax/boat_1.png");
             animation: boat 5s infinite cubic-bezier(0.455, 0.03, 0.515, 0.955);
@@ -295,24 +294,31 @@ export default {
           }
           .wave {
             right: -30px;
+            bottom: -40px;
           }
         }
         &:nth-of-type(2) {
+          z-index: 4;
           .boat {
             background-image: url("../assets/setup/parallax/boat_2.png");
-            animation: boat 4.8s infinite cubic-bezier(0.455, 0.03, 0.515, 0.955) reverse;
+            animation: boat 4.8s infinite
+              cubic-bezier(0.455, 0.03, 0.515, 0.955) reverse;
           }
           .wave {
             right: -90px;
+            bottom: -20px;
           }
         }
         &:nth-of-type(3) {
+          z-index: 3;
           .boat {
             background-image: url("../assets/setup/parallax/boat_3.png");
-            animation: boat 5.2s infinite cubic-bezier(0.455, 0.03, 0.515, 0.955) alternate;
+            animation: boat 5.2s infinite
+              cubic-bezier(0.455, 0.03, 0.515, 0.955) alternate;
           }
           .wave {
             right: -60px;
+            bottom: -20px;
           }
         }
 
@@ -333,12 +339,12 @@ export default {
       left: 0;
       right: 0;
       bottom: 0;
-      width: 110%;
-      transform: translateX(-5%);
-      z-index: 3;
+      width: 106%;
+      z-index: 6;
       .sea {
         position: absolute;
         width: 100%;
+        left: -6%;
         bottom: 0;
       }
     }
