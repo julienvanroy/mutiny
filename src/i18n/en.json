@@ -15,7 +15,6 @@
     "quit": "Quit",
     "timeLeft": "Remaining time",
     "tutorial": "Tutorial",
-    "waiting": "WAITING..."
   },
   "homepage": {
     "credits": "Credits",
@@ -86,7 +85,8 @@
     },
     "modalDead": "{player} ousted you",
     "modalTargetStolen": "{player} has found your target",
-    "modalTargetSwitched": "Quel pirate sanguinolant !"
+    "modalTargetSwitched": "Quel pirate sanguinolant !",
+    "modalWaiting": "WAITING..."
   },
   "gamepad": {
     "youAre": "you are",

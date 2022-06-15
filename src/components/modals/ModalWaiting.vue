@@ -1,7 +1,7 @@
 <template>
   <transition name="fade">
     <div>
-      {{ $t("ui.waiting") }}
+      {{ $t("modals.modalWaiting") }}
     </div>
   </transition>
 </template>
