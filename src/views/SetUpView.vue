@@ -31,13 +31,13 @@
           src="images/setup/sky_1.png"
         />
         <img
-          class="sea bottom parallax"
+          class="sea bottom parallax height"
           data-parallax="-1"
           src="images/setup/sea_3.png"
         />
         <img
           class="sea bottom parallax"
-          data-parallax="-1"
+          data-parallax="1"
           src="images/setup/sea_2.png"
         />
       </div>
@@ -245,10 +245,14 @@ export default {
         width: 100%;
         &.top {
           bottom: unset;
-          top: 0;
+          top: -3%;
         }
         &.bottom {
           bottom: 0;
+          top: unset;
+        }
+        &.height {
+          min-height: 116%;
         }
       }
     }
