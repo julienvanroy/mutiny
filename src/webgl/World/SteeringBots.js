@@ -4,7 +4,8 @@ import Experience from "@/webgl/Experience";
 import { SteeringEntity } from "@/webgl/Utils/Steer";
 import configs from "@/configs";
 import BotPirate from "./Pirate/BotPirate";
-import { flatten, sample, uuid } from "@/utils";
+import { flatten, randomNumberInRange, sample, uuid } from "@/utils";
+import { Vector3 } from "three";
 
 export default class SteeringBots extends component() {
     init() {
@@ -51,9 +52,13 @@ export default class SteeringBots extends component() {
                 let entity = new SteeringEntity(bot.mesh);
                 entity.bot = bot;
 
-                let pos = entity.position.clone();
+                let position = new Vector3(
+                    randomNumberInRange(box.min.x, box.max.x),
+                    mesh.position.y,
+                    randomNumberInRange(box.min.z, box.max.z)
+                );
 
-                entity.position.set(pos.x, mesh.position.y, pos.z);
+                entity.position.set(position.x, position.y, position.z);
 
                 this.entities[index].push(entity);
                 this._group.add(entity);
