@@ -98,11 +98,11 @@ export default {
         }
       }
       .separator {
-        width: 80%;
+        width: 70%;
         margin: 32px 0;
       }
       .players-list {
-        width: 90%;
+        width: 80%;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -139,12 +139,31 @@ export default {
             &:nth-of-type(6),
             &:nth-of-type(7) {
               border-bottom: 1px solid #e2d9dd;
+              &:before,
+              &:after {
+                content: "";
+                background-image: url("../assets/end-desktop/skull.png");
+                background-size: 100% 100%;
+                position: absolute;
+                bottom: 0;
+                transform: translateY(50%);
+              }
+              &:before {
+                left: -12px;
+                width: 23px;
+                height: 26px;
+              }
+              &:after {
+                right: -6px;
+                width: 13px;
+                height: 15px;
+              }
             }
 
             &:nth-of-type(6),
             &:nth-of-type(7),
             &:nth-of-type(8) {
-              margin-left: 20px;
+              margin-left: 54px;
             }
 
             & + li {
