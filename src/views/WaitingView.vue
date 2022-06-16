@@ -5,7 +5,7 @@
         <img src="../assets/mobile/header-w-logo.svg" alt="" />
       </header>
       <h2>{{ $t("waiting.portrait.title") }}</h2>
-      <ThePlayer v-if="null !== player" :player="player" large dont-update-state hide-points />
+      <ThePlayer v-if="colyseus.hasPlayer" :player="colyseus.player" large dont-update-state hide-points />
       <div class="waiting__instruction">
         <p>{{ $t("waiting.portrait.instruction") }}</p>
         <img src="../assets/mobile/icon-rotate.svg" alt="" />
@@ -18,7 +18,7 @@
       <header>
         <img src="../assets/mobile/header-w-logo.svg" alt="" />
       </header>
-      <ThePlayer v-if="null !== player" :player="player" dont-update-state hide-points />
+      <ThePlayer v-if="colyseus.hasPlayer" :player="colyseus.player" dont-update-state hide-points />
       <h2>
         {{ $t("waiting.landscape.titleLeft") }}
         <em>{{ $t("waiting.landscape.titleMiddle") }}</em>
@@ -50,7 +50,6 @@ export default {
   },
   data() {
     return {
-      player: null,
       ejected: false,
     };
   },
@@ -58,15 +57,9 @@ export default {
     ...mapState(useGlobalStore, ["isLandscape"]),
   },
   mounted() {
-    this.colyseus.getPlayer(this.colyseus.currentRoom.sessionId);
-
     this.colyseus.currentRoom.onMessage("startGame", () => this.$router.push("gamepad"));
 
     this.colyseus.currentRoom.onMessage("updatePlayerTarget", () => {});
-
-    this.colyseus.currentRoom.onMessage("getPlayer", (player) => {
-      this.player = player;
-    });
 
     this.colyseus.currentRoom.onMessage("leaveRoom", () => {
       this.colyseus.currentRoom.leave();

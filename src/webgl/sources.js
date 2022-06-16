@@ -24,11 +24,6 @@ export default [
         path: "textures/water/normals.jpeg",
     },
     {
-        name: "mapTutoModel",
-        type: "gltfModel",
-        path: "models/Map/hextile.glb",
-    },
-    {
         name: "mapModel",
         type: "gltfModel",
         path: "models/Map/pirate-ship.glb",

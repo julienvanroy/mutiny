@@ -19,7 +19,6 @@ export default class World extends component() {
     init() {
         const experience = new Experience();
         this._debug = experience.debug;
-        this._renderer = experience.renderer;
         this._scene = experience.scene;
         this._camera = experience.camera;
 
@@ -74,8 +73,6 @@ export default class World extends component() {
     }
 
     onRaf({ delta }) {
-        this._renderer.render(this._scene, this._camera);
-
         if (this._isLoaded) {
             // this._keyboard();
             this.waveRaf(delta);

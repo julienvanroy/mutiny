@@ -15,6 +15,9 @@ const useColyseusStore = defineStore("colyseus", {
         playersArray: [],
     }),
     getters: {
+        hasPlayer(state) {
+            return Object.keys(state.player).length !== 0;
+        },
         rankedPlayers(state) {
             return [...state.playersArray].sort((a, b) => (a.points < b.points ? 1 : -1));
         },
