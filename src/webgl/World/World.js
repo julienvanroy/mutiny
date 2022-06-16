@@ -14,7 +14,6 @@ import GerstnerWater from "@/webgl/Mesh/GerstnerWater";
 import MapCollider from "@/webgl/World/MapCollider";
 import Fog from "@/webgl/Mesh/Fog";
 import SteeringBots from "@/webgl/World/SteeringBots";
-import { Vector3 } from "three";
 
 export default class World extends component() {
     init() {
@@ -70,6 +69,7 @@ export default class World extends component() {
         );
         this.group.notBots.quaternion.rotateTowards(quaternion, delta * 0.5);
         this.group.bots.quaternion.rotateTowards(quaternion, delta * 0.5);
+
         this.group.updateMatrixWorld();
     }
 
