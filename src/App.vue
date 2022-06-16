@@ -22,9 +22,19 @@
       </button>
     </div>
 
-    <ModalOptions v-if="'options' === modalShown" :setFullscreen="setFullscreen" />
+    <transition name="fade">
+      <ModalOptions
+        v-if="'options' === modalShown"
+        :setFullscreen="setFullscreen"
+      />
+    </transition>
 
-    <ModalPause v-if="'pause' === modalShown" :setFullscreen="setFullscreen" />
+    <transition name="fade">
+      <ModalPause
+        v-if="'pause' === modalShown"
+        :setFullscreen="setFullscreen"
+      />
+    </transition>
 
     <div id="view">
       <router-view />
@@ -82,7 +92,10 @@ export default {
   },
   watch: {
     isLandscape(newValue) {
-      this.colyseus.currentRoom && this.colyseus.sendData("orientationChange", { orientationReady: newValue });
+      this.colyseus.currentRoom &&
+        this.colyseus.sendData("orientationChange", {
+          orientationReady: newValue,
+        });
     },
   },
   methods: {
@@ -105,7 +118,11 @@ export default {
   computed: {
     ...mapState(useWebglStore, ["audio"]),
     ...mapState(useGlobalStore, ["isMobile", "showFullscreenBtn"]),
-    ...mapWritableState(useGlobalStore, ["isFullscreen", "isLandscape", "modalShown"]),
+    ...mapWritableState(useGlobalStore, [
+      "isFullscreen",
+      "isLandscape",
+      "modalShown",
+    ]),
     music() {
       return this.audio.musicGame;
     },
