@@ -19,8 +19,8 @@
             <li v-for="(player, index) in colyseus.rankedPlayers" :key="index">
               <div v-if="0 !== index" class="player-container">
                 <p>
-                  <span>{{ index + 1 }}.</span>
-                  {{ $t(`end.desktop[${index}]`) }}
+                  <span class="index">{{ index + 1 }}.</span>
+                  <span class="status">{{ $t(`end.desktop[${index}]`) }}</span>
                 </p>
                 <ThePlayer :player="player" />
               </div>
@@ -34,9 +34,14 @@
         </div>
       </div>
       <div class="right">
-        <TheButton label="Replay" color="primary" link="/setup" />
-        <TheButton label="Home" color="secondary" link="/" />
-        <TheButton label="Credits" color="secondary" link="/credits" />
+        <!-- TODO: replay btn -->
+        <TheButton :label="$t('ui.replay')" color="primary" link="/" />
+        <TheButton
+          :label="$t('ui.changeMode')"
+          color="secondary"
+          link="/setup"
+        />
+        <TheButton :label="$t('ui.quitVessel')" color="secondary" link="/" />
       </div>
     </div>
   </div>
@@ -78,7 +83,7 @@ export default {
     align-items: stretch;
     .left {
       position: relative;
-      width: 65%;
+      width: 70%;
       height: 100%;
       display: flex;
       flex-flow: column nowrap;
@@ -124,11 +129,21 @@ export default {
               justify-content: space-between;
               align-items: center;
               p {
-                font-size: $ft-s-medium;
+                max-width: calc(100% - 170px);
+                display: flex;
+                justify-content: flex-start;
+                align-items: flex-start;
                 font-weight: $ft-w-bold;
-                span {
+                .index {
+                  display: block;
                   font-size: $ft-s-small;
                   opacity: 0.6;
+                  padding-top: 6px;
+                }
+                .status {
+                  display: block;
+                  font-size: $ft-s-medium;
+                  margin-left: 8px;
                 }
               }
             }
@@ -187,14 +202,14 @@ export default {
     }
 
     .right {
-      width: 35%;
+      width: 30%;
       height: 100%;
       display: flex;
       flex-flow: column nowrap;
       justify-content: center;
       align-items: center;
       .btn + .btn {
-        margin-top: 20px;
+        margin-top: 32px;
       }
     }
   }

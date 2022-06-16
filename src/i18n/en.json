@@ -12,6 +12,9 @@
     "close": "Close",
     "continue": "Continue",
     "restart": "Restart",
+    "replay": "Replay",
+    "changeMode": "Change mode",
+    "quitVessel": "Leaving the vessel",
     "quit": "Quit",
     "timeLeft": "Remaining time",
     "tutorial": "Tutorial"
@@ -137,14 +140,14 @@
         "lose": "Morbleu !"
       },
       "description": {
-        "0": "Le capitaine, c’est toi !",
-        "1": "Second, tu resteras...",
-        "2": "Canonnier, tu resteras...",
-        "3": "Matelot, tu resteras...",
-        "4": "Matelot, tu resteras...",
-        "5": "Mousse, tu resteras...",
-        "6": "Mousse, tu resteras...",
-        "7": "Espèce de marin d’eau douce..."
+        "0": "You are the Captain!",
+        "1": "Second, you will remain...",
+        "2": "Gunner, you will remain...",
+        "3": "Sailor, you will remain...",
+        "4": "Sailor, you will remain...",
+        "5": "Apprentice sailor, you will remain...",
+        "6": "Apprentice sailor, you will remain...",
+        "7": "You freshwater sailor..."
       }
     },
     "desktop": {
