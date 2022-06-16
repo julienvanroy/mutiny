@@ -91,6 +91,30 @@ export default class PostProcessing extends component() {
     onDebug() {
         if (!this._debug.active) return;
 
+        const configDebug = {
+            // Bloom
+            ppBloomThreshold: this.bloomEffect.luminanceMaterial.threshold,
+            ppBloomSmoothing: this.bloomEffect.luminanceMaterial.smoothing,
+            ppBloomIntensity: this.bloomEffect.intensity,
+            // Tone
+            ppToneExposure: this.effectComposer.getRenderer().toneMappingExposure,
+            ppToneWhitePoint: this.toneEffect.whitePoint,
+            ppToneMiddleGrey: this.toneEffect.middleGrey,
+            ppToneAverageLuminance: this.toneEffect.averageLuminance,
+            // Drunk Chroma
+            ppChromaOffset: this.chromaEffect.offset,
+            // Drunk Vignette
+            ppVignetteDarkness: this.vignetteEffect.darkness,
+            ppVignetteOffset: this.vignetteEffect.offset,
+            // Drunk Shock Wave
+            ppShockWavePosition: this.shockWaveEffect.position,
+            ppShockWaveEpicenter: this.shockWaveEffect.epicenter,
+            ppShockWaveSpeed: this.shockWaveEffect.speed,
+            ppShockWaveMaxRadius: this.shockWaveEffect.maxRadius,
+            ppShockWaveSize: this.shockWaveEffect.waveSize,
+            ppShockWaveAmplitude: this.shockWaveEffect.amplitude,
+        }
+
         // TweakPane
         const folderDebug = this._debug.pane.addFolder({
             title: "Post Processing",
@@ -115,31 +139,39 @@ export default class PostProcessing extends component() {
             this.smaaEffect.applyPreset(this._params.smaa.preset[value])
         });
 
+        // Bloom
         const folderBloom = folderDebug.addFolder({
             title: "Bloom",
             expanded: false,
         });
-        folderBloom.addInput(this.bloomEffect.luminanceMaterial, 'threshold', {
+        folderBloom.addInput(configDebug, 'ppBloomThreshold', {
             label: "threshold",
             step: 0.001,
             min: 0,
             max: 1,
-        })
-        folderBloom.addInput(this.bloomEffect.luminanceMaterial, 'smoothing',
+        }).on('change', ({value}) => {
+            this.bloomEffect.luminanceMaterial.threshold = value
+        });
+        folderBloom.addInput(configDebug, 'ppBloomSmoothing',
             {
                 label: "smoothing",
                 step: 0.001,
                 min: 0,
                 max: 1,
-            })
-        folderBloom.addInput(this.bloomEffect, 'intensity',
+            }).on('change', ({value}) => {
+            this.bloomEffect.luminanceMaterial.smoothing = value
+        });
+        folderBloom.addInput(configDebug, 'ppBloomIntensity',
             {
                 label: "intensity",
                 step: 0.001,
                 min: 0,
                 max: 20,
-            })
+            }).on('change', ({value}) => {
+            this.bloomEffect.intensity = value
+        });
 
+        // Tone Mapping
         const folderTone = folderDebug.addFolder({
             title: "ToneMapping",
             expanded: false,
@@ -158,89 +190,117 @@ export default class PostProcessing extends component() {
         }).on('change', ({value}) => {
             this.toneEffect.mode = this._params.tone.mode[value]
         });
-        folderTone.addInput(this.effectComposer.getRenderer(), 'toneMappingExposure', {
+        folderTone.addInput(configDebug, 'ppToneExposure', {
             label: "exposure",
             step: 0.001,
             min: 0,
             max: 2,
-        })
-        folderTone.addInput(this.toneEffect, 'whitePoint', {
+        }).on('change', ({value}) => {
+            this.effectComposer.getRenderer().toneMappingExposure = value
+        });
+        folderTone.addInput(configDebug, 'ppToneWhitePoint', {
             label: "whitePoint",
             step: 0.01,
             min: 0,
             max: 32,
-        })
-        folderTone.addInput(this.toneEffect, 'middleGrey', {
+        }).on('change', ({value}) => {
+            this.toneEffect.whitePoint = value
+        });
+        folderTone.addInput(configDebug, 'ppToneMiddleGrey', {
             label: "middleGrey",
             step: 0.0001,
             min: 0,
             max: 1,
-        })
-        folderTone.addInput(this.toneEffect, 'averageLuminance', {
+        }).on('change', ({value}) => {
+            this.toneEffect.middleGrey = value
+        });
+        folderTone.addInput(configDebug, 'ppToneAverageLuminance', {
             label: "averageLuminance",
             step: 0.0001,
             min: 0,
             max: 1,
-        })
+        }).on('change', ({value}) => {
+            this.toneEffect.averageLuminance = value
+        });
 
         const folderDrunk = folderDebug.addFolder({
             title: "Drunk Effect",
             expanded: false,
         });
+
         const folderChroma = folderDrunk.addFolder({
             title: "Chroma Effect",
             expanded: false,
         });
-        folderChroma.addInput(this.chromaEffect, 'offset', {
+        folderChroma.addInput(configDebug, 'ppChromaOffset', {
             label: "offset",
-        })
+        }).on('change', ({value}) => {
+            this.chromaEffect.offset = value
+        });
         const folderVignette = folderDrunk.addFolder({
             title: "Vignette Effect",
             expanded: false,
         });
-        folderVignette.addInput(this.vignetteEffect, 'darkness', {
+        folderVignette.addInput(configDebug, 'ppVignetteDarkness', {
             label: "darkness",
             step: 0.001,
             min: 0,
             max: 3,
-        })
-        folderVignette.addInput(this.vignetteEffect, 'offset', {
+        }).on('change', ({value}) => {
+            this.vignetteEffect.darkness = value
+        });
+        folderVignette.addInput(configDebug, 'ppVignetteOffset', {
             label: "offset",
-        })
+        }).on('change', ({value}) => {
+            this.vignetteEffect.offset = value
+        });
+
         const folderWave = folderDrunk.addFolder({
             title: "Shock Wave Effect",
             expanded: false,
         });
-        folderWave.addInput(this.shockWaveEffect, 'position', {
+        folderWave.addInput(configDebug, 'ppShockWavePosition', {
             label: "position",
-        })
-        folderWave.addInput(this.shockWaveEffect, 'epicenter', {
+        }).on('change', ({value}) => {
+            this.shockWaveEffect.position = value
+        });
+        folderWave.addInput(configDebug, 'ppShockWaveEpicenter', {
             label: "epicenter"
-        })
-        folderWave.addInput(this.shockWaveEffect, 'speed', {
+        }).on('change', ({value}) => {
+            this.shockWaveEffect.epicenter = value
+        });
+        folderWave.addInput(configDebug, 'ppShockWaveSpeed', {
             label: "speed",
             step: 0.001,
             min: 0,
             max: 10,
-        })
-        folderWave.addInput(this.shockWaveEffect, 'maxRadius', {
+        }).on('change', ({value}) => {
+            this.shockWaveEffect.speed = value
+        });
+        folderWave.addInput(configDebug, 'ppShockWaveMaxRadius', {
             label: "maxRadius",
             step: 0.001,
             min: 0,
             max: 20,
-        })
-        folderWave.addInput(this.shockWaveEffect, 'waveSize', {
+        }).on('change', ({value}) => {
+            this.shockWaveEffect.maxRadius = value
+        });
+        folderWave.addInput(configDebug, 'ppShockWaveSize', {
             label: "waveSize",
             step: 0.001,
             min: 0,
             max: 10,
-        })
-        folderWave.addInput(this.shockWaveEffect, 'amplitude', {
+        }).on('change', ({value}) => {
+            this.shockWaveEffect.waveSize = value
+        });
+        folderWave.addInput(configDebug, 'ppShockWaveAmplitude', {
             label: "amplitude",
             step: 0.001,
             min: 0,
             max: 1,
-        })
+        }).on('change', ({value}) => {
+            this.shockWaveEffect.amplitude = value
+        });
         folderWave.addButton({title: "Explode"}).on("click", () => {
             this.explodeDrunk()
         });
