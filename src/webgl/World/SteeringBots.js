@@ -1,5 +1,5 @@
 import { component } from "bidello";
-import { Vector3, Box3 } from "three";
+import { Box3 } from "three";
 import Experience from "@/webgl/Experience";
 import { SteeringEntity } from "@/webgl/Utils/Steer";
 import configs from "@/configs";
@@ -68,9 +68,7 @@ export default class SteeringBots extends component() {
             this.bots.push([]);
 
             for (let i = 0; i < this.characters[j].length; i++) {
-                let position = new Vector3();
-
-                this.bots[j].push(new BotPirate(uuid(), position, this.characters[j][i], this.group));
+                this.bots[j].push(new BotPirate(uuid(), this.characters[j][i], this.group));
             }
         }
     }
