@@ -1,7 +1,6 @@
 const configs = {
     character: {
-        count: 16, //32
-        colors: ["#3C365A", "#F3E3DD", "#FAA757", "#F86F43", "#6B8CDB"],
+        count: 24, //24
         speed: 1.2, //1.2
         rotationSpeed: 0.032,
         range: 1.2, //10
@@ -126,7 +125,8 @@ const configs = {
         cluesTime: [0, 5, 10, 10],
     },
     map: {
-        steerPlanes: ["steer-avant", "steer-milieu", "steer-arriere"], //["NavMesh", "NavMeshShip"],
+        steerPlanes: ["steer-avant", "steer-milieu", "steer-arriere"],
+        steerBotCounts: [8, 8, 8],
         nearRange: 320,
         decors: ["Coffre", "Tonneau", "Canon", "Box", "Boulet"],
     },

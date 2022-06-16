@@ -1,4 +1,4 @@
-import {Vector3, Group, Raycaster, Box3} from "three";
+import { Vector3, Group, Raycaster, Box3 } from "three";
 
 class Entity extends Group {
     constructor(mesh) {
@@ -13,68 +13,66 @@ class Entity extends Group {
         this.box = new Box3().setFromObject(mesh);
         this.raycaster = new Raycaster();
 
-        this.velocitySamples = []
-        this.numSamplesForSmoothing = 20
+        this.velocitySamples = [];
+        this.numSamplesForSmoothing = 20;
 
-        this.add(this.mesh)
+        this.add(this.mesh);
 
-        this.radius = 200 //temp
+        this.radius = 200; //temp
     }
 
     get width() {
-        return (this.box.max.x - this.box.min.x)
+        return this.box.max.x - this.box.min.x;
     }
 
     get height() {
-        return (this.box.max.y - this.box.min.y)
+        return this.box.max.y - this.box.min.y;
     }
 
     get depth() {
-        return (this.box.max.z - this.box.min.z)
+        return this.box.max.z - this.box.min.z;
     }
 
     get forward() {
-        return new Vector3(0, 0, -1).applyQuaternion(this.quaternion).negate()
+        return new Vector3(0, 0, -1).applyQuaternion(this.quaternion).negate();
     }
 
     get backward() {
-        return this.forward.clone().negate()
+        return this.forward.clone().negate();
     }
 
     get left() {
-        return this.forward.clone().applyAxisAngle(new Vector3(0, 1, 0), Math.PI * .5)
+        return this.forward.clone().applyAxisAngle(new Vector3(0, 1, 0), Math.PI * 0.5);
     }
 
     get right() {
-        return this.left.clone().negate()
+        return this.left.clone().negate();
     }
 
     update() {
-        this.velocity.clampLength(0, this.maxSpeed)
+        this.velocity.clampLength(0, this.maxSpeed);
         this.velocity.setY(0);
-        this.position.add(this.velocity)
+        this.position.add(this.velocity);
     }
 
-
     bounce(box) {
-
         if (this.position.x > box.max.x) {
             this.position.setX(box.max.x);
-            this.velocity.angle = this.velocity.angle + .1
+            this.velocity.angle = this.velocity.angle + 0.1;
         }
 
         if (this.position.x < box.min.x) {
             this.position.setX(box.min.x);
-            this.velocity.angle = this.velocity.angle + .1
+            this.velocity.angle = this.velocity.angle + 0.1;
         }
 
         if (this.position.z > box.max.z) {
             this.position.setZ(box.max.z);
-            this.velocity.angle = this.velocity.angle + .1
+            this.velocity.angle = this.velocity.angle + 0.1;
         }
         if (this.position.z < box.min.z) {
             this.position.setZ(box.min.z);
-            this.velocity.angle = this.velocity.angle + .1
+            this.velocity.angle = this.velocity.angle + 0.1;
         }
 
         if (this.position.y > box.max.y) {
@@ -95,7 +93,6 @@ class Entity extends Group {
 
         if (this.position.z > box.max.z) {
             this.position.setZ(box.min.z + 1);
-
         } else if (this.position.z < box.min.z) {
             this.position.setZ(box.max.z - 1);
         }
@@ -107,9 +104,8 @@ class Entity extends Group {
         }
     }
 
-
     lookWhereGoing(smoothing) {
-        let direction = this.position.clone().add(this.velocity).setY(this.position.y)
+        let direction = this.position.clone().add(this.velocity).setY(this.position.y);
         if (smoothing) {
             if (this.velocitySamples.length === this.numSamplesForSmoothing) {
                 this.velocitySamples.shift();
@@ -118,36 +114,34 @@ class Entity extends Group {
             this.velocitySamples.push(this.velocity.clone().setY(this.position.y));
             direction.set(0, 0, 0);
             for (let v = 0; v < this.velocitySamples.length; v++) {
-                direction.add(this.velocitySamples[v])
+                direction.add(this.velocitySamples[v]);
             }
-            direction.divideScalar(this.velocitySamples.length)
-            direction = this.position.clone().add(direction).setY(this.position.y)
+            direction.divideScalar(this.velocitySamples.length);
+            direction = this.position.clone().add(direction).setY(this.position.y);
         }
-        this.lookAt(direction)
+        this.lookAt(direction);
     }
 }
 
-
 export class SteeringEntity extends Entity {
-
     constructor(mesh) {
         super(mesh);
 
         this.maxForce = 5;
         this.arrivalThreshold = 400;
 
-        this.wanderAngle = 0
+        this.wanderAngle = 0;
         this.wanderDistance = 10;
         this.wanderRadius = 5;
         this.wanderRange = 1;
 
-        this.avoidDistance = 400
+        this.avoidDistance = 400;
         this.avoidBuffer = 20; //NOT USED
 
-        this.inSightDistance = 200
-        this.tooCloseDistance = 60
+        this.inSightDistance = 200;
+        this.tooCloseDistance = 60;
 
-        this.pathIndex = 0
+        this.pathIndex = 0;
 
         this.steeringForce = new Vector3(0, 0, 0);
     }
@@ -166,12 +160,10 @@ export class SteeringEntity extends Entity {
 
     arrive(position) {
         const desiredVelocity = position.clone().sub(this.position);
-        desiredVelocity.normalize()
-        const distance = this.position.distanceTo(position)
-        if (distance > this.arrivalThreshold)
-            desiredVelocity.setLength(this.maxSpeed);
-        else
-            desiredVelocity.setLength(this.maxSpeed * distance / this.arrivalThreshold)
+        desiredVelocity.normalize();
+        const distance = this.position.distanceTo(position);
+        if (distance > this.arrivalThreshold) desiredVelocity.setLength(this.maxSpeed);
+        else desiredVelocity.setLength((this.maxSpeed * distance) / this.arrivalThreshold);
         desiredVelocity.sub(this.velocity);
         this.steeringForce.add(desiredVelocity);
     }
@@ -189,38 +181,36 @@ export class SteeringEntity extends Entity {
     }
 
     idle() {
-        this.velocity.setLength(0)
+        this.velocity.setLength(0);
         this.steeringForce.set(0, 0, 0);
     }
-
 
     wander() {
         const center = this.velocity.clone().normalize().setLength(this.wanderDistance);
         const offset = new Vector3(1, 1, 1);
         offset.setLength(this.wanderRadius);
-        offset.x = Math.sin(this.wanderAngle) * offset.length()
-        offset.z = Math.cos(this.wanderAngle) * offset.length()
-        offset.y = Math.sin(this.wanderAngle) * offset.length()
+        offset.x = Math.sin(this.wanderAngle) * offset.length();
+        offset.z = Math.cos(this.wanderAngle) * offset.length();
+        offset.y = Math.sin(this.wanderAngle) * offset.length();
 
-        this.wanderAngle += Math.random() * this.wanderRange - this.wanderRange * .5;
-        center.add(offset)
-        center.setY(0)
+        this.wanderAngle += Math.random() * this.wanderRange - this.wanderRange * 0.5;
+        center.add(offset);
+        center.setY(0);
         this.steeringForce.add(center);
     }
 
     interpose(targetA, targetB) {
         let midPoint = targetA.position.clone().add(targetB.position.clone()).divideScalar(2);
         const timeToMidPoint = this.position.distanceTo(midPoint) / this.maxSpeed;
-        const pointA = targetA.position.clone().add(targetA.velocity.clone().multiplyScalar(timeToMidPoint))
-        const pointB = targetB.position.clone().add(targetB.velocity.clone().multiplyScalar(timeToMidPoint))
+        const pointA = targetA.position.clone().add(targetA.velocity.clone().multiplyScalar(timeToMidPoint));
+        const pointB = targetB.position.clone().add(targetB.velocity.clone().multiplyScalar(timeToMidPoint));
         midPoint = pointA.add(pointB).divideScalar(2);
-        this.seek(midPoint)
+        this.seek(midPoint);
     }
-
 
     separation(entities, separationRadius = 300, maxSeparation = 100) {
         const force = new Vector3(0, 0, 0);
-        let neighborCount = 0
+        let neighborCount = 0;
 
         for (let i = 0; i < entities.length; i++) {
             if (entities[i] !== this && entities[i].position.distanceTo(this.position) <= separationRadius) {
@@ -229,7 +219,7 @@ export class SteeringEntity extends Entity {
             }
         }
         if (neighborCount !== 0) {
-            force.divideScalar(neighborCount)
+            force.divideScalar(neighborCount);
             force.negate();
         }
         force.normalize();
@@ -238,15 +228,26 @@ export class SteeringEntity extends Entity {
     }
 
     isOnLeaderSight(leader, ahead, leaderSightRadius) {
-        return (ahead.distanceTo(this.position) <= leaderSightRadius || leader.position.distanceTo(this.position) <= leaderSightRadius)
+        return (
+            ahead.distanceTo(this.position) <= leaderSightRadius ||
+            leader.position.distanceTo(this.position) <= leaderSightRadius
+        );
     }
 
-    followLeader(leader, entities, distance = 400, separationRadius = 300, maxSeparation = 100, leaderSightRadius = 1600, arrivalThreshold = 200) {
+    followLeader(
+        leader,
+        entities,
+        distance = 400,
+        separationRadius = 300,
+        maxSeparation = 100,
+        leaderSightRadius = 1600,
+        arrivalThreshold = 200
+    ) {
         const tv = leader.velocity.clone();
-        tv.normalize().multiplyScalar(distance)
-        const ahead = leader.position.clone().add(tv)
-        tv.negate()
-        const behind = leader.position.clone().add(tv)
+        tv.normalize().multiplyScalar(distance);
+        const ahead = leader.position.clone().add(tv);
+        tv.negate();
+        const behind = leader.position.clone().add(tv);
 
         if (this.isOnLeaderSight(leader, ahead, leaderSightRadius)) {
             this.evade(leader);
@@ -254,7 +255,6 @@ export class SteeringEntity extends Entity {
         this.arrivalThreshold = arrivalThreshold;
         this.arrive(behind);
         this.separation(entities, separationRadius, maxSeparation);
-
     }
 
     getNeighborAhead(entities) {
@@ -267,7 +267,7 @@ export class SteeringEntity extends Entity {
         for (let i = 0; i < entities.length; i++) {
             const distance = ahead.distanceTo(entities[i].position);
             if (entities[i] !== this && distance <= maxQueueRadius) {
-                res = entities[i]
+                res = entities[i];
                 break;
             }
         }
@@ -275,16 +275,15 @@ export class SteeringEntity extends Entity {
     }
 
     queue(entities, maxQueueRadius = 500) {
-
         const neighbor = this.getNeighborAhead(entities);
-        let brake = new Vector3(0, 0, 0)
-        const v = this.velocity.clone()
+        let brake = new Vector3(0, 0, 0);
+        const v = this.velocity.clone();
         if (neighbor != null) {
             brake = this.steeringForce.clone().negate().multiplyScalar(0.8);
             v.negate().normalize();
-            brake.add(v)
+            brake.add(v);
             if (this.position.distanceTo(neighbor.position) <= maxQueueRadius) {
-                this.velocity.multiplyScalar(0.3)
+                this.velocity.multiplyScalar(0.3);
             }
         }
 
@@ -292,14 +291,12 @@ export class SteeringEntity extends Entity {
     }
 
     inSight(entity) {
-        if (this.position.distanceTo(entity.position) > this.inSightDistance)
-            return false;
+        if (this.position.distanceTo(entity.position) > this.inSightDistance) return false;
         const heading = this.velocity.clone().normalize();
         const difference = entity.position.clone().sub(this.position);
-        const dot = difference.dot(heading)
+        const dot = difference.dot(heading);
         return dot >= 0;
     }
-
 
     flock(entities) {
         const averageVelocity = this.velocity.clone();
@@ -307,10 +304,10 @@ export class SteeringEntity extends Entity {
         let inSightCount = 0;
         for (let i = 0; i < entities.length; i++) {
             if (entities[i] !== this && this.inSight(entities[i])) {
-                averageVelocity.add(entities[i].velocity)
-                averagePosition.add(entities[i].position)
+                averageVelocity.add(entities[i].velocity);
+                averagePosition.add(entities[i].position);
                 if (this.position.distanceTo(entities[i].position) < this.tooCloseDistance) {
-                    this.flee(entities[i].position)
+                    this.flee(entities[i].position);
                 }
                 inSightCount++;
             }
@@ -319,48 +316,53 @@ export class SteeringEntity extends Entity {
             averageVelocity.divideScalar(inSightCount);
             averagePosition.divideScalar(inSightCount);
             this.seek(averagePosition);
-            this.steeringForce.add(averageVelocity.sub(this.velocity))
+            this.steeringForce.add(averageVelocity.sub(this.velocity));
         }
     }
 
     followPath(path, loop, thresholdRadius = 1) {
-        const wayPoint = path[this.pathIndex]
-        if (wayPoint == null)
-            return;
+        const wayPoint = path[this.pathIndex];
+        if (wayPoint == null) return;
         if (this.position.distanceTo(wayPoint) < thresholdRadius) {
             if (this.pathIndex >= path.length - 1) {
-                if (loop)
-                    this.pathIndex = 0;
+                if (loop) this.pathIndex = 0;
             } else {
-                this.pathIndex++
+                this.pathIndex++;
             }
         }
-        if (this.pathIndex >= path.length - 1 && !loop)
-            this.arrive(wayPoint)
-        else
-            this.seek(wayPoint)
-
+        if (this.pathIndex >= path.length - 1 && !loop) this.arrive(wayPoint);
+        else this.seek(wayPoint);
     }
-
 
     avoid(obstacles) {
         const dynamic_length = this.velocity.length() / this.maxSpeed;
-        const ahead = this.position.clone().add(this.velocity.clone().normalize().multiplyScalar(dynamic_length))
-        const ahead2 = this.position.clone().add(this.velocity.clone().normalize().multiplyScalar(this.avoidDistance * .5));
+        const ahead = this.position.clone().add(this.velocity.clone().normalize().multiplyScalar(dynamic_length));
+        const ahead2 = this.position.clone().add(
+            this.velocity
+                .clone()
+                .normalize()
+                .multiplyScalar(this.avoidDistance * 0.5)
+        );
         //get most threatening
         let mostThreatening = null;
         for (let i = 0; i < obstacles.length; i++) {
-            if (obstacles[i] === this)
-                continue;
-            const collision = obstacles[i].position.distanceTo(ahead) <= obstacles[i].radius || obstacles[i].position.distanceTo(ahead2) <= obstacles[i].radius
-            if (collision && (mostThreatening == null || this.position.distanceTo(obstacles[i].position) < this.position.distanceTo(mostThreatening.position))) {
+            if (obstacles[i] === this) continue;
+            const collision =
+                obstacles[i].position.distanceTo(ahead) <= obstacles[i].radius ||
+                obstacles[i].position.distanceTo(ahead2) <= obstacles[i].radius;
+            if (
+                collision &&
+                (mostThreatening == null ||
+                    this.position.distanceTo(obstacles[i].position) <
+                        this.position.distanceTo(mostThreatening.position))
+            ) {
                 mostThreatening = obstacles[i];
             }
         }
         //end
-        let avoidance = new Vector3(0, 0, 0)
+        let avoidance = new Vector3(0, 0, 0);
         if (mostThreatening != null) {
-            avoidance = ahead.clone().sub(mostThreatening.position).normalize().multiplyScalar(100)
+            avoidance = ahead.clone().sub(mostThreatening.position).normalize().multiplyScalar(100);
         }
         this.steeringForce.add(avoidance);
     }
@@ -374,13 +376,12 @@ export class SteeringEntity extends Entity {
     }
 }
 
-
 /**
  * Returns a random number between min (inclusive) and max (exclusive)
  */
 Math.getRandomArbitrary = function (min, max) {
     return Math.random() * (max - min) + min;
-}
+};
 
 /**
  * Returns a random integer between min (inclusive) and max (inclusive)
@@ -388,25 +389,24 @@ Math.getRandomArbitrary = function (min, max) {
  */
 Math.getRandomInt = function (min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+};
 
 Vector3.prototype.perp = function () {
-    return new Vector3(-this.z, 0, this.x)
-}
+    return new Vector3(-this.z, 0, this.x);
+};
 
 Vector3.prototype.sign = function (vector) {
-    return this.perp().dot(vector) < 0 ? -1 : 1
-}
+    return this.perp().dot(vector) < 0 ? -1 : 1;
+};
 
-
-Object.defineProperty(Vector3.prototype, 'angle', {
+Object.defineProperty(Vector3.prototype, "angle", {
     enumerable: true,
     configurable: true,
     get() {
-        return Math.atan2(this.z, this.x)
+        return Math.atan2(this.z, this.x);
     },
     set(value) {
-        this.x = Math.cos(value) * this.length()
-        this.z = Math.sin(value) * this.length()
-    }
+        this.x = Math.cos(value) * this.length();
+        this.z = Math.sin(value) * this.length();
+    },
 });

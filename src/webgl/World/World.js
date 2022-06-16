@@ -1,20 +1,19 @@
 import Environment from "./Environment.js";
 import { component } from "bidello";
 import Experience from "@/webgl/Experience";
-import { Euler, Group, Quaternion, Vector3 } from "three";
+import { Euler, Group, Quaternion } from "three";
 import PlayerPirate from "@/webgl/World/Pirate/PlayerPirate";
 //import Item from "@/webgl/World/Item";
 //import BoxCollision from "@/webgl/Collision/BoxCollision";
-import { diffArray, randomIntegerInRange, sample, shuffle, uuid } from "@/utils/index.js";
+import { diffArray, sample, shuffle } from "@/utils/index.js";
 import BotPirate from "./Pirate/BotPirate.js";
 import MapLevel from "@/webgl/World/MapLevel";
-import configs from "@/configs";
 import useColyseusStore from "@/store/colyseus.js";
 import Fireflies from "@/webgl/Mesh/Fireflies";
 import GerstnerWater from "@/webgl/Mesh/GerstnerWater";
 import MapCollider from "@/webgl/World/MapCollider";
 import Fog from "@/webgl/Mesh/Fog";
-import Steer from "@/webgl/World/Steer";
+import SteeringBots from "@/webgl/World/SteeringBots";
 
 export default class World extends component() {
     init() {
@@ -45,7 +44,7 @@ export default class World extends component() {
         this.boxCollision = new BoxCollision();
         */
 
-        this.steer = new Steer();
+        this.steeringBots = new SteeringBots();
 
         this._scene.add(this.group);
         this.onDebug();
@@ -66,12 +65,12 @@ export default class World extends component() {
         this.group.updateMatrixWorld();
     }
 
-    onRaf() {
+    onRaf({ delta }) {
         this._renderer.render(this._scene, this._camera);
 
         if (this._isLoaded) {
             // this._keyboard();
-            // this.waveRaf(delta);
+            this.waveRaf(delta);
             /*
             TODO: Collision Items
                 // Check Collision Items
