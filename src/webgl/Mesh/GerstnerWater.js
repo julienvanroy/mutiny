@@ -172,11 +172,12 @@ export default class GerstnerWater extends component() {
                 step: 1,
                 min: 0,
                 max: 359,
-            }).on('change', (ev) => {
-                const v = ev.value
-                const x = (v * Math.PI) / 180
+            }).on('change', ({value}) => {
+                const x = (value * Math.PI) / 180
                 waterUniforms[uniform].value[0] = Math.sin(x)
                 waterUniforms[uniform].value[1] = Math.cos(x)
+
+                this.waves[index].direction = value
             });
 
             waveFolder.addInput(configDebug, `wave${index}Steepness`, {
@@ -184,8 +185,9 @@ export default class GerstnerWater extends component() {
                 step: 0.01,
                 min: 0,
                 max: 1,
-            }).on('change', (ev) => {
-                waterUniforms[uniform].value[2] = ev.value
+            }).on('change', ({value}) => {
+                waterUniforms[uniform].value[2] = value
+                this.waves[index].steepness = value
             });
 
             waveFolder.addInput(configDebug, `wave${index}Length`, {
@@ -193,8 +195,9 @@ export default class GerstnerWater extends component() {
                 step: 1,
                 min: 1,
                 max: 100,
-            }).on('change', (ev) => {
-                waterUniforms[uniform].value[3] = ev.value
+            }).on('change', ({value}) => {
+                waterUniforms[uniform].value[3] = value
+                this.waves[index].wavelength = value
             });
         }
 
