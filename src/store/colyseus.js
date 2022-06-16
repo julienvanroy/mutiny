@@ -11,7 +11,15 @@ const useColyseusStore = defineStore("colyseus", {
         currentRoom: null,
         lobbyRoom: null,
         players: new Map(),
-        player: {},
+        player: {
+            id: "",
+            name: "",
+            color: {
+                bottle: "",
+                bottleDetails: "",
+                medal: "",
+            },
+        },
         playersArray: [],
     }),
     getters: {
