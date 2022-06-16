@@ -1,37 +1,35 @@
 <template>
-  <transition name="fade">
-    <ModalContainer
-      :title="$t('parameters.options')"
-      :btnLabel="$t('modals.modalOptions.btnLabel')"
-    >
-      <div class="modal__options">
-        <div class="modal__options-left">
-          <OptionContainer :title="$t('parameters.audio')">
-            <TheRanger :label="$t('parameters.music')" defaultValue="0.5" />
-            <TheRanger :label="$t('parameters.effects')" defaultValue="0.5" />
-          </OptionContainer>
-          <OptionContainer :title="$t('parameters.languages')">
-            <LangChanger />
-          </OptionContainer>
-        </div>
-        <div class="modal__options-right">
-          <OptionContainer :title="$t('parameters.graphics')">
-            <TheRadioer
-              :subtitle="$t('parameters.quality')"
-              label="graphics"
-              :values="[
-                $t('parameters.low'),
-                $t('parameters.medium'),
-                $t('parameters.high'),
-              ]"
-              :defaultValue="$t('parameters.medium')"
-            />
-            <TheSwitcher v-on:set-fullscreen="setFullscreen" />
-          </OptionContainer>
-        </div>
+  <ModalContainer
+    :title="$t('parameters.options')"
+    :btnLabel="$t('modals.modalOptions.btnLabel')"
+  >
+    <div class="modal__options">
+      <div class="modal__options-left">
+        <OptionContainer :title="$t('parameters.audio')">
+          <TheRanger :label="$t('parameters.music')" defaultValue="0.5" />
+          <TheRanger :label="$t('parameters.effects')" defaultValue="0.5" />
+        </OptionContainer>
+        <OptionContainer :title="$t('parameters.languages')">
+          <LangChanger />
+        </OptionContainer>
       </div>
-    </ModalContainer>
-  </transition>
+      <div class="modal__options-right">
+        <OptionContainer :title="$t('parameters.graphics')">
+          <TheRadioer
+            :subtitle="$t('parameters.quality')"
+            label="graphics"
+            :values="[
+              $t('parameters.low'),
+              $t('parameters.medium'),
+              $t('parameters.high'),
+            ]"
+            :defaultValue="$t('parameters.medium')"
+          />
+          <TheSwitcher v-on:set-fullscreen="setFullscreen" />
+        </OptionContainer>
+      </div>
+    </div>
+  </ModalContainer>
 </template>
 
 <script>

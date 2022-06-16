@@ -1,29 +1,27 @@
 <template>
-  <transition name="fade">
-    <ModalContainer
-      :title="$t('modals.modalJoin.title')"
-      :btnLabel="$t('modals.modalJoin.btnLabel')"
-    >
-      <div class="modal__join">
-        <p>
-          {{ $t("modals.modalJoin.description1") }}
-          <strong>{{ $t("modals.modalJoin.description2") }}</strong>
-          {{ $t("modals.modalJoin.description3") }}
-          <strong>{{ $t("modals.modalJoin.description4") }}</strong>
-          {{ $t("modals.modalJoin.description5") }}
-        </p>
-        <div class="connection">
-          <div class="connection__code">
-            <CopyCode :code="roomId" />
-          </div>
-          <span>{{ $t("modals.modalJoin.or") }}</span>
-          <div class="connection__qrcode">
-            <div class="connection__qrcode_inner"><QrCode /></div>
-          </div>
+  <ModalContainer
+    :title="$t('modals.modalJoin.title')"
+    :btnLabel="$t('modals.modalJoin.btnLabel')"
+  >
+    <div class="modal__join">
+      <p>
+        {{ $t("modals.modalJoin.description1") }}
+        <strong>{{ $t("modals.modalJoin.description2") }}</strong>
+        {{ $t("modals.modalJoin.description3") }}
+        <strong>{{ $t("modals.modalJoin.description4") }}</strong>
+        {{ $t("modals.modalJoin.description5") }}
+      </p>
+      <div class="connection">
+        <div class="connection__code">
+          <CopyCode :code="roomId" />
+        </div>
+        <span>{{ $t("modals.modalJoin.or") }}</span>
+        <div class="connection__qrcode">
+          <div class="connection__qrcode_inner"><QrCode /></div>
         </div>
       </div>
-    </ModalContainer>
-  </transition>
+    </div>
+  </ModalContainer>
 </template>
 
 <script>

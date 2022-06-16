@@ -1,42 +1,43 @@
 <template>
-  <transition name="fade">
-    <div class="modal">
-      <div :class="`modal__container ${!!isPause ? 'pause' : ''}`">
-        <div class="modal__container-inner">
-          <h2 class="title">{{ this.title }}</h2>
-          <div class="content">
-            <slot></slot>
-          </div>
-          <div class="btn-container">
-            <TheButton
-              v-if="!!isPause"
-              :label="$t('ui.restart')"
-              color="secondary"
-            />
-            <TheButton
-              :label="btnLabel ? btnLabel : $t('ui.close')"
-              color="primary"
-              @click="
-                () => {
-                  this.modalShown = null;
-                  !!this.btnAction && this.btnAction;
-                }
-              "
-            />
-            <TheButton
-              v-if="!!isPause"
-              :label="$t('ui.quit')"
-              color="secondary"
-            />
-          </div>
-          <div v-if="!!isPause" class="timer-container">
-            <p>{{ $t("ui.timeLeft") }}</p>
-            <TheTimer />
-          </div>
+  <div class="modal">
+    <div :class="`modal__container ${!!isPause ? 'pause' : ''}`">
+      <div class="modal__container-inner">
+        <h2 class="title">{{ this.title }}</h2>
+        <div class="content">
+          <slot></slot>
+        </div>
+        <div class="btn-container">
+          <!-- todo: btn restart game -->
+          <TheButton
+            v-if="!!isPause"
+            :label="$t('ui.restart')"
+            color="secondary"
+          />
+          <!-- todo: btn close modal OR continue game depending if !!isPause -->
+          <TheButton
+            :label="btnLabel ? btnLabel : $t('ui.close')"
+            color="primary"
+            @click="
+              () => {
+                this.modalShown = null;
+                !!this.btnAction && this.btnAction;
+              }
+            "
+          />
+          <!-- todo: btn quit game -->
+          <TheButton
+            v-if="!!isPause"
+            :label="$t('ui.quit')"
+            color="secondary"
+          />
+        </div>
+        <div v-if="!!isPause" class="timer-container">
+          <p>{{ $t("ui.timeLeft") }}</p>
+          <TheTimer />
         </div>
       </div>
     </div>
-  </transition>
+  </div>
 </template>
 
 <script>
