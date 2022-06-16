@@ -7,13 +7,17 @@
       <div class="left">
         <div class="winner">
           <h1>1. {{ $t("end.desktop.0") }}</h1>
-          <ThePlayer :player="colyseus.rankedPlayers[0]" :large="true" />
+          <ThePlayer
+            :player="colyseus.rankedPlayers[0]"
+            :large="true"
+            :showMedal="true"
+          />
         </div>
         <img class="separator" src="images/end-desktop/separator.png" />
         <div class="players-list">
           <ul>
             <li v-for="(player, index) in colyseus.rankedPlayers" :key="index">
-              <div v-if="0 !== index">
+              <div v-if="0 !== index" class="player-container">
                 <p>
                   <span>{{ index + 1 }}.</span>
                   {{ $t(`end.desktop[${index}]`) }}
@@ -110,9 +114,10 @@ export default {
           justify-content: flex-start;
           align-items: flex-start;
           li {
+            position: relative;
             width: 50%;
             list-style: none;
-            div {
+            .player-container {
               height: 85px;
               padding: 12px;
               display: flex;

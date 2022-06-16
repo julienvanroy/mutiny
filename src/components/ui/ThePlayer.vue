@@ -9,6 +9,7 @@
   >
     <div class="points">
       <TheBottle
+        class="bottle"
         :background="
           !dontUpdateState && (!!player.isKilled || !!player.targetChanged || !player.connected)
             ? '#FFF6F4'
@@ -25,13 +26,24 @@
         "
       />
       <span v-if="!hidePoints">{{ !player.connected ? "!" : player.points }}</span>
+      <TheMedal
+        v-if="!!showMedal"
+        class="medal"
+        :background="player.color.medal"
+      />
     </div>
     <span class="name">{{ player.name }}</span>
     <ThePins
       v-if="!dontUpdateState"
       class="pin"
       :state="
-        !!player.isKilled ? 'killed' : !!player.targetChanged ? 'switched' : !player.connected ? 'disconnected' : ''
+        !!player.isKilled
+          ? 'killed'
+          : !!player.targetChanged
+          ? 'switched'
+          : !player.connected
+          ? 'disconnected'
+          : ''
       "
     />
   </div>
@@ -40,10 +52,11 @@
 <script>
 import TheBottle from "@/components/svg/TheBottle";
 import ThePins from "@/components/svg/ThePins";
+import TheMedal from "@/components/svg/TheMedal";
 
 export default {
   name: "ThePlayer",
-  components: { TheBottle, ThePins },
+  components: { TheBottle, ThePins, TheMedal },
   props: {
     player: {
       required: true,
@@ -57,6 +70,10 @@ export default {
       default: false,
     },
     hidePoints: {
+      type: Boolean,
+      default: false,
+    },
+    showMedal: {
       type: Boolean,
       default: false,
     },
@@ -84,7 +101,7 @@ export default {
     left: -10px;
     height: 70px;
     transform: translateY(-50%) rotate(-5deg);
-    svg {
+    .bottle {
       height: 100%;
     }
     span {
@@ -97,6 +114,12 @@ export default {
       transform: translate(-50%, -50%);
       transition: 0.3s all ease-in-out;
       text-shadow: 4px 3px 2px rgba(77, 8, 28, 0.2);
+    }
+    .medal {
+      position: absolute;
+      width: 40px;
+      top: 8px;
+      right: -14px;
     }
   }
   .name {
