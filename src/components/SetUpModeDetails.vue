@@ -1,24 +1,31 @@
 <template>
-  <!-- <transition name="slide"> -->
-  <div class="details">
+  <div :class="`details ${null !== mode ? 'open' : ''}`">
     <div class="details__inner">
       <img class="flag" src="images/setup/flag.png" />
       <p class="uptitle">Mode</p>
-      <h3>{{ $t(this.mode.name) }}</h3>
-      <p class="description">{{ $t(this.mode.description) }}</p>
+      <h3>{{ null !== mode && $t(mode.name) }}</h3>
+      <p class="description">{{ null !== mode && $t(mode.description) }}</p>
       <div class="parameters">
         <div class="parameters__left">
           <OptionContainer :title="$t('parameters.difficulty')">
             <TheRadioer
               label="difficulty"
-              :values="[$t('parameters.easy'), $t('parameters.normal'), $t('parameters.hard')]"
+              :values="[
+                $t('parameters.easy'),
+                $t('parameters.normal'),
+                $t('parameters.hard'),
+              ]"
               :defaultValue="$t('parameters.normal')"
             />
           </OptionContainer>
           <OptionContainer :title="$t('parameters.duration')">
             <TheRadioer
               label="duration"
-              :values="[$t('parameters.easy'), $t('parameters.normal'), $t('parameters.hard')]"
+              :values="[
+                $t('parameters.easy'),
+                $t('parameters.normal'),
+                $t('parameters.hard'),
+              ]"
               :defaultValue="$t('parameters.normal')"
             />
           </OptionContainer>
@@ -30,13 +37,25 @@
         </div>
       </div>
       <div class="actions">
-        <TheButton :label="$t('ui.back')" color="back" @click="() => $emit('setSelected', null)" />
-        <TheButton label="GO !" color="primary" @click="startGame()" :disabled="!colyseus.roomReadyToPlay" />
-        <TheButton :label="$t('ui.tutorial')" color="secondary" :disabled="true" />
+        <TheButton
+          :label="$t('ui.back')"
+          color="back"
+          @click="() => $emit('setSelected', null)"
+        />
+        <TheButton
+          label="GO !"
+          color="primary"
+          @click="startGame()"
+          :disabled="!colyseus.roomReadyToPlay"
+        />
+        <TheButton
+          :label="$t('ui.tutorial')"
+          color="secondary"
+          :disabled="true"
+        />
       </div>
     </div>
   </div>
-  <!-- </transition> -->
 </template>
 
 <script>
@@ -75,11 +94,16 @@ export default {
   z-index: 18;
   top: 0;
   bottom: 0;
-  right: 0;
+  right: -100%;
   width: calc(100% - 580px);
   background-image: url("../assets/setup/mode-details.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
+  transition: 0.6s all ease-in-out;
+  &.open {
+    right: 0;
+    transition: 0.6s all ease-in-out;
+  }
   &__inner {
     width: 100%;
     height: 100%;
