@@ -11,7 +11,10 @@
     "back": "Retour",
     "close": "Fermer",
     "continue": "Continuer",
-    "restart": "Rejouer",
+    "restart": "Recommencer",
+    "replay": "Rejouer",
+    "changeMode": "Changer de mode",
+    "quitVessel": "Quitter le navire",
     "quit": "Quitter",
     "timeLeft": "Temps restant",
     "tutorial": "Tutoriel"
@@ -146,6 +149,16 @@
         "6": "Mousse, tu resteras...",
         "7": "Espèce de marin d’eau douce..."
       }
+    },
+    "desktop": {
+      "0": "Capitaine",
+      "1": "Second",
+      "2": "Canonnier",
+      "3": "Matelot",
+      "4": "Matelot",
+      "5": "Mousse",
+      "6": "Mousse",
+      "7": "Simple marin d’eau douce..."
     }
   }
 }
