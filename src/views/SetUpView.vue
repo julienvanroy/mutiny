@@ -6,8 +6,40 @@
 
     <div :class="`setup__under ${null !== selected ? 'details-open' : ''}`">
       <div class="background">
-        <img class="sky" src="images/setup/sky.png" />
-        <img class="sea__3" src="images/setup/sea_3.png" />
+        <img
+          class="sky bottom"
+          src="images/setup/sky_5.jpg"
+        />
+        <img
+          class="sky bottom parallax"
+          data-parallax="1"
+          src="images/setup/sky_4.png"
+        />
+        <img
+          class="sky bottom parallax"
+          data-parallax="-1"
+          src="images/setup/sky_3.png"
+        />
+        <img
+          class="sky bottom parallax"
+          data-parallax="1"
+          src="images/setup/sky_2.png"
+        />
+        <img
+          class="sky top parallax"
+          data-parallax="1"
+          src="images/setup/sky_1.png"
+        />
+        <img
+          class="sea bottom parallax height"
+          data-parallax="-1"
+          src="images/setup/sea_3.png"
+        />
+        <img
+          class="sea bottom parallax"
+          data-parallax="1"
+          src="images/setup/sea_2.png"
+        />
       </div>
 
       <div class="modes">
@@ -19,21 +51,23 @@
           @mouseleave="() => mouseHover(mode.isAvailable, null)"
           @click="() => setSelected(mode)"
         >
-          <div v-if="!!mode.isAvailable" class="content">
-            <img
-              class="flag"
-              :src="`images/setup/flag${idx === hovered ? '-hover' : ''}.png`"
-            />
-            <p :class="`uptitle ${idx === hovered ? 'hovered' : ''}`">Mode</p>
-            <h2>{{ $t(mode.name) }}</h2>
+          <div class="boat-container parallax" :data-parallax="`${4 - idx}`">
+            <div :class="`boat ${idx === hovered ? 'boat-hover' : ''}`"></div>
           </div>
-          <img :src="`images/setup/boat_${idx + 1}.png`" />
+          <img
+            class="wave parallax"
+            :data-parallax="`${3 - idx + .5}`"
+            :src="`images/setup/wave_${idx + 1}.png`"
+          />
         </div>
       </div>
 
       <div class="front">
-        <img class="sea__2" src="images/setup/sea_2.png" />
-        <img class="sea__1" src="images/setup/sea_1.png" />
+        <img
+          class="sea parallax"
+          data-parallax="-4"
+          src="images/setup/sea_1.png"
+        />
       </div>
 
       <div class="catch-phrase">
@@ -109,6 +143,11 @@ export default {
     this.colyseus.currentRoom.onMessage("leaveRoom", () => {});
 
     this.modalShown = "join";
+
+    document.addEventListener("mousemove", (e) => this.parallax(e));
+  },
+  beforeUnmount() {
+    document.removeEventListener("mousemove", (e) => this.parallax(e));
   },
   methods: {
     mouseHover(isAvailable, value) {
@@ -117,6 +156,14 @@ export default {
     },
     setSelected(val) {
       this.selected = val;
+    },
+    parallax(e) {
+      document.querySelectorAll(".parallax").forEach((shift) => {
+        const position = shift.getAttribute("data-parallax");
+        const x = (window.innerWidth - e.pageX * position) / 100;
+        const y = (window.innerHeight - e.pageY * position) / 100;
+        shift.style.transform = `translateX(${x}px) translateY(${y}px)`;
+      });
     },
   },
   computed: {
@@ -176,24 +223,37 @@ export default {
         backdrop-filter: blur(4px);
       }
     }
+
+    .parallax {
+      transform-origin: center;
+      will-change: transform;
+    }
+
     .background {
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      width: 100%;
+      width: 106%;
       height: 100%;
-      img {
+      z-index: 1;
+      .sky,
+      .sea {
         position: absolute;
+        left: -3%;
         width: 100%;
-      }
-      .sky {
-        height: 100%;
-        object-fit: cover;
-      }
-      .sea__3 {
-        bottom: 26%;
+        &.top {
+          bottom: unset;
+          top: -3%;
+        }
+        &.bottom {
+          bottom: 0;
+          top: unset;
+        }
+        &.height {
+          min-height: 116%;
+        }
       }
     }
     .modes {
@@ -204,53 +264,65 @@ export default {
       height: 100%;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-end;
+      z-index: 2;
       .mode {
         position: relative;
-        width: 300px;
-        min-height: 400px;
-        border-radius: 12px;
-        text-align: center;
-        padding: 50px 0;
-        transform-origin: center 80%;
-        &:nth-of-type(1) {
-          animation: boat 5s infinite cubic-bezier(0.455, 0.03, 0.515, 0.955);
-        }
-        &:nth-of-type(2) {
-          animation: boat 4.8s infinite cubic-bezier(0.455, 0.03, 0.515, 0.955)
-            reverse;
-        }
-        &:nth-of-type(3) {
-          animation: boat 5.2s infinite cubic-bezier(0.455, 0.03, 0.515, 0.955)
-            alternate;
-        }
-        img {
-          width: 100%;
-        }
-        .content {
-          position: absolute;
-          top: 22%;
-          left: 0;
-          right: 0;
-          width: 80%;
-          margin: auto;
-          .flag {
-            width: 80px;
-            transition: 0.3s all ease-in-out;
+        margin-bottom: 20%;
+        .boat-container {
+          position: relative;
+          width: 300px;
+          height: 546px;
+          .boat {
+            width: 100%;
+            height: 100%;
+            transform-origin: center 80%;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            transition: 0.3s background-image ease-in-out;
           }
-          .uptitle {
-            font-style: italic;
-            font-size: $ft-s-xsmall;
-            color: rgba($purple, 0.4);
-            transition: 0.3s all ease-in-out;
-            &.hovered {
-              color: $purple;
-              transition: 0.3s all ease-in-out;
+        }
+
+        .wave {
+          position: absolute;
+        }
+        &:nth-of-type(1) {
+          z-index: 5;
+          .boat {
+            background-image: url("../assets/setup/parallax/boat_1.png");
+            animation: boat 5s infinite cubic-bezier(0.455, 0.03, 0.515, 0.955);
+            &.boat-hover {
+              background-image: url("../assets/setup/parallax/boat_1-hover.png");
+              transition: 0.3s background-image ease-in-out;
             }
           }
-          h2 {
-            font-weight: $ft-w-bold;
-            font-size: $ft-s-large;
+          .wave {
+            right: -30px;
+            bottom: -40px;
+          }
+        }
+        &:nth-of-type(2) {
+          z-index: 4;
+          .boat {
+            background-image: url("../assets/setup/parallax/boat_2.png");
+            animation: boat 4.8s infinite
+              cubic-bezier(0.455, 0.03, 0.515, 0.955) reverse;
+          }
+          .wave {
+            right: -90px;
+            bottom: -20px;
+          }
+        }
+        &:nth-of-type(3) {
+          z-index: 3;
+          .boat {
+            background-image: url("../assets/setup/parallax/boat_3.png");
+            animation: boat 5.2s infinite
+              cubic-bezier(0.455, 0.03, 0.515, 0.955) alternate;
+          }
+          .wave {
+            right: -60px;
+            bottom: -20px;
           }
         }
 
@@ -271,16 +343,13 @@ export default {
       left: 0;
       right: 0;
       bottom: 0;
-      width: 100%;
-      img {
+      width: 106%;
+      z-index: 6;
+      .sea {
         position: absolute;
         width: 100%;
-        &.sea__2 {
-          bottom: 6%;
-        }
-        &.sea__1 {
-          bottom: 0;
-        }
+        left: -6%;
+        bottom: 0;
       }
     }
 
