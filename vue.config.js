@@ -1,20 +1,31 @@
-const {defineConfig} = require('@vue/cli-service')
+const { defineConfig } = require("@vue/cli-service");
 module.exports = defineConfig({
     transpileDependencies: true,
     css: {
         loaderOptions: {
             sass: {
-                additionalData: `@import "@/scss/vars/index.scss";`
-            }
-        }
+                additionalData: `@import "@/scss/vars/index.scss";`,
+            },
+        },
     },
-    chainWebpack: config => {
+    chainWebpack: (config) => {
         // GraphQL Loader
         config.module
-            .rule('glsl')
+            .rule("glsl")
             .test(/\.(glsl|vs|fs|vert|frag)$/)
-            .exclude.add(/node_modules/).end()
-            .use('raw-loader').loader('raw-loader').end()
-            .use('glslify-loader').loader('glslify-loader').end()
-    }
-})
+            .exclude.add(/node_modules/)
+            .end()
+            .use("raw-loader")
+            .loader("raw-loader")
+            .end()
+            .use("glslify-loader")
+            .loader("glslify-loader")
+            .end();
+    },
+    configureWebpack: {
+        experiments: {
+            asyncWebAssembly: true,
+            syncWebAssembly: true,
+        },
+    },
+});
