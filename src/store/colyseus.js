@@ -11,18 +11,13 @@ const useColyseusStore = defineStore("colyseus", {
         currentRoom: null,
         lobbyRoom: null,
         players: new Map(),
-        player: {
-            id: "",
-            name: "",
-            color: {
-                bottle: "",
-                bottleDetails: "",
-                medal: "",
-            },
-        },
+        player: {},
         playersArray: [],
     }),
     getters: {
+        hasPlayer(state) {
+            return Object.keys(state.player).length !== 0;
+        },
         rankedPlayers(state) {
             return [...state.playersArray].sort((a, b) => (a.points < b.points ? 1 : -1));
         },
