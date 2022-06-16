@@ -2,17 +2,16 @@ import { sRGBEncoding } from "three";
 
 export default [
     {
-        name: 'environmentMapTexture',
-        type: 'cubeTexture',
-        path:
-            [
-                'textures/environmentMap/px.png',
-                'textures/environmentMap/nx.png',
-                'textures/environmentMap/py.png',
-                'textures/environmentMap/ny.png',
-                'textures/environmentMap/pz.png',
-                'textures/environmentMap/nz.png'
-            ]
+        name: "environmentMapTexture",
+        type: "cubeTexture",
+        path: [
+            "textures/environmentMap/px.png",
+            "textures/environmentMap/nx.png",
+            "textures/environmentMap/py.png",
+            "textures/environmentMap/ny.png",
+            "textures/environmentMap/pz.png",
+            "textures/environmentMap/nz.png",
+        ],
     },
     {
         name: "woodTexture",
@@ -142,9 +141,6 @@ export default [
             encoding: sRGBEncoding,
             flipY: false,
         },
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     },
     {
         name: "fog",
@@ -152,14 +148,8 @@ export default [
         path: "textures/fog/blue.png",
         options: {
             encoding: sRGBEncoding,
-            flipY: false
-        }
-=======
->>>>>>> 6c58489 (feat: big implementation - wander & collision avoidance with bots in 3 zones)
-=======
->>>>>>> cd8730e (feat: big implementation - wander & collision avoidance with bots in 3 zones)
-=======
->>>>>>> cd8730e263c9abe12ee6057d45459e5a6c672b64
+            flipY: false,
+        },
     },
     {
         name: "musicGame",
