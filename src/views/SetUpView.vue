@@ -80,15 +80,18 @@
       <SetUpConnection />
     </div>
 
-    <SetUpModeDetails
-      v-if="null !== selected"
-      v-on:set-selected="setSelected"
-      :mode="selected"
-    />
+    <SetUpModeDetails v-on:set-selected="setSelected" :mode="selected" />
 
-    <ModalJoin v-if="'join' === modalShown" :roomId="colyseus.currentRoom.id" />
+    <transition name="fade">
+      <ModalJoin
+        v-if="'join' === modalShown"
+        :roomId="colyseus.currentRoom.id"
+      />
+    </transition>
 
-    <ModalQrCode v-if="'qrcode' === modalShown" />
+    <transition name="fade">
+      <ModalQrCode v-if="'qrcode' === modalShown" />
+    </transition>
   </div>
 </template>
 
@@ -208,19 +211,24 @@ export default {
     width: 100%;
     height: 100%;
     overflow: hidden;
+    &:before {
+      content: "";
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      z-index: 1;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      transition: 0.3s all ease-in-out;
+    }
     &.details-open {
       &:before {
-        content: "";
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        z-index: 1;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
         background-color: rgba($purple, 0.4);
         backdrop-filter: blur(4px);
+        transition: 0.3s all ease-in-out;
       }
     }
 
