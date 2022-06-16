@@ -17,6 +17,7 @@ const steerBotCounts = {
 export default class SteeringBots extends component() {
     constructor() {
         super();
+
         this._params = {
             maxSpeed: 0.32,
             maxForce: 3.2,
@@ -30,10 +31,6 @@ export default class SteeringBots extends component() {
             botsCount: steerBotCounts,
         };
 
-        this.onDebug();
-    }
-
-    init() {
         const experience = new Experience();
         this._debug = experience.debug;
         this._scene = experience.scene;
@@ -42,6 +39,8 @@ export default class SteeringBots extends component() {
         this._group = experience.world.group;
 
         this._initSteer();
+
+        this.onDebug();
     }
 
     _initSteer() {
@@ -82,6 +81,8 @@ export default class SteeringBots extends component() {
                 this._group.bots.add(entity);
             }
         });
+
+        console.log(this._group.bots);
     }
 
     _initBots() {
