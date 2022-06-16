@@ -14,6 +14,8 @@
 import useColyseusStore from "@/store/colyseus";
 import CopyCode from "@/components/ui/CopyCode";
 import QrCode from "@/components/ui/QrCode";
+import { mapWritableState } from "pinia";
+import useGlobalStore from "@/store/global";
 
 export default {
   name: "SetUpConnection",
@@ -24,6 +26,9 @@ export default {
   setup() {
     const colyseus = useColyseusStore();
     return { colyseus };
+  },
+    computed: {
+    ...mapWritableState(useGlobalStore, ["modalShown"])
   },
 };
 </script>
