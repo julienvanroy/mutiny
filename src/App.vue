@@ -4,13 +4,13 @@
     <template v-slot:description="{ content }">{{ content }}</template>
   </metainfo>
   <div class="main-container" ref="fullscreenContainer">
-    <div v-if="!isMobile" class="fullscreen">
+    <div v-if="!isMobile && !is404" class="fullscreen">
       <button v-if="showFullscreenBtn" @click="setFullscreen()">
         <img :src="`images/icons/fullscreen-${isFullscreen ? 'off' : 'on'}.png`" />
       </button>
     </div>
 
-    <div class="btn-parameters" v-if="!isMobile">
+    <div class="btn-parameters" v-if="!isMobile && !is404">
       <button @click="playMusic">
         <img src="images/icons/sound-on.png" />
       </button>
@@ -136,6 +136,9 @@ export default {
     },
     isGamePath() {
       return this.path === "/game" || this.path === "/debug";
+    },
+    is404() {
+      return this.path === "/404";
     },
   },
 };
