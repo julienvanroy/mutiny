@@ -16,30 +16,46 @@
     </div>
     <ul v-if="0 < colyseus.playersArray.length" class="players-list">
       <li class="player" v-for="(n, index) in 8" :key="index">
-        <div class="player__inner" v-if="!!colyseus.playersArray[index]">
-          <div class="player__infos">
-            <TheBottle
-              class="bottle"
-              :background="colyseus.playersArray[index].color.bottle"
-              :details="colyseus.playersArray[index].color.bottleDetails"
-            />
-            <span>{{ colyseus.playersArray[index].name }}</span>
-          </div>
-          <div class="player__state">
-            <div class="state">
-              {{ !!colyseus.playersArray[index].orientationReady ? $t("setup.ready") : "" }}
-              <div v-if="!colyseus.playersArray[index].orientationReady" class="dots">
-                <span class="dot">.</span>
-                <span class="dot">.</span>
-                <span class="dot">.</span>
+        <transition name="fade">
+          <div class="player__inner" v-if="!!colyseus.playersArray[index]">
+            <div class="player__infos">
+              <TheBottle
+                class="bottle"
+                :background="colyseus.playersArray[index].color.bottle"
+                :details="colyseus.playersArray[index].color.bottleDetails"
+              />
+              <span>{{ colyseus.playersArray[index].name }}</span>
+            </div>
+            <div class="player__state">
+              <div class="state">
+                {{
+                  !!colyseus.playersArray[index].orientationReady
+                    ? $t("setup.ready")
+                    : ""
+                }}
+                <div
+                  v-if="!colyseus.playersArray[index].orientationReady"
+                  class="dots"
+                >
+                  <span class="dot">.</span>
+                  <span class="dot">.</span>
+                  <span class="dot">.</span>
+                </div>
+              </div>
+              <div
+                class="remove"
+                @click="
+                  this.colyseus.sendData(
+                    'ejectPlayer',
+                    colyseus.playersArray[index].id
+                  )
+                "
+              >
+                <img src="images/icons/remove-player.png" />
               </div>
             </div>
-            <div class="remove" @click="this.colyseus.sendData('ejectPlayer', colyseus.playersArray[index].id)">
-              <img src="images/icons/remove-player.png" />
-            </div>
           </div>
-        </div>
-
+        </transition>
         <div class="player__inner empty" v-if="!colyseus.playersArray[index]">
           <div class="player__infos">
             <TheBottle class="bottle" :isEmpty="true" />
