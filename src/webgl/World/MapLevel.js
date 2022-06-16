@@ -33,6 +33,6 @@ export default class MapLevel {
             }
         });
 
-        this._group.add(this.model);
+        this._group.notBots.add(this.model);
     }
 }

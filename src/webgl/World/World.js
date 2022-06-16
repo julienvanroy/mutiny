@@ -14,6 +14,7 @@ import GerstnerWater from "@/webgl/Mesh/GerstnerWater";
 import MapCollider from "@/webgl/World/MapCollider";
 import Fog from "@/webgl/Mesh/Fog";
 import SteeringBots from "@/webgl/World/SteeringBots";
+import { Vector3 } from "three";
 
 export default class World extends component() {
     init() {
@@ -22,7 +23,12 @@ export default class World extends component() {
         this._renderer = experience.renderer;
         this._scene = experience.scene;
         this._camera = experience.camera;
+
         this.group = new Group();
+        this.group.notBots = new Group();
+        this.group.bots = new Group();
+        this.group.add(this.group.notBots);
+        this.group.add(this.group.bots);
 
         this._isLoaded = false;
     }
@@ -57,11 +63,13 @@ export default class World extends component() {
             this.group.position.z,
             this.gerstnerWater.water.material.uniforms.time.value
         );
-        this.group.position.y = waveInfo.position.y + 2;
+        this.group.notBots.position.y = waveInfo.position.y + 2;
+        this.group.bots.position.y = waveInfo.position.y + 2;
         const quaternion = new Quaternion().setFromEuler(
             new Euler(waveInfo.normal.x, waveInfo.normal.y, waveInfo.normal.z)
         );
-        this.group.quaternion.rotateTowards(quaternion, delta * 0.5);
+        this.group.notBots.quaternion.rotateTowards(quaternion, delta * 0.5);
+        this.group.bots.quaternion.rotateTowards(quaternion, delta * 0.5);
         this.group.updateMatrixWorld();
     }
 

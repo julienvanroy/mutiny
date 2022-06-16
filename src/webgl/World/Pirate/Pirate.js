@@ -46,7 +46,7 @@ export default class Pirate {
 
         this.mesh.position.set(0, 0, 0);
         this.mesh.scale.set(1.4, 1.4, 1.4);
-        this._group.add(this.mesh);
+        this._group.notBots.add(this.mesh);
 
         let rangeColor;
 

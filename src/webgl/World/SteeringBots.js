@@ -61,7 +61,7 @@ export default class SteeringBots extends component() {
                 entity.position.set(position.x, position.y, position.z);
 
                 this.entities[index].push(entity);
-                this._group.add(entity);
+                this._group.bots.add(entity);
             }
         });
     }
