@@ -15,6 +15,7 @@ import Fireflies from "@/webgl/Mesh/Fireflies";
 import GerstnerWater from "@/webgl/Mesh/GerstnerWater";
 import MapCollider from "@/webgl/World/MapCollider";
 import Fog from "@/webgl/Mesh/Fog";
+import Test from "@/webgl/Test";
 
 export default class World extends component() {
     init() {
@@ -53,45 +54,70 @@ export default class World extends component() {
 
         this._scene.add(this.group);
         this.onDebug();
+
+        this._initPathfinding();
+        this._initCharacters();
+        this._initBots();
+
+        new Test();
         this._isLoaded = true;
     }
 
     _initPathfinding() {
         this.pathfinding = new Pathfinding();
-        this.pathfinding.zone = "map";
-        this.pathfinding.setZoneData(
-            this.pathfinding.zone,
-            Pathfinding.createZone(this.mapLevel.navMesh.geometry, Number.EPSILON)
-        );
+        // this.pathfinding.zone = "map";
+        // this.pathfinding.setZoneData(
+        //     this.pathfinding.zone,
+        //     Pathfinding.createZone(this.mapLevel.navMesh.geometry, Number.EPSILON)
+        // );
 
-        let tempGroups = [];
-        this.pathfinding.zones.map.groups.forEach((group) => group.length >= 64 && tempGroups.push(group));
-        this.pathfinding.zones.map.groups = tempGroups;
+        // let tempGroups = [];
+        // this.pathfinding.zones.map.groups.forEach((group) => group.length >= 64 && tempGroups.push(group));
+        // this.pathfinding.zones.map.groups = tempGroups;
+
+        for (const [key, value] of Object.entries(this.mapLevel.planes)) {
+            this.pathfinding.setZoneData(key, Pathfinding.createZone(value.geometry, Number.EPSILON));
+        }
+
+        console.log(this.pathfinding);
     }
 
     _initBots() {
         this.bots = {};
-        const initialPositions = [];
-        const zonesCount = this.pathfinding.zones.map.groups.length - 1;
+        this.botsPool = [];
+        // const initialPositions = [];
+        // const zonesCount = this.pathfinding.zones.map.groups.length - 1;
 
-        for (let i = 0; i < configs.character.count; i++) {
-            let position = this.pathfinding.getRandomNode(
-                this.pathfinding.zone,
-                randomIntegerInRange(0, zonesCount),
-                new Vector3(),
-                configs.map.nearRange
-            );
+        for (let j = 0; j < Object.keys(this.mapLevel.planes).length; j++) {
+            this.botsPool.push([]);
 
-            while (
-                !initialPositions.every((pos) => pos.distanceTo(position) > configs.character.range) &&
-                !this.mapLevel.decors.every((mesh) => mesh.position.distanceTo(position) < configs.character.range * 2)
-            ) {
-                position = this.pathfinding.getRandomNode(
-                    this.pathfinding.zone,
-                    randomIntegerInRange(0, zonesCount),
-                    new Vector3(),
-                    32
-                );
+            for (let i = 0; i < configs.character.count; i++) {
+                // let position = this.pathfinding.getRandomNode(
+                //     this.pathfinding.zone,
+                //     randomIntegerInRange(0, zonesCount),
+                //     new Vector3(),
+                //     configs.map.nearRange
+                // );
+
+                // while (
+                //     !initialPositions.every((pos) => pos.distanceTo(position) > configs.character.range) &&
+                //     !this.mapLevel.decors.every((mesh) => mesh.position.distanceTo(position) < configs.character.range * 2)
+                // ) {
+                //     position = this.pathfinding.getRandomNode(
+                //         this.pathfinding.zone,
+                //         randomIntegerInRange(0, zonesCount),
+                //         new Vector3(),
+                //         32
+                //     );
+                // }
+
+                // initialPositions.push(position);
+
+                // const botId = uuid();
+                // this.bots[botId] = new Bot(botId, position, this.characters[i], this.group);
+
+                let position = new Vector3();
+                this.botsPool[j].push(new Bot(uuid(), position, this.characters[j][i], this.group));
             }
 
             initialPositions.push(position);
@@ -150,10 +176,34 @@ export default class World extends component() {
                             : undefined,
                     };
                 }
-            }
 
-            console.log(`Generative characters ${i + 1}: ${duplicataCount} duplicata times`);
-            this.characters.push(body);
+                let duplicataCount = 0;
+                while (this.characters.find((charaBody) => JSON.stringify(charaBody) === JSON.stringify(body))) {
+                    duplicataCount++;
+                    body = {};
+                    for (const [key, value] of Object.entries(configs.character.body)) {
+                        body[key] = {
+                            tag: key,
+                            alphaTexture: value.alphaTexture,
+                            shuffleMesh: value.shuffleMesh,
+                            addColor: value.addColor,
+                            meshes: value.meshes,
+                            mesh: value.shuffleMesh
+                                ? sample(
+                                      value.meshes.map(({ name, texture, color: colors }) => ({
+                                          name,
+                                          texture,
+                                          color: colors ? sample(colors) : undefined,
+                                      }))
+                                  )
+                                : undefined,
+                        };
+                    }
+                }
+
+                console.log(`Generative characters ${i + 1}: ${duplicataCount} duplicata times`);
+                this.characters[j].push(body);
+            }
         }
 
         this.characters = shuffle(this.characters);
@@ -173,12 +223,12 @@ export default class World extends component() {
         this.group.updateMatrixWorld();
     }
 
-    onRaf({ delta }) {
+    onRaf() {
         this._renderer.render(this._scene, this._camera);
 
         if (this._isLoaded) {
-            this.waveRaf(delta);
-
+            // this._keyboard();
+            // this.waveRaf(delta);
             /*
             TODO: Collision Items
                 // Check Collision Items
