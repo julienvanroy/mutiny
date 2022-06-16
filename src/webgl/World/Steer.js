@@ -1,9 +1,10 @@
 import { component } from "bidello";
-import { PlaneGeometry, MeshBasicMaterial, Mesh, Vector3, Box3 } from "three";
+import { Vector3, Box3 } from "three";
 import Experience from "@/webgl/Experience";
 import { SteeringEntity } from "@/webgl/Utils/Steer";
 import configs from "@/configs";
-import { DoubleSide } from "three";
+import BotPirate from "./Pirate/BotPirate";
+import { sample, uuid } from "@/utils";
 
 let entities = [];
 let params = {
@@ -24,18 +25,18 @@ export default class Steer extends component() {
     init() {
         const experience = new Experience();
         this._scene = experience.scene;
-
-        this._botsPool = experience.world.botsPool;
+        this._mapLevel = experience.world.mapLevel;
         this._group = experience.world.group;
 
-        Object.keys(experience.world.mapLevel.planes).forEach((key, index) => {
+        this._initCharacters();
+        this._initBots();
+
+        Object.keys(this._mapLevel.planes).forEach((key, index) => {
             const mesh = experience.world.mapLevel.planes[key].clone();
 
             mesh.geometry.computeBoundingBox();
 
             const box = new Box3().copy(mesh.geometry.boundingBox);
-
-            console.log(box);
 
             mesh.updateMatrixWorld();
 
@@ -46,7 +47,7 @@ export default class Steer extends component() {
             entities.push([]);
 
             for (let i = 0; i < params.numEntities; i++) {
-                let bot = this._botsPool[index][i];
+                let bot = this.bots[index][i];
                 let entity = new SteeringEntity(bot.mesh);
 
                 let pos = bot.position.clone();
@@ -57,6 +58,77 @@ export default class Steer extends component() {
                 this._group.add(entity);
             }
         });
+    }
+
+    _initBots() {
+        this.bots = [];
+
+        for (let j = 0; j < Object.keys(this._mapLevel.planes).length; j++) {
+            this.bots.push([]);
+
+            for (let i = 0; i < configs.character.count; i++) {
+                let position = new Vector3();
+
+                this.bots[j].push(new BotPirate(uuid(), position, this.characters[j][i], this.group));
+            }
+        }
+    }
+
+    // Generative chara
+    _initCharacters() {
+        this.characters = [];
+        for (let j = 0; j < Object.keys(this._mapLevel.planes).length; j++) {
+            this.characters.push([]);
+            for (let i = 0; i < configs.character.count; i++) {
+                let body = {};
+                for (const [key, value] of Object.entries(configs.character.body)) {
+                    body[key] = {
+                        tag: key,
+
+                        alphaTexture: value.alphaTexture,
+                        shuffleMesh: value.shuffleMesh,
+                        addColor: value.addColor,
+                        meshes: value.meshes,
+                        mesh: value.shuffleMesh
+                            ? sample(
+                                  value.meshes.map(({ name, texture, color: colors }) => ({
+                                      name,
+                                      texture,
+                                      color: colors ? sample(colors) : undefined,
+                                  }))
+                              )
+                            : undefined,
+                    };
+
+                    let duplicataCount = 0;
+                    while (this.characters.find((charaBody) => JSON.stringify(charaBody) === JSON.stringify(body))) {
+                        duplicataCount++;
+                        body = {};
+                        for (const [key, value] of Object.entries(configs.character.body)) {
+                            body[key] = {
+                                tag: key,
+                                alphaTexture: value.alphaTexture,
+                                shuffleMesh: value.shuffleMesh,
+                                addColor: value.addColor,
+                                meshes: value.meshes,
+                                mesh: value.shuffleMesh
+                                    ? sample(
+                                          value.meshes.map(({ name, texture, color: colors }) => ({
+                                              name,
+                                              texture,
+                                              color: colors ? sample(colors) : undefined,
+                                          }))
+                                      )
+                                    : undefined,
+                            };
+                        }
+                    }
+
+                    console.log(`Generative characters ${i + 1}: ${duplicataCount} duplicata times`);
+                    this.characters[j].push(body);
+                }
+            }
+        }
     }
 
     onRaf() {

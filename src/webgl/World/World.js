@@ -45,85 +45,11 @@ export default class World extends component() {
         this.boxCollision = new BoxCollision();
         */
 
-        this._initCharacters();
-        this._initBots();
-        new Steer();
+        this.steer = new Steer();
 
         this._scene.add(this.group);
         this.onDebug();
         this._isLoaded = true;
-    }
-
-    _initBots() {
-        this.bots = {};
-        this.botsPool = [];
-
-        for (let j = 0; j < Object.keys(this.mapLevel.planes).length; j++) {
-            this.botsPool.push([]);
-
-            for (let i = 0; i < configs.character.count; i++) {
-                let position = new Vector3();
-
-                this.botsPool[j].push(new BotPirate(uuid(), position, this.characters[j][i], this.group));
-            }
-        }
-    }
-
-    // Generative chara
-    _initCharacters() {
-        this.characters = [];
-        for (let j = 0; j < Object.keys(this.mapLevel.planes).length; j++) {
-            this.characters.push([]);
-            for (let i = 0; i < configs.character.count; i++) {
-                let body = {};
-                for (const [key, value] of Object.entries(configs.character.body)) {
-                    body[key] = {
-                        tag: key,
-
-                        alphaTexture: value.alphaTexture,
-                        shuffleMesh: value.shuffleMesh,
-                        addColor: value.addColor,
-                        meshes: value.meshes,
-                        mesh: value.shuffleMesh
-                            ? sample(
-                                  value.meshes.map(({ name, texture, color: colors }) => ({
-                                      name,
-                                      texture,
-                                      color: colors ? sample(colors) : undefined,
-                                  }))
-                              )
-                            : undefined,
-                    };
-
-                    let duplicataCount = 0;
-                    while (this.characters.find((charaBody) => JSON.stringify(charaBody) === JSON.stringify(body))) {
-                        duplicataCount++;
-                        body = {};
-                        for (const [key, value] of Object.entries(configs.character.body)) {
-                            body[key] = {
-                                tag: key,
-                                alphaTexture: value.alphaTexture,
-                                shuffleMesh: value.shuffleMesh,
-                                addColor: value.addColor,
-                                meshes: value.meshes,
-                                mesh: value.shuffleMesh
-                                    ? sample(
-                                          value.meshes.map(({ name, texture, color: colors }) => ({
-                                              name,
-                                              texture,
-                                              color: colors ? sample(colors) : undefined,
-                                          }))
-                                      )
-                                    : undefined,
-                            };
-                        }
-                    }
-
-                    console.log(`Generative characters ${i + 1}: ${duplicataCount} duplicata times`);
-                    this.characters[j].push(body);
-                }
-            }
-        }
     }
 
     waveRaf(delta) {

@@ -26,7 +26,7 @@ export default class MapLevel {
                     child.material = new SailMaterial();
                 }
                 if (configs.map.decors.some((name) => child.name.includes(name))) this.decors.push(child);
-                if (configs.map.navMesh.includes(child.name)) {
+                if (configs.map.steerPlanes.includes(child.name)) {
                     child.visible = true;
                     this.planes[child.name] = child;
                 }

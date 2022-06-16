@@ -62,6 +62,7 @@ export default class Pirate {
                     if (bodyPart.mesh.name !== child.name) child.visible = false;
 
                     child.material = new MeshStandardMaterial();
+                    child.material.metalness = 0.0;
 
                     child.material.map = this._resources[bodyPart.mesh.texture];
                     if (bodyPart.addColor) {
