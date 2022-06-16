@@ -11,33 +11,35 @@
     <div class="homepage__under">
       <img src="images/background-home.png" />
     </div>
-    <div class="homepage__over">
-      <img src="images/logo.png" />
-      <div class="btn-container">
-        <TheButton
-          @click="createRoom"
-          :label="$t('homepage.createRoom')"
-          color="primary"
-        />
-        <p>
-          {{ $t("homepage.homePhraseDesktop") }}
-        </p>
-        <div class="infos">
-          <div>
-            <img src="images/icons/players.png" />
-            <span>{{ $t("homepage.infosPlayers") }}</span>
-          </div>
-          <div>
-            <img src="images/icons/equipments.png" />
-            <span>
-              {{ $t("homepage.infosEquipments1") }}
-              <br />
-              {{ $t("homepage.infosEquipments2") }}
-            </span>
+    <transition name="fade">
+      <div v-if="!!isMounted" class="homepage__over">
+        <img src="images/logo.png" />
+        <div class="btn-container">
+          <TheButton
+            @click="createRoom"
+            :label="$t('homepage.createRoom')"
+            color="primary"
+          />
+          <p>
+            {{ $t("homepage.homePhraseDesktop") }}
+          </p>
+          <div class="infos">
+            <div>
+              <img src="images/icons/players.png" />
+              <span>{{ $t("homepage.infosPlayers") }}</span>
+            </div>
+            <div>
+              <img src="images/icons/equipments.png" />
+              <span>
+                {{ $t("homepage.infosEquipments1") }}
+                <br />
+                {{ $t("homepage.infosEquipments2") }}
+              </span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </transition>
   </div>
 
   <CreditsOverlay :isOpen="creditsOpen" />
@@ -60,10 +62,12 @@ export default {
   data() {
     return {
       roomId: "",
+      isMounted: false,
     };
   },
   mounted() {
     this.colyseus.initLobbyRoom();
+    this.isMounted = true;
   },
   methods: {
     createRoom(doJoinRoom = true) {
