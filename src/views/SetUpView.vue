@@ -6,79 +6,89 @@
 
     <div :class="`setup__under ${null !== selected ? 'details-open' : ''}`">
       <div class="background">
-        <img
-          class="sky bottom"
-          src="images/setup/sky_5.jpg"
-        />
+        <img class="sky bottom" src="images/setup/sky_5.jpg" rel="preload" />
         <img
           class="sky bottom parallax"
           data-parallax="1"
           src="images/setup/sky_4.png"
+          rel="preload"
         />
         <img
           class="sky bottom parallax"
           data-parallax="-1"
           src="images/setup/sky_3.png"
+          rel="preload"
         />
         <img
           class="sky bottom parallax"
           data-parallax="1"
           src="images/setup/sky_2.png"
+          rel="preload"
         />
         <img
           class="sky top parallax"
           data-parallax="1"
           src="images/setup/sky_1.png"
+          rel="preload"
         />
         <img
           class="sea bottom parallax height"
           data-parallax="-1"
           src="images/setup/sea_3.png"
+          rel="preload"
         />
         <img
           class="sea bottom parallax"
           data-parallax="1"
           src="images/setup/sea_2.png"
+          rel="preload"
         />
       </div>
 
-      <div class="modes">
-        <div
-          v-for="(mode, idx) in modes"
-          :key="`mode-${idx}`"
-          :class="`mode ${!mode.isAvailable ? 'unavailable' : ''}`"
-          @mouseover="() => mouseHover(mode.isAvailable, idx)"
-          @mouseleave="() => mouseHover(mode.isAvailable, null)"
-          @click="() => setSelected(mode)"
-        >
-          <div class="boat-container parallax" :data-parallax="`${4 - idx}`">
-            <div :class="`boat ${idx === hovered ? 'boat-hover' : ''}`"></div>
+      <transition name="fade">
+        <div v-if="!!isMounted" class="modes">
+          <div
+            v-for="(mode, idx) in modes"
+            :key="`mode-${idx}`"
+            :class="`mode ${!mode.isAvailable ? 'unavailable' : ''}`"
+            @mouseover="() => mouseHover(mode.isAvailable, idx)"
+            @mouseleave="() => mouseHover(mode.isAvailable, null)"
+            @click="() => setSelected(mode)"
+          >
+            <div class="boat-container parallax" :data-parallax="`${4 - idx}`">
+              <div :class="`boat ${idx === hovered ? 'boat-hover' : ''}`"></div>
+            </div>
+            <img
+              class="wave parallax"
+              :data-parallax="`${3 - idx + 0.5}`"
+              :src="`images/setup/wave_${idx + 1}.png`"
+            />
           </div>
-          <img
-            class="wave parallax"
-            :data-parallax="`${3 - idx + .5}`"
-            :src="`images/setup/wave_${idx + 1}.png`"
-          />
         </div>
-      </div>
+      </transition>
 
       <div class="front">
         <img
           class="sea parallax"
           data-parallax="-4"
           src="images/setup/sea_1.png"
+          rel="preload"
         />
       </div>
 
       <div class="catch-phrase">
-        <p v-if="hovered !== null">{{ $t(modes[hovered].shortDescription) }}</p>
+        <p v-if="hovered !== null">
+          {{ $t(modes[hovered].shortDescription) }}
+        </p>
       </div>
     </div>
 
-    <div class="setup__over">
-      <SetUpPlayers />
-      <SetUpConnection />
-    </div>
+    <transition name="fade">
+      <div v-if="!!isMounted" class="setup__over">
+        <SetUpPlayers />
+        <SetUpConnection />
+      </div>
+    </transition>
 
     <SetUpModeDetails v-on:set-selected="setSelected" :mode="selected" />
 
@@ -124,11 +134,10 @@ export default {
   },
   data() {
     return {
-      showModalJoin: true,
-      showModalQRCode: false,
       modes: Modes,
       hovered: null,
       selected: null,
+      isMounted: false,
     };
   },
   mounted() {
@@ -145,7 +154,9 @@ export default {
 
     this.colyseus.currentRoom.onMessage("leaveRoom", () => {});
 
-    this.modalShown = "join";
+    // this.modalShown = "join";
+
+    this.isMounted = true;
 
     document.addEventListener("mousemove", (e) => this.parallax(e));
   },

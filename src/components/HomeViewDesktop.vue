@@ -9,7 +9,7 @@
     </div>
 
     <div class="homepage__under">
-      <img src="images/background-home.png" />
+      <img src="images/background-home.png" rel="preload" />
     </div>
     <transition name="fade">
       <div v-if="!!isMounted" class="homepage__over">
