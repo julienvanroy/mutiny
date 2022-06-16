@@ -154,7 +154,7 @@ export default {
 
     this.colyseus.currentRoom.onMessage("leaveRoom", () => {});
 
-    // this.modalShown = "join";
+    this.modalShown = "join";
 
     this.isMounted = true;
 
