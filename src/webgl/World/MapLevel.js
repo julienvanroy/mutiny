@@ -27,7 +27,7 @@ export default class MapLevel {
                 }
                 if (configs.map.decors.some((name) => child.name.includes(name))) this.decors.push(child);
                 if (configs.map.steerPlanes.includes(child.name)) {
-                    child.visible = true;
+                    child.visible = false;
                     this.planes[child.name] = child;
                 }
             }
