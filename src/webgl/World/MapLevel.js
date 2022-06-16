@@ -18,6 +18,8 @@ export default class MapLevel {
 
         this.decors = [];
 
+        this.planes = {};
+
         this.model.traverse((child) => {
             if (child instanceof Mesh) {
                 if (child.name.includes("voile")) {
@@ -25,20 +27,12 @@ export default class MapLevel {
                 }
                 if (configs.map.decors.some((name) => child.name.includes(name))) this.decors.push(child);
                 if (configs.map.navMesh.includes(child.name)) {
-                    this._initNavMesh(child);
-                    child.visible = false;
+                    child.visible = true;
+                    this.planes[child.name] = child;
                 }
             }
         });
 
         this._group.add(this.model);
-    }
-
-    _initNavMesh(mesh) {
-        this.navMesh = mesh;
-        this.navMesh.scale.set(-1, 1, 1);
-        this.navMesh.rotation.x = Math.PI / 2;
-        this.navMesh.updateMatrixWorld();
-        // this.navMesh.geometry.applyMatrix4(this.navMesh.matrix);
     }
 }

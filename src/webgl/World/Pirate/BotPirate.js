@@ -1,5 +1,4 @@
 import { component } from "bidello";
-import { PathfindingHelper } from "three-pathfinding";
 import Pirate from "./Pirate";
 import Experience from "../../Experience";
 import configs from "@/configs";
@@ -17,11 +16,7 @@ export default class BotPirate extends component(Pirate) {
 
         this.isPlayer = false;
 
-        const experience = new Experience();
-        this._pathfinding = experience.world.pathfinding;
-
-        this._helper = new PathfindingHelper();
-        // this._scene.add(this._helper);
+        // const experience = new Experience();
 
         this.position = position.clone();
 
@@ -35,21 +30,6 @@ export default class BotPirate extends component(Pirate) {
             interval: null,
             angle: 0,
         };
-    }
-
-    _setPath() {
-        const groupID = this._pathfinding.getGroup(this._pathfinding.zone, this.position);
-
-        this.targetPosition = this._pathfinding.getRandomNode(
-            this._pathfinding.zone,
-            groupID,
-            this.position,
-            configs.map.nearRange
-        );
-
-        let newPath = this._pathfinding.findPath(this.position, this.targetPosition, this._pathfinding.zone, groupID);
-
-        if (newPath && newPath.length > 0) this.path.push(...newPath);
     }
 
     // onRaf({ delta }) {
