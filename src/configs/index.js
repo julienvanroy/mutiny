@@ -6,10 +6,11 @@ const configs = {
         range: 1.2, //10
         animation: {
             idle: {
-                chance() {
-                    return Math.random() < 0.2;
+                chance(amt = 0.2) {
+                    return Math.random() < amt;
                 },
                 duration: 2, // in second
+                amt: 0.2,
             },
         },
         body: {
