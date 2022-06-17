@@ -228,6 +228,7 @@ export default class SteeringBots extends component() {
                             animation.play("walk");
                         if (velocity >= this._params.steerMaxSpeed / 1.6)
                             animation.actions.current.setEffectiveTimeScale(this._params.runningSpeed);
+                        else animation.actions.current.setEffectiveTimeScale(confAnimation.active.walkingTimeScale);
                     }
                 }
             }
