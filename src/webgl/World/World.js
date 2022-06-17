@@ -3,14 +3,12 @@ import { component } from "bidello";
 import Experience from "@/webgl/Experience";
 import { Euler, Group, Quaternion } from "three";
 import PlayerPirate from "@/webgl/World/Pirate/PlayerPirate";
-//import Item from "@/webgl/World/Item";
-//import BoxCollision from "@/webgl/Collision/BoxCollision";
 import { diffArray, sample, shuffle } from "@/utils/index.js";
 import BotPirate from "./Pirate/BotPirate.js";
 import MapLevel from "@/webgl/World/MapLevel";
 import useColyseusStore from "@/store/colyseus.js";
 import Fireflies from "@/webgl/Mesh/Fireflies";
-// import GerstnerWater from "@/webgl/Mesh/GerstnerWater";
+import GerstnerWater from "@/webgl/Mesh/GerstnerWater";
 import MapCollider from "@/webgl/World/MapCollider";
 import Fog from "@/webgl/Mesh/Fog";
 import SteeringBots from "@/webgl/World/SteeringBots";
@@ -36,17 +34,12 @@ export default class World extends component() {
         this.environment = new Environment();
         this.fog = new Fog(20);
         this.fog.mesh.position.y += 1;
-        // this.gerstnerWater = new GerstnerWater();
+        this.gerstnerWater = new GerstnerWater();
         this.fireflies = new Fireflies(100);
         this.fireflies.mesh.position.y += 5;
         this.mapLevel = new MapLevel(this.group);
         this.mapCollider = new MapCollider(this.group);
         this.players = new Map();
-        /*
-        TODO: For Colllision Items
-        this.item = new Item();
-        this.boxCollision = new BoxCollision();
-        */
 
         this.steeringBots = new SteeringBots();
 
@@ -72,17 +65,9 @@ export default class World extends component() {
         this.group.updateMatrixWorld();
     }
 
-    onRaf() {
+    onRaf({delta}) {
         if (this._isLoaded) {
-            // this._keyboard();
-            // this.waveRaf(delta);
-            /*
-            TODO: Collision Items
-                // Check Collision Items
-                this.players.forEach((player, id) => {
-                    if (this.boxCollision.hit(player.mesh, this.item.mesh)) console.log(id, 'Collision')
-                })
-            */
+            this.waveRaf(delta);
         }
     }
 

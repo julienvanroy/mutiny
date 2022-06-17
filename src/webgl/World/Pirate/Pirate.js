@@ -30,6 +30,7 @@ export default class Pirate {
 
         this.mesh.children[0].traverse((child) => {
             if (child instanceof Mesh) {
+                child.layers.set(1)
                 const bodyPart = Object.values(this.body).find(({ meshes }) =>
                     Object.values(meshes)
                         .map(({ name }) => name)
