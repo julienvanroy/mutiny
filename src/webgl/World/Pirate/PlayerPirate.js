@@ -28,6 +28,7 @@ export default class PlayerPirate extends component(Pirate) {
         this._speedMove = configs.character.speed;
         this._targetQuaternion = new Quaternion();
         this._speedRotation = 10;
+        this._debugRunning = false;
 
         this.isOnGround = false;
         this._velocity = new Vector3();
@@ -76,12 +77,12 @@ export default class PlayerPirate extends component(Pirate) {
     }
 
     get isRunning() {
-        return this._vectorControls.length > 0.5;
+        return this._vectorControls.length() > (this._debug.active ? 1 : 0.5);
     }
 
     _move(delta) {
         if (this.isMoving) {
-            const boostRun = this.isRunning ? this._speedRun : 1;
+            const boostRun = this.isRunning || this._debugRunning ? this._speedRun : 1;
             this.mesh.position.z -= this._vectorControls.y * delta * this._speedMove * boostRun;
             this.mesh.position.x += this._vectorControls.x * delta * this._speedMove * boostRun;
         }
@@ -203,9 +204,14 @@ export default class PlayerPirate extends component(Pirate) {
                 !this.bot.animation.areEqual(this.bot.animation.actions.current, this.bot.animation.actions.walk)
             ) {
                 this.bot.animation.play("walk");
-                if (this.isRunning)
+                console.log(this.isRunning, this._debugRunning);
+                if (this.isRunning || this._debugRunning)
                     this.bot.animation.actions.current.setEffectiveTimeScale(
                         configs.character.animation.active.runningTimeScale
+                    );
+                else
+                    this.bot.animation.actions.current.setEffectiveTimeScale(
+                        configs.character.animation.active.walkingTimeScale
                     );
             }
         }
@@ -296,6 +302,10 @@ export default class PlayerPirate extends component(Pirate) {
 
         folderDebug.addInput(this, "_useKeyboard", {
             label: "Use Keyboard",
+        });
+
+        folderDebug.addInput(this, "_debugRunning", {
+            label: "Run",
         });
 
         folderDebug.addInput(this, "_speedMove", {
