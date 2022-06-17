@@ -5,7 +5,7 @@
   },
   "meta": {
     "title": "Mutiny - Hidden Barrels",
-    "description": "To play, first start a game on the computer. You will be given a ship name. Boarding. 3 to 8 players."
+    "description": "To play, first start a game on the computer. You will receive the name of your vessel. Boarding. 3 to 8 players."
   },
   "ui": {
     "back": "Back",
@@ -14,7 +14,7 @@
     "restart": "Restart",
     "replay": "Replay",
     "changeMode": "Change mode",
-    "quitVessel": "Leaving the vessel",
+    "quitVessel": "Leave the vessel",
     "quit": "Quit",
     "timeLeft": "Remaining time",
     "tutorial": "Tutorial"
@@ -22,33 +22,32 @@
   "homepage": {
     "credits": "Credits",
     "createRoom": "Create a vessel",
-    "homePhraseDesktop": "One phone per player is required to control their shipmate",
-    "homePhraseMobile": "Join a game from a computer gascreenme",
+    "homePhraseDesktop": "One phone per player is required to control their sailor",
     "infosPlayers": "3 to 8 players",
     "infosEquipments1": "1 phone per player",
     "infosEquipments2": "+ 1 computer",
     "mobileContent": {
       "shipName": "Name of the vessel",
       "inputPlaceholder": "Fpdr36",
-      "instruction": "To play, first start a game on the computer. You will be given a ship name.",
+      "instruction": "To play, first start a game on the computer. You will receive the name of your vessel.",
       "cta": "Boarding"
     }
   },
   "credits": {
-    "p": "This game was created as part of the end-of-study project for the Master's degree in Interactive Design and Innovation Management at Gobelins.",
+    "p": "This game was made as part of the graduation project of the Master degree in Interactive Design and Innovation Management at Gobelins.",
     "thanks": "Acknowledgements",
-    "pThanks": "Many thanks to Louis-Jean Teitelbaum, Adrien Havet, Olivier Drouet, Marc Petska, Chlovis Lobre, Frédéric Coispeau, Framboise Fronty-Gilles, Nicolas Rouit-Leduc, Rosa Rocca-Serra, Tatiana Vilela dos Santos, Rémy Bourçois, Bastien Robert, Julien Dargelos, Bruno Simon, Nina Chaulet, Mathieu Ehrsam, Adrien Melchior, Lisa Schaeffer for having followed us throughout this project"
+    "pThanks": "Many thanks to Louis-Jean Teitelbaum, Adrien Havet, Olivier Drouet, Marc Petska, Chlovis Lobre, Frédéric Coispeau, Framboise Fronty-Gilles, Nicolas Rouit-Leduc, Rosa Rocca-Serra, Tatiana Vilela dos Santos, Rémy Bourçois, Bastien Robert, Julien Dargelos, Bruno Simon, Nina Chaulet, Mathieu Ehrsam, Adrien Melchior, Lisa Schaeffer for following us throughout this project."
   },
   "getPseudo": {
     "title": "Who are you, sailor?",
     "ctaRandom": "Random name",
-    "cta": "Getting on the bridge",
-    "error": "Pseudo is already taken"
+    "cta": "Climb on the deck!",
+    "error": "The name is already taken."
   },
   "waiting": {
     "portrait": {
-      "title": "Welcome !",
-      "instruction": "To be ready, turn your phone around."
+      "title": "Welcome aboard !",
+      "instruction": "To be ready, rotate your screen."
     },
     "landscape": {
       "titleLeft": "You are ",
@@ -59,7 +58,7 @@
   },
   "setup": {
     "playersTitle": "The crew",
-    "playersPlaceholder1": "No sailors on deck...",
+    "playersPlaceholder1": "No sailor on deck...",
     "playersPlaceholder2": "“sounds of crickets“",
     "infos1": "To join the crew, go to ",
     "infos2": "mutinyparty.com",
@@ -67,7 +66,7 @@
     "infos4": "your phone.",
     "codeTitle": "Join the vessel",
     "ready": "Ready",
-    "vacancy": "Vacancy"
+    "vacancy": "Vacancy..."
   },
   "modals": {
     "modalJoin": {
@@ -86,24 +85,24 @@
     "modalOptions": {
       "btnLabel": "Ahoy!"
     },
-    "modalLockGamepad": "Retourne ta manette pour jouer.",
+    "modalLockGamepad": "Rotate your phone to continue to play.",
     "modalEjected": {
-      "title": "Tu as été jeté par dessus bord",
-      "cta": "Retourner sur le quai"
+      "title": "You were thrown overboard!",
+      "cta": "Return to the dock"
     },
     "modalDead": "{player} ousted you",
-    "modalTargetStolen": "{player} has found your target",
-    "modalTargetSwitched": "Quel pirate sanguinolant !",
+    "modalTargetStolen": "{player} has found your target before you did!",
+    "modalTargetSwitched": "Such a bloody pirate!!",
     "modalWaiting": "WAITING..."
   },
   "gamepad": {
     "youAre": "you are",
-    "clues": "Ta cible",
-    "clueInterval": "Indice suivant",
+    "clues": "Your target",
+    "clueInterval": "Next clue",
     "attack": "Attack",
     "power": "Power",
-    "stalkersCounterLeft": "T’es traqué.e par",
-    "stalkersCounterRight": "mousse.s"
+    "stalkersCounterLeft": "You are the target of",
+    "stalkersCounterRight": "sailor.s"
   },
   "parameters": {
     "options": "Options",
@@ -136,29 +135,29 @@
   "end": {
     "mobile": {
       "title": {
-        "win": "Victoire !",
-        "lose": "Morbleu !"
+        "win": "Victory ahead !",
+        "lose": "What a shame..."
       },
       "description": {
         "0": "You are the Captain!",
-        "1": "Second, you will remain...",
+        "1": "Vice captain, you will remain...",
         "2": "Gunner, you will remain...",
         "3": "Sailor, you will remain...",
         "4": "Sailor, you will remain...",
         "5": "Apprentice sailor, you will remain...",
         "6": "Apprentice sailor, you will remain...",
-        "7": "You freshwater sailor..."
+        "7": "Boo you freshwater sailor..."
       }
     },
     "desktop": {
       "0": "Captain",
-      "1": "Second",
+      "1": "Vice captaon",
       "2": "Gunner",
       "3": "Sailor",
       "4": "Sailor",
       "5": "Apprentice sailor",
       "6": "Apprentice sailor",
-      "7": "You freshwater sailor..."
+      "7": "Freshwater sailor..."
     }
   }
 }

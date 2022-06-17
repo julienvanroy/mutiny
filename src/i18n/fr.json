@@ -23,7 +23,6 @@
     "credits": "Crédits",
     "createRoom": "Créer un navire",
     "homePhraseDesktop": "Un téléphone par joueur est requis pour contrôler son moussaillon.",
-    "homePhraseMobile": "Rejoignez une partie depuis le jeu sur ordinateur",
     "infosPlayers": "3 à 8 joueurs",
     "infosEquipments1": "1 téléphone par joueur",
     "infosEquipments2": "+ 1 ordinateur",
@@ -40,10 +39,10 @@
     "pThanks": "Un grand merci à Louis-Jean Teitelbaum, Adrien Havet, Olivier Drouet, Marc Petska, Chlovis Lobre, Frédéric Coispeau, Framboise Fronty-Gilles, Nicolas Rouit-Leduc, Rosa Rocca-Serra, Tatiana Vilela dos Santos, Rémy Bourçois, Bastien Robert, Julien Dargelos, Bruno Simon, Nina Chaulet, Mathieu Ehrsam, Adrien Melchior, Lisa Schaeffer pour nous avoir suivis tout au long de ce projet."
   },
   "getPseudo": {
-    "title": "Qui es-tu moussaillon ?",
+    "title": "Qui es-tu, moussaillon ?",
     "ctaRandom": "Nom aléatoire",
-    "cta": "Monter sur le pont",
-    "error": "Pseudo is already taken"
+    "cta": "Monter sur le pont !",
+    "error": "Le pseudo existe déjà."
   },
   "waiting": {
     "portrait": {
@@ -66,8 +65,8 @@
     "infos3": " avec ",
     "infos4": "ton téléphone.",
     "codeTitle": "Rejoins le navire",
-    "ready": "Prêt",
-    "vacancy": "Poste à pourvoir"
+    "ready": "Prêt.e",
+    "vacancy": "Poste à pourvoir..."
   },
   "modals": {
     "modalJoin": {
@@ -88,11 +87,11 @@
     },
     "modalLockGamepad": "Retourne ta manette pour jouer.",
     "modalEjected": {
-      "title": "Tu as été jeté par dessus bord",
+      "title": "Tu as été jeté par dessus bord !",
       "cta": "Retourner sur le quai"
     },
-    "modalDead": "{player} vous a évincé.e.",
-    "modalTargetStolen": "{player} a débusqué votre cible avant vous.",
+    "modalDead": "{player} vous a évincé.e !",
+    "modalTargetStolen": "{player} a débusqué votre cible avant vous !",
     "modalTargetSwitched": "Quel pirate sanguinolant !",
     "modalWaiting": "EN ATTENTE..."
   },
