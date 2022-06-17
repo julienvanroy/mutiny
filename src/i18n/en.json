@@ -47,7 +47,7 @@
   "waiting": {
     "portrait": {
       "title": "Welcome aboard !",
-      "instruction": "To be ready, rotate your screen."
+      "instruction": "To become ready, rotate your phone."
     },
     "landscape": {
       "titleLeft": "You are ",
@@ -157,7 +157,7 @@
       "4": "Sailor",
       "5": "Apprentice sailor",
       "6": "Apprentice sailor",
-      "7": "Freshwater sailor..."
+      "7": "Freshwater sailor boohoo..."
     }
   }
 }
