@@ -3,7 +3,9 @@ import { component } from "bidello";
 import Experience from "@/webgl/Experience";
 import { Euler, Group, Quaternion } from "three";
 import PlayerPirate from "@/webgl/World/Pirate/PlayerPirate";
-import { diffArray, sample, shuffle } from "@/utils/index.js";
+//import Item from "@/webgl/World/Item";
+//import BoxCollision from "@/webgl/Collision/BoxCollision";
+import { diffArray, sample, shuffle, flatten } from "@/utils/index.js";
 import BotPirate from "./Pirate/BotPirate.js";
 import MapLevel from "@/webgl/World/MapLevel";
 import useColyseusStore from "@/store/colyseus.js";
@@ -65,7 +67,7 @@ export default class World extends component() {
         this.group.updateMatrixWorld();
     }
 
-    onRaf({delta}) {
+    onRaf({ delta }) {
         if (this._isLoaded) {
             this.waveRaf(delta);
         }
@@ -99,6 +101,7 @@ export default class World extends component() {
         });
         btnAddPlayer.on("click", () => {
             this.onAddPlayer({ playerId: "debug" });
+            this.assignTargets();
             btnAddPlayer.dispose();
         });
     }
@@ -120,7 +123,7 @@ export default class World extends component() {
 
             case 1:
                 singlePlayer = this.players.values().next().value;
-                bots = Object.values(singlePlayer._bots).filter((bot) => !bot.isPlayer);
+                bots = flatten(Object.values(singlePlayer._bots)).filter((bot) => !bot.isPlayer);
                 singlePlayer.target = sample(bots);
                 break;
 
