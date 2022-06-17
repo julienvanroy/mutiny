@@ -26,8 +26,9 @@ export default class SteeringBots extends component() {
             wanderRange: 3.2,
             avoidDistance: 0.32,
             radius: 3.2,
-            inSightDistance: 1000,
-            tooCloseDistance: 400,
+            flock: true,
+            flockInSightDistance: 3.2,
+            flockTooCloseDistance: 1.6,
             botsCount: steerBotCounts,
         };
 
@@ -154,13 +155,15 @@ export default class SteeringBots extends component() {
                     entity.wanderDistance = this._params.wanderDistance;
                     entity.wanderRadius = this._params.wanderRadius;
                     entity.wanderRange = this._params.wanderRange;
-                    entity.inSightDistance = this._params.inSightDistance;
-                    entity.tooCloseDistance = this._params.tooCloseDistance;
+                    entity.inSightDistance = this._params.flockISightDistance;
+                    entity.tooCloseDistance = this._params.flockTooCloseDistance;
                     entity.radius = this._params.radius;
                     entity.avoidDistance = this._params.avoidDistance;
-                    entity.wander();
-                    entity.avoid(this.entities[j]);
-                    entity.flock(this.entities[j]);
+
+                    if (!this._params.flock) {
+                        entity.wander();
+                        entity.avoid(this.entities[j]);
+                    } else entity.flock(this.entities[j]);
                     entity.lookWhereGoing(true);
                     entity.bounce(this.boundaries[j]);
                     entity.update();
@@ -207,8 +210,17 @@ export default class SteeringBots extends component() {
             max: 10,
             step: 0.1,
         });
-        folderDebug.addInput(this._params, "inSightDistance");
-        folderDebug.addInput(this._params, "tooCloseDistance");
+        folderDebug.addInput(this._params, "flock");
+        folderDebug.addInput(this._params, "flockInSightDistance", {
+            min: 0,
+            max: 32,
+            step: 0.1,
+        });
+        folderDebug.addInput(this._params, "flockTooCloseDistance", {
+            min: 0,
+            max: 32,
+            step: 0.1,
+        });
         folderDebug
             .addInput(this._params, "botsCount", {
                 x: { min: 0, max: 100, step: 1 },

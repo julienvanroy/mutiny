@@ -10,7 +10,7 @@ import BotPirate from "./Pirate/BotPirate.js";
 import MapLevel from "@/webgl/World/MapLevel";
 import useColyseusStore from "@/store/colyseus.js";
 import Fireflies from "@/webgl/Mesh/Fireflies";
-import GerstnerWater from "@/webgl/Mesh/GerstnerWater";
+// import GerstnerWater from "@/webgl/Mesh/GerstnerWater";
 import MapCollider from "@/webgl/World/MapCollider";
 import Fog from "@/webgl/Mesh/Fog";
 import SteeringBots from "@/webgl/World/SteeringBots";
@@ -36,7 +36,7 @@ export default class World extends component() {
         this.environment = new Environment();
         this.fog = new Fog(20);
         this.fog.mesh.position.y += 1;
-        this.gerstnerWater = new GerstnerWater();
+        // this.gerstnerWater = new GerstnerWater();
         this.fireflies = new Fireflies(100);
         this.fireflies.mesh.position.y += 5;
         this.mapLevel = new MapLevel(this.group);
@@ -72,10 +72,10 @@ export default class World extends component() {
         this.group.updateMatrixWorld();
     }
 
-    onRaf({ delta }) {
+    onRaf() {
         if (this._isLoaded) {
             // this._keyboard();
-            this.waveRaf(delta);
+            // this.waveRaf(delta);
             /*
             TODO: Collision Items
                 // Check Collision Items
