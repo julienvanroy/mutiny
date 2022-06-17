@@ -49,7 +49,6 @@ export default class SteeringBots extends component() {
         this._renderer = experience.renderer;
         this._mapLevel = experience.world.mapLevel;
         this._group = experience.world.group;
-        this._players = experience.world.players;
 
         this._initSteer();
 
