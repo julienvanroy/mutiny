@@ -35,7 +35,7 @@ export default class SteeringBots extends component() {
             steerWanderAvoidDistance: 0.32,
             steerRadius: 3.2,
             steerFlock: true,
-            steerFlockInSightDistance: 3.2,
+            steerFlockInSightDistance: 6.4,
             steerFlockTooCloseDistance: 1.6,
             steerIdleChance: confAnimation.idle.amt,
             steerBotsCount: steerBotCounts,
@@ -82,6 +82,8 @@ export default class SteeringBots extends component() {
                 bot.entity = entity;
                 entity.idleState = {
                     active: confAnimation.idle.chance(this._params.steerIdleChance),
+                    oldActive: null,
+                    repeat: 0,
                     duration: 0,
                     interval: null,
                 };
@@ -164,6 +166,7 @@ export default class SteeringBots extends component() {
         for (let j = 0; j < this.boundaries.length; j++) {
             for (let i = 0; i < this.entities[j].length; i++) {
                 const entity = this.entities[j][i];
+
                 entity.mesh.scale.set(...Object.values(this._params.botSize));
                 if (!entity.bot.isPlayer) {
                     if (!entity.idleState.interval) {
@@ -175,7 +178,16 @@ export default class SteeringBots extends component() {
                         entity.idleState.interval = null;
 
                         entity.idleState.duration = 0;
+                        entity.idleState.oldActive = entity.idleState.active;
                         entity.idleState.active = confAnimation.idle.chance(this._params.steerIdleChance);
+                    }
+
+                    if (
+                        entity.idleState.oldActive === entity.idleState.active &&
+                        entity.idleState.duration === confAnimation.idle.duration * confAnimation.idle.repeat
+                    ) {
+                        entity.idleState.oldActive = entity.idleState.active;
+                        entity.idleState.active = !entity.idleState.active;
                     }
 
                     entity.maxSpeed = this._params.steerMaxSpeed;
@@ -194,7 +206,9 @@ export default class SteeringBots extends component() {
                         if (!this._params.steerFlock) {
                             entity.wander();
                             entity.avoid(this.entities[j]);
-                        } else entity.flock(this.entities[j]);
+                        } else {
+                            entity.flock(this.entities[j]);
+                        }
                         entity.lookWhereGoing(true);
                         entity.bounce(this.boundaries[j]);
                         entity.update();

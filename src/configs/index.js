@@ -10,7 +10,8 @@ const configs = {
                     return Math.random() < amt;
                 },
                 duration: 2, // in second
-                amt: 0.2,
+                repeatCount: 2,
+                amt: 0.4,
             },
         },
         size: [1.4, 1.4, 1.4],
