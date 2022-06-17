@@ -1,5 +1,5 @@
-import {AnimationMixer} from 'three'
-import {component} from "bidello";
+import { AnimationMixer } from "three";
+import { component } from "bidello";
 
 export default class Animation extends component() {
     constructor(model, animations) {
@@ -7,41 +7,43 @@ export default class Animation extends component() {
     }
 
     init() {
-        const model = this._args[0]
-        const animations = this._args[1]
+        const model = this._args[0];
+        const animations = this._args[1];
         // Mixer
-        this.mixer = new AnimationMixer(model)
+        this.mixer = new AnimationMixer(model);
 
         // All Animations
-        this.animations = animations
+        this.animations = animations;
 
         // Actions
-        this.actions = {}
+        this.actions = {};
 
-        this.actions.current = null
+        this.actions.current = null;
 
         // Play the action
         this.play = (name, duration = 1) => {
-            const newAction = this.actions[name]
-            const oldAction = this.actions.current
+            const newAction = this.actions[name];
+            const oldAction = this.actions.current;
 
-            newAction.reset()
-            newAction.play()
+            newAction.reset();
+            newAction.play();
             if (oldAction && duration > 0) {
-                newAction.crossFadeFrom(oldAction, duration)
+                newAction.crossFadeFrom(oldAction, duration);
             }
 
-            this.actions.current = newAction
-        }
+            this.actions.current = newAction;
+        };
     }
 
     addAction(actionName, animationName) {
-        this.actions[actionName] = this.mixer.clipAction(
-            this.animations.find(elem => elem.name === animationName)
-        )
+        this.actions[actionName] = this.mixer.clipAction(this.animations.find((elem) => elem.name === animationName));
     }
 
-    onRaf({delta}) {
+    areEqual(actionA, actionB) {
+        return actionA._clip.name === actionB._clip.name;
+    }
+
+    onRaf({ delta }) {
         this.mixer.update(delta);
     }
 }
