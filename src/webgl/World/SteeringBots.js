@@ -27,7 +27,7 @@ export default class SteeringBots extends component() {
         super();
 
         this._params = {
-            steerMaxSpeed: 0.32,
+            steerMaxSpeed: 0.032,
             steerMaxForce: 3.2,
             steerWanderDistance: 32,
             steerWanderRadius: 32,
@@ -228,7 +228,7 @@ export default class SteeringBots extends component() {
         });
         folderDebug.addInput(this._params, "steerMaxSpeed", {
             min: 0,
-            max: 1,
+            max: 0.32,
             step: 0.01,
         });
         folderDebug.addInput(this._params, "steerMaxForce", {
