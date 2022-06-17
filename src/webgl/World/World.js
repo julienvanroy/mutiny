@@ -15,7 +15,6 @@ import Fireflies from "@/webgl/Mesh/Fireflies";
 import GerstnerWater from "@/webgl/Mesh/GerstnerWater";
 import MapCollider from "@/webgl/World/MapCollider";
 import Fog from "@/webgl/Mesh/Fog";
-import Engine from "./Engine.js";
 
 export default class World extends component() {
     init() {
@@ -35,11 +34,9 @@ export default class World extends component() {
         this.fog.mesh.position.y += 1;
         this.gerstnerWater = new GerstnerWater();
         this.fireflies = new Fireflies(100);
-        this.fireflies.mesh.position.y += 5;
+        this.fireflies.mesh.position.y += 5
         this.mapLevel = new MapLevel(this.group);
         this.mapCollider = new MapCollider(this.group);
-
-        this.engine = new Engine();
 
         this.players = new Map();
         /*
