@@ -19,17 +19,17 @@ export default class SteeringBots extends component() {
         super();
 
         this._params = {
-            maxSpeed: 0.32,
-            maxForce: 3.2,
-            wanderDistance: 32,
-            wanderRadius: 32,
-            wanderRange: 3.2,
-            wanderAvoidDistance: 0.32,
-            radius: 3.2,
-            flock: true,
-            flockInSightDistance: 3.2,
-            flockTooCloseDistance: 1.6,
-            botsCount: steerBotCounts,
+            steerMaxSpeed: 0.32,
+            steerMaxForce: 3.2,
+            steerWanderDistance: 32,
+            steerWanderRadius: 32,
+            steerWanderRange: 3.2,
+            steerWanderAvoidDistance: 0.32,
+            steerRadius: 3.2,
+            steerFlock: true,
+            steerFlockInSightDistance: 3.2,
+            steerFlockTooCloseDistance: 1.6,
+            steerBotsCount: steerBotCounts,
         };
 
         const experience = new Experience();
@@ -150,17 +150,17 @@ export default class SteeringBots extends component() {
             for (let i = 0; i < this.entities[j].length; i++) {
                 const entity = this.entities[j][i];
                 if (!entity.bot.isPlayer) {
-                    entity.maxSpeed = this._params.maxSpeed;
-                    entity.maxForce = this._params.maxForce;
-                    entity.wanderDistance = this._params.wanderDistance;
-                    entity.wanderRadius = this._params.wanderRadius;
-                    entity.wanderRange = this._params.wanderRange;
-                    entity.avoidDistance = this._params.wanderAvoidDistance;
-                    entity.radius = this._params.radius;
-                    entity.inSightDistance = this._params.flockISightDistance;
-                    entity.tooCloseDistance = this._params.flockTooCloseDistance;
+                    entity.maxSpeed = this._params.steerMaxSpeed;
+                    entity.maxForce = this._params.steerMaxForce;
+                    entity.wanderDistance = this._params.steerWanderAvoidDistance;
+                    entity.wanderRadius = this._params.steerWanderRadius;
+                    entity.wanderRange = this._params.steerWanderRange;
+                    entity.avoidDistance = this._params.steerWanderAvoidDistance;
+                    entity.radius = this._params.steerRadius;
+                    entity.inSightDistance = this._params.steerFlockInSightDistance;
+                    entity.tooCloseDistance = this._params.steerFlockTooCloseDistance;
 
-                    if (!this._params.flock) {
+                    if (!this._params.steerFlock) {
                         entity.wander();
                         entity.avoid(this.entities[j]);
                     } else entity.flock(this.entities[j]);
@@ -180,54 +180,54 @@ export default class SteeringBots extends component() {
             title: "Steer",
             expanded: false,
         });
-        folderDebug.addInput(this._params, "maxSpeed", {
+        folderDebug.addInput(this._params, "steerMaxSpeed", {
             min: 0,
             max: 1,
             step: 0.01,
         });
-        folderDebug.addInput(this._params, "maxForce", {
+        folderDebug.addInput(this._params, "steerMaxForce", {
             min: 0,
             max: 10,
             step: 0.1,
         });
-        folderDebug.addInput(this._params, "wanderDistance", {
+        folderDebug.addInput(this._params, "steerWanderDistance", {
             min: 0,
             max: 100,
             step: 0.1,
         });
-        folderDebug.addInput(this._params, "wanderRadius", {
+        folderDebug.addInput(this._params, "steerWanderRadius", {
             min: 0,
             max: 100,
             step: 0.1,
         });
-        folderDebug.addInput(this._params, "wanderRange", {
+        folderDebug.addInput(this._params, "steerWanderRange", {
             min: 0,
             max: 10,
             step: 0.1,
         });
-        folderDebug.addInput(this._params, "wanderAvoidDistance", {
+        folderDebug.addInput(this._params, "steerWanderAvoidDistance", {
             min: 0,
             max: 10,
             step: 0.1,
         });
-        folderDebug.addInput(this._params, "radius", {
+        folderDebug.addInput(this._params, "steerRadius", {
+            min: 0,
+            max: 10,
+            step: 0.1,
+        });
+        folderDebug.addInput(this._params, "steerFlock");
+        folderDebug.addInput(this._params, "steerFlockInSightDistance", {
             min: 0,
             max: 100,
             step: 0.1,
         });
-        folderDebug.addInput(this._params, "flock");
-        folderDebug.addInput(this._params, "flockInSightDistance", {
-            min: 0,
-            max: 100,
-            step: 0.1,
-        });
-        folderDebug.addInput(this._params, "flockTooCloseDistance", {
+        folderDebug.addInput(this._params, "steerFlockTooCloseDistance", {
             min: 0,
             max: 100,
             step: 0.1,
         });
         folderDebug
-            .addInput(this._params, "botsCount", {
+            .addInput(this._params, "steerBotsCount", {
                 x: { min: 0, max: 32, step: 1 },
                 y: { min: 0, max: 32, step: 1 },
                 z: { min: 0, max: 32, step: 1 },
