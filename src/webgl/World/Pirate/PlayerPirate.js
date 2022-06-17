@@ -2,7 +2,7 @@ import { component } from "bidello";
 import { Box3, Line3, Matrix4, Quaternion, Vector2, Vector3 } from "three";
 import Experience from "../../Experience";
 import Pirate from "./Pirate";
-import { mapToArray, sample } from "@/utils";
+import { flatten, mapToArray, sample } from "@/utils";
 import configs from "@/configs";
 import BotPirate from "./BotPirate";
 import useColyseusStore from "@/store/colyseus";
@@ -20,7 +20,7 @@ export default class PlayerPirate extends component(Pirate) {
         this._debug = experience.debug;
         this._controls = experience.controls;
 
-        this._bots = experience.world.bots;
+        this._bots = experience.world.steeringBots.bots;
         this._players = experience.world.players;
 
         this._vectorControls = new Vector2();
@@ -171,7 +171,9 @@ export default class PlayerPirate extends component(Pirate) {
             this.bot = null;
         }
 
-        this.bot = sample(Object.values(this._bots).filter((bot) => !bot.isPlayer && bot.id !== this.target.id));
+        this.bot = sample(
+            Object.values(flatten(this._bots)).filter((bot) => !bot.isPlayer && bot.id !== this.target.id)
+        );
 
         this.bot.isPlayer = true;
         this.mesh = this.bot.mesh;

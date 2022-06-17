@@ -150,7 +150,7 @@ export default class World extends component() {
                     console.log(`chosen as targets`, [...chosenAsTargets]);
 
                     targetsToChose = playersIds.filter((pId) => pId !== playerId);
-                    console.log(`targets to chode`, [...targetsToChose]);
+                    console.log(`targets to chose`, [...targetsToChose]);
 
                     playerTarget = sample(diffArray(targetsToChose, chosenAsTargets));
 
