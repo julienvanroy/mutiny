@@ -14,30 +14,9 @@ export default class Pirate {
 
         this.body = body;
 
-        if (!this.body) this.generateBody();
-        this._initModel();
-        this._initAnimation();
-    }
-
-    generateBody() {
-        this.body = {};
-        for (const [key, value] of Object.entries(configs.character.body)) {
-            this.body[key] = {
-                tag: key,
-                alphaTexture: value.alphaTexture,
-                shuffleMesh: value.shuffleMesh,
-                addColor: value.addColor,
-                meshes: value.meshes,
-                mesh: value.shuffleMesh
-                    ? sample(
-                          value.meshes.map(({ name, texture, color: colors }) => ({
-                              name,
-                              texture,
-                              color: colors ? sample(colors) : undefined,
-                          }))
-                      )
-                    : undefined,
-            };
+        if (this.body) {
+            this._initModel();
+            this._initAnimation();
         }
     }
 

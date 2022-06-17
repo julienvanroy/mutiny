@@ -68,6 +68,7 @@ export default class SteeringBots extends component() {
                 let bot = this.bots[index][i];
                 let entity = new SteeringEntity(bot.mesh);
                 entity.bot = bot;
+                bot.entity = entity;
 
                 let position = new Vector3(
                     randomNumberInRange(box.min.x, box.max.x),
@@ -81,8 +82,6 @@ export default class SteeringBots extends component() {
                 this._group.bots.add(entity);
             }
         });
-
-        console.log(this._group.bots);
     }
 
     _initBots() {
@@ -149,7 +148,6 @@ export default class SteeringBots extends component() {
         for (let j = 0; j < this.boundaries.length; j++) {
             for (let i = 0; i < this.entities[j].length; i++) {
                 const entity = this.entities[j][i];
-
                 if (!entity.bot.isPlayer) {
                     entity.maxSpeed = this._params.maxSpeed;
                     entity.maxForce = this._params.maxForce;
@@ -160,11 +158,9 @@ export default class SteeringBots extends component() {
                     entity.tooCloseDistance = this._params.tooCloseDistance;
                     entity.radius = this._params.radius;
                     entity.avoidDistance = this._params.avoidDistance;
-
                     entity.wander();
                     entity.avoid(this.entities[j]);
                     entity.flock(this.entities[j]);
-
                     entity.lookWhereGoing(true);
                     entity.bounce(this.boundaries[j]);
                     entity.update();
