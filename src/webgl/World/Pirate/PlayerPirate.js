@@ -186,7 +186,7 @@ export default class PlayerPirate extends component(Pirate) {
         this.bot.isPlayer = true;
         this.bot.playerId = this.id;
         this.mesh = this.bot.mesh;
-        this._initAnimation();
+        // this._initAnimation();
     }
 
     onRaf({ delta }) {
