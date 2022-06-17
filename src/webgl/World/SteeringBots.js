@@ -166,13 +166,6 @@ export default class SteeringBots extends component() {
     }
 
     onRaf() {
-        // const steeringEntities = flatten(this.entities).filter((entity) =>
-        //     mapToArray(this._players, true)
-        //         .map(({ id }) => id)
-        //         .every((playerId) => playerId !== entity.bot.playerId)
-        // );
-
-        // if (this._players.size > 0 || this._debug.active) {
         for (let j = 0; j < this.boundaries.length; j++) {
             for (let i = 0; i < this.entities[j].length; i++) {
                 const entity = this.entities[j][i];
@@ -239,7 +232,6 @@ export default class SteeringBots extends component() {
                 }
             }
         }
-        // }
     }
 
     onDebug() {
