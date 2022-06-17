@@ -13,6 +13,7 @@ const configs = {
                 amt: 0.2,
             },
         },
+        size: [1.4, 1.4, 1.4],
         body: {
             hat: {
                 shuffleMesh: true,

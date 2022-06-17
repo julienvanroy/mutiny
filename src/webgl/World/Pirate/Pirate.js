@@ -23,7 +23,7 @@ export default class Pirate {
         this.mesh = clone(this.charaResource.scene);
 
         this.mesh.position.set(0, 0, 0);
-        this.mesh.scale.set(1.4, 1.4, 1.4);
+        this.mesh.scale.set(...configs.character.size);
         this._group.notBots.add(this.mesh);
 
         let rangeColor;

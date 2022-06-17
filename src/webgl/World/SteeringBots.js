@@ -8,13 +8,20 @@ import { flatten, randomNumberInRange, sample, uuid } from "@/utils";
 import { Vector3 } from "three";
 import { Group } from "three";
 
+const confAnimation = configs.character.animation;
+
 const steerBotCounts = {
     x: configs.map.steerBotCounts[0],
     y: configs.map.steerBotCounts[1],
     z: configs.map.steerBotCounts[2],
 };
 
-const confAnimation = configs.character.animation;
+const botSize = {
+    x: configs.character.size[0],
+    y: configs.character.size[1],
+    z: configs.character.size[2],
+};
+
 export default class SteeringBots extends component() {
     constructor() {
         super();
@@ -32,7 +39,7 @@ export default class SteeringBots extends component() {
             steerFlockTooCloseDistance: 1.6,
             steerIdleChance: confAnimation.idle.amt,
             steerBotsCount: steerBotCounts,
-            botSize: { x: 1.4, y: 1.4, z: 1.4 },
+            botSize,
         };
 
         const experience = new Experience();
