@@ -177,9 +177,7 @@ export default class SteeringBots extends component() {
             for (let i = 0; i < this.entities[j].length; i++) {
                 const entity = this.entities[j][i];
                 const animation = entity.bot.animation;
-                const velocity = entity.bot.isPlayer
-                    ? this._players.get(entity.bot.playerId).velocity
-                    : entity.velocity.length();
+                const velocity = entity.velocity.length();
 
                 entity.mesh.scale.set(...Object.values(this._params.botSize));
 
