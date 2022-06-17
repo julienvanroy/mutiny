@@ -79,10 +79,6 @@ export default class PlayerPirate extends component(Pirate) {
         return this._vectorControls.length > 0.5;
     }
 
-    get velocity() {
-        return this._vectorControls.length();
-    }
-
     _move(delta) {
         if (this.isMoving) {
             const boostRun = this.isRunning ? this._speedRun : 1;
