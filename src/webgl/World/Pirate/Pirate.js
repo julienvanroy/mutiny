@@ -2,7 +2,6 @@ import { Mesh, Color, CircleGeometry, MeshBasicMaterial, MeshStandardMaterial, L
 import Experience from "../../Experience";
 import configs from "@/configs";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils";
-import { sample } from "@/utils";
 import Animation from "@/webgl/Animation";
 
 export default class Pirate {
