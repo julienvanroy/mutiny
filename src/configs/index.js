@@ -15,7 +15,7 @@ const configs = {
             },
             active: {
                 walkingTimeScale: 1,
-                runningTimeScale: 6.4,
+                runningTimeScale: 3.2,
             },
         },
         size: [1.4, 1.4, 1.4],
