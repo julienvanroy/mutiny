@@ -320,10 +320,12 @@ export default class SteeringBots extends component() {
             y: { min: 0.1, max: 3.2, step: 0.1 },
             z: { min: 0.1, max: 3.2, step: 0.1 },
         });
-        folderDebug.addInput(this._params, "runningSpeed", {
-            min: 1,
-            max: 10,
-            step: 0.1,
-        });
+        folderDebug
+            .addInput(this._params, "runningSpeed", {
+                min: 1,
+                max: 10,
+                step: 0.1,
+            })
+            .on("change", ({ value }) => (confAnimation.active.runningTimeScale = value));
     }
 }
