@@ -111,8 +111,7 @@ export default class Pirate {
         this.animation.actions.dead.setLoop(LoopOnce);
         this.animation.actions.dead.clampWhenFinished = true;
 
-        this.animation.actions.current = this.animation.actions.walk;
-        this.animation.play("walk");
+        this.animation.play("idle");
     }
 
     _getTargetData() {

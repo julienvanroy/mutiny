@@ -40,6 +40,7 @@ export default class SteeringBots extends component() {
             steerIdleChance: confAnimation.idle.amt,
             steerBotsCount: steerBotCounts,
             botSize,
+            runningSpeed: confAnimation.active.runningTimeScale,
         };
 
         const experience = new Experience();
@@ -48,6 +49,7 @@ export default class SteeringBots extends component() {
         this._renderer = experience.renderer;
         this._mapLevel = experience.world.mapLevel;
         this._group = experience.world.group;
+        this._players = experience.world.players;
 
         this._initSteer();
 
@@ -87,6 +89,7 @@ export default class SteeringBots extends component() {
                     duration: 0,
                     interval: null,
                 };
+                entity.steeringGroupIndex = index;
 
                 let position = new Vector3(
                     randomNumberInRange(box.min.x, box.max.x),
@@ -163,16 +166,22 @@ export default class SteeringBots extends component() {
     }
 
     onRaf() {
+        // const steeringEntities = flatten(this.entities).filter((entity) =>
+        //     mapToArray(this._players, true)
+        //         .map(({ id }) => id)
+        //         .every((playerId) => playerId !== entity.bot.playerId)
+        // );
+
+        // if (this._players.size > 0 || this._debug.active) {
         for (let j = 0; j < this.boundaries.length; j++) {
             for (let i = 0; i < this.entities[j].length; i++) {
                 const entity = this.entities[j][i];
                 const animation = entity.bot.animation;
-                const velocity = entity.velocity.length();
-                entity.mesh.scale.set(...Object.values(this._params.botSize));
+                const velocity = entity.bot.isPlayer
+                    ? this._players.get(entity.bot.playerId).velocity
+                    : entity.velocity.length();
 
-                if (animation.actions.current === animation.actions.walk) {
-                    animation.actions.current.setEffectiveTimeScale(2);
-                }
+                entity.mesh.scale.set(...Object.values(this._params.botSize));
 
                 if (!entity.bot.isPlayer) {
                     if (!entity.idleState.interval) {
@@ -221,16 +230,18 @@ export default class SteeringBots extends component() {
                     }
 
                     if (velocity === 0) {
-                        if (animation.actions.current !== animation.actions.idle) animation.play("idle");
+                        if (!animation.areEqual(animation.actions.current, animation.actions.idle))
+                            animation.play("idle");
                     } else {
-                        if (animation.actions.current !== animation.actions.walk) animation.play("walk");
-                        if (velocity >= 0.16) animation.actions.current.setEffectiveTimeScale(2);
+                        if (!animation.areEqual(animation.actions.current, animation.actions.walk))
+                            animation.play("walk");
+                        if (velocity >= this._params.steerMaxSpeed / 1.6)
+                            animation.actions.current.setEffectiveTimeScale(this._params.runningSpeed);
                     }
-
-                    console.log;
                 }
             }
         }
+        // }
     }
 
     onDebug() {
@@ -318,6 +329,11 @@ export default class SteeringBots extends component() {
             x: { min: 0.1, max: 3.2, step: 0.1 },
             y: { min: 0.1, max: 3.2, step: 0.1 },
             z: { min: 0.1, max: 3.2, step: 0.1 },
+        });
+        folderDebug.addInput(this._params, "runningSpeed", {
+            min: 1,
+            max: 10,
+            step: 0.1,
         });
     }
 }

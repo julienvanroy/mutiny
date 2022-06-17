@@ -75,9 +75,17 @@ export default class PlayerPirate extends component(Pirate) {
         return this._vectorControls.x !== 0 || this._vectorControls.y !== 0;
     }
 
+    get isRunning() {
+        return this._vectorControls.length > 0.5;
+    }
+
+    get velocity() {
+        return this._vectorControls.length();
+    }
+
     _move(delta) {
         if (this.isMoving) {
-            const boostRun = this._vectorControls.length() > 0.5 ? this._speedRun : 1;
+            const boostRun = this.isRunning ? this._speedRun : 1;
             this.mesh.position.z -= this._vectorControls.y * delta * this._speedMove * boostRun;
             this.mesh.position.x += this._vectorControls.x * delta * this._speedMove * boostRun;
         }
@@ -176,7 +184,9 @@ export default class PlayerPirate extends component(Pirate) {
         );
 
         this.bot.isPlayer = true;
+        this.bot.playerId = this.id;
         this.mesh = this.bot.mesh;
+        this._initAnimation();
     }
 
     onRaf({ delta }) {
@@ -189,10 +199,17 @@ export default class PlayerPirate extends component(Pirate) {
          */
         //this._updateCollision(delta)
 
-        if (this.body) {
-            if (!this.isMoving && this.animation.actions.current !== this.animation.actions.idle)
-                this.animation.play("idle");
-            else if (this.animation.actions.current !== this.animation.actions.walk) this.animation.play("walk");
+        if (this.mesh) {
+            if (!this.isMoving) {
+                if (!this.animation.areEqual(this.animation.actions.current, this.animation.actions.idle))
+                    this.animation.play("idle");
+            } else if (!this.animation.areEqual(this.animation.actions.current, this.animation.actions.walk)) {
+                this.animation.play("walk");
+                if (this.isRunning)
+                    this.animation.actions.current.setEffectiveTimeScale(
+                        configs.character.animation.active.runningTimeScale
+                    );
+            }
         }
     }
 
