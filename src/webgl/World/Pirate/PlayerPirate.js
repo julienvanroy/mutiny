@@ -204,7 +204,6 @@ export default class PlayerPirate extends component(Pirate) {
                 !this.bot.animation.areEqual(this.bot.animation.actions.current, this.bot.animation.actions.walk)
             ) {
                 this.bot.animation.play("walk");
-                console.log(this.isRunning, this._debugRunning);
                 if (this.isRunning || this._debugRunning)
                     this.bot.animation.actions.current.setEffectiveTimeScale(
                         configs.character.animation.active.runningTimeScale
