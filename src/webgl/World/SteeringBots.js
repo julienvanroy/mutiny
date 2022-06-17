@@ -32,6 +32,7 @@ export default class SteeringBots extends component() {
             steerFlockTooCloseDistance: 1.6,
             steerIdleChance: confAnimation.idle.amt,
             steerBotsCount: steerBotCounts,
+            botSize: { x: 1.4, y: 1.4, z: 1.4 },
         };
 
         const experience = new Experience();
@@ -156,6 +157,7 @@ export default class SteeringBots extends component() {
         for (let j = 0; j < this.boundaries.length; j++) {
             for (let i = 0; i < this.entities[j].length; i++) {
                 const entity = this.entities[j][i];
+                entity.mesh.scale.set(...Object.values(this._params.botSize));
                 if (!entity.bot.isPlayer) {
                     if (!entity.idleState.interval) {
                         entity.idleState.interval = setInterval(() => (entity.idleState.duration += 1), 1000);
@@ -254,7 +256,6 @@ export default class SteeringBots extends component() {
             max: 1,
             step: 0.1,
         });
-
         folderDebug
             .addInput(this._params, "steerBotsCount", {
                 x: { min: 0, max: 32, step: 1 },
@@ -277,5 +278,10 @@ export default class SteeringBots extends component() {
                 this._renderer.renderLists.dispose();
                 this._initSteer();
             });
+        folderDebug.addInput(this._params, "botSize", {
+            x: { min: 0.1, max: 3.2, step: 0.1 },
+            y: { min: 0.1, max: 3.2, step: 0.1 },
+            z: { min: 0.1, max: 3.2, step: 0.1 },
+        });
     }
 }
