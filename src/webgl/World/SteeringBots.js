@@ -166,8 +166,14 @@ export default class SteeringBots extends component() {
         for (let j = 0; j < this.boundaries.length; j++) {
             for (let i = 0; i < this.entities[j].length; i++) {
                 const entity = this.entities[j][i];
-
+                const animation = entity.bot.animation;
+                const velocity = entity.velocity.length();
                 entity.mesh.scale.set(...Object.values(this._params.botSize));
+
+                if (animation.actions.current === animation.actions.walk) {
+                    animation.actions.current.setEffectiveTimeScale(2);
+                }
+
                 if (!entity.bot.isPlayer) {
                     if (!entity.idleState.interval) {
                         entity.idleState.interval = setInterval(() => (entity.idleState.duration += 1), 1000);
@@ -213,6 +219,15 @@ export default class SteeringBots extends component() {
                         entity.bounce(this.boundaries[j]);
                         entity.update();
                     }
+
+                    if (velocity === 0) {
+                        if (animation.actions.current !== animation.actions.idle) animation.play("idle");
+                    } else {
+                        if (animation.actions.current !== animation.actions.walk) animation.play("walk");
+                        if (velocity >= 0.16) animation.actions.current.setEffectiveTimeScale(2);
+                    }
+
+                    console.log;
                 }
             }
         }
