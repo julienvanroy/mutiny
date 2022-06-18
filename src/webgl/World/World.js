@@ -1,9 +1,9 @@
 import Environment from "./Environment.js";
-import { component } from "bidello";
+import {component} from "bidello";
 import Experience from "@/webgl/Experience";
-import { Euler, Group, Quaternion } from "three";
+import {Euler, Group, Quaternion} from "three";
 import PlayerPirate from "@/webgl/World/Pirate/PlayerPirate";
-import { diffArray, sample, shuffle } from "@/utils/index.js";
+import {diffArray, sample, shuffle} from "@/utils/index.js";
 import BotPirate from "./Pirate/BotPirate.js";
 import MapLevel from "@/webgl/World/MapLevel";
 import useColyseusStore from "@/store/colyseus.js";
@@ -42,7 +42,7 @@ export default class World extends component() {
     }
 
     waveRaf(delta) {
-        if(!this.gerstnerWater) return;
+        if (!this.gerstnerWater) return;
         const waveInfo = this.gerstnerWater.getWaveInfo(
             this.group.position.x,
             this.group.position.z,
@@ -64,12 +64,12 @@ export default class World extends component() {
         this.assignTargets();
     }
 
-    onAddPlayer({ playerId }) {
+    onAddPlayer({playerId}) {
         this.players.set(playerId, new PlayerPirate(playerId, this.mapCollider.collider));
         console.log(`player ${playerId} added`, this.players.get(playerId));
     }
 
-    onMovePlayer({ playerId, vector2 }) {
+    onMovePlayer({playerId, vector2}) {
         const player = this.players.get(playerId);
         player.vectorControls = vector2;
     }
@@ -87,7 +87,7 @@ export default class World extends component() {
             title: "addPlayer",
         });
         btnAddPlayer.on("click", () => {
-            this.onAddPlayer({ playerId: "debug" });
+            this.onAddPlayer({playerId: "debug"});
             btnAddPlayer.dispose();
         });
     }
@@ -142,8 +142,8 @@ export default class World extends component() {
         }
 
         this.players.forEach((p) => {
-            if (p.target instanceof PlayerPirate) p.target._setBot();
-            else if (p.target instanceof BotPirate) p._setBot();
+            if (p.target instanceof PlayerPirate) p.target.setBot();
+            else if (p.target instanceof BotPirate) p.setBot();
 
             useColyseusStore().updatePlayerTarget(p.id, p.getTargetData(), false, true);
 

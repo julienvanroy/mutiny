@@ -22,9 +22,7 @@ const botSize = {
 };
 
 export default class SteeringBots extends component() {
-    constructor() {
-        super();
-
+    init() {
         this._params = {
             steerMaxSpeed: 0.032,
             steerMaxForce: 3.2,
@@ -43,8 +41,6 @@ export default class SteeringBots extends component() {
 
         const experience = new Experience();
         this._debug = experience.debug;
-        this._scene = experience.scene;
-        this._renderer = experience.renderer;
         this._mapLevel = experience.world.mapLevel;
         this._group = experience.world.group;
 
@@ -120,14 +116,14 @@ export default class SteeringBots extends component() {
         for (let j = 0; j < Object.keys(this._mapLevel.planes).length; j++) {
             this.characters.push([]);
             for (let i = 0; i < configs.map.steerBotCounts[j]; i++) {
-                let body = this._genBody();
+                let body = this._generateBody();
 
                 let duplicataCount = 0;
                 while (
                     flatten(this.characters).find((charaBody) => JSON.stringify(charaBody) === JSON.stringify(body))
                 ) {
                     duplicataCount++;
-                    body = this._genBody();
+                    body = this._generateBody();
                 }
 
                 console.log(`Generative characters ${count + 1}: ${duplicataCount} duplicata times`);
@@ -138,7 +134,7 @@ export default class SteeringBots extends component() {
         }
     }
 
-    _genBody() {
+    _generateBody() {
         let body = {};
         for (const [key, value] of Object.entries(configs.character.body)) {
             body[key] = {
@@ -211,6 +207,7 @@ export default class SteeringBots extends component() {
                         entity.lookWhereGoing(true);
                         entity.bounce(this.boundaries[j]);
                         entity.update();
+                        entity.rotation.set(0, entity.rotation.y, 0)
                     }
                 }
             }
@@ -276,12 +273,6 @@ export default class SteeringBots extends component() {
             max: 1,
             step: 0.1,
         });
-        folderDebug
-            .addInput(this._params, "steerBotsCount", {
-                x: { min: 0, max: 32, step: 1 },
-                y: { min: 0, max: 32, step: 1 },
-                z: { min: 0, max: 32, step: 1 },
-            })
         folderDebug.addInput(this._params, "botSize", {
             x: { min: 0.1, max: 3.2, step: 0.1 },
             y: { min: 0.1, max: 3.2, step: 0.1 },

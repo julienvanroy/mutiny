@@ -165,7 +165,7 @@ export default class PlayerPirate extends component(Pirate) {
         }
     }
 
-    _setBot() {
+    setBot() {
         if (this.bot) {
             this.bot.isPlayer = false;
             this.bot = null;
