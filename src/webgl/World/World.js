@@ -9,9 +9,9 @@ import MapLevel from "@/webgl/World/MapLevel";
 import useColyseusStore from "@/store/colyseus.js";
 import Fireflies from "@/webgl/Mesh/Fireflies";
 import GerstnerWater from "@/webgl/Mesh/GerstnerWater";
-import MapCollider from "@/webgl/World/MapCollider";
 import Fog from "@/webgl/Mesh/Fog";
 import SteeringBots from "@/webgl/World/SteeringBots";
+import MapCollider from "@/webgl/World/MapCollider";
 
 export default class World extends component() {
     init() {
@@ -21,12 +21,7 @@ export default class World extends component() {
         this._camera = experience.camera;
 
         this.group = new Group();
-        this.group.notBots = new Group();
-        this.group.bots = new Group();
-        this.group.add(this.group.notBots);
-        this.group.add(this.group.bots);
-
-        this._isLoaded = false;
+        this._scene.add(this.group);
     }
 
     onResourcesIsReady() {
@@ -43,32 +38,26 @@ export default class World extends component() {
 
         this.steeringBots = new SteeringBots();
 
-        this._scene.add(this.group);
         this.onDebug();
-        this._isLoaded = true;
     }
 
     waveRaf(delta) {
+        if(!this.gerstnerWater) return;
         const waveInfo = this.gerstnerWater.getWaveInfo(
             this.group.position.x,
             this.group.position.z,
             this.gerstnerWater.water.material.uniforms.time.value
         );
-        this.group.notBots.position.y = waveInfo.position.y + 2;
-        this.group.bots.position.y = waveInfo.position.y + 2;
+        this.group.position.y = waveInfo.position.y + 2;
         const quaternion = new Quaternion().setFromEuler(
             new Euler(waveInfo.normal.x, waveInfo.normal.y, waveInfo.normal.z)
         );
-        this.group.notBots.quaternion.rotateTowards(quaternion, delta * 0.5);
-        this.group.bots.quaternion.rotateTowards(quaternion, delta * 0.5);
-
+        this.group.quaternion.rotateTowards(quaternion, delta * 0.5);
         this.group.updateMatrixWorld();
     }
 
     onRaf({delta}) {
-        if (this._isLoaded) {
-            this.waveRaf(delta);
-        }
+        this.waveRaf(delta);
     }
 
     onAssignTargets() {
@@ -152,12 +141,11 @@ export default class World extends component() {
                 break;
         }
 
-        console.log(this.players);
         this.players.forEach((p) => {
             if (p.target instanceof PlayerPirate) p.target._setBot();
             else if (p.target instanceof BotPirate) p._setBot();
 
-            useColyseusStore().updatePlayerTarget(p.id, p._getTargetData(), false, true);
+            useColyseusStore().updatePlayerTarget(p.id, p.getTargetData(), false, true);
 
             console.log(`player ${p.id} has target ${p.target.id} ${p.target.bot ? `of bot ${p.target.bot.id}` : ""}`);
         });

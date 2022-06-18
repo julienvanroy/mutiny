@@ -6,7 +6,6 @@ import configs from "@/configs";
 import BotPirate from "./Pirate/BotPirate";
 import { flatten, randomNumberInRange, sample, uuid } from "@/utils";
 import { Vector3 } from "three";
-import { Group } from "three";
 
 const confAnimation = configs.character.animation;
 
@@ -97,7 +96,7 @@ export default class SteeringBots extends component() {
                 entity.position.set(position.x, position.y, position.z);
 
                 this.entities[index].push(entity);
-                this._group.bots.add(entity);
+                this._group.add(entity);
             }
         });
     }
@@ -283,22 +282,6 @@ export default class SteeringBots extends component() {
                 y: { min: 0, max: 32, step: 1 },
                 z: { min: 0, max: 32, step: 1 },
             })
-            .on("change", (e) => {
-                Object.values(e.value).forEach((v, i) => (configs.map.steerBotCounts[i] = v));
-                this._group.bots.children.forEach((child) => {
-                    this._group.bots.remove(child);
-                    child.mesh.traverse((c) => {
-                        if (c.geometry) c.geometry.dispose();
-                        if (c.material) c.material.dispose();
-                        this._scene.remove(c);
-                    });
-                });
-                this._group.remove(this._group.bots);
-                this._group.bots = new Group();
-                this._group.add(this._group.bots);
-                this._renderer.renderLists.dispose();
-                this._initSteer();
-            });
         folderDebug.addInput(this._params, "botSize", {
             x: { min: 0.1, max: 3.2, step: 0.1 },
             y: { min: 0.1, max: 3.2, step: 0.1 },

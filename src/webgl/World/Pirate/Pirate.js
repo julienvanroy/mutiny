@@ -1,6 +1,5 @@
 import { Mesh, Color, CircleGeometry, MeshBasicMaterial, MeshStandardMaterial, LoopOnce } from "three";
 import Experience from "../../Experience";
-import configs from "@/configs";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils";
 import Animation from "@/webgl/Animation";
 
@@ -23,8 +22,8 @@ export default class Pirate {
         this.mesh = clone(this.charaResource.scene);
 
         this.mesh.position.set(0, 0, 0);
-        this.mesh.scale.set(...configs.character.size);
-        this._group.notBots.add(this.mesh);
+        this.mesh.scale.set(1.4, 1.4, 1.4);
+        this._group.add(this.mesh);
 
         let rangeColor;
 
@@ -69,9 +68,11 @@ export default class Pirate {
             }
         });
 
+        this.range = 1.2
+
         // Attack range
         const rangeCircle = new Mesh(
-            new CircleGeometry(configs.character.range / 2, 32),
+            new CircleGeometry(this.range / 2, 32),
             new MeshBasicMaterial({
                 color: new Color(rangeColor).convertSRGBToLinear(),
                 opacity: 0.32,
@@ -113,23 +114,5 @@ export default class Pirate {
 
         this.animation.actions.current = this.animation.actions.walk;
         this.animation.play("walk");
-    }
-
-    _getTargetData() {
-        if (this.target) {
-            let bodyData;
-
-            if (this.target.bot) bodyData = this.target.bot.bodyData;
-            else bodyData = this.target.bodyData;
-
-            return {
-                id: this.target.id,
-                info: bodyData.map(({ tag, name, color, show }) => ({
-                    tag,
-                    img: tag !== "weapon" ? `${name}_${color.replace("#", "")}` : name,
-                    show,
-                })),
-            };
-        } else return undefined;
     }
 }

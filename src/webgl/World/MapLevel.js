@@ -8,15 +8,9 @@ export default class MapLevel {
         this._group = group;
 
         const experience = new Experience();
-        this.resource = experience.resources.items.mapModel;
-        this.texture = experience.resources.items.woodTexture;
-
-        this.model = this.resource.scene.clone();
+        const resource = experience.resources.items.mapModel;
+        this.model = resource.scene.clone();
         this.model.position.set(0, 0, 0);
-
-        this.navMesh = null;
-
-        this.decors = [];
 
         this.planes = {};
 
@@ -25,7 +19,6 @@ export default class MapLevel {
                 if (child.name.includes("voile")) {
                     child.material = new SailMaterial();
                 }
-                if (configs.map.decors.some((name) => child.name.includes(name))) this.decors.push(child);
                 if (configs.map.steerPlanes.includes(child.name)) {
                     child.visible = false;
                     this.planes[child.name] = child;
@@ -33,6 +26,6 @@ export default class MapLevel {
             }
         });
 
-        this._group.notBots.add(this.model);
+        this._group.add(this.model);
     }
 }
