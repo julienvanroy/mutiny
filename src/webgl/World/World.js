@@ -1,19 +1,17 @@
 import Environment from "./Environment.js";
-import { component } from "bidello";
+import {component} from "bidello";
 import Experience from "@/webgl/Experience";
-import { Euler, Group, Quaternion } from "three";
+import {Euler, Group, Quaternion} from "three";
 import PlayerPirate from "@/webgl/World/Pirate/PlayerPirate";
-//import Item from "@/webgl/World/Item";
-//import BoxCollision from "@/webgl/Collision/BoxCollision";
 import { diffArray, sample, shuffle, flatten } from "@/utils/index.js";
 import BotPirate from "./Pirate/BotPirate.js";
 import MapLevel from "@/webgl/World/MapLevel";
 import useColyseusStore from "@/store/colyseus.js";
 import Fireflies from "@/webgl/Mesh/Fireflies";
 import GerstnerWater from "@/webgl/Mesh/GerstnerWater";
-import MapCollider from "@/webgl/World/MapCollider";
 import Fog from "@/webgl/Mesh/Fog";
 import SteeringBots from "@/webgl/World/SteeringBots";
+import MapCollider from "@/webgl/World/MapCollider";
 
 export default class World extends component() {
     init() {
@@ -23,12 +21,7 @@ export default class World extends component() {
         this._camera = experience.camera;
 
         this.group = new Group();
-        this.group.notBots = new Group();
-        this.group.bots = new Group();
-        this.group.add(this.group.notBots);
-        this.group.add(this.group.bots);
-
-        this._isLoaded = false;
+        this._scene.add(this.group);
     }
 
     onResourcesIsReady() {
@@ -45,44 +38,38 @@ export default class World extends component() {
 
         this.steeringBots = new SteeringBots();
 
-        this._scene.add(this.group);
         this.onDebug();
-        this._isLoaded = true;
     }
 
     waveRaf(delta) {
+        if (!this.gerstnerWater) return;
         const waveInfo = this.gerstnerWater.getWaveInfo(
             this.group.position.x,
             this.group.position.z,
             this.gerstnerWater.water.material.uniforms.time.value
         );
-        this.group.notBots.position.y = waveInfo.position.y + 2;
-        this.group.bots.position.y = waveInfo.position.y + 2;
+        this.group.position.y = waveInfo.position.y + 2;
         const quaternion = new Quaternion().setFromEuler(
             new Euler(waveInfo.normal.x, waveInfo.normal.y, waveInfo.normal.z)
         );
-        this.group.notBots.quaternion.rotateTowards(quaternion, delta * 0.5);
-        this.group.bots.quaternion.rotateTowards(quaternion, delta * 0.5);
-
+        this.group.quaternion.rotateTowards(quaternion, delta * 0.5);
         this.group.updateMatrixWorld();
     }
 
-    onRaf({ delta }) {
-        if (this._isLoaded) {
-            this.waveRaf(delta);
-        }
+    onRaf({delta}) {
+        this.waveRaf(delta);
     }
 
     onAssignTargets() {
         this.assignTargets();
     }
 
-    onAddPlayer({ playerId }) {
+    onAddPlayer({playerId}) {
         this.players.set(playerId, new PlayerPirate(playerId, this.mapCollider.collider));
         console.log(`player ${playerId} added`, this.players.get(playerId));
     }
 
-    onMovePlayer({ playerId, vector2 }) {
+    onMovePlayer({playerId, vector2}) {
         const player = this.players.get(playerId);
         player.vectorControls = vector2;
     }
@@ -100,8 +87,7 @@ export default class World extends component() {
             title: "addPlayer",
         });
         btnAddPlayer.on("click", () => {
-            this.onAddPlayer({ playerId: "debug" });
-            this.assignTargets();
+            this.onAddPlayer({playerId: "debug"});
             btnAddPlayer.dispose();
         });
     }
@@ -155,12 +141,11 @@ export default class World extends component() {
                 break;
         }
 
-        console.log(this.players);
         this.players.forEach((p) => {
-            if (p.target instanceof PlayerPirate) p.target._setBot();
-            else if (p.target instanceof BotPirate) p._setBot();
+            if (p.target instanceof PlayerPirate) p.target.setBot();
+            else if (p.target instanceof BotPirate) p.setBot();
 
-            useColyseusStore().updatePlayerTarget(p.id, p._getTargetData(), false, true);
+            useColyseusStore().updatePlayerTarget(p.id, p.getTargetData(), false, true);
 
             console.log(`player ${p.id} has target ${p.target.id} ${p.target.bot ? `of bot ${p.target.bot.id}` : ""}`);
         });

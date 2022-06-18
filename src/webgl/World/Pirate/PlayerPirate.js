@@ -170,7 +170,7 @@ export default class PlayerPirate extends component(Pirate) {
         }
     }
 
-    _setBot() {
+    setBot() {
         if (this.bot) {
             this.bot.isPlayer = false;
             this.bot = null;
@@ -223,7 +223,7 @@ export default class PlayerPirate extends component(Pirate) {
 
         if (
             playerId === this.id &&
-            this.mesh.position.distanceTo(this.target.mesh.position) <= configs.character.range
+            this.mesh.position.distanceTo(this.target.mesh.position) <= this.range
         ) {
             console.log(`player ${this.id} killed their target ${this.target.id}`);
 
@@ -243,6 +243,24 @@ export default class PlayerPirate extends component(Pirate) {
         }
     }
 
+    getTargetData() {
+        if (this.target) {
+            let bodyData;
+
+            if (this.target.bot) bodyData = this.target.bot.bodyData;
+            else bodyData = this.target.bodyData;
+
+            return {
+                id: this.target.id,
+                info: bodyData.map(({ tag, name, color, show }) => ({
+                    tag,
+                    img: tag !== "weapon" ? `${name}_${color.replace("#", "")}` : name,
+                    show,
+                })),
+            };
+        } else return undefined;
+    }
+
     addPoints() {
         useColyseusStore().sendData("addPoint", { playerId: this.id });
     }
@@ -260,7 +278,7 @@ export default class PlayerPirate extends component(Pirate) {
         this.mesh = this.bot.mesh;
 
         this.target = targetPlayer;
-        useColyseusStore().updatePlayerTarget(this.id, this._getTargetData());
+        useColyseusStore().updatePlayerTarget(this.id, this.getTargetData());
 
         console.log(
             `player ${this.id} has new target ${this.target.id} ${
@@ -282,7 +300,7 @@ export default class PlayerPirate extends component(Pirate) {
             );
         }
 
-        useColyseusStore().updatePlayerTarget(this.id, this._getTargetData(), targetGotStolen, onGameStart);
+        useColyseusStore().updatePlayerTarget(this.id, this.getTargetData(), targetGotStolen, onGameStart);
 
         console.log(
             `player ${this.id} has new target ${this.target.id} ${

@@ -29,7 +29,7 @@ export default class MapCollider {
         this.collider = new Mesh(geometry, material);
         this.collider.position.x = 3.75;
 
-        this._group.notBots.add(this.collider);
+        this._group.add(this.collider);
 
         this.onDebug();
     }
@@ -47,7 +47,7 @@ export default class MapCollider {
 
         const visualizer = new MeshBVHVisualizer(this.collider, configDebug.visualizeDepth);
         visualizer.visible = configDebug.displayBVH;
-        this._group.notBots.add(visualizer);
+        this._group.add(visualizer);
 
         // TweakPane
         const folderDebug = this._debug.pane.addFolder({
