@@ -16,6 +16,9 @@ export default class Camera extends component(PerspectiveCamera) {
 
         this.position.set(28, 22, 29);
 
+        this.layers.enable(0)
+        this.layers.enable(1)
+
         this._scene.add(this);
 
         this.onDebug();

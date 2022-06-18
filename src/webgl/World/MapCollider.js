@@ -1,6 +1,6 @@
 import Experience from "../Experience";
 import { MeshBVH, MeshBVHVisualizer } from "three-mesh-bvh";
-import {Mesh, MeshBasicMaterial} from "three";
+import { Mesh, MeshBasicMaterial } from "three";
 
 export default class MapCollider {
     constructor(group) {
@@ -13,7 +13,7 @@ export default class MapCollider {
         const collider = resource.scene.children[0];
 
         // Geometry
-        const geometry = collider.geometry.clone()
+        const geometry = collider.geometry.clone();
         geometry.boundsTree = new MeshBVH(geometry, {
             lazyGeneration: false,
         });
@@ -27,7 +27,7 @@ export default class MapCollider {
 
         // Collider
         this.collider = new Mesh(geometry, material);
-        this.collider.position.x = 3.75
+        this.collider.position.x = 3.75;
 
         this._group.add(this.collider);
 
@@ -54,11 +54,13 @@ export default class MapCollider {
             title: "Map Collider",
             expanded: false,
         });
-        folderDebug.addInput(configDebug, "displayCollider", { label: "Display Collider" }).on('change', ({value}) => {
-            this.collider.visible = value
-        });
-        folderDebug.addInput(configDebug, "displayBVH", { label: "Display BVH" }).on('change', ({value}) => {
-            visualizer.visible = value
+        folderDebug
+            .addInput(configDebug, "displayCollider", { label: "Display Collider" })
+            .on("change", ({ value }) => {
+                this.collider.visible = value;
+            });
+        folderDebug.addInput(configDebug, "displayBVH", { label: "Display BVH" }).on("change", ({ value }) => {
+            visualizer.visible = value;
         });
     }
 }
