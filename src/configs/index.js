@@ -12,6 +12,10 @@ const configs = {
                 repeatCount: 2,
                 amt: 0.4,
             },
+            active: {
+                walkingTimeScale: 1,
+                runningTimeScale: 3.2,
+            },
         },
         size: [1.4, 1.4, 1.4],
         body: {

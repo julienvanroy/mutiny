@@ -37,6 +37,7 @@ export default class SteeringBots extends component() {
             steerIdleChance: confAnimation.idle.amt,
             steerBotsCount: steerBotCounts,
             botSize,
+            runningSpeed: confAnimation.active.runningTimeScale,
         };
 
         const experience = new Experience();
@@ -82,6 +83,7 @@ export default class SteeringBots extends component() {
                     duration: 0,
                     interval: null,
                 };
+                entity.steeringGroupIndex = index;
 
                 let position = new Vector3(
                     randomNumberInRange(box.min.x, box.max.x),
@@ -161,8 +163,11 @@ export default class SteeringBots extends component() {
         for (let j = 0; j < this.boundaries.length; j++) {
             for (let i = 0; i < this.entities[j].length; i++) {
                 const entity = this.entities[j][i];
+                const animation = entity.bot.animation;
+                const velocity = entity.velocity.length();
 
                 entity.mesh.scale.set(...Object.values(this._params.botSize));
+
                 if (!entity.bot.isPlayer) {
                     if (!entity.idleState.interval) {
                         entity.idleState.interval = setInterval(() => (entity.idleState.duration += 1), 1000);
@@ -208,6 +213,17 @@ export default class SteeringBots extends component() {
                         entity.bounce(this.boundaries[j]);
                         entity.update();
                         entity.rotation.set(0, entity.rotation.y, 0)
+                    }
+
+                    if (velocity === 0) {
+                        if (!animation.isCurrent("idle"))
+                            animation.play("idle");
+                    } else {
+                        if (!animation.isCurrent("walk"))
+                            animation.play("walk");
+                        if (velocity >= this._params.steerMaxSpeed / 1.6)
+                            animation.actions.current.setEffectiveTimeScale(this._params.runningSpeed);
+                        else animation.actions.current.setEffectiveTimeScale(confAnimation.active.walkingTimeScale);
                     }
                 }
             }
@@ -278,5 +294,12 @@ export default class SteeringBots extends component() {
             y: { min: 0.1, max: 3.2, step: 0.1 },
             z: { min: 0.1, max: 3.2, step: 0.1 },
         });
+        folderDebug
+            .addInput(this._params, "runningSpeed", {
+                min: 1,
+                max: 10,
+                step: 0.1,
+            })
+            .on("change", ({ value }) => (confAnimation.active.runningTimeScale = value));
     }
 }

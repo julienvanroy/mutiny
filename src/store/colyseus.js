@@ -125,7 +125,7 @@ const useColyseusStore = defineStore("colyseus", {
             };
         },
         sendData(type, value) {
-            this.currentRoom.send(type, value);
+            this.currentRoom?.send(type, value);
         },
         addPseudo(pseudo) {
             this.sendData("addPseudo", {

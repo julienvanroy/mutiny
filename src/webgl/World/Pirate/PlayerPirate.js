@@ -28,6 +28,7 @@ export default class PlayerPirate extends component(Pirate) {
         this._speedMove = configs.character.speed;
         this._targetQuaternion = new Quaternion();
         this._speedRotation = 10;
+        this._debugRunning = false;
 
         this.isOnGround = false;
         this._velocity = new Vector3();
@@ -75,9 +76,13 @@ export default class PlayerPirate extends component(Pirate) {
         return this._vectorControls.x !== 0 || this._vectorControls.y !== 0;
     }
 
+    get isRunning() {
+        return this._vectorControls.length() > (this._debug.active ? 1 : 0.5);
+    }
+
     _move(delta) {
         if (this.isMoving) {
-            const boostRun = this._vectorControls.length() > 0.5 ? this._speedRun : 1;
+            const boostRun = this.isRunning || this._debugRunning ? this._speedRun : 1;
             this.mesh.position.z -= this._vectorControls.y * delta * this._speedMove * boostRun;
             this.mesh.position.x += this._vectorControls.x * delta * this._speedMove * boostRun;
         }
@@ -176,6 +181,7 @@ export default class PlayerPirate extends component(Pirate) {
         );
 
         this.bot.isPlayer = true;
+        this.bot.playerId = this.id;
         this.mesh = this.bot.mesh;
     }
 
@@ -189,16 +195,21 @@ export default class PlayerPirate extends component(Pirate) {
          */
         //this._updateCollision(delta)
 
-        if (this.body) {
-            if (!this.isMoving && this.animation.actions.current !== this.animation.actions.idle)
-                this.animation.play("idle");
-            else if (this.animation.actions.current !== this.animation.actions.walk) this.animation.play("walk");
+        if (this.mesh) {
+            if (!this.isMoving) {
+                if (!this.bot.animation.isCurrent("idle"))
+                    this.bot.animation.play("idle");
+            } else if (!this.bot.animation.isCurrent("walk")) {
+                this.bot.animation.play("walk");
+                if (this.isRunning || this._debugRunning) this.bot.animation.actions.current.setEffectiveTimeScale(configs.character.animation.active.runningTimeScale);
+                else this.bot.animation.actions.current.setEffectiveTimeScale(configs.character.animation.active.walkingTimeScale);
+            }
         }
     }
 
     onAttack({ playerId }) {
         if (playerId === this.id) {
-            this.animation.play("attack");
+            this.bot.animation.play("attack");
         }
 
         if (
@@ -299,6 +310,10 @@ export default class PlayerPirate extends component(Pirate) {
 
         folderDebug.addInput(this, "_useKeyboard", {
             label: "Use Keyboard",
+        });
+
+        folderDebug.addInput(this, "_debugRunning", {
+            label: "Run",
         });
 
         folderDebug.addInput(this, "_speedMove", {
