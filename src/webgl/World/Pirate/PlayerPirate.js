@@ -183,7 +183,6 @@ export default class PlayerPirate extends component(Pirate) {
         this.bot.isPlayer = true;
         this.bot.playerId = this.id;
         this.mesh = this.bot.mesh;
-        // this._initAnimation();
     }
 
     onRaf({ delta }) {
@@ -198,20 +197,12 @@ export default class PlayerPirate extends component(Pirate) {
 
         if (this.mesh) {
             if (!this.isMoving) {
-                if (!this.bot.animation.areEqual(this.bot.animation.actions.current, this.bot.animation.actions.idle))
+                if (!this.bot.animation.isCurrent("idle"))
                     this.bot.animation.play("idle");
-            } else if (
-                !this.bot.animation.areEqual(this.bot.animation.actions.current, this.bot.animation.actions.walk)
-            ) {
+            } else if (!this.bot.animation.isCurrent("walk")) {
                 this.bot.animation.play("walk");
-                if (this.isRunning || this._debugRunning)
-                    this.bot.animation.actions.current.setEffectiveTimeScale(
-                        configs.character.animation.active.runningTimeScale
-                    );
-                else
-                    this.bot.animation.actions.current.setEffectiveTimeScale(
-                        configs.character.animation.active.walkingTimeScale
-                    );
+                if (this.isRunning || this._debugRunning) this.bot.animation.actions.current.setEffectiveTimeScale(configs.character.animation.active.runningTimeScale);
+                else this.bot.animation.actions.current.setEffectiveTimeScale(configs.character.animation.active.walkingTimeScale);
             }
         }
     }

@@ -39,8 +39,8 @@ export default class Animation extends component() {
         this.actions[actionName] = this.mixer.clipAction(this.animations.find((elem) => elem.name === animationName));
     }
 
-    areEqual(actionA, actionB) {
-        return actionA._clip.name === actionB._clip.name;
+    isCurrent(name) {
+        return this.actions.current === this.actions[name];
     }
 
     onRaf({ delta }) {
