@@ -1,8 +1,6 @@
 import { Mesh, Color, CircleGeometry, MeshBasicMaterial, MeshStandardMaterial, LoopOnce } from "three";
 import Experience from "../../Experience";
-import configs from "@/configs";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils";
-import { sample } from "@/utils";
 import Animation from "@/webgl/Animation";
 
 export default class Pirate {
@@ -14,30 +12,9 @@ export default class Pirate {
 
         this.body = body;
 
-        if (!this.body) this.generateBody();
-        this._initModel();
-        this._initAnimation();
-    }
-
-    generateBody() {
-        this.body = {};
-        for (const [key, value] of Object.entries(configs.character.body)) {
-            this.body[key] = {
-                tag: key,
-                alphaTexture: value.alphaTexture,
-                shuffleMesh: value.shuffleMesh,
-                addColor: value.addColor,
-                meshes: value.meshes,
-                mesh: value.shuffleMesh
-                    ? sample(
-                          value.meshes.map(({ name, texture, color: colors }) => ({
-                              name,
-                              texture,
-                              color: colors ? sample(colors) : undefined,
-                          }))
-                      )
-                    : undefined,
-            };
+        if (this.body) {
+            this._initModel();
+            this._initAnimation();
         }
     }
 
@@ -52,6 +29,7 @@ export default class Pirate {
 
         this.mesh.children[0].traverse((child) => {
             if (child instanceof Mesh) {
+                child.layers.set(1)
                 const bodyPart = Object.values(this.body).find(({ meshes }) =>
                     Object.values(meshes)
                         .map(({ name }) => name)
@@ -62,6 +40,7 @@ export default class Pirate {
                     if (bodyPart.mesh.name !== child.name) child.visible = false;
 
                     child.material = new MeshStandardMaterial();
+                    child.material.metalness = 0.0;
 
                     child.material.map = this._resources[bodyPart.mesh.texture];
                     if (bodyPart.addColor) {
@@ -89,9 +68,11 @@ export default class Pirate {
             }
         });
 
+        this.range = 1.2
+
         // Attack range
         const rangeCircle = new Mesh(
-            new CircleGeometry(configs.character.range / 2, 32),
+            new CircleGeometry(this.range / 2, 32),
             new MeshBasicMaterial({
                 color: new Color(rangeColor).convertSRGBToLinear(),
                 opacity: 0.32,
@@ -101,7 +82,7 @@ export default class Pirate {
         );
         rangeCircle.geometry.rotateX(-Math.PI / 2);
         rangeCircle.position.y = 0.32;
-        this.mesh.add(rangeCircle);
+        // this.mesh.add(rangeCircle);
 
         // Body data (to send to gamepad)
         this.bodyData = Object.values(this.body)
@@ -131,25 +112,7 @@ export default class Pirate {
         this.animation.actions.dead.setLoop(LoopOnce);
         this.animation.actions.dead.clampWhenFinished = true;
 
-        this.animation.actions.current = this.animation.actions.walk;
-        this.animation.play("walk");
-    }
-
-    _getTargetData() {
-        if (this.target) {
-            let bodyData;
-
-            if (this.target.bot) bodyData = this.target.bot.bodyData;
-            else bodyData = this.target.bodyData;
-
-            return {
-                id: this.target.id,
-                info: bodyData.map(({ tag, name, color, show }) => ({
-                    tag,
-                    img: tag !== "weapon" ? `${name}_${color.replace("#", "")}` : name,
-                    show,
-                })),
-            };
-        } else return undefined;
+        this.animation.actions.current = this.animation.actions.idle;
+        this.animation.play("idle");
     }
 }

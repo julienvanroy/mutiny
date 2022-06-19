@@ -70,12 +70,20 @@
 <script>
 import useColyseusStore from "@/store/colyseus";
 import TheBottle from "@/components/svg/TheBottle";
+import {onMounted} from "vue";
 
 export default {
   name: "SetUpPlayers",
   components: { TheBottle },
   setup() {
     const colyseus = useColyseusStore();
+
+    onMounted(() => {
+      colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
+        colyseus.players = new Map(Object.entries(players));
+      });
+    })
+
     return { colyseus };
   },
 };

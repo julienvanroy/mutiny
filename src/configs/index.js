@@ -1,18 +1,23 @@
 const configs = {
     character: {
         count: 24, //24
-        colors: ["#3C365A", "#F3E3DD", "#FAA757", "#F86F43", "#6B8CDB"],
         speed: 1.2, //1.2
         rotationSpeed: 0.032,
-        range: 1.2, //10
         animation: {
             idle: {
-                chance() {
-                    return Math.random() < 0.2;
+                chance(amt = 0.2) {
+                    return Math.random() < amt;
                 },
                 duration: 2, // in second
+                repeatCount: 2,
+                amt: 0.4,
+            },
+            active: {
+                walkingTimeScale: 1,
+                runningTimeScale: 3.2,
             },
         },
+        size: [1.4, 1.4, 1.4],
         body: {
             hat: {
                 shuffleMesh: true,
@@ -126,7 +131,8 @@ const configs = {
         cluesTime: [0, 5, 10, 10],
     },
     map: {
-        navMesh: ["NavMesh", "NavMeshShip"],
+        steerPlanes: ["steer-avant", "steer-milieu", "steer-arriere"],
+        steerBotCounts: [8, 8, 8],
         nearRange: 320,
         decors: ["Coffre", "Tonneau", "Canon", "Box", "Boulet"],
     },

@@ -2,7 +2,7 @@ import { component } from "bidello";
 import { Box3, Line3, Matrix4, Quaternion, Vector2, Vector3 } from "three";
 import Experience from "../../Experience";
 import Pirate from "./Pirate";
-import { mapToArray, sample } from "@/utils";
+import { flatten, mapToArray, sample } from "@/utils";
 import configs from "@/configs";
 import BotPirate from "./BotPirate";
 import useColyseusStore from "@/store/colyseus";
@@ -20,7 +20,7 @@ export default class PlayerPirate extends component(Pirate) {
         this._debug = experience.debug;
         this._controls = experience.controls;
 
-        this._bots = experience.world.bots;
+        this._bots = experience.world.steeringBots.bots;
         this._players = experience.world.players;
 
         this._vectorControls = new Vector2();
@@ -28,6 +28,7 @@ export default class PlayerPirate extends component(Pirate) {
         this._speedMove = configs.character.speed;
         this._targetQuaternion = new Quaternion();
         this._speedRotation = 10;
+        this._debugRunning = false;
 
         this.isOnGround = false;
         this._velocity = new Vector3();
@@ -75,9 +76,13 @@ export default class PlayerPirate extends component(Pirate) {
         return this._vectorControls.x !== 0 || this._vectorControls.y !== 0;
     }
 
+    get isRunning() {
+        return this._vectorControls.length() > (this._debug.active ? 1 : 0.5);
+    }
+
     _move(delta) {
         if (this.isMoving) {
-            const boostRun = this._vectorControls.length() > 0.5 ? this._speedRun : 1;
+            const boostRun = this.isRunning || this._debugRunning ? this._speedRun : 1;
             this.mesh.position.z -= this._vectorControls.y * delta * this._speedMove * boostRun;
             this.mesh.position.x += this._vectorControls.x * delta * this._speedMove * boostRun;
         }
@@ -165,15 +170,18 @@ export default class PlayerPirate extends component(Pirate) {
         }
     }
 
-    _setBot() {
+    setBot() {
         if (this.bot) {
             this.bot.isPlayer = false;
             this.bot = null;
         }
 
-        this.bot = sample(Object.values(this._bots).filter((bot) => !bot.isPlayer && bot.id !== this.target.id));
+        this.bot = sample(
+            Object.values(flatten(this._bots)).filter((bot) => !bot.isPlayer && bot.id !== this.target.id)
+        );
 
         this.bot.isPlayer = true;
+        this.bot.playerId = this.id;
         this.mesh = this.bot.mesh;
     }
 
@@ -187,19 +195,26 @@ export default class PlayerPirate extends component(Pirate) {
          */
         //this._updateCollision(delta)
 
-        if (!this.isMoving && this.animation.actions.current !== this.animation.actions.idle)
-            this.animation.play("idle");
-        else if (this.animation.actions.current !== this.animation.actions.walk) this.animation.play("walk");
+        if (this.mesh) {
+            if (!this.isMoving) {
+                if (!this.bot.animation.isCurrent("idle"))
+                    this.bot.animation.play("idle");
+            } else if (!this.bot.animation.isCurrent("walk")) {
+                this.bot.animation.play("walk");
+                if (this.isRunning || this._debugRunning) this.bot.animation.actions.current.setEffectiveTimeScale(configs.character.animation.active.runningTimeScale);
+                else this.bot.animation.actions.current.setEffectiveTimeScale(configs.character.animation.active.walkingTimeScale);
+            }
+        }
     }
 
     onAttack({ playerId }) {
         if (playerId === this.id) {
-            this.animation.play("attack");
+            this.bot.animation.play("attack");
         }
 
         if (
             playerId === this.id &&
-            this.mesh.position.distanceTo(this.target.mesh.position) <= configs.character.range
+            this.mesh.position.distanceTo(this.target.mesh.position) <= this.range
         ) {
             console.log(`player ${this.id} killed their target ${this.target.id}`);
 
@@ -219,6 +234,24 @@ export default class PlayerPirate extends component(Pirate) {
         }
     }
 
+    getTargetData() {
+        if (this.target) {
+            let bodyData;
+
+            if (this.target.bot) bodyData = this.target.bot.bodyData;
+            else bodyData = this.target.bodyData;
+
+            return {
+                id: this.target.id,
+                info: bodyData.map(({ tag, name, color, show }) => ({
+                    tag,
+                    img: tag !== "weapon" ? `${name}_${color.replace("#", "")}` : name,
+                    show,
+                })),
+            };
+        } else return undefined;
+    }
+
     addPoints() {
         useColyseusStore().sendData("addPoint", { playerId: this.id });
     }
@@ -236,7 +269,7 @@ export default class PlayerPirate extends component(Pirate) {
         this.mesh = this.bot.mesh;
 
         this.target = targetPlayer;
-        useColyseusStore().updatePlayerTarget(this.id, this._getTargetData());
+        useColyseusStore().updatePlayerTarget(this.id, this.getTargetData());
 
         console.log(
             `player ${this.id} has new target ${this.target.id} ${
@@ -258,7 +291,7 @@ export default class PlayerPirate extends component(Pirate) {
             );
         }
 
-        useColyseusStore().updatePlayerTarget(this.id, this._getTargetData(), targetGotStolen, onGameStart);
+        useColyseusStore().updatePlayerTarget(this.id, this.getTargetData(), targetGotStolen, onGameStart);
 
         console.log(
             `player ${this.id} has new target ${this.target.id} ${
@@ -277,6 +310,10 @@ export default class PlayerPirate extends component(Pirate) {
 
         folderDebug.addInput(this, "_useKeyboard", {
             label: "Use Keyboard",
+        });
+
+        folderDebug.addInput(this, "_debugRunning", {
+            label: "Run",
         });
 
         folderDebug.addInput(this, "_speedMove", {

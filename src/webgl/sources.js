@@ -2,17 +2,16 @@ import { sRGBEncoding } from "three";
 
 export default [
     {
-        name: 'environmentMapTexture',
-        type: 'cubeTexture',
-        path:
-            [
-                'textures/environmentMap/px.png',
-                'textures/environmentMap/nx.png',
-                'textures/environmentMap/py.png',
-                'textures/environmentMap/ny.png',
-                'textures/environmentMap/pz.png',
-                'textures/environmentMap/nz.png'
-            ]
+        name: "environmentMapTexture",
+        type: "cubeTexture",
+        path: [
+            "textures/environmentMap/px.png",
+            "textures/environmentMap/nx.png",
+            "textures/environmentMap/py.png",
+            "textures/environmentMap/ny.png",
+            "textures/environmentMap/pz.png",
+            "textures/environmentMap/nz.png",
+        ],
     },
     {
         name: "woodTexture",
@@ -23,11 +22,6 @@ export default [
         name: "waterTexture",
         type: "texture",
         path: "textures/water/normals.jpeg",
-    },
-    {
-        name: "mapTutoModel",
-        type: "gltfModel",
-        path: "models/Map/hextile.glb",
     },
     {
         name: "mapModel",
@@ -149,8 +143,8 @@ export default [
         path: "textures/fog/blue.png",
         options: {
             encoding: sRGBEncoding,
-            flipY: false
-        }
+            flipY: false,
+        },
     },
     {
         name: "musicGame",

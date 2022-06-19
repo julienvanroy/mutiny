@@ -1,4 +1,4 @@
-import { Mesh, Scene } from "three";
+import {Mesh, Scene} from "three";
 
 import Debug from "./Utils/Debug.js";
 import Viewport from "./Utils/Viewport.js";
@@ -11,6 +11,7 @@ import Resources from "./Utils/Resources.js";
 import sources from "./sources";
 import settings from "./settings";
 import Controls from "./Controls";
+import PostProcessing from "@/webgl/PostProcessing";
 
 let instance = null;
 
@@ -42,6 +43,7 @@ export default class Experience {
         this.camera = new Camera();
         this.renderer = new Renderer(this.canvas);
         this.world = new World();
+        this.composer = new PostProcessing(this.renderer)
     }
 
     destroy() {

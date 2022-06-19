@@ -40,11 +40,7 @@ export default {
 
     this.colyseus.sendData("getAllPlayers");
 
-    this.colyseus.currentRoom.onMessage("startGame", () => {});
-
-    this.colyseus.currentRoom.onMessage("endGame", () =>
-      this.$router.push("/end-game")
-    );
+    this.colyseus.currentRoom.onMessage("endGame", () => this.$router.push("/end-game"));
 
     this.colyseus.currentRoom.onMessage(
       "joystick",
