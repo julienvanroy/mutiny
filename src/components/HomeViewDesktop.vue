@@ -9,7 +9,98 @@
     </div>
 
     <div class="homepage__under">
-      <img src="images/background-home.png" rel="preload" />
+      <img src="images/home/16_ciel.jpg" rel="preload" />
+      <img
+        class="parallax"
+        data-parallax="1"
+        src="images/home/15_brume.png"
+        rel="preload"
+      />
+      <img
+        class="parallax"
+        data-parallax="-1"
+        src="images/home/14_nuages.png"
+        rel="preload"
+      />
+      <img
+        class="parallax"
+        data-parallax="1.5"
+        src="images/home/13_nuages.png"
+        rel="preload"
+      />
+      <img
+        class="parallax"
+        data-parallax="-2"
+        src="images/home/12_mer.png"
+        rel="preload"
+      />
+      <img
+        class="parallax"
+        data-parallax="2.5"
+        src="images/home/11_bateau.png"
+        rel="preload"
+      />
+      <!-- <img
+        class="parallax"
+        data-parallax="1"
+        src="images/home/10_cible_ombre.png"
+        rel="preload"
+      /> -->
+      <img
+        class="parallax"
+        data-parallax="2.5"
+        src="images/home/09_cible.png"
+        rel="preload"
+      />
+      <img
+        class="parallax"
+        data-parallax="2.5"
+        src="images/home/08_barriere.png"
+        rel="preload"
+      />
+      <img
+        class="parallax"
+        data-parallax="3"
+        src="images/home/07_cordage.png"
+        rel="preload"
+      />
+      <img
+        class="parallax"
+        data-parallax="3"
+        src="images/home/06_cordage.png"
+        rel="preload"
+      />
+      <img
+        class="parallax"
+        data-parallax="3.5"
+        src="images/home/05_mat.png"
+        rel="preload"
+      />
+      <img
+        class="parallax"
+        data-parallax="-4"
+        src="images/home/04_bateau.png"
+        rel="preload"
+      />
+      <img
+        class="parallax"
+        data-parallax="-5"
+        src="images/home/03_perso.png"
+        rel="preload"
+      />
+      <img
+        class="parallax"
+        data-parallax="-4.5"
+        src="images/home/02_voile.png"
+        rel="preload"
+      />
+
+      <img
+        class="parallax"
+        data-parallax="-4.5"
+        src="images/home/01_mat.png"
+        rel="preload"
+      />
     </div>
     <transition name="fade">
       <div v-if="!!isMounted" class="homepage__over">
@@ -67,11 +158,24 @@ export default {
   },
   mounted() {
     this.colyseus.initLobbyRoom();
+    document.addEventListener("mousemove", (e) => this.parallax(e));
+
     this.isMounted = true;
+  },
+  beforeUnmount() {
+    document.removeEventListener("mousemove", (e) => this.parallax(e));
   },
   methods: {
     createRoom(doJoinRoom = true) {
       this.colyseus.createRoom("play_room", doJoinRoom);
+    },
+    parallax(e) {
+      document.querySelectorAll(".parallax").forEach((shift) => {
+        const position = shift.getAttribute("data-parallax");
+        const x = (window.innerWidth - e.pageX * position) / 100;
+        const y = (window.innerHeight - e.pageY * position) / 100;
+        shift.style.transform = `translateX(${x}px) translateY(${y}px)`;
+      });
     },
   },
   computed: {
@@ -156,9 +260,17 @@ export default {
     height: 100%;
     overflow: hidden;
     img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+      position: absolute;
+      top: -6%;
+      left: -8%;
+      right: 0;
+      bottom: 0;
+      width: 110%;
+      height: 106%;
+    }
+    .parallax {
+      transform-origin: center;
+      will-change: transform;
     }
   }
   .credits {
