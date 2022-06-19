@@ -1,13 +1,19 @@
 <template>
-  <ul class="players">
-    <li v-for="player in colyseus.playersArray" :key="player.id">
-      <ThePlayer :player="player" />
-    </li>
-  </ul>
-  <router-link to="end-game"><button class="end-btn">END GAME</button></router-link>
-  <div class="timer-container">
-    <TheTimer />
-  </div>
+  <transition name="fade">
+    <ul v-if="!!isMounted" class="players">
+      <li v-for="player in colyseus.playersArray" :key="player.id">
+        <ThePlayer :player="player" />
+      </li>
+    </ul>
+  </transition>
+  <router-link to="end-game"
+    ><button class="end-btn">END GAME</button></router-link
+  >
+  <transition name="fade">
+    <div v-if="!!isMounted" class="timer-container">
+      <TheTimer />
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -26,6 +32,7 @@ export default {
   data() {
     return {
       players: {},
+      isMounted: false,
     };
   },
   mounted() {
@@ -35,9 +42,15 @@ export default {
 
     this.colyseus.currentRoom.onMessage("endGame", () => this.$router.push("/end-game"));
 
-    this.colyseus.currentRoom.onMessage("joystick", ({ playerSessionId, playerPosition }) => {
-      bidello.trigger({ name: "movePlayer" }, { playerId: playerSessionId, vector2: playerPosition });
-    });
+    this.colyseus.currentRoom.onMessage(
+      "joystick",
+      ({ playerSessionId, playerPosition }) => {
+        bidello.trigger(
+          { name: "movePlayer" },
+          { playerId: playerSessionId, vector2: playerPosition }
+        );
+      }
+    );
 
     this.colyseus.currentRoom.onMessage("attack", ({ playerSessionId }) => {
       bidello.trigger({ name: "attack" }, { playerId: playerSessionId });
@@ -56,6 +69,8 @@ export default {
     // this.colyseus.currentRoom.onMessage("power", ({ playerSessionId }) => {
     //   bidello.trigger({ name: "respawn" }, { playerId: playerSessionId });
     // });
+
+    this.isMounted = true;
   },
 };
 </script>

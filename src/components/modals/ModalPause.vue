@@ -1,37 +1,35 @@
 <template>
-  <transition name="fade">
-    <ModalContainer
-      :title="$t('parameters.pause')"
-      :btnLabel="$t('ui.continue')"
-      :isPause="true"
-    >
-      <div class="modal__pause">
-        <div class="modal__pause-left">
-          <OptionContainer :title="$t('parameters.audio')">
-            <TheRanger :label="$t('parameters.music')" defaultValue="0.5" />
-            <TheRanger :label="$t('parameters.effects')" defaultValue="0.5" />
-            <h3>{{ $t("parameters.graphics") }}</h3>
-            <TheRadioer
-              :subtitle="$t('parameters.quality')"
-              label="graphics"
-              :values="[
-                $t('parameters.low'),
-                $t('parameters.medium'),
-                $t('parameters.high'),
-              ]"
-              :defaultValue="$t('parameters.medium')"
-            />
-            <TheSwitcher v-on:set-fullscreen="setFullscreen" />
-          </OptionContainer>
-        </div>
-        <div class="modal__pause-right">
-          <OptionContainer :title="$t('parameters.controls')">
-            <img :src="`images/parameters/controls-mode-1-${$i18n.locale}.png`" />
-          </OptionContainer>
-        </div>
+  <ModalContainer
+    :title="$t('parameters.pause')"
+    :btnLabel="$t('ui.continue')"
+    :isPause="true"
+  >
+    <div class="modal__pause">
+      <div class="modal__pause-left">
+        <OptionContainer :title="$t('parameters.audio')">
+          <TheRanger :label="$t('parameters.music')" defaultValue="0.5" />
+          <TheRanger :label="$t('parameters.effects')" defaultValue="0.5" />
+          <h3>{{ $t("parameters.graphics") }}</h3>
+          <TheRadioer
+            :subtitle="$t('parameters.quality')"
+            label="graphics"
+            :values="[
+              $t('parameters.low'),
+              $t('parameters.medium'),
+              $t('parameters.high'),
+            ]"
+            :defaultValue="$t('parameters.medium')"
+          />
+          <TheSwitcher v-on:set-fullscreen="setFullscreen" />
+        </OptionContainer>
       </div>
-    </ModalContainer>
-  </transition>
+      <div class="modal__pause-right">
+        <OptionContainer :title="$t('parameters.controls')">
+          <img :src="`images/parameters/controls-mode-1-${$i18n.locale}.png`" />
+        </OptionContainer>
+      </div>
+    </div>
+  </ModalContainer>
 </template>
 
 <script>

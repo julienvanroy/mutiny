@@ -32,7 +32,7 @@
           </ul>
           <ul>
             <li><h2>Design</h2></li>
-            <li><a href="" target="_blank">Marie-Liesse Prunier-Duparge</a></li>
+            <li><a href="" target="_blank">Marie-Liesse de Solages</a></li>
             <li><a href="" target="_blank">Vincent Calas</a></li>
           </ul>
         </div>

@@ -81,15 +81,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.v-enter-active,
-.v-leave-active {
-  transition: opacity 0.64s ease;
-}
-
-.v-enter-from,
-.v-leave-to {
-  opacity: 0;
-}
-</style>
