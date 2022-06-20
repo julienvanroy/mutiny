@@ -144,6 +144,8 @@ export default class PlayerPirate extends component(Pirate) {
         this.target.mesh.matrixWorld.decompose(targetPosition, new Quaternion(), new Vector3());
 
         if (playerId === this.id && position.distanceTo(targetPosition) <= configs.character.range) {
+            this.target.bot.animation.play("dead");
+
             console.log(`player ${this.id} killed their target ${this.target.id}`);
 
             useColyseusStore().sendData("kill", { player: playerId, target: this.target.id });
