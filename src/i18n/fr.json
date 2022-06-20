@@ -22,7 +22,6 @@
   "homepage": {
     "credits": "Crédits",
     "createRoom": "Créer un navire",
-    "homePhraseDesktop": "Un téléphone par joueur est requis pour contrôler son moussaillon.",
     "homePhraseMobile": "Rejoignez une partie depuis le jeu sur ordinateur",
     "infosPlayers": "3 à 8 joueurs",
     "infosEquipments1": "1 téléphone par joueur",
@@ -58,7 +57,7 @@
     }
   },
   "setup": {
-    "playersTitle": "L'équipage",
+    "playersTitle": "Moussaillons",
     "playersPlaceholder1": "Aucun moussaillon sur le pont...",
     "playersPlaceholder2": "“bruits de criquets”",
     "infos1": "Pour intégrer l’équipage, va sur ",

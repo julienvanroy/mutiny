@@ -51,7 +51,7 @@ export default {
   justify-content: space-evenly;
   align-items: center;
   p {
-    max-width: 560px;
+    max-width: 520px;
     text-align: center;
     font-size: $ft-s-medium;
   }
@@ -62,13 +62,13 @@ export default {
     align-items: stretch;
     .connection__code,
     .connection__qrcode {
-      min-width: 200px;
+      width: 300px;
       display: flex;
       justify-content: center;
       align-items: center;
       box-shadow: inset 0px 0px 16px rgba(222, 197, 204, 0.8);
       border-radius: 4px;
-      padding: 50px;
+      padding: 40px 50px;
       .qrcode_inner {
         width: 100px;
       }

@@ -70,7 +70,7 @@
 <script>
 import useColyseusStore from "@/store/colyseus";
 import TheBottle from "@/components/svg/TheBottle";
-import {onMounted} from "vue";
+import { onMounted } from "vue";
 
 export default {
   name: "SetUpPlayers",
@@ -82,7 +82,7 @@ export default {
       colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
         colyseus.players = new Map(Object.entries(players));
       });
-    })
+    });
 
     return { colyseus };
   },
@@ -95,7 +95,7 @@ export default {
   background-image: url("../assets/setup/player-board.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
-  padding: 70px 84px 80px 90px;
+  padding: 80px 84px 90px 90px;
 
   h1 {
     margin: 0;
@@ -114,7 +114,7 @@ export default {
       color: rgba($purple, 0.4);
     }
     .infos {
-      border-top: 2px solid $purple;
+      border-top: 2px solid rgba($purple, 0.2);
       padding-top: 32px;
     }
   }

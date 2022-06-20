@@ -10,7 +10,7 @@
   "ui": {
     "back": "Back",
     "close": "Close",
-    "continue": "Continue",
+    "continue": "Resume",
     "restart": "Restart",
     "replay": "Replay",
     "changeMode": "Change mode",
@@ -22,7 +22,6 @@
   "homepage": {
     "credits": "Credits",
     "createRoom": "Create a vessel",
-    "homePhraseDesktop": "One phone per player is required to control their shipmate",
     "homePhraseMobile": "Join a game from a computer gascreenme",
     "infosPlayers": "3 to 8 players",
     "infosEquipments1": "1 phone per player",
@@ -58,7 +57,7 @@
     }
   },
   "setup": {
-    "playersTitle": "The crew",
+    "playersTitle": "Sailors",
     "playersPlaceholder1": "No sailors on deck...",
     "playersPlaceholder2": "“sounds of crickets“",
     "infos1": "To join the crew, go to ",

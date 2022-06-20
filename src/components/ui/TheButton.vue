@@ -49,7 +49,7 @@ export default {
   justify-content: center;
   align-items: center;
   padding: 10px 30px;
-  min-height: 60px;
+  min-height: 56px;
   border: none;
   background-color: transparent;
   color: $white;

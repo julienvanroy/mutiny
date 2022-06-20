@@ -39,11 +39,11 @@
       <div class="actions">
         <TheButton
           :label="$t('ui.back')"
-          color="back"
+          color="secondary"
           @click="() => $emit('setSelected', null)"
         />
         <TheButton
-          label="GO !"
+          label="A l'abordaaaaage !"
           color="primary"
           @click="startGame()"
           :disabled="!colyseus.roomReadyToPlay"
@@ -178,6 +178,9 @@ export default {
     align-items: center;
     .btn + .btn {
       margin-left: 20px;
+    }
+    .btn-primary {
+      height: 72px;
     }
   }
 }
