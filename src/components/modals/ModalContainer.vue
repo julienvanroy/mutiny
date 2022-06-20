@@ -108,7 +108,7 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        padding-bottom: 60px;
+        padding-bottom: 80px;
       }
       .btn-container {
         position: absolute;
@@ -119,8 +119,11 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        button + button {
+        .btn + .btn {
           margin-left: 20px;
+        }
+        .btn-primary {
+          height: 72px;
         }
       }
       .timer-container {
