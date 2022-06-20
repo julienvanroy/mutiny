@@ -14,7 +14,8 @@ export default class Camera extends component(PerspectiveCamera) {
         this._debug = experience.debug;
         this._canvas = experience.canvas;
 
-        this.position.set(28, 22, 29);
+        this.position.set(25, 25, 25);
+        this.lookAt(0, 0, 0)
 
         this.layers.enable(0)
         this.layers.enable(1)
@@ -33,9 +34,11 @@ export default class Camera extends component(PerspectiveCamera) {
         if (!this._debug.active) return;
 
         // OrbitControls
-        this.controls = new OrbitControls(this, this._canvas);
-        this.controls.enable= true;
-        this.controls.enableDamping = true;
+        if (process.env.NODE_ENV === "production") {
+            this.controls = new OrbitControls(this, this._canvas);
+            this.controls.enable= true;
+            this.controls.enableDamping = true;
+        }
 
         const configDebug = {
             cameraPosition: this.position,
@@ -59,6 +62,8 @@ export default class Camera extends component(PerspectiveCamera) {
 
     onRaf() {
         if (!this._debug.active) return;
-        this.controls.update();
+        if (process.env.NODE_ENV === "production") {
+            this.controls.update();
+        }
     }
 }

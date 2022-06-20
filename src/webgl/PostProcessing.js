@@ -48,13 +48,14 @@ export default class PostProcessing extends component() {
 
         const smaaEffect = new SMAAEffect({preset: this._params.smaa.preset.medium})
         const bloomEffect = new BloomEffect({intensity: this._params.bloom.intensity})
+        // eslint-disable-next-line no-unused-vars
         const toonEffect = new ToneMappingEffect({mode: this._params.tone.mode.ACES_FILMIC})
 
         // Drunk
         const chromaEffect = new ChromaticAberrationEffect()
         const vignetteEffect = new VignetteEffect({darkness: 0.65})
 
-        this.effectPass = new EffectPass(this._camera, smaaEffect, bloomEffect, toonEffect);
+        this.effectPass = new EffectPass(this._camera, smaaEffect, bloomEffect);
         this.effectComposer = new EffectComposer(this._renderer);
 
         this.effectComposer.addPass(this.renderPass);
@@ -64,7 +65,7 @@ export default class PostProcessing extends component() {
 
         this.smaaEffect = this.effectComposer.passes[1].effects[0]
         this.bloomEffect = this.effectComposer.passes[1].effects[1]
-        this.toneEffect = this.effectComposer.passes[1].effects[2]
+        // this.toneEffect = this.effectComposer.passes[1].effects[2]
 
         // Drunk
         this.chromaEffect = this.effectComposer.passes[2].effects[0]
@@ -80,7 +81,7 @@ export default class PostProcessing extends component() {
         setInterval(this.explodeDrunk,6000)
          */
 
-        this.onDebug()
+        // this.onDebug()
     }
 
     explodeDrunk() {
