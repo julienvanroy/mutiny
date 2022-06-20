@@ -48,8 +48,7 @@ export default {
     this.colyseus.sendData("getAllPlayers");
 
     this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
-      delete players[this.colyseus.currentRoom.sessionId];
-      this.players = players;
+      this.players = new Map(Object.entries(players));
 
       this.placeholder = sample(
         diffArray(
