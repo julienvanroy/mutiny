@@ -52,7 +52,7 @@ export default class Environment {
 
         // TweakPane
         const folderDebug = this._debug.pane.addFolder({
-            title: this.constructor.name,
+            title: 'Environment',
             expanded: false,
         });
         const folderSun = folderDebug.addFolder({

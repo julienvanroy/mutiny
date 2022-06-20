@@ -114,7 +114,7 @@ export default class Fireflies extends component() {
 
         // TweakPane
         const folderDebug = this._debug.pane.addFolder({
-            title: this.constructor.name,
+            title: 'Fireflies',
             expanded: false,
         });
         folderDebug.addInput(configDebug, 'firefliesColor', {
