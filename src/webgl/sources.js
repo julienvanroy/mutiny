@@ -29,11 +29,6 @@ export default [
         path: "models/Map/pirate-ship.glb",
     },
     {
-        name: "mapCollider",
-        type: "gltfModel",
-        path: "models/MapCollision/index.glb",
-    },
-    {
         name: "characterModel",
         type: "gltfModel",
         path: "models/Character/personnage03_binary.glb",

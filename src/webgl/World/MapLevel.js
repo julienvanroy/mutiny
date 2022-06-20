@@ -2,6 +2,7 @@ import Experience from "../Experience";
 import { Mesh } from "three";
 import configs from "@/configs";
 import { SailMaterial } from "@/webgl/Materials/SailMaterial";
+import getSize from "@/webgl/Utils/getSize";
 
 export default class MapLevel {
     constructor(group) {
@@ -14,6 +15,8 @@ export default class MapLevel {
 
         this.planes = {};
 
+        this.size = null
+
         this.model.traverse((child) => {
             if (child instanceof Mesh) {
                 if (child.name.includes("voile")) {
@@ -22,6 +25,9 @@ export default class MapLevel {
                 if (configs.map.steerPlanes.includes(child.name)) {
                     child.visible = false;
                     this.planes[child.name] = child;
+                }
+                if(child.name === 'steer-milieu') {
+                    this.size = getSize(child)
                 }
             }
         });
