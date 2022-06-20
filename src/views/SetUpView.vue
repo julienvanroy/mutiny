@@ -6,42 +6,36 @@
 
     <div :class="`setup__under ${null !== selected ? 'details-open' : ''}`">
       <div class="background">
-        <img class="sky bottom" src="images/setup/sky_5.jpg" rel="preload" />
+        <img class="sky bottom" src="images/setup/sky_5.jpg" />
         <img
           class="sky bottom parallax"
           data-parallax="1"
           src="images/setup/sky_4.png"
-          rel="preload"
         />
         <img
           class="sky bottom parallax"
           data-parallax="-1"
           src="images/setup/sky_3.png"
-          rel="preload"
         />
         <img
           class="sky bottom parallax"
           data-parallax="1"
           src="images/setup/sky_2.png"
-          rel="preload"
         />
         <img
           class="sky top parallax"
           data-parallax="1"
           src="images/setup/sky_1.png"
-          rel="preload"
         />
         <img
           class="sea bottom parallax height"
           data-parallax="-1"
           src="images/setup/sea_3.png"
-          rel="preload"
         />
         <img
           class="sea bottom parallax"
           data-parallax="1"
           src="images/setup/sea_2.png"
-          rel="preload"
         />
       </div>
 
@@ -72,7 +66,6 @@
           class="sea parallax"
           data-parallax="-4"
           src="images/setup/sea_1.png"
-          rel="preload"
         />
       </div>
 

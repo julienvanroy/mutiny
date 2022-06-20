@@ -54,7 +54,7 @@ export default {
     background-size: 100% 100%;
     border: none;
     background-color: transparent;
-    width: 52px;
+    width: 64px;
     height: 100%;
     @media (any-hover: hover) {
       &:hover {

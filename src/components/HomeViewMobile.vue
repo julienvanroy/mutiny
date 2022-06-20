@@ -32,11 +32,11 @@
     </div>
     <footer class="homepage__footer">
       <div class="homepage__footer__left">
-        <img src="../assets/mobile/icon-players.svg" />
+        <IconPlayers color="#3C365A" />
         <span>{{ $t("homepage.infosPlayers") }}</span>
       </div>
       <div class="homepage__footer__right">
-        <img src="../assets/mobile/icon-matos.svg" />
+        <IconEquipment color="#3C365A" />
         <span>
           {{ $t("homepage.infosEquipments1") }}
           <br />
@@ -49,12 +49,14 @@
 
 <script>
 import useColyseusStore from "@/store/colyseus";
-import TheButton from "@/components/ui/TheButton.vue";
-import TheInput from "@/components/ui/TheInput.vue";
+import TheButton from "@/components/ui/TheButton";
+import TheInput from "@/components/ui/TheInput";
+import IconPlayers from "@/components/svg/IconPlayers";
+import IconEquipment from "@/components/svg/IconEquipment";
 
 export default {
   name: "HomeViewMobile",
-  components: { TheButton, TheInput },
+  components: { TheButton, TheInput, IconPlayers, IconEquipment },
   setup() {
     const colyseus = useColyseusStore();
     return { colyseus };
@@ -141,11 +143,22 @@ export default {
     padding: 0 32px 20px 32px;
     text-align: left;
 
-    div {
+    &__left,
+    &__right {
       display: flex;
-
-      img {
-        margin-right: 7px;
+      align-items: center;
+      svg {
+        margin-right: 8px;
+      }
+    }
+    &__left {
+      svg {
+        width: 36px;
+      }
+    }
+    &__right {
+      svg {
+        width: 30px;
       }
     }
   }
