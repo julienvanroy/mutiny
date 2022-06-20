@@ -60,38 +60,36 @@
       />
       <img class="parallax" data-parallax="-5" src="images/home/03_perso.png" />
       <img
-        class="parallax"
+        class="parallax voile"
         data-parallax="-4.5"
         src="images/home/02_voile.png"
       />
 
-      <img class="parallax" data-parallax="-4.5" src="images/home/01_mat.png" />
+      <img
+        class="parallax mat"
+        data-parallax="-5.5"
+        src="images/home/01_mat.png"
+      />
     </div>
     <transition name="fade">
       <div v-if="!!isMounted" class="homepage__over">
         <img src="images/logo.png" />
-        <div class="btn-container">
-          <TheButton
-            @click="createRoom"
-            :label="$t('homepage.createRoom')"
-            color="primary"
-          />
-          <p>
-            {{ $t("homepage.homePhraseDesktop") }}
-          </p>
-          <div class="infos">
-            <div>
-              <IconPlayers color="#FDEAD7" />
-              <span>{{ $t("homepage.infosPlayers") }}</span>
-            </div>
-            <div>
-              <IconEquipment color="#FDEAD7" />
-              <span>
-                {{ $t("homepage.infosEquipments1") }}
-                <br />
-                {{ $t("homepage.infosEquipments2") }}
-              </span>
-            </div>
+        <TheButton
+          @click="createRoom"
+          :label="$t('homepage.createRoom')"
+          color="primary"
+        />
+        <div class="infos">
+          <div>
+            <IconPlayers color="#FDEAD7" />
+            <span>{{ $t("homepage.infosPlayers") }}</span>
+          </div>
+          <div>
+            <IconEquipment color="#FDEAD7" />
+            <span>
+              {{ $t("homepage.infosEquipments1") }}
+              {{ $t("homepage.infosEquipments2") }}
+            </span>
           </div>
         </div>
       </div>
@@ -167,61 +165,53 @@ export default {
     height: 100%;
     display: flex;
     flex-flow: column nowrap;
-    justify-content: space-evenly;
+    justify-content: flex-end;
     align-items: center;
+    padding-bottom: 24px;
     img {
       width: 380px;
       @media #{$mq-small} {
         width: 560px;
       }
+      margin-bottom: 140px;
     }
-    .btn-container {
-      max-width: 460px;
+    .btn {
+      margin-bottom: 100px;
+      min-height: 80px;
+      padding: 10px 40px;
+      font-size: $ft-s-medium;
+    }
+    .infos {
       display: flex;
-      flex-flow: column nowrap;
       justify-content: center;
       align-items: center;
-      .btn + .btn {
-        margin-left: 20px;
-      }
-      p {
-        color: $white;
-        font-size: $ft-s-small;
-        font-weight: $ft-w-bold;
-        text-align: center;
-        margin-top: 30px;
-      }
-      .infos {
+      margin-top: 32px;
+      div {
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-top: 64px;
-        div {
-          display: flex;
-          justify-content: center;
-          align-items: center;
+        svg {
+          margin-right: 16px;
+        }
+        span {
+          color: $white;
+          font-size: $ft-s-xsmall;
+          text-align: center;
+        }
+        &:first-of-type {
+          padding-right: 32px;
+          border-right: 1px solid $white;
           svg {
-            margin-right: 8px;
+            width: 36px;
           }
-          span {
-            color: $white;
-            font-size: $ft-s-xsmall;
+        }
+        &:last-of-type {
+          svg {
+            width: 30px;
           }
-          &:first-of-type {
-            padding-right: 32px;
-            svg {
-              width: 36px;
-            }
-          }
-          &:last-of-type {
-            svg {
-              width: 30px;
-            }
-          }
-          & + div {
-            padding-left: 32px;
-            border-left: 2px solid $white;
-          }
+        }
+        & + div {
+          padding-left: 32px;
         }
       }
     }
@@ -232,6 +222,7 @@ export default {
     width: 100%;
     height: 100%;
     overflow: hidden;
+    pointer-events: none;
     img {
       position: absolute;
       top: -6%;
@@ -240,10 +231,17 @@ export default {
       bottom: 0;
       width: 110%;
       height: 106%;
+      pointer-events: none;
     }
     .parallax {
       transform-origin: center;
       will-change: transform;
+    }
+    .voile {
+      top: -10%;
+    }
+    .mat {
+      left: -16%;
     }
   }
   .credits {
