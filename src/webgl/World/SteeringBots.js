@@ -33,7 +33,7 @@ export default class SteeringBots extends component() {
             steerRadius: 3.2,
             steerFlock: true,
             steerFlockInSightDistance: 6.4,
-            steerFlockTooCloseDistance: 1.6,
+            steerFlockTooCloseDistance: 3.6,
             steerIdleChance: confAnimation.idle.amt,
             steerBotsCount: steerBotCounts,
             botSize,

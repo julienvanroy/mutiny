@@ -2,6 +2,8 @@ import { Mesh, Color, CircleGeometry, MeshBasicMaterial, MeshStandardMaterial, L
 import Experience from "../../Experience";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils";
 import Animation from "@/webgl/Animation";
+import configs from "@/configs";
+import {sample} from "@/utils";
 
 export default class Pirate {
     constructor(body = null) {
@@ -10,12 +12,37 @@ export default class Pirate {
         this._resources = experience.resources.items;
         this.charaResource = experience.resources.items.characterModel;
 
-        this.body = body;
+        if(!body) {
+            this.body = this._generateBody()
+        } else this.body = body;
 
         if (this.body) {
             this._initModel();
             this._initAnimation();
         }
+    }
+
+    _generateBody() {
+        let body = {};
+        for (const [key, value] of Object.entries(configs.character.body)) {
+            body[key] = {
+                tag: key,
+                alphaTexture: value.alphaTexture,
+                shuffleMesh: value.shuffleMesh,
+                addColor: value.addColor,
+                meshes: value.meshes,
+                mesh: value.shuffleMesh
+                    ? sample(
+                        value.meshes.map(({ name, texture, color: colors }) => ({
+                            name,
+                            texture,
+                            color: colors ? sample(colors) : undefined,
+                        }))
+                    )
+                    : undefined,
+            };
+        }
+        return body;
     }
 
     _initModel() {

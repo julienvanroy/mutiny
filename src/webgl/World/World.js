@@ -11,7 +11,6 @@ import Fireflies from "@/webgl/Mesh/Fireflies";
 import GerstnerWater from "@/webgl/Mesh/GerstnerWater";
 import Fog from "@/webgl/Mesh/Fog";
 import SteeringBots from "@/webgl/World/SteeringBots";
-import MapCollider from "@/webgl/World/MapCollider";
 
 export default class World extends component() {
     init() {
@@ -33,7 +32,6 @@ export default class World extends component() {
         this.fireflies = new Fireflies(100);
         this.fireflies.mesh.position.y += 5;
         this.mapLevel = new MapLevel(this.group);
-        this.mapCollider = new MapCollider(this.group);
         this.players = new Map();
 
         this.steeringBots = new SteeringBots();
@@ -65,7 +63,7 @@ export default class World extends component() {
     }
 
     onAddPlayer({playerId}) {
-        this.players.set(playerId, new PlayerPirate(playerId, this.mapCollider.collider));
+        this.players.set(playerId, new PlayerPirate(playerId, this.mapLevel.size));
         console.log(`player ${playerId} added`, this.players.get(playerId));
     }
 
