@@ -21,13 +21,16 @@ import useColyseusStore from "@/store/colyseus";
 import bidello from "bidello";
 import TheTimer from "@/components/ui/TheTimer";
 import ThePlayer from "@/components/ui/ThePlayer";
+import useTimerStore from "@/store/timer";
 
 export default {
   name: "GameView",
   components: { TheTimer, ThePlayer },
   setup() {
     const colyseus = useColyseusStore();
-    return { colyseus };
+    const timer = useTimerStore()
+
+    return { colyseus, timer };
   },
   data() {
     return {
@@ -38,7 +41,10 @@ export default {
   mounted() {
     if (!this.colyseus.currentRoom) return;
 
+    // Start Game
     bidello.trigger({ name: "start" });
+    this.timer.reset();
+    this.timer.start();
 
     this.colyseus.sendData("getAllPlayers");
 

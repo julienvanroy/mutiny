@@ -56,6 +56,7 @@ import useWebglStore from "@/store/webgl";
 import ModalOptions from "@/components/modals/ModalOptions";
 import ModalPause from "@/components/modals/ModalPause";
 import useGlobalStore from "@/store/global";
+import useTimerStore from "@/store/timer";
 import useColyseusStore from "./store/colyseus";
 import bidello from "bidello";
 
@@ -79,10 +80,13 @@ export default {
   setup() {
     const route = useRoute();
     const colyseus = useColyseusStore();
+    const timer = useTimerStore()
+
+    console.log(timer)
 
     const path = computed(() => route.path);
 
-    return { path, colyseus };
+    return { path, colyseus, timer };
   },
   mounted() {
     this.resize();
@@ -101,8 +105,10 @@ export default {
     modalShown(newValue, oldValue) {
       if(newValue === 'pause') {
         bidello.trigger({ name: "pause" });
+        this.timer.stop();
       } else if(oldValue === 'pause' && newValue !== 'pause') {
         bidello.trigger({ name: "start" });
+        this.timer.start();
       }
     }
   },
