@@ -9,98 +9,63 @@
     </div>
 
     <div class="homepage__under">
-      <img src="images/home/16_ciel.jpg" rel="preload" />
-      <img
-        class="parallax"
-        data-parallax="1"
-        src="images/home/15_brume.png"
-        rel="preload"
-      />
+      <img src="images/home/16_ciel.jpg" />
+      <img class="parallax" data-parallax="1" src="images/home/15_brume.png" />
       <img
         class="parallax"
         data-parallax="-1"
         src="images/home/14_nuages.png"
-        rel="preload"
       />
       <img
         class="parallax"
         data-parallax="1.5"
         src="images/home/13_nuages.png"
-        rel="preload"
       />
-      <img
-        class="parallax"
-        data-parallax="-2"
-        src="images/home/12_mer.png"
-        rel="preload"
-      />
+      <img class="parallax" data-parallax="-2" src="images/home/12_mer.png" />
       <img
         class="parallax"
         data-parallax="2.5"
         src="images/home/11_bateau.png"
-        rel="preload"
       />
-      <!-- <img
+      <img
         class="parallax"
-        data-parallax="1"
+        data-parallax="2"
         src="images/home/10_cible_ombre.png"
-        rel="preload"
-      /> -->
+      />
       <img
         class="parallax"
         data-parallax="2.5"
         src="images/home/09_cible.png"
-        rel="preload"
       />
       <img
         class="parallax"
         data-parallax="2.5"
         src="images/home/08_barriere.png"
-        rel="preload"
       />
       <img
         class="parallax"
         data-parallax="3"
         src="images/home/07_cordage.png"
-        rel="preload"
       />
       <img
         class="parallax"
         data-parallax="3"
         src="images/home/06_cordage.png"
-        rel="preload"
       />
-      <img
-        class="parallax"
-        data-parallax="3.5"
-        src="images/home/05_mat.png"
-        rel="preload"
-      />
+      <img class="parallax" data-parallax="3.5" src="images/home/05_mat.png" />
       <img
         class="parallax"
         data-parallax="-4"
         src="images/home/04_bateau.png"
-        rel="preload"
       />
-      <img
-        class="parallax"
-        data-parallax="-5"
-        src="images/home/03_perso.png"
-        rel="preload"
-      />
+      <img class="parallax" data-parallax="-5" src="images/home/03_perso.png" />
       <img
         class="parallax"
         data-parallax="-4.5"
         src="images/home/02_voile.png"
-        rel="preload"
       />
 
-      <img
-        class="parallax"
-        data-parallax="-4.5"
-        src="images/home/01_mat.png"
-        rel="preload"
-      />
+      <img class="parallax" data-parallax="-4.5" src="images/home/01_mat.png" />
     </div>
     <transition name="fade">
       <div v-if="!!isMounted" class="homepage__over">
@@ -116,11 +81,11 @@
           </p>
           <div class="infos">
             <div>
-              <img src="images/icons/players.png" />
+              <IconPlayers color="#FDEAD7" />
               <span>{{ $t("homepage.infosPlayers") }}</span>
             </div>
             <div>
-              <img src="images/icons/equipments.png" />
+              <IconEquipment color="#FDEAD7" />
               <span>
                 {{ $t("homepage.infosEquipments1") }}
                 <br />
@@ -142,10 +107,12 @@ import { mapWritableState } from "pinia";
 import useGlobalStore from "@/store/global";
 import TheButton from "@/components/ui/TheButton.vue";
 import CreditsOverlay from "@/components/CreditsOverlay";
+import IconPlayers from "@/components/svg/IconPlayers";
+import IconEquipment from "@/components/svg/IconEquipment";
 
 export default {
   name: "HomeViewDesktop",
-  components: { TheButton, CreditsOverlay },
+  components: { TheButton, CreditsOverlay, IconPlayers, IconEquipment },
   setup() {
     const colyseus = useColyseusStore();
     return { colyseus };
@@ -233,17 +200,23 @@ export default {
           display: flex;
           justify-content: center;
           align-items: center;
-          img {
-            width: 30px;
-            margin-right: 16px;
+          svg {
+            margin-right: 8px;
           }
           span {
             color: $white;
             font-size: $ft-s-xsmall;
-            text-align: center;
           }
           &:first-of-type {
             padding-right: 32px;
+            svg {
+              width: 36px;
+            }
+          }
+          &:last-of-type {
+            svg {
+              width: 30px;
+            }
           }
           & + div {
             padding-left: 32px;
