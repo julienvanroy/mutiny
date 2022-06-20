@@ -238,7 +238,7 @@ export default {
       will-change: transform;
     }
     .voile {
-      top: -10%;
+      top: -14%;
     }
     .mat {
       left: -16%;
