@@ -2,7 +2,7 @@ import { component } from "bidello";
 import { Box3, Line3, Matrix4, Quaternion, Vector2, Vector3 } from "three";
 import Experience from "../../Experience";
 import Pirate from "./Pirate";
-import {clamp, flatten, mapToArray, sample} from "@/utils";
+import { clamp, flatten, mapToArray, sample } from "@/utils";
 import configs from "@/configs";
 import BotPirate from "./BotPirate";
 import useColyseusStore from "@/store/colyseus";
@@ -16,7 +16,7 @@ export default class PlayerPirate extends component(Pirate) {
         this.id = this._args[1];
         this._collider = this._args[2];
 
-        console.log(this._collider)
+        console.log(this._collider);
 
         const experience = new Experience();
         this._debug = experience.debug;
@@ -85,8 +85,16 @@ export default class PlayerPirate extends component(Pirate) {
     _move(delta) {
         if (this.isMoving) {
             const boostRun = this.isRunning || this._debugRunning ? this._speedRun : 1;
-            this.mesh.position.z = clamp(this.mesh.position.z - this._vectorControls.y * delta * this._speedMove * boostRun, -this._collider.z/2, this._collider.z/2 );
-            this.mesh.position.x = clamp(this.mesh.position.x + this._vectorControls.x * delta * this._speedMove * boostRun, -this._collider.x/2, this._collider.x/2 );
+            this.mesh.position.z = clamp(
+                this.mesh.position.z - this._vectorControls.y * delta * this._speedMove * boostRun,
+                -this._collider.z / 2,
+                this._collider.z / 2
+            );
+            this.mesh.position.x = clamp(
+                this.mesh.position.x + this._vectorControls.x * delta * this._speedMove * boostRun,
+                -this._collider.x / 2,
+                this._collider.x / 2
+            );
         }
     }
 
@@ -105,9 +113,10 @@ export default class PlayerPirate extends component(Pirate) {
             this.bot = null;
         }
 
-        this.bot = sample(
-            Object.values(flatten(this._bots)).filter((bot) => !bot.isPlayer && bot.id !== this.target.id)
-        );
+        // this.bot = sample(
+        //     Object.values(flatten(this._bots)).filter((bot) => !bot.isPlayer && bot.id !== this.target.id)
+        // );
+        this.bot = sample(Object.values(this._bots[0]).filter((bot) => !bot.isPlayer && bot.id !== this.target.id));
 
         this.bot.isPlayer = true;
         this.bot.playerId = this.id;
@@ -121,25 +130,40 @@ export default class PlayerPirate extends component(Pirate) {
 
         if (this.mesh) {
             if (!this.isMoving) {
-                if (!this.animation.isCurrent("idle"))
-                    this.animation.play("idle");
+                if (!this.animation.isCurrent("idle")) this.animation.play("idle");
             } else if (!this.animation.isCurrent("walk")) {
                 this.animation.play("walk");
-                if (this.isRunning || this._debugRunning) this.animation.actions.current.setEffectiveTimeScale(configs.character.animation.active.runningTimeScale);
-                else this.animation.actions.current.setEffectiveTimeScale(configs.character.animation.active.walkingTimeScale);
+                if (this.isRunning || this._debugRunning)
+                    this.animation.actions.current.setEffectiveTimeScale(
+                        configs.character.animation.active.runningTimeScale
+                    );
+                else
+                    this.animation.actions.current.setEffectiveTimeScale(
+                        configs.character.animation.active.walkingTimeScale
+                    );
             }
         }
     }
 
     onAttack({ playerId }) {
+        let position, targetPosition, directionVect, playerFacing, isInFront;
         if (playerId === this.id) {
-            this.animation.play("attack");
+            this.bot.animation.play("attack");
+
+            position = new Vector3();
+            this.mesh.matrixWorld.decompose(position, new Quaternion(), new Vector3());
+
+            targetPosition = new Vector3();
+            this.target.mesh.matrixWorld.decompose(targetPosition, new Quaternion(), new Vector3());
+
+            directionVect = targetPosition.clone().sub(position).normalize();
+            playerFacing = this.mesh.getWorldDirection(new Vector3());
+            isInFront = playerFacing.dot(directionVect) > 0;
         }
 
-        if (
-            playerId === this.id &&
-            this.mesh.position.distanceTo(this.target.mesh.position) <= this.range
-        ) {
+        if (playerId === this.id && position.distanceTo(targetPosition) <= configs.character.range && isInFront) {
+            this.target.bot.animation.play("dead");
+
             console.log(`player ${this.id} killed their target ${this.target.id}`);
 
             useColyseusStore().sendData("kill", { player: playerId, target: this.target.id });
@@ -183,7 +207,9 @@ export default class PlayerPirate extends component(Pirate) {
     respawn(targetPlayer) {
         console.log(`player ${this.id} has old target ${this.target.id}, old bot ${this.bot.id}`);
 
-        const selectedBot = sample(Object.values(this._bots).filter((bot) => !bot.isPlayer && bot.id !== this.bot.id));
+        const selectedBot = sample(
+            Object.values(this._bots[0]).filter((bot) => !bot.isPlayer && bot.id !== this.bot.id)
+        );
         selectedBot.isPlayer = true;
 
         this.bot.isPlayer = false;
@@ -193,6 +219,7 @@ export default class PlayerPirate extends component(Pirate) {
         this.mesh = this.bot.mesh;
 
         this.target = targetPlayer;
+
         useColyseusStore().updatePlayerTarget(this.id, this.getTargetData());
 
         console.log(
@@ -205,7 +232,7 @@ export default class PlayerPirate extends component(Pirate) {
     switchTarget(targetGotStolen = false, onGameStart = false) {
         if (this.target instanceof BotPirate) {
             this.target = sample(
-                Object.values(this._bots).filter((bot) => bot.id !== this.target.id && bot.id !== this.bot.id)
+                Object.values(flatten(this._bots)).filter((bot) => bot.id !== this.target.id && bot.id !== this.bot.id)
             );
         } else if (this.target instanceof PlayerPirate) {
             this.target = sample(

@@ -1,4 +1,4 @@
-import {Mesh, Scene} from "three";
+import { Mesh, Scene } from "three";
 
 import Debug from "./Utils/Debug.js";
 import Viewport from "./Utils/Viewport.js";
@@ -43,7 +43,7 @@ export default class Experience {
         this.camera = new Camera();
         this.renderer = new Renderer(this.canvas);
         this.world = new World();
-        this.composer = new PostProcessing(this.renderer)
+        this.composer = new PostProcessing(this.renderer);
     }
 
     destroy() {

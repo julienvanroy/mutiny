@@ -3,7 +3,7 @@ import Experience from "../../Experience";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils";
 import Animation from "@/webgl/Animation";
 import configs from "@/configs";
-import {sample} from "@/utils";
+import { sample } from "@/utils";
 
 export default class Pirate {
     constructor(body = null) {
@@ -12,8 +12,8 @@ export default class Pirate {
         this._resources = experience.resources.items;
         this.charaResource = experience.resources.items.characterModel;
 
-        if(!body) {
-            this.body = this._generateBody()
+        if (!body) {
+            this.body = this._generateBody();
         } else this.body = body;
 
         if (this.body) {
@@ -33,12 +33,12 @@ export default class Pirate {
                 meshes: value.meshes,
                 mesh: value.shuffleMesh
                     ? sample(
-                        value.meshes.map(({ name, texture, color: colors }) => ({
-                            name,
-                            texture,
-                            color: colors ? sample(colors) : undefined,
-                        }))
-                    )
+                          value.meshes.map(({ name, texture, color: colors }) => ({
+                              name,
+                              texture,
+                              color: colors ? sample(colors) : undefined,
+                          }))
+                      )
                     : undefined,
             };
         }
@@ -56,7 +56,7 @@ export default class Pirate {
 
         this.mesh.children[0].traverse((child) => {
             if (child instanceof Mesh) {
-                child.layers.set(1)
+                child.layers.set(1);
                 const bodyPart = Object.values(this.body).find(({ meshes }) =>
                     Object.values(meshes)
                         .map(({ name }) => name)
@@ -95,7 +95,7 @@ export default class Pirate {
             }
         });
 
-        this.range = 1.2
+        this.range = configs.character.range;
 
         // Attack range
         const rangeCircle = new Mesh(
