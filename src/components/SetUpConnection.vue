@@ -63,10 +63,17 @@ export default {
     .qrcode {
       display: flex;
       justify-content: center;
-      align-items: center;
-      border-left: 2px solid $salmon;
       padding-left: 20px;
+      background-color: $white;
+      position: relative;
+      width: 60px;
+      height: 60px;
+      border-radius: 4px;
+
       img {
+        position: absolute;
+        left: 0;
+        top: 0;
         width: 60px;
       }
       @media (any-hover: hover) {
