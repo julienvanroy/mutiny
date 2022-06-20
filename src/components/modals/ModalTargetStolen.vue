@@ -1,7 +1,7 @@
 <template>
   <transition name="fade">
     <div>
-      <img src="/images/modals/icon-steal.svg/" alt="" />
+      <img src="/images/modals/icon-new-target.svg/" alt="" />
       {{ $t("modals.modalTargetStolen", { player }) }}
     </div>
   </transition>
