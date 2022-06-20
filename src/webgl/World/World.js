@@ -26,10 +26,10 @@ export default class World extends component() {
     onResourcesIsReady() {
         console.log("world is ready");
         this.environment = new Environment();
-        this.fog = new Fog(20);
+        this.fog = new Fog(3150, 27, 76, '#0a0042');
         this.fog.mesh.position.y += 1;
         this.gerstnerWater = new GerstnerWater();
-        this.fireflies = new Fireflies(100);
+        this.fireflies = new Fireflies(325, 29, 21, '#ff4800');
         this.fireflies.mesh.position.y += 5;
         this.mapLevel = new MapLevel(this.group);
         this.players = new Map();
