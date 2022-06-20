@@ -13,6 +13,7 @@
           :placeholder="$t('homepage.mobileContent.inputPlaceholder')"
           :width="236"
           :height="48"
+          :maxlength="9"
           v-model="roomId"
           center
         />

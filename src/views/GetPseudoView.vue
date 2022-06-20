@@ -5,7 +5,7 @@
     </header>
     <h2>{{ $t("getPseudo.title") }}</h2>
     <div class="get-pseudo__content">
-      <TheInput v-model="pseudo" :placeholder="placeholder" :width="236" :height="48" center />
+      <TheInput v-model="pseudo" :placeholder="placeholder" :width="236" :height="48" :maxlength="18" center />
       <span v-if="pseudoNotValid">{{ $t("getPseudo.error") }}</span>
       <TheButton
         :label="$t('getPseudo.ctaRandom')"
