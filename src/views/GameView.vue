@@ -38,6 +38,8 @@ export default {
   mounted() {
     if (!this.colyseus.currentRoom) return;
 
+    bidello.trigger({ name: "start" });
+
     this.colyseus.sendData("getAllPlayers");
 
     this.colyseus.currentRoom.onMessage("endGame", () => this.$router.push("/end-game"));

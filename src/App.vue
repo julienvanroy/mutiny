@@ -57,6 +57,7 @@ import ModalOptions from "@/components/modals/ModalOptions";
 import ModalPause from "@/components/modals/ModalPause";
 import useGlobalStore from "@/store/global";
 import useColyseusStore from "./store/colyseus";
+import bidello from "bidello";
 
 export default {
   name: "App",
@@ -97,6 +98,13 @@ export default {
           orientationReady: newValue,
         });
     },
+    modalShown(newValue, oldValue) {
+      if(newValue === 'pause') {
+        bidello.trigger({ name: "pause" });
+      } else if(oldValue === 'pause' && newValue !== 'pause') {
+        bidello.trigger({ name: "start" });
+      }
+    }
   },
   methods: {
     resize() {
