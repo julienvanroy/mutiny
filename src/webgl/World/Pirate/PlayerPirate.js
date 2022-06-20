@@ -105,9 +105,10 @@ export default class PlayerPirate extends component(Pirate) {
             this.bot = null;
         }
 
-        this.bot = sample(
-            Object.values(flatten(this._bots)).filter((bot) => !bot.isPlayer && bot.id !== this.target.id)
-        );
+        // this.bot = sample(
+        //     Object.values(flatten(this._bots)).filter((bot) => !bot.isPlayer && bot.id !== this.target.id)
+        // );
+        this.bot = sample(Object.values(this._bots[0]).filter((bot) => !bot.isPlayer && bot.id !== this.target.id));
 
         this.bot.isPlayer = true;
         this.bot.playerId = this.id;
@@ -136,10 +137,13 @@ export default class PlayerPirate extends component(Pirate) {
             this.animation.play("attack");
         }
 
-        if (
-            playerId === this.id &&
-            this.mesh.position.distanceTo(this.target.mesh.position) <= this.range
-        ) {
+        let position = new Vector3();
+        this.mesh.matrixWorld.decompose(position, new Quaternion(), new Vector3());
+
+        let targetPosition = new Vector3();
+        this.target.mesh.matrixWorld.decompose(targetPosition, new Quaternion(), new Vector3());
+
+        if (playerId === this.id && position.distanceTo(targetPosition) <= configs.character.range) {
             console.log(`player ${this.id} killed their target ${this.target.id}`);
 
             useColyseusStore().sendData("kill", { player: playerId, target: this.target.id });
@@ -183,7 +187,9 @@ export default class PlayerPirate extends component(Pirate) {
     respawn(targetPlayer) {
         console.log(`player ${this.id} has old target ${this.target.id}, old bot ${this.bot.id}`);
 
-        const selectedBot = sample(Object.values(this._bots).filter((bot) => !bot.isPlayer && bot.id !== this.bot.id));
+        const selectedBot = sample(
+            Object.values(this._bots[0]).filter((bot) => !bot.isPlayer && bot.id !== this.bot.id)
+        );
         selectedBot.isPlayer = true;
 
         this.bot.isPlayer = false;
@@ -193,6 +199,7 @@ export default class PlayerPirate extends component(Pirate) {
         this.mesh = this.bot.mesh;
 
         this.target = targetPlayer;
+
         useColyseusStore().updatePlayerTarget(this.id, this.getTargetData());
 
         console.log(
@@ -205,7 +212,7 @@ export default class PlayerPirate extends component(Pirate) {
     switchTarget(targetGotStolen = false, onGameStart = false) {
         if (this.target instanceof BotPirate) {
             this.target = sample(
-                Object.values(this._bots).filter((bot) => bot.id !== this.target.id && bot.id !== this.bot.id)
+                Object.values(flatten(this._bots)).filter((bot) => bot.id !== this.target.id && bot.id !== this.bot.id)
             );
         } else if (this.target instanceof PlayerPirate) {
             this.target = sample(

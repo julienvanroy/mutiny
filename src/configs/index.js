@@ -2,7 +2,7 @@ const configs = {
     character: {
         count: 24, //24
         speed: 1.2, //1.2
-        rotationSpeed: 0.032,
+        range: 3.2,
         animation: {
             idle: {
                 chance(amt = 0.2) {
