@@ -10,6 +10,7 @@ export default class Raf {
         this.onTick = this.onTick.bind(this);
         this.start();
         this.onTick(this.startTime);
+        this.pause()
 
         this.onDebug()
     }

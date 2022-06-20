@@ -44,12 +44,7 @@
               </div>
               <div
                 class="remove"
-                @click="
-                  this.colyseus.sendData(
-                    'ejectPlayer',
-                    colyseus.playersArray[index].id
-                  )
-                "
+                @click="ejectedPlayer(colyseus.playersArray[index].id)"
               >
                 <img src="images/icons/remove-player.png" />
               </div>
@@ -86,6 +81,11 @@ export default {
 
     return { colyseus };
   },
+  methods: {
+    ejectedPlayer(playerId) {
+      this.colyseus.sendData('ejectPlayer', playerId)
+    }
+  }
 };
 </script>
 

@@ -24,11 +24,11 @@
               }
             "
           />
-          <!-- todo: btn quit game -->
           <TheButton
             v-if="!!isPause"
             :label="$t('ui.quit')"
             color="secondary"
+            link="/"
           />
         </div>
         <div v-if="!!isPause" class="timer-container">

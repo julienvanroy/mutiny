@@ -132,7 +132,7 @@ const configs = {
     },
     map: {
         steerPlanes: ["steer-avant", "steer-milieu", "steer-arriere"],
-        steerBotCounts: [28, 0, 0],
+        steerBotCounts: [16, 0, 0],
         nearRange: 320,
         decors: ["Coffre", "Tonneau", "Canon", "Box", "Boulet"],
     },
