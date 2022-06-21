@@ -130,15 +130,15 @@ export default class PlayerPirate extends component(Pirate) {
 
         if (this.mesh) {
             if (!this.isMoving) {
-                if (!this.animation.isCurrent("idle")) this.animation.play("idle");
-            } else if (!this.animation.isCurrent("walk")) {
-                this.animation.play("walk");
+                if (!this.bot.animation.isCurrent("idle")) this.bot.animation.play("idle");
+            } else if (!this.bot.animation.isCurrent("walk")) {
+                this.bot.animation.play("walk");
                 if (this.isRunning || this._debugRunning)
-                    this.animation.actions.current.setEffectiveTimeScale(
+                    this.bot.animation.actions.current.setEffectiveTimeScale(
                         configs.character.animation.active.runningTimeScale
                     );
                 else
-                    this.animation.actions.current.setEffectiveTimeScale(
+                    this.bot.animation.actions.current.setEffectiveTimeScale(
                         configs.character.animation.active.walkingTimeScale
                     );
             }
