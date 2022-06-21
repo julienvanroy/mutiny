@@ -17,6 +17,7 @@ const useAudioStore = defineStore("audio", {
             this.effectVolume = parseFloat(value)
             this.audios.click.volume(value)
             this.audios.newPlayer.volume(value)
+            this.audios.attack.volume(value)
         }
     }
 });

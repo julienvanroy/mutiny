@@ -29,7 +29,6 @@
 
 <script>
 import useColyseusStore from "@/store/colyseus";
-// import TheBottle from "@/components/svg/TheBottle";
 import PlayerAdded from "@/components/ui/PlayerAdded";
 import { onMounted } from "vue";
 
