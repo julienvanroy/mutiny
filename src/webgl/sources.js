@@ -144,9 +144,49 @@ export default [
     {
         name: "musicGame",
         type: "audio",
-        path: "sound/music.mp3",
+        path: "sound/music-game.mp3",
         options: {
+            volume: 0.5,
+        },
+    },
+    {
+        name: "theme",
+        type: "audio",
+        path: "sound/theme.mp3",
+        options: {
+            volume: 0.5,
             loop: true,
+        },
+    },
+    {
+        name: "click",
+        type: "audio",
+        path: "sound/click.mp3",
+        options: {
+            volume: 0.5,
+        },
+    },
+    {
+        name: "newPlayer",
+        type: "audio",
+        path: "sound/new-player.mp3",
+        options: {
+            volume: 0.5,
+        },
+    },
+    {
+        name: "ticTac",
+        type: "audio",
+        path: "sound/tic-tac.mp3",
+        options: {
+            volume: 0.5,
+        },
+    },
+    {
+        name: "attack",
+        type: "audio",
+        path: "sound/attack.mp3",
+        options: {
             volume: 0.5,
         },
     },
