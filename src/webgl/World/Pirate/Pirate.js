@@ -30,6 +30,7 @@ export default class Pirate {
                 alphaTexture: value.alphaTexture,
                 shuffleMesh: value.shuffleMesh,
                 addColor: value.addColor,
+                refColor: value.refColor,
                 meshes: value.meshes,
                 mesh: value.shuffleMesh
                     ? sample(
@@ -57,6 +58,7 @@ export default class Pirate {
         this.mesh.children[0].traverse((child) => {
             if (child instanceof Mesh) {
                 child.layers.set(1);
+
                 const bodyPart = Object.values(this.body).find(({ meshes }) =>
                     Object.values(meshes)
                         .map(({ name }) => name)
@@ -71,7 +73,9 @@ export default class Pirate {
 
                     child.material.map = this._resources[bodyPart.mesh.texture];
                     if (bodyPart.addColor) {
-                        child.material.color = new Color(bodyPart.mesh.color).convertSRGBToLinear();
+                        child.material.color = new Color(
+                            bodyPart.refColor ? configs.character.colors[bodyPart.mesh.color] : bodyPart.mesh.color
+                        ).convertSRGBToLinear();
                     }
 
                     if (bodyPart.alphaTexture) {
@@ -85,7 +89,7 @@ export default class Pirate {
                     }
                 }
 
-                if (child.name === "Tonneau") rangeColor = bodyPart.mesh.color;
+                if (child.name === "Tonneau") rangeColor = configs.character.colors[bodyPart.mesh.color];
 
                 if (child.name === "Barbe")
                     this.mesh.children[0].getObjectByName("Sourcil").material = child.material.clone();

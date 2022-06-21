@@ -194,7 +194,7 @@ export default class PlayerPirate extends component(Pirate) {
                 stalkersCount: mapToArray(this._players, true).filter((p) => p.target.id === this.id).length,
                 info: bodyData.map(({ tag, name, color, show }) => ({
                     tag,
-                    img: tag !== "weapon" ? `${name}_${color.replace("#", "")}` : name,
+                    img: tag !== "weapon" ? `${name}_${color}` : name,
                     show,
                 })),
             };

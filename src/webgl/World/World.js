@@ -1,7 +1,7 @@
 import Environment from "./Environment.js";
-import {component} from "bidello";
+import { component } from "bidello";
 import Experience from "@/webgl/Experience";
-import {Euler, Group, Quaternion} from "three";
+import { Euler, Group, Quaternion } from "three";
 import PlayerPirate from "@/webgl/World/Pirate/PlayerPirate";
 import { diffArray, sample, shuffle, flatten } from "@/utils/index.js";
 import BotPirate from "./Pirate/BotPirate.js";
@@ -11,6 +11,8 @@ import Fireflies from "@/webgl/Mesh/Fireflies";
 import GerstnerWater from "@/webgl/Mesh/GerstnerWater";
 import Fog from "@/webgl/Mesh/Fog";
 import SteeringBots from "@/webgl/World/SteeringBots";
+import configs from "@/configs/index.js";
+import { Color } from "three";
 
 export default class World extends component() {
     init() {
@@ -26,10 +28,10 @@ export default class World extends component() {
     onResourcesIsReady() {
         console.log("world is ready");
         this.environment = new Environment();
-        this.fog = new Fog(3150, 27, 76, '#0a0042');
+        this.fog = new Fog(3150, 27, 76, "#0a0042");
         this.fog.mesh.position.y += 1;
         this.gerstnerWater = new GerstnerWater();
-        this.fireflies = new Fireflies(325, 29, 21, '#ff4800');
+        this.fireflies = new Fireflies(325, 29, 21, "#ff4800");
         this.fireflies.mesh.position.y += 5;
         this.mapLevel = new MapLevel(this.group);
         this.players = new Map();
@@ -54,7 +56,7 @@ export default class World extends component() {
         this.group.updateMatrixWorld();
     }
 
-    onRaf({delta}) {
+    onRaf({ delta }) {
         this.waveRaf(delta);
     }
 
@@ -62,12 +64,12 @@ export default class World extends component() {
         this.assignTargets();
     }
 
-    onAddPlayer({playerId}) {
+    onAddPlayer({ playerId }) {
         this.players.set(playerId, new PlayerPirate(playerId, this.mapLevel.size));
         console.log(`player ${playerId} added`, this.players.get(playerId));
     }
 
-    onMovePlayer({playerId, vector2}) {
+    onMovePlayer({ playerId, vector2 }) {
         const player = this.players.get(playerId);
         player.vectorControls = vector2;
     }
@@ -85,8 +87,23 @@ export default class World extends component() {
             title: "addPlayer",
         });
         btnAddPlayer.on("click", () => {
-            this.onAddPlayer({playerId: "debug"});
+            this.onAddPlayer({ playerId: "debug" });
             btnAddPlayer.dispose();
+        });
+
+        folderDebug.addInput(configs.character.colors, "noir").on("change", ({ value }) => {
+            flatten(this.steeringBots.bots).forEach((bot) => {
+                bot.mesh.traverse((child) => {
+                    if (child.name.includes("Chapeau")) child.material.color = new Color(value).convertSRGBToLinear();
+                });
+            });
+        });
+        folderDebug.addInput(configs.character.colors, "orange").on("change", ({ value }) => {
+            flatten(this.steeringBots.bots).forEach((bot) => {
+                bot.mesh.traverse((child) => {
+                    if (child.name.includes("Chapeau")) child.material.color = new Color(value).convertSRGBToLinear();
+                });
+            });
         });
     }
 

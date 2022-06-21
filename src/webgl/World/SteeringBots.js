@@ -144,6 +144,7 @@ export default class SteeringBots extends component() {
                 alphaTexture: value.alphaTexture,
                 shuffleMesh: value.shuffleMesh,
                 addColor: value.addColor,
+                refColor: value.refColor,
                 meshes: value.meshes,
                 mesh: value.shuffleMesh
                     ? sample(
@@ -212,15 +213,13 @@ export default class SteeringBots extends component() {
                         entity.lookWhereGoing(true);
                         entity.bounce(this.boundaries[j]);
                         entity.update();
-                        entity.rotation.set(0, entity.rotation.y, 0)
+                        entity.rotation.set(0, entity.rotation.y, 0);
                     }
 
                     if (velocity === 0) {
-                        if (!animation.isCurrent("idle"))
-                            animation.play("idle");
+                        if (!animation.isCurrent("idle")) animation.play("idle");
                     } else {
-                        if (!animation.isCurrent("walk"))
-                            animation.play("walk");
+                        if (!animation.isCurrent("walk")) animation.play("walk");
                         if (velocity >= this._params.steerMaxSpeed / 1.6)
                             animation.actions.current.setEffectiveTimeScale(this._params.runningSpeed);
                         else animation.actions.current.setEffectiveTimeScale(confAnimation.active.walkingTimeScale);
