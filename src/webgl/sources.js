@@ -175,14 +175,6 @@ export default [
         },
     },
     {
-        name: "ticTac",
-        type: "audio",
-        path: "sound/tic-tac.mp3",
-        options: {
-            volume: 0.5,
-        },
-    },
-    {
         name: "attack",
         type: "audio",
         path: "sound/attack.mp3",
