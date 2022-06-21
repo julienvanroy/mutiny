@@ -66,6 +66,7 @@ export default {
       countdownInterval: null,
       isAttack: false,
       stalkerCountStateChange: false,
+      stalkerCountChanges: 0,
     };
   },
   watch: {
@@ -79,10 +80,16 @@ export default {
     },
     stalkerCount() {
       this.stalkerCountStateChange = true;
-      const timeout = setTimeout(() => {
-        this.stalkerCountStateChange = false;
-        clearTimeout(timeout);
-      }, 4800);
+
+      const timeout = setTimeout(
+        () => {
+          this.stalkerCountStateChange = false;
+          clearTimeout(timeout);
+        },
+        this.stalkerCountChanges === 0 ? 0 : 4800
+      );
+
+      if (this.stalkerCountChanges === 0) this.stalkerCountChanges++;
     },
   },
   computed: {
