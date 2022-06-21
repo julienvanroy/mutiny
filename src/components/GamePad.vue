@@ -89,7 +89,7 @@ export default {
         this.stalkerCountChanges === 0 ? 0 : 4800
       );
 
-      if (this.stalkerCountChanges === 0) this.stalkerCountChanges++;
+      this.stalkerCountChanges++;
     },
   },
   computed: {
