@@ -56,7 +56,7 @@ import { computed } from "vue";
 import TheLoader from "@/components/ui/TheLoader";
 import { mapState } from "pinia";
 import { mapWritableState } from "pinia";
-import useWebglStore from "@/store/webgl";
+import useAudioStore from "@/store/audio";
 import ModalOptions from "@/components/modals/ModalOptions";
 import ModalPause from "@/components/modals/ModalPause";
 import useGlobalStore from "@/store/global";
@@ -95,11 +95,11 @@ export default {
   mounted() {
     this.resize();
     window.addEventListener("resize", this.resize, false);
-    window.addEventListener("click", () => this.audio?.click?.play(), false);
+    window.addEventListener("click", () => this.audios?.click?.play(), false);
   },
   beforeUnmount() {
     window.removeEventListener("resize", this.resize, false);
-    window.removeEventListener("click", () => this.audio?.click?.play(), false);
+    window.removeEventListener("click", () => this.audios?.click?.play(), false);
   },
   watch: {
     isLandscape(newValue) {
@@ -133,12 +133,12 @@ export default {
       }
     },
     setTheme() {
-      !!this.themeIsPlaying && !!this.audio?.theme?.playing() ? this.audio?.theme?.pause() : this.audio?.theme?.play()
+      !!this.themeIsPlaying && !!this.audios?.theme?.playing() ? this.audios?.theme?.pause() : this.audios?.theme?.play()
       this.themeIsPlaying = !this.themeIsPlaying;
     },
   },
   computed: {
-    ...mapState(useWebglStore, ["audio"]),
+    ...mapState(useAudioStore, ["audios"]),
     ...mapState(useGlobalStore, ["isMobile", "showFullscreenBtn"]),
     ...mapWritableState(useGlobalStore, [
       "isFullscreen",

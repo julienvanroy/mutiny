@@ -4,7 +4,6 @@ const useWebglStore = defineStore("webgl", {
     state: () => {
         return {
             progressLoading: 0,
-            audio: {}
         };
     },
 });

@@ -6,8 +6,16 @@
     <div class="modal__options">
       <div class="modal__options-left">
         <OptionContainer :title="$t('parameters.audio')">
-          <TheRanger :label="$t('parameters.music')" :value="audio.musicVolume.toString()" @set-value="setMusicVolume"/>
-          <TheRanger :label="$t('parameters.effects')" :value="audio.effectVolume.toString()" @set-value="setEffectVolume"/>
+          <TheRanger
+            :label="$t('parameters.music')"
+            :value="audio.musicVolume.toString()"
+            @set-value="setMusicVolume"
+          />
+          <TheRanger
+            :label="$t('parameters.effects')"
+            :value="audio.effectVolume.toString()"
+            @set-value="setEffectVolume"
+          />
         </OptionContainer>
         <OptionContainer :title="$t('parameters.languages')">
           <LangChanger />
@@ -43,7 +51,7 @@ import useAudioStore from "@/store/audio";
 
 export default {
   name: "ModalOptions",
-  setup () {
+  setup() {
     const audio = useAudioStore();
     return { audio };
   },
@@ -60,13 +68,12 @@ export default {
   },
   methods: {
     setMusicVolume(value) {
-      console.log(value)
-      this.audio.musicVolume = parseFloat(value)
+      this.audio.changeMusicVolume(value);
     },
     setEffectVolume(value) {
-      this.audio.effectVolume = parseFloat(value)
-    }
-  }
+      this.audio.changeEffectVolume(value);
+    },
+  },
 };
 </script>
 

@@ -2,6 +2,7 @@ import { TextureLoader, CubeTextureLoader } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import bidello from "bidello";
 import useWebglStore from "@/store/webgl";
+import useAudioStore from "@/store/audio";
 import { Howl } from "howler";
 
 export default class Resources {
@@ -9,11 +10,12 @@ export default class Resources {
         this.sources = sources;
 
         this.items = {};
-        this.audio = {};
+        this.audios = {};
         this.toLoad = this.sources.length;
         this.loaded = 0;
 
         this._storeWebgl = useWebglStore();
+        this._storeAudio = useAudioStore();
 
         this.setLoaders();
         this.startLoading();
@@ -46,7 +48,7 @@ export default class Resources {
                     src: [source.path],
                     ...source.options,
                     onload: () => {
-                        this.audio[source.name] = file;
+                        this.audios[source.name] = file;
                         this.sourceLoaded(source, file);
                     },
                 });
@@ -68,7 +70,7 @@ export default class Resources {
         this._storeWebgl.progressLoading = this.progressRatio;
 
         if (this.loaded === this.toLoad) {
-            this._storeWebgl.audio = this.audio;
+            this._storeAudio.audios = this.audios;
             bidello.trigger({ name: "resourcesIsReady" });
         }
     }

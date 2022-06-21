@@ -33,7 +33,7 @@
 <script>
 import { mapState } from "pinia";
 import TheBottle from "@/components/svg/TheBottle";
-import useWebglStore from "@/store/webgl";
+import useAudioStore from "@/store/audio";
 
 export default {
   name: "PlayerAdded",
@@ -46,18 +46,18 @@ export default {
   },
   mounted() {
     if (!this.isEmpty) {
-      this.audio?.newPlayer?.play();
+      this.audios?.newPlayer?.play();
     }
   },
   watch: {
     isEmpty(newValue, oldValue) {
       if (oldValue === true && newValue === false) {
-        this.audio?.newPlayer?.play();
+        this.audios?.newPlayer?.play();
       }
     },
   },
   computed: {
-    ...mapState(useWebglStore, ["audio"]),
+    ...mapState(useAudioStore, ["audios"]),
   },
 };
 </script>
