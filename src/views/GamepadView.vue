@@ -15,6 +15,7 @@ import ModalDead from "@/components/modals/ModalDead.vue";
 import ModalTargetStolen from "@/components/modals/ModalTargetStolen.vue";
 import ModalTargetSwitched from "@/components/modals/ModalTargetSwitched.vue";
 import ModalLockGamepad from "@/components/modals/ModalLockGamepad.vue";
+import useAudioStore from "@/store/audio";
 
 export default {
   components: { GamePad, ModalDead, ModalTargetStolen, ModalTargetSwitched, ModalLockGamepad },
@@ -28,11 +29,14 @@ export default {
     };
   },
   computed: {
+    ...mapState(useAudioStore, ["audios"]),
     ...mapState(useGlobalStore, ["isLandscape"]),
     showModalDead() {
+      this.audios?.killed?.play()
       return this.colyseus.player.isKilled;
     },
     showModalTargetSwitched() {
+      this.audios?.point?.play()
       return !this.colyseus.player.isKilled && this.colyseus.player.targetChanged && !this.showModalTargetStolen;
     },
     showModalTargetStolen() {
