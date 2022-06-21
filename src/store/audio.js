@@ -12,6 +12,7 @@ const useAudioStore = defineStore("audio", {
         changeMusicVolume(value) {
             this.musicVolume = parseFloat(value)
             this.audios.theme.volume(value)
+            this.audios.musicGame.volume(value)
         },
         changeEffectVolume(value) {
             this.effectVolume = parseFloat(value)
