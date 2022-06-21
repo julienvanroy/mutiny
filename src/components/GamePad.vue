@@ -21,14 +21,14 @@
       </div>
     </div>
     <div class="gamepad__right">
-      <p class="stalkers-counter-container">
+      <p class="stalkers-counter-container" :class="{ '--state-change': stalkerCountStateChange }">
         {{ $t("gamepad.stalkersCounterLeft") }}
         <br />
-        <stalkers-counter :count="stalkersCount" />
+        <stalkers-counter :count="stalkerCount" :state-change="stalkerCountStateChange" />
         <span>{{ $t("gamepad.stalkersCounterRight") }}</span>
       </p>
       <button ref="attack" class="attack" @click="colyseus.sendData('attack')">
-        <img src="/images/gamepad/btn-attack.png" />
+        <btn-attack @click="attack" :attack="isAttack" />
       </button>
       <!-- <button ref="power" @click="colyseus.sendData('power', true)">{{$t("gamepad.power")}}</button> -->
     </div>
@@ -41,9 +41,10 @@ import nipplejs from "nipplejs";
 import ThePlayer from "./ui/ThePlayer";
 import StalkersCounter from "./ui/StalkersCounter";
 import configs from "@/configs";
+import BtnAttack from "./svg/BtnAttack.vue";
 
 export default {
-  components: { ThePlayer, StalkersCounter },
+  components: { ThePlayer, StalkersCounter, BtnAttack },
   name: "GamePad",
   setup() {
     const colyseus = useColyseusStore();
@@ -60,10 +61,12 @@ export default {
     return {
       joystick: [],
       interval: null,
-      stalkersCount: 1,
       nextClueIndex: 1,
       countdown: configs.game.cluesTime[0],
       countdownInterval: null,
+      isAttack: false,
+      stalkerCountStateChange: false,
+      stalkerCountChanges: 0,
     };
   },
   watch: {
@@ -74,6 +77,19 @@ export default {
       this.nextClueIndex = 1;
       this.countdown = configs.game.cluesTime[this.nextClueIndex];
       this.setIntervalClues();
+    },
+    stalkerCount() {
+      this.stalkerCountStateChange = true;
+
+      const timeout = setTimeout(
+        () => {
+          this.stalkerCountStateChange = false;
+          clearTimeout(timeout);
+        },
+        this.stalkerCountChanges === 0 ? 0 : 4800
+      );
+
+      this.stalkerCountChanges++;
     },
   },
   computed: {
@@ -89,8 +105,18 @@ export default {
     targetName() {
       return this.colyseus.playersArray.find((p) => p.id === this.targetInfo?.id)?.name || "";
     },
+    stalkerCount() {
+      return this.colyseus.stalkersCount;
+    },
   },
   methods: {
+    attack() {
+      this.isAttack = true;
+      const timeout = setTimeout(() => {
+        this.isAttack = false;
+        clearTimeout(timeout);
+      }, 600);
+    },
     setIntervalClues() {
       if (this.interval) clearInterval(this.interval);
       if (this.countdownInterval) {
@@ -314,6 +340,13 @@ export default {
       font-weight: $ft-w-bold;
       text-align: center;
       padding-top: 11px;
+      transition: all 0.6s ease;
+      color: $purple;
+
+      &.--state-change {
+        background-image: url("../assets/gamepad/bg-stalker-count-r.png");
+        color: $white-beige;
+      }
     }
 
     .stalkers-counter {
@@ -339,9 +372,9 @@ export default {
         transform: scale(0.9);
       }
 
-      img {
+      svg {
         width: 152px;
-        height: auto;
+        height: 152px;
       }
     }
   }
