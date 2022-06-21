@@ -12,7 +12,9 @@ export default class Pirate {
         this._resources = experience.resources.items;
         this.charaResource = experience.resources.items.characterModel;
 
-        this.body = body;
+        if (!body) {
+            this.body = this._generateBody();
+        } else this.body = body;
 
         if (this.body) {
             this._initModel();
