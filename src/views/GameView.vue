@@ -22,6 +22,8 @@ import bidello from "bidello";
 import TheTimer from "@/components/ui/TheTimer";
 import ThePlayer from "@/components/ui/ThePlayer";
 import useTimerStore from "@/store/timer";
+import { mapState } from "pinia";
+import useAudioStore from "@/store/audio";
 
 export default {
   name: "GameView",
@@ -37,6 +39,9 @@ export default {
       players: {},
       isMounted: false,
     };
+  },
+  computed: {
+    ...mapState(useAudioStore, ["audios"]),
   },
   mounted() {
     if (!this.colyseus.currentRoom) return;
@@ -62,6 +67,7 @@ export default {
 
     this.colyseus.currentRoom.onMessage("attack", ({ playerSessionId }) => {
       bidello.trigger({ name: "attack" }, { playerId: playerSessionId });
+      this.audios?.attack?.play()
       this.colyseus.sendData("getAllPlayers");
     });
 

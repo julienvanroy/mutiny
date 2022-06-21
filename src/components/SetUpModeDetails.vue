@@ -32,7 +32,9 @@
         </div>
         <div class="parameters__right">
           <OptionContainer :title="$t('parameters.controls')">
-            <img :src="`images/parameters/controls-mode-1-${$i18n.locale}.png`" />
+            <img
+              :src="`images/parameters/controls-mode-1-${$i18n.locale}.png`"
+            />
           </OptionContainer>
         </div>
       </div>
@@ -65,6 +67,8 @@ import bidello from "bidello";
 import TheButton from "@/components/ui/TheButton.vue";
 import OptionContainer from "@/components/parameters/OptionContainer.vue";
 import TheRadioer from "@/components/parameters/TheRadioer.vue";
+import { mapState } from "pinia";
+import useAudioStore from "@/store/audio";
 
 export default {
   name: "SetUpModeDetails",
@@ -82,8 +86,19 @@ export default {
     startGame() {
       bidello.trigger({ name: "assignTargets" });
       this.colyseus.sendData("startGame");
+      if (this.audios?.theme?.playing()) {
+        this.audios?.theme?.fade(1, 0, 2000);
+        let timeout = setTimeout(() => {
+          this.audios?.musicGame?.play();
+          this.audios?.musicGame?.fade(0, 1, 2000);
+          return clearTimeout(timeout);
+        }, 1000);
+      }
       router.push("/game");
     },
+  },
+  computed: {
+    ...mapState(useAudioStore, ["audios"]),
   },
 };
 </script>

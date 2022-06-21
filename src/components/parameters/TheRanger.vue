@@ -42,7 +42,6 @@ export default {
   methods: {
     handleInputChange(e) {
       const val = e.target.value;
-
       this.$emit('set-value', val)
     },
   },

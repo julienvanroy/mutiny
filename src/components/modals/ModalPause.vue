@@ -1,31 +1,39 @@
 <template>
   <ModalContainer
-      :title="$t('parameters.pause')"
-      :btnLabel="$t('ui.continue')"
-      :isPause="true"
+    :title="$t('parameters.pause')"
+    :btnLabel="$t('ui.continue')"
+    :isPause="true"
   >
     <div class="modal__pause">
       <div class="modal__pause-left">
         <OptionContainer :title="$t('parameters.audio')">
-          <TheRanger :label="$t('parameters.music')" :value="audio.musicVolume.toString()" @set-value="setMusicVolume"/>
-          <TheRanger :label="$t('parameters.effects')" :value="audio.effectVolume.toString()" @set-value="setEffectVolume"/>
+          <TheRanger
+            :label="$t('parameters.music')"
+            :value="audio.musicVolume.toString()"
+            @set-value="setMusicVolume"
+          />
+          <TheRanger
+            :label="$t('parameters.effects')"
+            :value="audio.effectVolume.toString()"
+            @set-value="setEffectVolume"
+          />
           <h3>{{ $t("parameters.graphics") }}</h3>
           <TheRadioer
-              :subtitle="$t('parameters.quality')"
-              label="graphics"
-              :values="[
+            :subtitle="$t('parameters.quality')"
+            label="graphics"
+            :values="[
               $t('parameters.low'),
               $t('parameters.medium'),
               $t('parameters.high'),
             ]"
-              :defaultValue="$t('parameters.medium')"
+            :defaultValue="$t('parameters.medium')"
           />
-          <TheSwitcher v-on:set-fullscreen="setFullscreen"/>
+          <TheSwitcher v-on:set-fullscreen="setFullscreen" />
         </OptionContainer>
       </div>
       <div class="modal__pause-right">
         <OptionContainer :title="$t('parameters.controls')">
-          <img :src="`images/parameters/controls-mode-1-${$i18n.locale}.png`"/>
+          <img :src="`images/parameters/controls-mode-1-${$i18n.locale}.png`" />
         </OptionContainer>
       </div>
     </div>
@@ -44,7 +52,7 @@ export default {
   name: "ModalPause",
   setup() {
     const audio = useAudioStore();
-    return {audio};
+    return { audio };
   },
   components: {
     ModalContainer,
@@ -54,16 +62,16 @@ export default {
     TheSwitcher,
   },
   props: {
-    setFullscreen: {type: Function},
+    setFullscreen: { type: Function },
   },
   methods: {
     setMusicVolume(value) {
-      this.audio.musicVolume = parseFloat(value)
+      this.audio.changeMusicVolume(value);
     },
     setEffectVolume(value) {
-      this.audio.effectVolume = parseFloat(value)
-    }
-  }
+      this.audio.changeEffectVolume(value);
+    },
+  },
 };
 </script>
 
