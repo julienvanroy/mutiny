@@ -6,13 +6,17 @@
   <div class="main-container" ref="fullscreenContainer">
     <div v-if="!isMobile && !is404" class="fullscreen">
       <button v-if="showFullscreenBtn" @click="setFullscreen()">
-        <img :src="`images/icons/fullscreen-${isFullscreen ? 'off' : 'on'}.png`" />
+        <img
+          :src="`images/icons/fullscreen-${isFullscreen ? 'off' : 'on'}.png`"
+        />
       </button>
     </div>
 
     <div class="btn-parameters" v-if="!isMobile && !is404">
-      <button @click="playMusic">
-        <img src="images/icons/sound-on.png" />
+      <button @click="setTheme()">
+        <img
+          :src="`images/icons/sound-${!!this.themeIsPlaying ? 'on' : 'off'}.png`"
+        />
       </button>
       <button v-show="!isGamePath" @click="() => (modalShown = 'options')">
         <img src="images/icons/parameters.png" />
@@ -91,9 +95,11 @@ export default {
   mounted() {
     this.resize();
     window.addEventListener("resize", this.resize, false);
+    window.addEventListener("click", () => this.audio.click.play(), false);
   },
   beforeUnmount() {
     window.removeEventListener("resize", this.resize, false);
+    window.removeEventListener("click", () => this.audio.click.play(), false);
   },
   watch: {
     isLandscape(newValue) {
@@ -104,14 +110,14 @@ export default {
       }
     },
     modalShown(newValue, oldValue) {
-      if(newValue === 'pause') {
+      if (newValue === "pause") {
         bidello.trigger({ name: "pause" });
         this.timer.stop();
       } else if(oldValue === 'pause' && newValue !== 'pause') {
         bidello.trigger({ name: "start" });
         this.timer.start();
       }
-    }
+    },
   },
   methods: {
     resize() {
@@ -126,8 +132,9 @@ export default {
         this.isFullscreen = true;
       }
     },
-    playMusic() {
-      this.music.play();
+    setTheme() {
+      !!this.themeIsPlaying && !!this.audio.theme.playing() ? this.audio.theme.pause() : this.audio.theme.play()
+      this.themeIsPlaying = !this.themeIsPlaying;
     },
   },
   computed: {
@@ -137,10 +144,8 @@ export default {
       "isFullscreen",
       "isLandscape",
       "modalShown",
+      "themeIsPlaying",
     ]),
-    music() {
-      return this.audio.musicGame;
-    },
     isGamePath() {
       return this.path === "/game" || this.path === "/debug";
     },
