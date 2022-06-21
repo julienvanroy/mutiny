@@ -59,6 +59,11 @@ export default {
   computed: {
     ...mapState(useAudioStore, ["audios"]),
   },
+  methods: {
+    ejectedPlayer(playerId) {
+      this.colyseus.sendData("ejectPlayer", playerId);
+    },
+  }
 };
 </script>
 

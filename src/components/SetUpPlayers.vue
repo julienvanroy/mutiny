@@ -47,11 +47,6 @@ export default {
 
     return { colyseus };
   },
-  methods: {
-    ejectedPlayer(playerId) {
-      this.colyseus.sendData("ejectPlayer", playerId);
-    },
-  },
 };
 </script>
 
