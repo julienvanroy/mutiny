@@ -34,10 +34,15 @@
 import { mapState } from "pinia";
 import TheBottle from "@/components/svg/TheBottle";
 import useAudioStore from "@/store/audio";
+import useColyseusStore from "@/store/colyseus";
 
 export default {
   name: "PlayerAdded",
   components: { TheBottle },
+  setup() {
+    const colyseus = useColyseusStore();
+    return { colyseus };
+  },
   props: {
     player: {},
     isEmpty: {
