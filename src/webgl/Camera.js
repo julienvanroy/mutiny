@@ -14,8 +14,8 @@ export default class Camera extends component(PerspectiveCamera) {
         this._debug = experience.debug;
         this._canvas = experience.canvas;
 
-        this.position.set(31, 31, 29);
-        this.lookAt(0, 0, 0)
+        this.position.set(24, 20, 12.50);
+        this.rotation.set(-1, 0.83, 0.83)
 
         this.layers.enable(0)
         this.layers.enable(1)
