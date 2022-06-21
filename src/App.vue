@@ -97,10 +97,11 @@ export default {
   },
   watch: {
     isLandscape(newValue) {
-      this.colyseus.currentRoom &&
+      if(this.colyseus.currentRoom && this.isMobile) {
         this.colyseus.sendData("orientationChange", {
           orientationReady: newValue,
         });
+      }
     },
     modalShown(newValue, oldValue) {
       if(newValue === 'pause') {

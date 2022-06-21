@@ -1,5 +1,5 @@
 import {
-    BloomEffect, ChromaticAberrationEffect,
+    BloomEffect, // ChromaticAberrationEffect,
     EffectComposer,
     EffectPass,
     RenderPass, ShockWaveEffect,
@@ -51,7 +51,7 @@ export default class PostProcessing extends component() {
         const toonEffect = new ToneMappingEffect({mode: this._params.tone.mode.ACES_FILMIC})
 
         // Drunk
-        const chromaEffect = new ChromaticAberrationEffect()
+        // const chromaEffect = new ChromaticAberrationEffect()
         const vignetteEffect = new VignetteEffect({darkness: 0.49, offset: 0.4})
 
         this.effectPass = new EffectPass(this._camera, smaaEffect, bloomEffect, toonEffect);
@@ -59,7 +59,7 @@ export default class PostProcessing extends component() {
 
         this.effectComposer.addPass(this.renderPass);
         this.effectComposer.addPass(this.effectPass);
-        this.effectComposer.addPass(new EffectPass(this._camera, chromaEffect, vignetteEffect))
+        this.effectComposer.addPass(new EffectPass(this._camer, vignetteEffect))
         this.effectComposer.addPass(new EffectPass(this._camera, new ShockWaveEffect(this._camera)))
 
         this.smaaEffect = this.effectComposer.passes[1].effects[0]
@@ -72,8 +72,8 @@ export default class PostProcessing extends component() {
         this.toneEffect.averageLuminance = 1.0
 
         // Drunk
-        this.chromaEffect = this.effectComposer.passes[2].effects[0]
-        this.vignetteEffect = this.effectComposer.passes[2].effects[1]
+        // this.chromaEffect = this.effectComposer.passes[2].effects[0]
+        this.vignetteEffect = this.effectComposer.passes[2].effects[0]
         this.shockWaveEffect =  this.effectComposer.passes[3].effects[0]
 
         this.shockWaveEffect.epicenter.x = 19.0
@@ -108,7 +108,7 @@ export default class PostProcessing extends component() {
             ppToneMiddleGrey: this.toneEffect.middleGrey,
             ppToneAverageLuminance: this.toneEffect.averageLuminance,
             // Drunk Chroma
-            ppChromaOffset: this.chromaEffect.offset,
+            // ppChromaOffset: this.chromaEffect.offset,
             // Drunk Vignette
             ppVignetteDarkness: this.vignetteEffect.darkness,
             ppVignetteOffset: this.vignetteEffect.offset,
@@ -234,6 +234,7 @@ export default class PostProcessing extends component() {
             expanded: false,
         });
 
+        /*
         const folderChroma = folderDrunk.addFolder({
             title: "Chroma Effect",
             expanded: false,
@@ -243,6 +244,7 @@ export default class PostProcessing extends component() {
         }).on('change', ({value}) => {
             this.chromaEffect.offset = value
         });
+        */
         const folderVignette = folderDrunk.addFolder({
             title: "Vignette Effect",
             expanded: false,
