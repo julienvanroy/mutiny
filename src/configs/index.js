@@ -13,7 +13,7 @@ const configs = {
                 amt: 0.4,
             },
             active: {
-                walkingTimeScale: 1,
+                walkingTimeScale: 2,
                 runningTimeScale: 3.2,
             },
         },

@@ -121,6 +121,7 @@ export default class PlayerPirate extends component(Pirate) {
         this.bot.isPlayer = true;
         this.bot.playerId = this.id;
         this.mesh = this.bot.mesh;
+        this.animation = this.bot.animation
     }
 
     onRaf({ delta }) {
@@ -130,15 +131,15 @@ export default class PlayerPirate extends component(Pirate) {
 
         if (this.mesh) {
             if (!this.isMoving) {
-                if (!this.bot.animation.isCurrent("idle")) this.bot.animation.play("idle");
-            } else if (!this.bot.animation.isCurrent("walk")) {
-                this.bot.animation.play("walk");
+                if (!this.animation.isCurrent("idle")) this.animation.play("idle");
+            } else if (!this.animation.isCurrent("walk")) {
+                this.animation.play("walk");
                 if (this.isRunning || this._debugRunning)
-                    this.bot.animation.actions.current.setEffectiveTimeScale(
+                    this.animation.actions.current.setEffectiveTimeScale(
                         configs.character.animation.active.runningTimeScale
                     );
                 else
-                    this.bot.animation.actions.current.setEffectiveTimeScale(
+                    this.animation.actions.current.setEffectiveTimeScale(
                         configs.character.animation.active.walkingTimeScale
                     );
             }
@@ -148,7 +149,7 @@ export default class PlayerPirate extends component(Pirate) {
     onAttack({ playerId }) {
         let position, targetPosition, directionVect, playerFacing, isInFront;
         if (playerId === this.id) {
-            this.bot.animation.play("attack");
+            this.animation.play("attack");
 
             position = new Vector3();
             this.mesh.matrixWorld.decompose(position, new Quaternion(), new Vector3());
@@ -162,7 +163,7 @@ export default class PlayerPirate extends component(Pirate) {
         }
 
         if (playerId === this.id && position.distanceTo(targetPosition) <= configs.character.range && isInFront) {
-            this.target.bot.animation.play("dead");
+            this.target.animation.play("dead");
 
             console.log(`player ${this.id} killed their target ${this.target.id}`);
 
