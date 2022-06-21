@@ -45,8 +45,6 @@ export default {
     };
   },
   mounted() {
-    this.colyseus.sendData("getAllPlayers");
-
     this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
       this.players = new Map(Object.entries(players));
 
@@ -57,9 +55,8 @@ export default {
         )
       );
     });
-    this.colyseus.currentRoom.onMessage("addPlayer", () => {
-      this.colyseus.sendData("getAllPlayers");
-    });
+
+    this.colyseus.sendData("getAllPlayers");
   },
   watch: {
     pseudo(value) {
@@ -73,11 +70,7 @@ export default {
   methods: {
     checkIsPseudoValid(pseudoToCheck) {
       const isValid = !Object.values(this.players).some((player) => player.name === pseudoToCheck);
-      if (!isValid) {
-        this.pseudoNotValid = true;
-      } else {
-        this.pseudoNotValid = false;
-      }
+      this.pseudoNotValid = !isValid;
       return isValid;
     },
     chooseRandomPseudo() {
@@ -92,8 +85,7 @@ export default {
     },
     sendPseudo() {
       if ("" === this.pseudo) this.pseudo = this.placeholder;
-      this.colyseus.addPseudo(this.pseudo);
-      this.colyseus.addPlayer();
+      this.colyseus.addPlayer(this.pseudo);
       router.push(`/waiting`);
     },
   },

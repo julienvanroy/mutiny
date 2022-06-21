@@ -130,15 +130,10 @@ const useColyseusStore = defineStore("colyseus", {
         sendData(type, value) {
             this.currentRoom?.send(type, value);
         },
-        addPseudo(pseudo) {
-            this.sendData("addPseudo", {
-                playerId: this.currentRoom.sessionId,
-                playerName: pseudo,
-            });
-        },
-        addPlayer() {
+        addPlayer(pseudo) {
             this.sendData("addPlayer", {
                 playerId: this.currentRoom.sessionId,
+                playerName: pseudo,
                 orientationReady: useGlobalStore().isLandscape,
             });
         },
