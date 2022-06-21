@@ -28,7 +28,7 @@
         <span>{{ $t("gamepad.stalkersCounterRight") }}</span>
       </p>
       <button ref="attack" class="attack" @click="colyseus.sendData('attack')">
-        <img src="/images/gamepad/btn-attack.png" />
+        <btn-attack @click="attack" :attack="isAttack" />
       </button>
       <!-- <button ref="power" @click="colyseus.sendData('power', true)">{{$t("gamepad.power")}}</button> -->
     </div>
@@ -41,9 +41,10 @@ import nipplejs from "nipplejs";
 import ThePlayer from "./ui/ThePlayer";
 import StalkersCounter from "./ui/StalkersCounter";
 import configs from "@/configs";
+import BtnAttack from "./svg/BtnAttack.vue";
 
 export default {
-  components: { ThePlayer, StalkersCounter },
+  components: { ThePlayer, StalkersCounter, BtnAttack },
   name: "GamePad",
   setup() {
     const colyseus = useColyseusStore();
@@ -64,6 +65,7 @@ export default {
       nextClueIndex: 1,
       countdown: configs.game.cluesTime[0],
       countdownInterval: null,
+      isAttack: false,
     };
   },
   watch: {
@@ -91,6 +93,13 @@ export default {
     },
   },
   methods: {
+    attack() {
+      this.isAttack = true;
+      const timeout = setTimeout(() => {
+        this.isAttack = false;
+        clearTimeout(timeout);
+      }, 600);
+    },
     setIntervalClues() {
       if (this.interval) clearInterval(this.interval);
       if (this.countdownInterval) {
@@ -339,9 +348,9 @@ export default {
         transform: scale(0.9);
       }
 
-      img {
+      svg {
         width: 152px;
-        height: auto;
+        height: 152px;
       }
     }
   }
