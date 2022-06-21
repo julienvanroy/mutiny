@@ -18,18 +18,23 @@ const configs = {
             },
         },
         size: [1.4, 1.4, 1.4],
+        colors: {
+            orange: "#9C73FF",
+            noir: "#3C365A",
+        },
         body: {
             hat: {
                 shuffleMesh: true,
                 addColor: true,
+                refColor: true,
                 meshes: [
                     {
                         name: "Chapeau_01",
-                        color: ["#F86F43", "#1E1D22"],
+                        color: ["orange", "noir"],
                     },
                     {
                         name: "Chapeau_02",
-                        color: ["#F86F43", "#1E1D22"],
+                        color: ["orange", "noir"],
                     },
                 ],
             },
@@ -37,58 +42,61 @@ const configs = {
                 shuffleMesh: true,
                 alphaTexture: "barbeAlphaTexture",
                 addColor: false,
+                refColor: false,
                 meshes: [
                     {
                         name: "Barbe",
                         texture: "barbeBlancTexture",
-                        color: ["#F3E3DD"],
+                        color: ["blanc"],
                     },
                     {
                         name: "Barbe",
                         texture: "barbeJauneTexture",
-                        color: ["#FAA757"],
+                        color: ["jaune"],
                     },
                     {
                         name: "Barbe",
                         texture: "barbeOrangeTexture",
-                        color: ["#F86F43"],
+                        color: ["orange"],
                     },
                     {
                         name: "Barbe",
                         texture: "barbeVioletTexture",
-                        color: ["#3C365A"],
+                        color: ["violet"],
                     },
                 ],
             },
             barrel: {
                 shuffleMesh: true,
                 addColor: false,
+                refColor: false,
                 meshes: [
                     {
                         name: "Tonneau",
                         texture: "tonneauBlancTexture",
-                        color: ["#F3E3DD"],
+                        color: ["blanc"],
                     },
                     {
                         name: "Tonneau",
                         texture: "tonneauBleuTexture",
-                        color: ["#6B8CDB"],
+                        color: ["bleu"],
                     },
                     {
                         name: "Tonneau",
                         texture: "tonneauJauneTexture",
-                        color: ["#FAA757"],
+                        color: ["jaune"],
                     },
                     {
                         name: "Tonneau",
                         texture: "tonneauOrangeTexture",
-                        color: ["#F86F43"],
+                        color: ["orange"],
                     },
                 ],
             },
             weapon: {
                 shuffleMesh: true,
                 addColor: false,
+                refColor: false,
                 meshes: [
                     {
                         name: "Epee_01",
@@ -99,6 +107,7 @@ const configs = {
             belt: {
                 shuffleMesh: false,
                 addColor: false,
+                refColor: false,
                 meshes: [
                     {
                         name: "Cinture_bas",
