@@ -6,8 +6,8 @@
     <div class="modal__options">
       <div class="modal__options-left">
         <OptionContainer :title="$t('parameters.audio')">
-          <TheRanger :label="$t('parameters.music')" defaultValue="0.5" />
-          <TheRanger :label="$t('parameters.effects')" defaultValue="0.5" />
+          <TheRanger :label="$t('parameters.music')" :value="audio.musicVolume.toString()" @set-value="setMusicVolume"/>
+          <TheRanger :label="$t('parameters.effects')" :value="audio.effectVolume.toString()" @set-value="setEffectVolume"/>
         </OptionContainer>
         <OptionContainer :title="$t('parameters.languages')">
           <LangChanger />
@@ -39,9 +39,14 @@ import TheRadioer from "@/components/parameters/TheRadioer";
 import TheRanger from "@/components/parameters/TheRanger";
 import TheSwitcher from "@/components/parameters/TheSwitcher";
 import LangChanger from "@/components/parameters/LangChanger";
+import useAudioStore from "@/store/audio";
 
 export default {
   name: "ModalOptions",
+  setup () {
+    const audio = useAudioStore();
+    return { audio };
+  },
   components: {
     ModalContainer,
     OptionContainer,
@@ -53,6 +58,15 @@ export default {
   props: {
     setFullscreen: { type: Function },
   },
+  methods: {
+    setMusicVolume(value) {
+      console.log(value)
+      this.audio.musicVolume = parseFloat(value)
+    },
+    setEffectVolume(value) {
+      this.audio.effectVolume = parseFloat(value)
+    }
+  }
 };
 </script>
 

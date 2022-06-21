@@ -9,7 +9,9 @@
       min="0"
       max="1"
       step="0.1"
-      :defaultValue="defaultValue"
+      :value="value"
+      @input="handleInputChange"
+      :style="{backgroundSize: `${((value - min) * 100) / (max - min)}% 100%`}"
     />
   </div>
 </template>
@@ -22,29 +24,26 @@ export default {
       type: String,
       required: true,
     },
-    defaultValue: {
+    value: {
       type: String,
       required: true,
     },
-  },
-  mounted() {
-    this.$refs.input.addEventListener("input", (e) =>
-      this.handleInputChange(e)
-    );
-  },
-  beforeUnmount() {
-    this.$refs.input.removeEventListener("input", (e) =>
-      this.handleInputChange(e)
-    );
+    min: {
+      type: Number,
+      required: false,
+      default: 0
+    },
+    max: {
+      type: Number,
+      required: false,
+      default: 1
+    }
   },
   methods: {
     handleInputChange(e) {
-      const min = e.target.min;
-      const max = e.target.max;
       const val = e.target.value;
 
-      this.$refs.input.style.backgroundSize =
-        ((val - min) * 100) / (max - min) + "% 100%";
+      this.$emit('set-value', val)
     },
   },
 };
