@@ -46,13 +46,13 @@ export default {
   },
   mounted() {
     if (!this.isEmpty) {
-      this.audio.newPlayer.play();
+      this.audio?.newPlayer?.play();
     }
   },
   watch: {
     isEmpty(newValue, oldValue) {
       if (oldValue === true && newValue === false) {
-        this.audio.newPlayer.play();
+        this.audio?.newPlayer?.play();
       }
     },
   },

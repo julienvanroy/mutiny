@@ -95,11 +95,11 @@ export default {
   mounted() {
     this.resize();
     window.addEventListener("resize", this.resize, false);
-    window.addEventListener("click", () => this.audio.click.play(), false);
+    window.addEventListener("click", () => this.audio?.click?.play(), false);
   },
   beforeUnmount() {
     window.removeEventListener("resize", this.resize, false);
-    window.removeEventListener("click", () => this.audio.click.play(), false);
+    window.removeEventListener("click", () => this.audio?.click?.play(), false);
   },
   watch: {
     isLandscape(newValue) {
@@ -133,7 +133,7 @@ export default {
       }
     },
     setTheme() {
-      !!this.themeIsPlaying && !!this.audio.theme.playing() ? this.audio.theme.pause() : this.audio.theme.play()
+      !!this.themeIsPlaying && !!this.audio?.theme?.playing() ? this.audio?.theme?.pause() : this.audio?.theme?.play()
       this.themeIsPlaying = !this.themeIsPlaying;
     },
   },
