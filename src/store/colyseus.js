@@ -33,6 +33,9 @@ const useColyseusStore = defineStore("colyseus", {
                 isLast,
             };
         },
+        stalkersCount(state) {
+            return state.player.target ? JSON.parse(state.player.target).stalkersCount : undefined;
+        },
     },
     actions: {
         async initLobbyRoom() {

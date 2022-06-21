@@ -1,5 +1,5 @@
 <template>
-  <em class="stalkers-counter">
+  <em class="stalkers-counter" :class="{ '--state-change': stateChange }">
     <span>{{ count }}</span>
   </em>
 </template>
@@ -9,7 +9,11 @@ export default {
   name: "StalkersCounter",
   props: {
     count: {
-      count: Number,
+      type: Number,
+      required: true,
+    },
+    stateChange: {
+      type: Boolean,
       required: true,
     },
   },
@@ -25,6 +29,15 @@ export default {
   background-size: contain;
   background-position: center;
   display: inline-block;
+  transition: all 0.6s ease;
+
+  &.--state-change {
+    background-image: url("../../assets/gamepad/bg-stalker-nb-w.png");
+
+    span {
+      color: $red-dead;
+    }
+  }
 
   span {
     position: absolute;
@@ -36,6 +49,7 @@ export default {
     color: $white-beige;
     text-shadow: 1.53336px 1.15002px 0.766678px rgba(77, 8, 28, 0.2);
     transform: translate(-60%, -52%) rotate(12.35deg);
+    transition: all 0.6s ease;
   }
 }
 </style>
