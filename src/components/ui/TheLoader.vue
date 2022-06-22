@@ -27,18 +27,18 @@ export default {
   computed: {
     ...mapState(useWebglStore, { progress: "progressLoading" }),
     ended() {
-      return this.progress === 1
-    }
+      return this.progress === 1;
+    },
   },
   watch: {
     ended(newValue) {
-      if(newValue) {
+      if (newValue) {
         setTimeout(() => {
-          this.show = false
-        }, 1000)
+          this.show = false;
+        }, 1000);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -60,7 +60,10 @@ export default {
   justify-content: center;
   align-items: center;
   img {
-    max-width: 680px;
+    width: 380px;
+    @media #{$mq-small} {
+      width: 520px;
+    }
   }
   /* p {
     font-weight: $ft-w-bold;
