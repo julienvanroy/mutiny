@@ -10,6 +10,7 @@ import {
 } from "postprocessing";
 import {component} from "bidello";
 import Experience from "@/webgl/Experience";
+import {Vector3} from "three";
 // import {Vector3} from "three";
 
 export default class PostProcessing extends component() {
@@ -76,9 +77,10 @@ export default class PostProcessing extends component() {
         this.vignetteEffect = this.effectComposer.passes[2].effects[0]
         this.shockWaveEffect =  this.effectComposer.passes[3].effects[0]
 
+        this.shockWaveEffect.position.x = 0
         this.shockWaveEffect.epicenter.x = 19.0
         this.shockWaveEffect.speed = 3.9
-        this.shockWaveEffect.maxRadius = 8.48
+        this.shockWaveEffect.maxRadius = 20
         this.shockWaveEffect.waveSize = 6.74
         this.shockWaveEffect.amplitude = 0.48
 
@@ -89,8 +91,8 @@ export default class PostProcessing extends component() {
         this.onDebug()
     }
 
-    explodeDrunk() {
-        // this.shockWaveEffect.position = new Vector3(Math.random() * 20, Math.random() * 20, Math.random() * 20)
+    onExplodeDrunk() {
+        this.shockWaveEffect.position = new Vector3(Math.random() * 20, Math.random() * 20, Math.random() * 20)
         this.shockWaveEffect.explode()
     }
 
@@ -310,7 +312,7 @@ export default class PostProcessing extends component() {
             this.shockWaveEffect.amplitude = value
         });
         folderWave.addButton({title: "Explode"}).on("click", () => {
-            this.explodeDrunk()
+            this.onExplodeDrunk()
         });
     }
 

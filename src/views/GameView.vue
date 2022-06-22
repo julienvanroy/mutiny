@@ -46,12 +46,14 @@ export default {
     time(newValue) {
       if (10 === newValue) {
         this.panickMode = true;
-      }
-      if (30 === newValue) {
+      }else if (30 === newValue) {
         this.audios?.musicGame?.rate(1.5);
-      }
-      if (60 === newValue) {
+      }else if (60 === newValue) {
         this.audios?.musicGame?.rate(1.2);
+      }
+
+      if(newValue <= 30 && newValue % 3 === 0) {
+        bidello.trigger({ name: "explodeDrunk" });
       }
     },
   },
