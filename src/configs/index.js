@@ -110,7 +110,7 @@ const configs = {
                     },
                     {
                         name: "Tonneau",
-                        texture: "tonneauRoseTexture",
+                        texture: "tonneauVioletTexture",
                         color: ["rose"],
                     },
                 ],

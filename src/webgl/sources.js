@@ -124,9 +124,9 @@ export default [
         },
     },
     {
-        name: "tonneauRoseTexture",
+        name: "tonneauVioletTexture",
         type: "texture",
-        path: "textures/character/Tonneau_orange.jpg",
+        path: "textures/character/Tonneau_violet.jpg",
         options: {
             encoding: sRGBEncoding,
             flipY: false,
