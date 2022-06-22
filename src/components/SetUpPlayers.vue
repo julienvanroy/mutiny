@@ -17,9 +17,7 @@
     <ul v-if="0 < colyseus.playersArray.length" class="players-list">
       <li class="player" v-for="(n, index) in 8" :key="index">
         <PlayerAdded
-          :player="
-            !!colyseus.playersArray[index] ? colyseus.playersArray[index] : ''
-          "
+          :player="!!colyseus.playersArray[index] ? colyseus.playersArray[index] : ''"
           :isEmpty="!colyseus.playersArray[index]"
         />
       </li>
@@ -30,19 +28,12 @@
 <script>
 import useColyseusStore from "@/store/colyseus";
 import PlayerAdded from "@/components/ui/PlayerAdded";
-import { onMounted } from "vue";
 
 export default {
   name: "SetUpPlayers",
   components: { PlayerAdded },
   setup() {
     const colyseus = useColyseusStore();
-
-    onMounted(() => {
-      colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
-        colyseus.players = new Map(Object.entries(players));
-      });
-    });
 
     return { colyseus };
   },
