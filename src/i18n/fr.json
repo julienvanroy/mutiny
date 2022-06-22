@@ -4,12 +4,13 @@
     "en": "Anglais"
   },
   "meta": {
-    "title": "Mutiny - Barils cachés",
-    "description": "Pour jouer, lancez d'abord une partie sur l'ordinateur. Vous recevrez un nom de navire. Embarquement. 3 à 8 joueurs."
+    "title": "Mutiny Party",
+    "description": "Faufile-toi parmi l’équipage. Trouve tes rivaux et élimine-les pour devenir capitaine. Prends garde, ils te traquent aussi. Sauras-tu être assez discret ? Que la silencieuse mutinerie commence !"
   },
   "ui": {
     "back": "Retour",
     "close": "Fermer",
+    "start": "À l’abordaaage !",
     "continue": "Continuer",
     "restart": "Recommencer",
     "replay": "Rejouer",
@@ -41,25 +42,25 @@
   "getPseudo": {
     "title": "Qui es-tu, moussaillon ?",
     "ctaRandom": "Nom aléatoire",
-    "cta": "Monter sur le pont !",
-    "error": "Le pseudo existe déjà."
+    "cta": "Monte sur le pont !",
+    "error": "Le pseudo a déjà été pris."
   },
   "waiting": {
     "portrait": {
-      "title": "Bienvenue !",
+      "title": "Bienvenue à bord !",
       "instruction": "Pour être fin prêt, tourne ton téléphone."
     },
     "landscape": {
       "titleLeft": "Tu es ",
       "titleMiddle": "prêt.e",
       "titleRight": " !",
-      "instruction": "Pour que la révolte commence, sélectionne un mode de jeu."
+      "instruction": "Pour que la mutinerie commence, sélectionne un mode de jeu."
     }
   },
   "setup": {
     "playersTitle": "L'équipage",
     "playersPlaceholder1": "Aucun moussaillon sur le pont...",
-    "playersPlaceholder2": "“bruits de criquets”",
+    "playersPlaceholder2": "*clapotis de vagues*",
     "infos1": "Pour intégrer l’équipage, va sur ",
     "infos2": "mutinyparty.com",
     "infos3": " avec ",
@@ -85,7 +86,7 @@
     "modalOptions": {
       "btnLabel": "Ohé !"
     },
-    "modalLockGamepad": "Retourne ta manette pour jouer.",
+    "modalLockGamepad": "Tourne ton téléphone pour continuer de jouer.",
     "modalEjected": {
       "title": "Tu as été jeté par dessus bord !",
       "cta": "Retourner sur le quai"
@@ -93,15 +94,15 @@
     "modalDead": "{player} vous a évincé.e !",
     "modalTargetStolen": "{player} a débusqué votre cible avant vous !",
     "modalTargetSwitched": "Quel pirate sanguinolant !",
-    "modalWaiting": "EN ATTENTE..."
+    "modalWaiting": "En attente..."
   },
   "gamepad": {
     "youAre": "tu es",
     "clues": "Ta cible",
     "clueInterval": "Indice suivant",
-    "attack": "Attaque",
+    "attack": "Attaquer",
     "power": "Pouvoir",
-    "stalkersCounterLeft": "T’es traqué.e par",
+    "stalkersCounterLeft": "Tu es traqué.e par",
     "stalkersCounterRight": "mousse.s"
   },
   "parameters": {
@@ -127,19 +128,17 @@
   "modes": {
     "1": {
       "name": "Traqueurs Traqués",
-      "shortDescription": "Faufile-toi parmi l’équipage, évince tes rivaux et renverse le cap’taine... Que la silencieuse mutinerie commence !",
-      "description": "Tu veux devenir le cap’taine du navire ? Gagne le plus de points de terreur en attaquant tes adversaires. Les indices de ta prochaine cible sont sur ton tableau de bord. Bon vent !",
-      "btnGo": "À l’aborrrdage !"
-    }
+      "shortDescription": "Faufile-toi parmi l’équipage, évince tes rivaux et renverse le capitaine... Que la silencieuse mutinerie commence !",
+      "description": "Tu veux devenir le capitaine du navire ? Gagne le plus de points de terreur en attaquant tes adversaires. Les indices de ta prochaine cible sont sur ton tableau de bord. Bon vent !"    }
   },
   "end": {
     "mobile": {
       "title": {
         "win": "Victoire !",
-        "lose": "Morbleu !"
+        "lose": "Morbleu..."
       },
       "description": {
-        "0": "Le capitaine, c’est toi !",
+        "0": "Le Capitaine, c’est toi !",
         "1": "Second, tu resteras...",
         "2": "Canonnier, tu resteras...",
         "3": "Matelot, tu resteras...",
@@ -157,7 +156,7 @@
       "4": "Matelot",
       "5": "Mousse",
       "6": "Mousse",
-      "7": "Simple marin d’eau douce..."
+      "7": "Marin d’eau douce..."
     }
   }
 }

@@ -4,12 +4,13 @@
     "en": "English"
   },
   "meta": {
-    "title": "Mutiny - Hidden Barrels",
-    "description": "To play, first start a game on the computer. You will receive the name of your vessel. Boarding. 3 to 8 players."
+    "title": "Mutiny Party",
+    "description": "Sneak into the crew. Find your rivals and eliminate them to become captain. Beware, they're after you too. Will you be discreet enough? Let the silent mutiny begin!"
   },
   "ui": {
     "back": "Back",
     "close": "Close",
+    "start": "On boooaard!",
     "continue": "Continue",
     "restart": "Restart",
     "replay": "Replay",
@@ -47,7 +48,7 @@
   "waiting": {
     "portrait": {
       "title": "Welcome aboard !",
-      "instruction": "To become ready, rotate your phone."
+      "instruction": "To be ready, rotate your phone."
     },
     "landscape": {
       "titleLeft": "You are ",
@@ -59,7 +60,7 @@
   "setup": {
     "playersTitle": "The crew",
     "playersPlaceholder1": "No sailor on deck...",
-    "playersPlaceholder2": "“sounds of crickets“",
+    "playersPlaceholder2": "*lapping waves*",
     "infos1": "To join the crew, go to ",
     "infos2": "mutinyparty.com",
     "infos3": " with ",
@@ -93,7 +94,7 @@
     "modalDead": "{player} ousted you",
     "modalTargetStolen": "{player} has found your target before you did!",
     "modalTargetSwitched": "Such a bloody pirate!!",
-    "modalWaiting": "WAITING..."
+    "modalWaiting": "Waiting..."
   },
   "gamepad": {
     "youAre": "you are",
@@ -128,8 +129,7 @@
     "1": {
       "name": "Stalkers Stalked",
       "shortDescription": "Sneak into the crew, oust your rivals and overthrow the captain... Let the silent mutiny begin!",
-      "description": "Do you want to become the captain of the ship? Earn the most terror points by attacking your opponents. The clues to your next target are on your dashboard. Have a nice trip!",
-      "btnGo": "On boooaard!"
+      "description": "Do you want to become the captain of the ship? Earn the most terror points by attacking your opponents. The clues to your next target are on your dashboard. Have a nice trip!"
     }
   },
   "end": {
