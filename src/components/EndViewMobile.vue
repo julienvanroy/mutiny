@@ -15,14 +15,13 @@
     </div>
     <div class="end-game__over">
       <h1>{{ $t(`end.mobile.title.${isWinner ? "win" : "lose"}`) }}</h1>
-      <p>{{ $t(`end.mobile.description[${rank}]`) }}</p>
+      <p>{{ $t(`end.mobile.description[${isWinner ? 0 : isLast ? 7 : rank}]`) }}</p>
     </div>
   </div>
 </template>
 
 <script>
 import useColyseusStore from "@/store/colyseus";
-import configs from "@/configs";
 
 export default {
   name: "EndViewMobile",
@@ -36,10 +35,11 @@ export default {
     isWinner() {
       return this.colyseus.playerRanking.isWinner;
     },
+    isLast() {
+      return this.colyseus.playerRanking.isLast;
+    },
     rank() {
-      return this.colyseus.playerRanking.isLast || this.colyseus.players.points === 0
-        ? configs.game.maxPlayers - 1
-        : this.colyseus.playerRanking.rank;
+      return this.colyseus.playerRanking.rank;
     },
   },
 };

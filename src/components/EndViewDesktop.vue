@@ -7,16 +7,23 @@
       <div :class="`left ${!!isMounted ? 'appear' : ''}`">
         <div class="winner">
           <h1>1. {{ $t("end.desktop.0") }}</h1>
-          <the-player :player="colyseus.rankedPlayers[0]" large show-medal dont-update-state />
+          <the-player
+            v-for="(playerWinner, index) in winners"
+            :key="index"
+            :player="playerWinner"
+            large
+            show-medal
+            dont-update-state
+          />
         </div>
         <img class="separator" src="images/end-desktop/separator.png" />
         <div class="players-list">
           <ul>
-            <li v-for="(player, index) in colyseus.rankedPlayers" :key="index">
-              <div v-if="0 !== index" class="player-container">
+            <li v-for="(player, index) in losers" :key="index">
+              <div class="player-container">
                 <p>
-                  <span class="index">{{ index + 1 }}.</span>
-                  <span class="status">{{ $t(`end.desktop[${index}]`) }}</span>
+                  <span class="index">{{ index + 2 }}.</span>
+                  <span class="status">{{ $t(`end.desktop[${player.isLast ? 7 : index}]`) }}</span>
                 </p>
                 <the-player :player="player" dont-update-state />
               </div>
@@ -56,6 +63,14 @@ export default {
     return {
       isMounted: false,
     };
+  },
+  computed: {
+    winners() {
+      return this.colyseus.rankedPlayers.filter(({ isFirst }) => isFirst);
+    },
+    losers() {
+      return this.colyseus.rankedPlayers.filter(({ isFirst }) => !isFirst);
+    },
   },
   mounted() {
     this.isMounted = true;
@@ -148,7 +163,7 @@ export default {
                 }
                 .status {
                   display: block;
-                  font-size: $ft-s-medium;
+                  font-size: 1.2rem; //$ft-s-medium;
                   margin-left: 8px;
                 }
               }

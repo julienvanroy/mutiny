@@ -19,18 +19,29 @@ const useColyseusStore = defineStore("colyseus", {
             return Object.keys(state.player).length !== 0;
         },
         rankedPlayers(state) {
-            return [...state.playersArray].sort((a, b) => (a.points < b.points ? 1 : -1));
+            const sortedPlayers = [...state.playersArray].sort((a, b) => (a.points < b.points ? 1 : -1));
+            const lastPlayers = sortedPlayers.filter(
+                (player) => player.points === sortedPlayers[sortedPlayers.length - 1].points
+            );
+            const firstPlayers = sortedPlayers.filter((player) => player.points === sortedPlayers[0].points);
+
+            return sortedPlayers.map((player) => ({
+                ...player,
+                isLast: player.points === 0 || lastPlayers.find((p) => p.id === player.id),
+                isFirst: player.points !== 0 && firstPlayers.find((p) => p.id === player.id),
+            }));
         },
         roomReadyToPlay(state) {
             return state.playersArray.length > 0 && state.playersArray.every((player) => player.orientationReady);
         },
         playerRanking(state) {
-            let rank = state.playersArray.findIndex((p) => p.id === state.player.id);
-            let isLast = rank === state.playersArray.length - 1;
+            let rankedPlayers = this.rankedPlayers;
+            let rank = rankedPlayers.findIndex((p) => p.id === state.player.id);
+
             return {
-                isWinner: rank === 0 && state.player.points !== 0,
-                rank,
-                isLast,
+                rank: rank,
+                isWinner: rankedPlayers.find((p) => p.id === state.player.id).isFirst,
+                isLast: rankedPlayers.find((p) => p.id === state.player.id).isLast,
             };
         },
         stalkersCount(state) {
