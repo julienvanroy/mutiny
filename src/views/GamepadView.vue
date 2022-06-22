@@ -71,7 +71,7 @@ export default {
       this.targetDead = target;
     });
 
-    this.colyseus.currentRoom.onMessage("updatePlayerTarget", ({ player }) => (this.player = player));
+    this.colyseus.currentRoom.onMessage("updatePlayerTarget", ({ target }) => (this.targetStolen = target));
 
     this.colyseus.currentRoom.onMessage("endGame", () => this.$router.push("/end-game"));
   },

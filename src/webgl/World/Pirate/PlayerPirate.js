@@ -32,7 +32,7 @@ export default class PlayerPirate extends component(Pirate) {
 
         this._useKeyboard = this.id === "debug";
 
-        this.mesh.position.set(2,0,6)
+        this.mesh.position.set(2, 0, 6);
 
         this.onDebug();
     }
@@ -83,7 +83,11 @@ export default class PlayerPirate extends component(Pirate) {
     }
 
     _rotation(delta) {
-        if (this.isMoving) this._targetQuaternion.setFromAxisAngle(new Vector3(0, 1, 0), new Vector2(-this._vectorControls.y, this._vectorControls.x).angle());
+        if (this.isMoving)
+            this._targetQuaternion.setFromAxisAngle(
+                new Vector3(0, 1, 0),
+                new Vector2(-this._vectorControls.y, this._vectorControls.x).angle()
+            );
 
         if (this.mesh && !this.mesh.quaternion.equals(this._targetQuaternion)) {
             const step = this._speedRotation * delta;
@@ -105,7 +109,7 @@ export default class PlayerPirate extends component(Pirate) {
         this.bot.isPlayer = true;
         this.bot.playerId = this.id;
         this.mesh = this.bot.mesh;
-        this.animation = this.bot.animation
+        this.animation = this.bot.animation;
     }
 
     onRaf({ delta }) {
@@ -147,7 +151,7 @@ export default class PlayerPirate extends component(Pirate) {
         }
 
         if (playerId === this.id && position.distanceTo(targetPosition) <= configs.character.range && isInFront) {
-            this.triggerDead(this.target)
+            this.triggerDead(this.target);
 
             console.log(`player ${this.id} killed their target ${this.target.id}`);
 
@@ -160,21 +164,21 @@ export default class PlayerPirate extends component(Pirate) {
                     (player) => player.target.id === this.target.id && player.id !== this.id
                 );
 
-                playersWithSameTarget.forEach((player) => player.switchTarget(true));
+                playersWithSameTarget.forEach((player) => player.switchTarget(playerId));
             }
             this.addPoints();
             this.switchTarget();
         }
     }
 
-    triggerDead(target=null) {
-        const player = target || this
-        this._tickDead = 0
+    triggerDead(target = null) {
+        const player = target || this;
+        this._tickDead = 0;
         const interval = setInterval(() => {
-            player.mesh.visible = !player.mesh.visible
-            ++this._tickDead
-            if(this._tickDead > 13) clearInterval(interval)
-        }, 250)
+            player.mesh.visible = !player.mesh.visible;
+            ++this._tickDead;
+            if (this._tickDead > 13) clearInterval(interval);
+        }, 250);
         player.animation.play("dead");
     }
 
@@ -284,7 +288,6 @@ export default class PlayerPirate extends component(Pirate) {
             min: 0,
             max: 30,
         });
-
 
         const btnAddPlayer = folderDebug.addButton({
             title: "dead Player",
