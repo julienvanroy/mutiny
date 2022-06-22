@@ -7,11 +7,7 @@
       <div :class="`left ${!!isMounted ? 'appear' : ''}`">
         <div class="winner">
           <h1>1. {{ $t("end.desktop.0") }}</h1>
-          <ThePlayer
-            :player="colyseus.rankedPlayers[0]"
-            :large="true"
-            :showMedal="true"
-          />
+          <the-player :player="colyseus.rankedPlayers[0]" large show-medal dont-update-state />
         </div>
         <img class="separator" src="images/end-desktop/separator.png" />
         <div class="players-list">
@@ -22,7 +18,7 @@
                   <span class="index">{{ index + 1 }}.</span>
                   <span class="status">{{ $t(`end.desktop[${index}]`) }}</span>
                 </p>
-                <ThePlayer :player="player" />
+                <the-player :player="player" dont-update-state />
               </div>
             </li>
           </ul>
@@ -36,11 +32,7 @@
       <div class="right">
         <!-- TODO: replay btn -->
         <TheButton :label="$t('ui.replay')" color="primary" link="/" />
-        <TheButton
-          :label="$t('ui.changeMode')"
-          color="secondary"
-          link="/setup"
-        />
+        <TheButton :label="$t('ui.changeMode')" color="secondary" link="/setup" />
         <TheButton :label="$t('ui.quitVessel')" color="secondary" link="/" />
       </div>
     </div>

@@ -32,11 +32,11 @@ export default {
     ...mapState(useAudioStore, ["audios"]),
     ...mapState(useGlobalStore, ["isLandscape"]),
     showModalDead() {
-      this.audios?.killed?.play()
+      this.audios?.killed?.play();
       return this.colyseus.player.isKilled;
     },
     showModalTargetSwitched() {
-      this.audios?.point?.play()
+      this.audios?.point?.play();
       return !this.colyseus.player.isKilled && this.colyseus.player.targetChanged && !this.showModalTargetStolen;
     },
     showModalTargetStolen() {
@@ -75,13 +75,9 @@ export default {
       this.targetDead = target;
     });
 
-    this.colyseus.currentRoom.onMessage("updatePlayerTarget", ({ target }) => (this.targetStolen = target));
+    this.colyseus.currentRoom.onMessage("updatePlayerTarget", ({ player }) => (this.player = player));
 
     this.colyseus.currentRoom.onMessage("endGame", () => this.$router.push("/end-game"));
-  },
-  unmounted() {
-    this.colyseus.currentRoom?.leave();
-    window.removeEventListener("resize", this.resize, false);
   },
 };
 </script>
