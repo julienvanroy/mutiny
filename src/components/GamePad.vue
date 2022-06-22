@@ -272,7 +272,6 @@ export default {
         position: relative;
         width: 160px;
         height: 56px;
-        padding-top: 14px;
         background-image: url("../assets/gamepad/bg-pirate-name.png");
         background-size: contain;
         background-position: center;
@@ -281,6 +280,10 @@ export default {
         font-size: 15px;
         color: $white-beige;
         text-align: center;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
         &::after {
           content: "";
