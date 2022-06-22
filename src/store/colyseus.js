@@ -126,7 +126,7 @@ const useColyseusStore = defineStore("colyseus", {
         getAllPlayers() {
             this.sendData("getAllPlayers");
         },
-        updatePlayerTarget(playerId, playerTarget, targetGotStolen = false, onGameStart = false) {
+        updatePlayerTarget(playerId, playerTarget, playerStealer = false, onGameStart = false) {
             this.sendData("updatePlayerTarget", {
                 playerId,
                 playerTarget,

@@ -230,7 +230,7 @@ export default class PlayerPirate extends component(Pirate) {
         );
     }
 
-    switchTarget(targetGotStolen = false, onGameStart = false) {
+    switchTarget(playerStealer = false, onGameStart = false) {
         if (this.target instanceof BotPirate) {
             this.target = sample(
                 Object.values(flatten(this._bots)).filter((bot) => bot.id !== this.target.id && bot.id !== this.bot.id)
