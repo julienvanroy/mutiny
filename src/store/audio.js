@@ -4,8 +4,8 @@ const useAudioStore = defineStore("audios", {
     state: () => {
         return {
             audios: {},
-            musicVolume: 0.5,
-            effectVolume: 0.5,
+            musicVolume: 0.2,
+            effectVolume: 0.6,
             muted: false,
         };
     },

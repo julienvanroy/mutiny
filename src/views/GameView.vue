@@ -80,7 +80,13 @@ export default {
       this.colyseus.sendData("getAllPlayers");
     });
 
-    this.colyseus.currentRoom.onMessage("kill", () => {});
+    this.colyseus.currentRoom.onMessage("kill", () => {
+      this.audios?.killed?.play();
+      let timeout = setTimeout(() => {
+        this.audios?.point?.play();
+        clearTimeout(timeout);
+      }, 1500);
+    });
 
     this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
       this.players = new Map(Object.entries(players));
