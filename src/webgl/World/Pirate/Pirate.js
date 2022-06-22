@@ -84,21 +84,21 @@ export default class Pirate {
                     child.material.metalness = 0.0;
 
                     child.material.map = this._resources[bodyPart.mesh.texture];
+
+                    if (bodyPart.addColor) {
+                        child.material.color = new Color(
+                            bodyPart.refColor
+                                ? typeof bodyPart.refColor === "string"
+                                    ? configs.character.colors[this.body[bodyPart.refColor].mesh.color]
+                                    : configs.character.colors[bodyPart.mesh.color]
+                                : bodyPart.mesh.color
+                        ).convertSRGBToLinear();
+                    }
                 } else {
                     const mesh = bodyPart.meshes.find(({ name }) => name === child.name);
                     if (mesh.texture) {
                         child.material.map = this._resources[mesh.texture];
                     }
-                }
-
-                if (bodyPart.addColor) {
-                    child.material.color = new Color(
-                        bodyPart.refColor
-                            ? typeof bodyPart.refColor === "string"
-                                ? configs.character.colors[this.body[bodyPart.refColor].mesh.color]
-                                : configs.character.colors[bodyPart.mesh.color]
-                            : bodyPart.mesh.color
-                    ).convertSRGBToLinear();
                 }
 
                 if (bodyPart.alphaTexture) {
