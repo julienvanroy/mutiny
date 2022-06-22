@@ -101,7 +101,7 @@ export default {
       "click",
       () => {
         if (!this.musicHasStarted) {
-          this.audios.audios?.theme.play();
+          this.audios.audios?.theme?.play();
           this.audios.muted = false
           this.musicHasStarted = true;
         }
@@ -116,7 +116,7 @@ export default {
       "click",
       () => {
         if (!this.musicHasStarted) {
-          this.audios.audios.theme.play();
+          this.audios.audios?.theme?.play();
           this.audios.muted = false
           this.musicHasStarted = true;
         }
