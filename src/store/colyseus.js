@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import * as Colyseus from "colyseus.js";
 import router from "@/router";
-import { mapToArray, sample } from "@/utils";
+import { sample } from "@/utils";
 import useGlobalStore from "./global";
 
 const useColyseusStore = defineStore("colyseus", {
@@ -102,8 +102,8 @@ const useColyseusStore = defineStore("colyseus", {
             }
         },
         updatePlayers(room) {
-            room.onStateChange((state) => {
-                for (const [key, value] of state.players.$items) {
+            room.onMessage("getAllPlayers", (players) => {
+                for (const [key, value] of Object.entries(players)) {
                     const p = this.players.get(key) || {};
                     const values = Object.values(value);
 
@@ -112,20 +112,14 @@ const useColyseusStore = defineStore("colyseus", {
                     });
                     this.players.set(key, p);
                 }
-                this.playersArray = mapToArray(this.players, true).filter((p) => !!p.name);
+
+                this.playersArray = Object.entries(players)
+                    .map(([key, value]) => ({ id: key, ...value }))
+                    .filter((p) => !!p.name);
+
+                const player = players[room.sessionId];
+                if (player) this.player = player;
             });
-
-            room.state.players.onAdd = (player, key) => {
-                this.players[key] = {};
-
-                player.onChange = (changes) => {
-                    changes.forEach((change) => {
-                        if (key === room.sessionId) {
-                            this.player[change.field] = change.value;
-                        }
-                    });
-                };
-            };
         },
         sendData(type, value) {
             this.currentRoom?.send(type, value);
