@@ -21,7 +21,7 @@ const configs = {
             orange: "#d26b4a",
             noir: "#44397c",
             jaune: "#FFBE4C",
-            violet: "#5186FF",
+            bleu: "#5186FF",
             rose: "#FF8AEA",
             blanc: "#FFF8F6",
             longueVueCorps: "#d26b4a",
