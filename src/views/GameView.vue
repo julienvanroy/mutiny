@@ -6,9 +6,7 @@
       </li>
     </ul>
   </transition>
-  <!-- <router-link to="end-game"
-    ><button class="end-btn">END GAME</button></router-link
-  > -->
+  <router-link to="end-game"><button class="end-btn">END GAME</button></router-link>
   <transition name="fade">
     <div
       v-if="!!isMounted"
@@ -82,15 +80,9 @@ export default {
       this.$router.push("/end-game");
     });
 
-    this.colyseus.currentRoom.onMessage(
-      "joystick",
-      ({ playerSessionId, playerPosition }) => {
-        bidello.trigger(
-          { name: "movePlayer" },
-          { playerId: playerSessionId, vector2: playerPosition }
-        );
-      }
-    );
+    this.colyseus.currentRoom.onMessage("joystick", ({ playerSessionId, playerPosition }) => {
+      bidello.trigger({ name: "movePlayer" }, { playerId: playerSessionId, vector2: playerPosition });
+    });
 
     this.colyseus.currentRoom.onMessage("attack", ({ playerSessionId }) => {
       bidello.trigger({ name: "attack" }, { playerId: playerSessionId });
@@ -104,10 +96,6 @@ export default {
         this.audios?.point?.play();
         clearTimeout(timeout);
       }, 1500);
-    });
-
-    this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
-      this.players = new Map(Object.entries(players));
     });
 
     this.colyseus.currentRoom.onMessage("updatePlayerTarget", () => {});
