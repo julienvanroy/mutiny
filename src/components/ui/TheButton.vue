@@ -164,6 +164,7 @@ export default {
       background-image: none;
     }
     span {
+      opacity: 0.2;
       color: $disabled;
     }
     @media (any-hover: hover) {
