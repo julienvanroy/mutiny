@@ -243,7 +243,7 @@ export default class PlayerPirate extends component(Pirate) {
             );
         }
 
-        useColyseusStore().updatePlayerTarget(this.id, this.getTargetData(), targetGotStolen, onGameStart);
+        useColyseusStore().updatePlayerTarget(this.id, this.getTargetData(), playerStealer, onGameStart);
 
         console.log(
             `player ${this.id} has new target ${this.target.id} ${
