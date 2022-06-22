@@ -1,8 +1,8 @@
 <template>
   <game-pad :has-new-target="hasNewTarget" />
-  <modal-dead v-show="showModalDead" :player="targetDead" />
+  <modal-dead v-show="showModalDead" :player="killer" />
   <modal-target-switched v-show="showModalTargetSwitched" />
-  <modal-target-stolen v-show="showModalTargetStolen" :player="targetStolen" />
+  <modal-target-stolen v-show="showModalTargetStolen" :player="stealer" />
   <modal-lock-gamepad v-if="!isLandscape" />
 </template>
 
@@ -23,8 +23,8 @@ export default {
     return {
       hasNewTarget: false,
       timeout: null,
-      targetDead: "",
-      targetStolen: "",
+      killer: "",
+      stealer: "",
     };
   },
   computed: {
@@ -67,11 +67,11 @@ export default {
 
     this.colyseus.currentRoom.onMessage("attack", () => {});
 
-    this.colyseus.currentRoom.onMessage("kill", ({ target }) => {
-      this.targetDead = target;
+    this.colyseus.currentRoom.onMessage("kill", ({ killer }) => {
+      this.killer = killer;
     });
 
-    this.colyseus.currentRoom.onMessage("updatePlayerTarget", ({ target }) => (this.targetStolen = target));
+    this.colyseus.currentRoom.onMessage("updatePlayerTarget", ({ stealer }) => (this.stealer = stealer));
 
     this.colyseus.currentRoom.onMessage("endGame", () => this.$router.push("/end-game"));
   },
