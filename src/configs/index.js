@@ -1,8 +1,7 @@
 const configs = {
     character: {
-        count: 24, //24
         speed: 1.2, //1.2
-        range: 3.2,
+        range: 3.2, //3.2
         animation: {
             idle: {
                 chance(amt = 0.2) {
@@ -34,6 +33,10 @@ const configs = {
                     },
                     {
                         name: "Chapeau_02",
+                        color: ["orange", "noir"],
+                    },
+                    {
+                        name: "Chapeau_03",
                         color: ["orange", "noir"],
                     },
                 ],
@@ -130,6 +133,13 @@ const configs = {
                     { name: "Pied" },
                     { name: "Pied_details" },
                     { name: "Sourcil" },
+                    { name: "Bouteille" },
+                    { name: "Longue_vue" },
+                    { name: "Cylinder" },
+                    { name: "Cylinder_1" },
+                    { name: "Cylinder002" },
+                    { name: "Cylinder002_1" },
+                    { name: "Tete_1" },
                 ],
             },
         },

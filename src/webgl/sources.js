@@ -31,7 +31,7 @@ export default [
     {
         name: "characterModel",
         type: "gltfModel",
-        path: "models/Character/personnage03_binary.glb",
+        path: "models/Character/personnage04_binary.glb",
     },
     {
         name: "barbeAlphaTexture",
