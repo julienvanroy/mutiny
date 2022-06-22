@@ -46,12 +46,10 @@ export default {
   },
   mounted() {
     this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
-      this.players = new Map(Object.entries(players));
-
       this.placeholder = sample(
         diffArray(
           PiratesNames,
-          Object.values(this.players).map(({ name }) => name)
+          Object.values(new Map(Object.entries(players))).map(({ name }) => name)
         )
       );
     });

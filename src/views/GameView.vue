@@ -6,9 +6,7 @@
       </li>
     </ul>
   </transition>
-  <router-link to="end-game"
-    ><button class="end-btn">END GAME</button></router-link
-  >
+  <router-link to="end-game"><button class="end-btn">END GAME</button></router-link>
   <transition name="fade">
     <div v-if="!!isMounted" class="timer-container">
       <TheTimer />
@@ -30,7 +28,7 @@ export default {
   components: { TheTimer, ThePlayer },
   setup() {
     const colyseus = useColyseusStore();
-    const timer = useTimerStore()
+    const timer = useTimerStore();
 
     return { colyseus, timer };
   },
@@ -55,27 +53,17 @@ export default {
 
     this.colyseus.currentRoom.onMessage("endGame", () => this.$router.push("/end-game"));
 
-    this.colyseus.currentRoom.onMessage(
-      "joystick",
-      ({ playerSessionId, playerPosition }) => {
-        bidello.trigger(
-          { name: "movePlayer" },
-          { playerId: playerSessionId, vector2: playerPosition }
-        );
-      }
-    );
+    this.colyseus.currentRoom.onMessage("joystick", ({ playerSessionId, playerPosition }) => {
+      bidello.trigger({ name: "movePlayer" }, { playerId: playerSessionId, vector2: playerPosition });
+    });
 
     this.colyseus.currentRoom.onMessage("attack", ({ playerSessionId }) => {
       bidello.trigger({ name: "attack" }, { playerId: playerSessionId });
-      this.audios?.attack?.play()
+      this.audios?.attack?.play();
       this.colyseus.sendData("getAllPlayers");
     });
 
     this.colyseus.currentRoom.onMessage("kill", () => {});
-
-    this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
-      this.players = new Map(Object.entries(players));
-    });
 
     this.colyseus.currentRoom.onMessage("updatePlayerTarget", () => {});
 
