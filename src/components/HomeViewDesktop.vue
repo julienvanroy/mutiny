@@ -9,64 +9,68 @@
     </div>
 
     <div class="homepage__under">
-      <img src="images/home/16_ciel.jpg" />
-      <img class="parallax" data-parallax="1" src="images/home/15_brume.png" />
+      <img class="img_16" src="images/home/16_ciel.jpg" />
       <img
-        class="parallax"
+        class="parallax img_15"
+        data-parallax="1"
+        src="images/home/15_brume.png"
+      />
+      <img
+        class="parallax img_14"
         data-parallax="-1"
         src="images/home/14_nuages.png"
       />
       <img
-        class="parallax"
+        class="parallax img_13"
         data-parallax="1.5"
         src="images/home/13_nuages.png"
       />
-      <img class="parallax" data-parallax="-2" src="images/home/12_mer.png" />
+      <img class="parallax img_12" data-parallax="-2" src="images/home/12_mer.png" />
       <img
-        class="parallax"
+        class="parallax img_11"
         data-parallax="2.5"
         src="images/home/11_bateau.png"
       />
       <img
-        class="parallax"
+        class="parallax img_10"
         data-parallax="2"
         src="images/home/10_cible_ombre.png"
       />
       <img
-        class="parallax"
+        class="parallax img_9"
         data-parallax="2.5"
         src="images/home/09_cible.png"
       />
       <img
-        class="parallax"
+        class="parallax img_8"
         data-parallax="2.5"
         src="images/home/08_barriere.png"
       />
       <img
-        class="parallax"
+        class="parallax img_7"
         data-parallax="3"
         src="images/home/07_cordage.png"
       />
       <img
-        class="parallax"
+        class="parallax img_6"
         data-parallax="3"
         src="images/home/06_cordage.png"
       />
-      <img class="parallax" data-parallax="3.5" src="images/home/05_mat.png" />
+      <img class="parallax img_5" data-parallax="3.5" src="images/home/05_mat.png" />
       <img
-        class="parallax"
+        class="parallax img_4"
         data-parallax="-4"
         src="images/home/04_bateau.png"
       />
-      <img class="parallax" data-parallax="-5" src="images/home/03_perso.png" />
+      <img class="parallax img_3" data-parallax="-5" src="images/home/03_perso.png" />
       <img
-        class="parallax voile"
+        class="parallax img_2"
         data-parallax="-4.5"
         src="images/home/02_voile.png"
       />
 
       <img
-        class="parallax mat"
+        class="parallax img_1"
         data-parallax="-5.5"
         src="images/home/01_mat.png"
       />
@@ -237,11 +241,57 @@ export default {
       transform-origin: center;
       will-change: transform;
     }
-    .voile {
-      top: -14%;
-    }
-    .mat {
-      left: -16%;
+    &.img {
+      &_16 {
+        z-index: 0;
+      }
+      &_15 {
+        z-index: 1;
+      }
+      &_14 {
+        z-index: 2;
+      }
+      &_13 {
+        z-index: 3;
+      }
+      &_12 {
+        z-index: 4;
+      }
+      &_11 {
+        z-index: 5;
+      }
+      &_10 {
+        z-index: 6;
+      }
+      &_9 {
+        z-index: 7;
+      }
+      &_8 {
+        z-index: 8;
+      }
+      &_7 {
+        z-index: 9;
+      }
+      &_6 {
+        z-index: 10;
+      }
+      &_5 {
+        z-index: 11;
+      }
+      &_4 {
+        z-index: 12;
+      }
+      &_3 {
+        z-index: 13;
+      }
+      &_2 {
+        z-index: 14;
+        top: -14%;
+      }
+      &_1 {
+        z-index: 15;
+        left: -16%;
+      }
     }
   }
   .credits {

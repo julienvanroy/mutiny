@@ -6,60 +6,58 @@
 
     <div :class="`setup__under ${null !== selected ? 'details-open' : ''}`">
       <div class="background">
-        <img class="sky bottom full" src="images/setup/sky_5.jpg" />
+        <img class="sky sky_5 bottom full" src="images/setup/sky_5.jpg" />
         <img
-          class="sky bottom parallax"
+          class="sky sky_4 bottom parallax"
           data-parallax="1"
           src="images/setup/sky_4.png"
         />
         <img
-          class="sky bottom parallax"
+          class="sky sky_3 bottom parallax"
           data-parallax="-1"
           src="images/setup/sky_3.png"
         />
         <img
-          class="sky bottom parallax"
+          class="sky sky_2 bottom parallax"
           data-parallax="1"
           src="images/setup/sky_2.png"
         />
         <img
-          class="sky top parallax"
+          class="sky sky_1 top parallax"
           data-parallax="1"
           src="images/setup/sky_1.png"
         />
         <img
-          class="sea bottom parallax height"
+          class="sea sea_3 bottom parallax"
           data-parallax="-1"
           src="images/setup/sea_3.png"
         />
         <img
-          class="sea bottom parallax"
+          class="sea sea_2 bottom parallax"
           data-parallax="1"
           src="images/setup/sea_2.png"
         />
       </div>
 
-      <transition name="fade">
-        <div v-if="!!isMounted" class="modes">
-          <div
-            v-for="(mode, idx) in modes"
-            :key="`mode-${idx}`"
-            :class="`mode ${!mode.isAvailable ? 'unavailable' : ''}`"
-            @mouseover="() => mouseHover(mode.isAvailable, idx)"
-            @mouseleave="() => mouseHover(mode.isAvailable, null)"
-            @click="() => setSelected(mode)"
-          >
-            <div class="boat-container parallax" :data-parallax="`${4 - idx}`">
-              <div :class="`boat ${idx === hovered ? 'boat-hover' : ''}`"></div>
-            </div>
-            <img
-              class="wave parallax"
-              :data-parallax="`${3 - idx + 0.5}`"
-              :src="`images/setup/wave_${idx + 1}.png`"
-            />
+      <div class="modes">
+        <div
+          v-for="(mode, idx) in modes"
+          :key="`mode-${idx}`"
+          :class="`mode ${!mode.isAvailable ? 'unavailable' : ''}`"
+          @mouseover="() => mouseHover(mode.isAvailable, idx)"
+          @mouseleave="() => mouseHover(mode.isAvailable, null)"
+          @click="() => setSelected(mode)"
+        >
+          <div class="boat-container parallax" :data-parallax="`${4 - idx}`">
+            <div :class="`boat ${idx === hovered ? 'boat-hover' : ''}`"></div>
           </div>
+          <img
+            class="wave parallax"
+            :data-parallax="`${3 - idx + 0.5}`"
+            :src="`images/setup/wave_${idx + 1}.png`"
+          />
         </div>
-      </transition>
+      </div>
 
       <div class="front">
         <img
@@ -76,12 +74,10 @@
       </div>
     </div>
 
-    <transition name="fade">
-      <div v-if="!!isMounted" class="setup__over">
-        <SetUpPlayers />
-        <SetUpConnection />
-      </div>
-    </transition>
+    <div class="setup__over">
+      <SetUpPlayers />
+      <SetUpConnection />
+    </div>
 
     <SetUpModeDetails v-on:set-selected="setSelected" :mode="selected" />
 
@@ -130,7 +126,6 @@ export default {
       modes: Modes,
       hovered: null,
       selected: null,
-      isMounted: false,
     };
   },
   mounted() {
@@ -142,8 +137,6 @@ export default {
     );
 
     this.modalShown = "join";
-
-    this.isMounted = true;
 
     document.addEventListener("mousemove", (e) => this.parallax(e));
   },
@@ -256,9 +249,6 @@ export default {
           bottom: 0;
           top: unset;
         }
-        &.height {
-          min-height: 116%;
-        }
         &.full {
           width: 100%;
           height: 100%;
@@ -266,6 +256,31 @@ export default {
           left: 0;
           right: 0;
           bottom: 0;
+        }
+      }
+      .sky {
+        &_5 {
+          z-index: -1;
+        }
+        &_4 {
+          z-index: 1;
+        }
+        &_3 {
+          z-index: 2;
+        }
+        &_2 {
+          z-index: 3;
+        }
+        &_1 {
+          z-index: 4;
+        }
+      }
+      .sea {
+        &_3 {
+          z-index: 5;
+        }
+        &_2 {
+          z-index: 6;
         }
       }
     }
