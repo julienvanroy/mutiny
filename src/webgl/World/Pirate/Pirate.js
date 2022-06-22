@@ -94,7 +94,6 @@ export default class Pirate {
                 if (bodyPart.addColor) {
                     let key, color;
                     if (bodyPart.refColor) {
-                        console.log(this.body[bodyPart.refColor]);
                         if (typeof bodyPart.refColor === "string") key = this.body[bodyPart.refColor]?.mesh?.color;
                         else key = bodyPart?.mesh?.color;
 
