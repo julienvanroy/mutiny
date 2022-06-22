@@ -20,6 +20,10 @@ const configs = {
         colors: {
             orange: "#9C73FF",
             noir: "#3C365A",
+            jaune: "#FFBE4C",
+            bleu: "#5186FF",
+            rose: "#FF8AEA",
+            blanc: "#FFF8F6",
             longueVueCorps: "#FFBE4C",
             longueVueBouchon: "#FFBE4C",
             bouteilleCorps: "#9C73FF",
@@ -27,6 +31,16 @@ const configs = {
             crocher: "#CFCCFF",
         },
         body: {
+            head: {
+                shuffleMesh: false,
+                addColor: true,
+                refColor: "barrel",
+                meshes: [
+                    {
+                        name: "Tete_1",
+                    },
+                ],
+            },
             hat: {
                 shuffleMesh: true,
                 addColor: true,
@@ -64,13 +78,13 @@ const configs = {
                     },
                     {
                         name: "Barbe",
-                        texture: "barbeOrangeTexture",
-                        color: ["orange"],
+                        texture: "barbeRoseTexture",
+                        color: ["rose"],
                     },
                     {
                         name: "Barbe",
-                        texture: "barbeVioletTexture",
-                        color: ["violet"],
+                        texture: "barbeBleuTexture",
+                        color: ["bleu"],
                     },
                 ],
             },
@@ -96,8 +110,8 @@ const configs = {
                     },
                     {
                         name: "Tonneau",
-                        texture: "tonneauOrangeTexture",
-                        color: ["orange"],
+                        texture: "tonneauRoseTexture",
+                        color: ["rose"],
                     },
                 ],
             },

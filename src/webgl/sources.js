@@ -79,7 +79,7 @@ export default [
         },
     },
     {
-        name: "barbeVioletTexture",
+        name: "barbeBleuTexture",
         type: "texture",
         path: "textures/character/Barbe_violet.jpg",
         options: {
@@ -124,7 +124,7 @@ export default [
         },
     },
     {
-        name: "tonneauOrangeTexture",
+        name: "tonneauRoseTexture",
         type: "texture",
         path: "textures/character/Tonneau_orange.jpg",
         options: {

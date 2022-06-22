@@ -75,6 +75,8 @@ export default class Pirate {
 
                 if (bodyPart.tag.includes("item") && bodyPart.tag !== this.body.item) child.visible = false;
 
+                child.material = child.material.clone();
+
                 if (bodyPart.shuffleMesh) {
                     if (bodyPart.mesh.name !== child.name) child.visible = false;
 
@@ -91,7 +93,11 @@ export default class Pirate {
 
                 if (bodyPart.addColor) {
                     child.material.color = new Color(
-                        bodyPart.refColor ? configs.character.colors[bodyPart.mesh.color] : bodyPart.mesh.color
+                        bodyPart.refColor
+                            ? typeof bodyPart.refColor === "string"
+                                ? configs.character.colors[this.body[bodyPart.refColor].mesh.color]
+                                : configs.character.colors[bodyPart.mesh.color]
+                            : bodyPart.mesh.color
                     ).convertSRGBToLinear();
                 }
 
