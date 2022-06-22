@@ -24,13 +24,18 @@ export default class Pirate {
 
     _generateBody() {
         let body = {};
+
+        const items = [];
+
         for (const [key, value] of Object.entries(configs.character.body)) {
+            if (key.includes("item")) items.push(key);
             body[key] = {
                 tag: key,
                 alphaTexture: value.alphaTexture,
                 shuffleMesh: value.shuffleMesh,
                 addColor: value.addColor,
                 refColor: value.refColor,
+                toHideArray: value.toHideArray,
                 meshes: value.meshes,
                 mesh: value.shuffleMesh
                     ? sample(
@@ -43,6 +48,9 @@ export default class Pirate {
                     : undefined,
             };
         }
+
+        body.item = sample(items);
+
         return body;
     }
 
@@ -65,6 +73,10 @@ export default class Pirate {
                         .includes(child.name)
                 );
 
+                if (bodyPart.tag.includes("item") && bodyPart.tag !== this.body.item) child.visible = false;
+
+                child.material = child.material.clone();
+
                 if (bodyPart.shuffleMesh) {
                     if (bodyPart.mesh.name !== child.name) child.visible = false;
 
@@ -72,21 +84,26 @@ export default class Pirate {
                     child.material.metalness = 0.0;
 
                     child.material.map = this._resources[bodyPart.mesh.texture];
-                    if (bodyPart.addColor) {
-                        child.material.color = new Color(
-                            bodyPart.refColor ? configs.character.colors[bodyPart.mesh.color] : bodyPart.mesh.color
-                        ).convertSRGBToLinear();
-                    }
-
-                    if (bodyPart.alphaTexture) {
-                        child.material.transparent = true;
-                        child.material.alphaMap = this._resources[bodyPart.alphaTexture];
-                    }
                 } else {
                     const mesh = bodyPart.meshes.find(({ name }) => name === child.name);
                     if (mesh.texture) {
                         child.material.map = this._resources[mesh.texture];
                     }
+                }
+
+                if (bodyPart.addColor) {
+                    child.material.color = new Color(
+                        bodyPart.refColor
+                            ? typeof bodyPart.refColor === "string"
+                                ? configs.character.colors[this.body[bodyPart.refColor].mesh.color]
+                                : configs.character.colors[bodyPart.mesh.color]
+                            : bodyPart.mesh.color
+                    ).convertSRGBToLinear();
+                }
+
+                if (bodyPart.alphaTexture) {
+                    child.material.transparent = true;
+                    child.material.alphaMap = this._resources[bodyPart.alphaTexture];
                 }
 
                 if (child.name === "Tonneau") rangeColor = configs.character.colors[bodyPart.mesh.color];

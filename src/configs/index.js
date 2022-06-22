@@ -1,8 +1,7 @@
 const configs = {
     character: {
-        count: 24, //24
         speed: 1.2, //1.2
-        range: 3.2,
+        range: 3.2, //3.2
         animation: {
             idle: {
                 chance(amt = 0.2) {
@@ -19,10 +18,29 @@ const configs = {
         },
         size: [1.4, 1.4, 1.4],
         colors: {
-            orange: "#9C73FF",
-            noir: "#3C365A",
+            orange: "#d26b4a",
+            noir: "#44397c",
+            jaune: "#FFBE4C",
+            bleu: "#5186FF",
+            rose: "#FF8AEA",
+            blanc: "#FFF8F6",
+            longueVueCorps: "#d26b4a",
+            longueVueBouchon: "#cf8137",
+            bouteilleCorps: "#758deb",
+            bouteilleBouchon: "#c8c5f9",
+            crocher: "#b5b2f3",
         },
         body: {
+            head: {
+                shuffleMesh: false,
+                addColor: true,
+                refColor: "barrel",
+                meshes: [
+                    {
+                        name: "Tete_1",
+                    },
+                ],
+            },
             hat: {
                 shuffleMesh: true,
                 addColor: true,
@@ -34,6 +52,10 @@ const configs = {
                     },
                     {
                         name: "Chapeau_02",
+                        color: ["orange", "noir"],
+                    },
+                    {
+                        name: "Chapeau_03",
                         color: ["orange", "noir"],
                     },
                 ],
@@ -56,13 +78,13 @@ const configs = {
                     },
                     {
                         name: "Barbe",
-                        texture: "barbeOrangeTexture",
-                        color: ["orange"],
+                        texture: "barbeRoseTexture",
+                        color: ["rose"],
                     },
                     {
                         name: "Barbe",
-                        texture: "barbeVioletTexture",
-                        color: ["violet"],
+                        texture: "barbeBleuTexture",
+                        color: ["bleu"],
                     },
                 ],
             },
@@ -88,13 +110,13 @@ const configs = {
                     },
                     {
                         name: "Tonneau",
-                        texture: "tonneauOrangeTexture",
-                        color: ["orange"],
+                        texture: "tonneauRoseTexture",
+                        color: ["rose"],
                     },
                 ],
             },
-            weapon: {
-                shuffleMesh: true,
+            item1: {
+                shuffleMesh: false,
                 addColor: false,
                 refColor: false,
                 meshes: [
@@ -104,6 +126,48 @@ const configs = {
                     },
                 ],
             },
+            item2: {
+                shuffleMesh: false,
+                addColor: true,
+                refColor: true,
+                meshes: [
+                    {
+                        name: "Crocher",
+                        color: ["crocher"],
+                    },
+                ],
+            },
+            item3: {
+                shuffleMesh: false,
+                addColor: true,
+                refColor: true,
+                meshes: [
+                    {
+                        name: "Longue_vue_1",
+                        color: ["longueVueBouchon"],
+                    },
+                    {
+                        name: "Longue_vue_2",
+                        color: ["longueVueCorps"],
+                    },
+                ],
+            },
+            item4: {
+                shuffleMesh: false,
+                addColor: true,
+                refColor: true,
+                meshes: [
+                    {
+                        name: "Bouteille_1",
+                        color: ["bouteilleBouchon"],
+                    },
+                    {
+                        name: "Bouteille_2",
+                        color: ["bouteilleCorps"],
+                    },
+                ],
+            },
+
             belt: {
                 shuffleMesh: false,
                 addColor: false,
@@ -125,11 +189,11 @@ const configs = {
                     { name: "Bras" },
                     { name: "Bras_d_details" },
                     { name: "Bras_g_details" },
-                    { name: "Crocher" },
                     { name: "Nez" },
                     { name: "Pied" },
                     { name: "Pied_details" },
                     { name: "Sourcil" },
+                    { name: "Tete_1" },
                 ],
             },
         },

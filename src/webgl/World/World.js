@@ -105,6 +105,45 @@ export default class World extends component() {
                 });
             });
         });
+        folderDebug.addInput(configs.character.colors, "longueVueBouchon").on("change", ({ value }) => {
+            flatten(this.steeringBots.bots).forEach((bot) => {
+                bot.mesh.traverse((child) => {
+                    if (child.name.includes("Longue_vue_2"))
+                        child.material.color = new Color(value).convertSRGBToLinear();
+                });
+            });
+        });
+        folderDebug.addInput(configs.character.colors, "longueVueCorps").on("change", ({ value }) => {
+            flatten(this.steeringBots.bots).forEach((bot) => {
+                bot.mesh.traverse((child) => {
+                    if (child.name.includes("Longue_vue_1"))
+                        child.material.color = new Color(value).convertSRGBToLinear();
+                });
+            });
+        });
+        folderDebug.addInput(configs.character.colors, "bouteilleBouchon").on("change", ({ value }) => {
+            flatten(this.steeringBots.bots).forEach((bot) => {
+                bot.mesh.traverse((child) => {
+                    if (child.name.includes("Bouteille_1"))
+                        child.material.color = new Color(value).convertSRGBToLinear();
+                });
+            });
+        });
+        folderDebug.addInput(configs.character.colors, "bouteilleCorps").on("change", ({ value }) => {
+            flatten(this.steeringBots.bots).forEach((bot) => {
+                bot.mesh.traverse((child) => {
+                    if (child.name.includes("Bouteille_2"))
+                        child.material.color = new Color(value).convertSRGBToLinear();
+                });
+            });
+        });
+        folderDebug.addInput(configs.character.colors, "crocher").on("change", ({ value }) => {
+            flatten(this.steeringBots.bots).forEach((bot) => {
+                bot.mesh.traverse((child) => {
+                    if (child.name.includes("Crocher")) child.material.color = new Color(value).convertSRGBToLinear();
+                });
+            });
+        });
     }
 
     assignTargets() {

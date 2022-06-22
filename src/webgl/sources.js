@@ -31,7 +31,7 @@ export default [
     {
         name: "characterModel",
         type: "gltfModel",
-        path: "models/Character/personnage03_binary.glb",
+        path: "models/Character/personnage04_binary.glb",
     },
     {
         name: "barbeAlphaTexture",
@@ -70,7 +70,7 @@ export default [
         },
     },
     {
-        name: "barbeOrangeTexture",
+        name: "barbeRoseTexture",
         type: "texture",
         path: "textures/character/Barbe_orange.jpg",
         options: {
@@ -79,7 +79,7 @@ export default [
         },
     },
     {
-        name: "barbeVioletTexture",
+        name: "barbeBleuTexture",
         type: "texture",
         path: "textures/character/Barbe_violet.jpg",
         options: {
@@ -124,7 +124,7 @@ export default [
         },
     },
     {
-        name: "tonneauOrangeTexture",
+        name: "tonneauRoseTexture",
         type: "texture",
         path: "textures/character/Tonneau_orange.jpg",
         options: {
