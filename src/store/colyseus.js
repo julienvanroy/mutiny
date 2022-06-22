@@ -33,12 +33,13 @@ const useColyseusStore = defineStore("colyseus", {
             return state.playersArray.length > 0 && state.playersArray.every((player) => player.orientationReady);
         },
         playerRanking(state) {
-            let rank = state.playersArray.findIndex((p) => p.id === state.player.id);
-            let isLast = rank === state.playersArray.length - 1;
+            let rankedPlayers = this.rankedPlayers;
+            let rank = rankedPlayers.findIndex((p) => p.id === state.player.id);
+
             return {
+                rank: rank,
                 isWinner: rank === 0 && state.player.points !== 0,
-                rank,
-                isLast,
+                isLast: rankedPlayers.find((p) => p.id === state.player.id).isLast,
             };
         },
         stalkersCount(state) {
