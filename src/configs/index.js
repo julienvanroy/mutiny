@@ -22,7 +22,7 @@ const configs = {
             noir: "#44397c",
             jaune: "#FFBE4C",
             bleu: "#5186FF",
-            rose: "#FF8AEA",
+            violet: "#FF8AEA",
             blanc: "#FFF8F6",
             longueVueCorps: "#d26b4a",
             longueVueBouchon: "#cf8137",
@@ -83,8 +83,8 @@ const configs = {
                     },
                     {
                         name: "Barbe",
-                        texture: "barbeBleuTexture",
-                        color: ["bleu"],
+                        texture: "barbeVioletTexture",
+                        color: ["violet"],
                     },
                 ],
             },
@@ -111,7 +111,7 @@ const configs = {
                     {
                         name: "Tonneau",
                         texture: "tonneauVioletTexture",
-                        color: ["rose"],
+                        color: ["violet"],
                     },
                 ],
             },
@@ -119,6 +119,7 @@ const configs = {
                 shuffleMesh: false,
                 addColor: false,
                 refColor: false,
+                assetName: "Epee",
                 meshes: [
                     {
                         name: "Epee_01",
@@ -130,6 +131,7 @@ const configs = {
                 shuffleMesh: false,
                 addColor: true,
                 refColor: true,
+                assetName: "Crocher",
                 meshes: [
                     {
                         name: "Crocher",
@@ -141,6 +143,7 @@ const configs = {
                 shuffleMesh: false,
                 addColor: true,
                 refColor: true,
+                assetName: "Longue_vue",
                 meshes: [
                     {
                         name: "Longue_vue_1",
@@ -156,6 +159,7 @@ const configs = {
                 shuffleMesh: false,
                 addColor: true,
                 refColor: true,
+                assetName: "Bouteille",
                 meshes: [
                     {
                         name: "Bouteille_1",
