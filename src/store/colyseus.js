@@ -130,7 +130,7 @@ const useColyseusStore = defineStore("colyseus", {
             this.sendData("updatePlayerTarget", {
                 playerId,
                 playerTarget,
-                targetGotStolen,
+                playerStealer,
                 onGameStart,
             });
         },
