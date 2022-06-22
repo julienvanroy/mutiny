@@ -10,7 +10,7 @@
     ><button class="end-btn">END GAME</button></router-link
   > -->
   <transition name="fade">
-    <div v-if="!!isMounted" class="timer-container">
+    <div v-if="!!isMounted" :class="`timer-container ${!!panickMode ? 'panick-mode' : ''}`">
       <TheTimer />
     </div>
   </transition>
@@ -38,10 +38,19 @@ export default {
     return {
       players: {},
       isMounted: false,
+      panickMode: false,
     };
+  },
+  watch: {
+    time(newValue) {
+      if(10 > newValue) {
+        this.panickMode = true
+      }
+    },
   },
   computed: {
     ...mapState(useAudioStore, ["audios", "musicVolume"]),
+    ...mapState(useTimerStore, ["time"]),
   },
   mounted() {
     if (!this.colyseus.currentRoom) return;
@@ -142,5 +151,29 @@ export default {
   width: 126px;
   height: 80px;
   padding-bottom: 12px;
+  &.panick-mode {
+    animation: shake 0.5s infinite;
+    color: $red-dead;
+  }
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translateX(calc(-50% + 0px)) rotate(0deg) scale(1.1);
+  }
+  20%,
+  80% {
+    transform: translateX(calc(-50% + -2px)) rotate(-2deg);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translateX(calc(-50% + 0px)) rotate(0deg);
+  }
+  40%,
+  60% {
+    transform: translateX(calc(-50% + 2px)) rotate(2deg);
+  }
 }
 </style>
