@@ -147,7 +147,7 @@ export default class PlayerPirate extends component(Pirate) {
         }
 
         if (playerId === this.id && position.distanceTo(targetPosition) <= configs.character.range && isInFront) {
-            this.target.animation.play("dead");
+            this.triggerDead(this.target)
 
             console.log(`player ${this.id} killed their target ${this.target.id}`);
 
@@ -165,6 +165,17 @@ export default class PlayerPirate extends component(Pirate) {
             this.addPoints();
             this.switchTarget();
         }
+    }
+
+    triggerDead(target=null) {
+        const player = target || this
+        this._tickDead = 0
+        const interval = setInterval(() => {
+            player.mesh.visible = !player.mesh.visible
+            ++this._tickDead
+            if(this._tickDead > 13) clearInterval(interval)
+        }, 250)
+        player.animation.play("dead");
     }
 
     getTargetData() {
@@ -272,6 +283,14 @@ export default class PlayerPirate extends component(Pirate) {
             step: 0.01,
             min: 0,
             max: 30,
+        });
+
+
+        const btnAddPlayer = folderDebug.addButton({
+            title: "dead Player",
+        });
+        btnAddPlayer.on("click", () => {
+            this.triggerDead(this);
         });
     }
 }
