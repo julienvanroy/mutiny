@@ -1,8 +1,8 @@
-import bidello from "bidello";
+import bidello, {component} from "bidello";
 import Experience from "@/webgl/Experience";
 
-export default class Raf {
-    constructor() {
+export default class Raf extends component() {
+    init() {
         this.time = window.performance.now();
 
         this.start = this.start.bind(this);
@@ -10,6 +10,7 @@ export default class Raf {
         this.onTick = this.onTick.bind(this);
         this.start();
         this.onTick(this.startTime);
+        this.pause()
 
         this.onDebug()
     }
@@ -62,5 +63,13 @@ export default class Raf {
             else this.pause()
             playPauseDebug.title = this.isPaused ? "Play" : "Pause"
         });
+    }
+
+    onStart() {
+        this.start()
+    }
+
+    onPause() {
+        this.pause()
     }
 }

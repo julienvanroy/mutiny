@@ -47,7 +47,7 @@ export default class Fog extends Fireflies {
 
         // TweakPane
         const folderDebug = this._debug.pane.addFolder({
-            title: this.constructor.name,
+            title: 'Fog',
             expanded: false,
         });
         folderDebug.addInput(configDebug, 'fogColor', {

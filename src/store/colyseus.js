@@ -33,6 +33,9 @@ const useColyseusStore = defineStore("colyseus", {
                 isLast,
             };
         },
+        stalkersCount(state) {
+            return state.player.target ? JSON.parse(state.player.target).stalkersCount : undefined;
+        },
     },
     actions: {
         async initLobbyRoom() {
@@ -99,43 +102,21 @@ const useColyseusStore = defineStore("colyseus", {
             }
         },
         updatePlayers(room) {
-            room.onStateChange((state) => {
-                for (const [key, value] of state.players.$items) {
-                    const p = this.players.get(key) || {};
-                    const values = Object.values(value);
-
-                    Object.keys(value).forEach((k, i) => {
-                        p[k] = values[i];
-                    });
-                    this.players.set(key, p);
-                }
+            room.onMessage("getAllPlayers", (players) => {
+                this.players = new Map(Object.entries(players));
                 this.playersArray = mapToArray(this.players, true).filter((p) => !!p.name);
+
+                const player = players[room.sessionId];
+                if (player) this.player = player;
             });
-
-            room.state.players.onAdd = (player, key) => {
-                this.players[key] = {};
-
-                player.onChange = (changes) => {
-                    changes.forEach((change) => {
-                        if (key === room.sessionId) {
-                            this.player[change.field] = change.value;
-                        }
-                    });
-                };
-            };
         },
         sendData(type, value) {
-            this.currentRoom.send(type, value);
+            this.currentRoom?.send(type, value);
         },
-        addPseudo(pseudo) {
-            this.sendData("addPseudo", {
-                playerId: this.currentRoom.sessionId,
-                playerName: pseudo,
-            });
-        },
-        addPlayer() {
+        addPlayer(pseudo) {
             this.sendData("addPlayer", {
                 playerId: this.currentRoom.sessionId,
+                playerName: pseudo,
                 orientationReady: useGlobalStore().isLandscape,
             });
         },

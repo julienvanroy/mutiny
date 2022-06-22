@@ -2,17 +2,16 @@ import { sRGBEncoding } from "three";
 
 export default [
     {
-        name: 'environmentMapTexture',
-        type: 'cubeTexture',
-        path:
-            [
-                'textures/environmentMap/px.png',
-                'textures/environmentMap/nx.png',
-                'textures/environmentMap/py.png',
-                'textures/environmentMap/ny.png',
-                'textures/environmentMap/pz.png',
-                'textures/environmentMap/nz.png'
-            ]
+        name: "environmentMapTexture",
+        type: "cubeTexture",
+        path: [
+            "textures/environmentMap/px.png",
+            "textures/environmentMap/nx.png",
+            "textures/environmentMap/py.png",
+            "textures/environmentMap/ny.png",
+            "textures/environmentMap/pz.png",
+            "textures/environmentMap/nz.png",
+        ],
     },
     {
         name: "woodTexture",
@@ -30,14 +29,9 @@ export default [
         path: "models/Map/pirate-ship.glb",
     },
     {
-        name: "mapCollider",
-        type: "gltfModel",
-        path: "models/MapCollision/index.glb",
-    },
-    {
         name: "characterModel",
         type: "gltfModel",
-        path: "models/Character/personnage03_binary.glb",
+        path: "models/Character/personnage04_binary.glb",
     },
     {
         name: "barbeAlphaTexture",
@@ -76,7 +70,7 @@ export default [
         },
     },
     {
-        name: "barbeOrangeTexture",
+        name: "barbeRoseTexture",
         type: "texture",
         path: "textures/character/Barbe_orange.jpg",
         options: {
@@ -85,7 +79,7 @@ export default [
         },
     },
     {
-        name: "barbeVioletTexture",
+        name: "barbeBleuTexture",
         type: "texture",
         path: "textures/character/Barbe_violet.jpg",
         options: {
@@ -130,7 +124,7 @@ export default [
         },
     },
     {
-        name: "tonneauOrangeTexture",
+        name: "tonneauRoseTexture",
         type: "texture",
         path: "textures/character/Tonneau_orange.jpg",
         options: {
@@ -144,15 +138,64 @@ export default [
         path: "textures/fog/blue.png",
         options: {
             encoding: sRGBEncoding,
-            flipY: false
-        }
+            flipY: false,
+        },
     },
     {
         name: "musicGame",
         type: "audio",
-        path: "sound/music.mp3",
+        path: "sound/music-game.mp3",
         options: {
+            volume: 0.3,
             loop: true,
+        },
+    },
+    {
+        name: "theme",
+        type: "audio",
+        path: "sound/theme.mp3",
+        options: {
+            volume: 0.3,
+            loop: true,
+        },
+    },
+    {
+        name: "click",
+        type: "audio",
+        path: "sound/click.mp3",
+        options: {
+            volume: 0.5,
+        },
+    },
+    {
+        name: "newPlayer",
+        type: "audio",
+        path: "sound/new-player.mp3",
+        options: {
+            volume: 0.5,
+        },
+    },
+    {
+        name: "attack",
+        type: "audio",
+        path: "sound/attack.mp3",
+        options: {
+            volume: 0.5,
+        },
+    },
+    {
+        name: "killed",
+        type: "audio",
+        path: "sound/killed.mp3",
+        options: {
+            volume: 0.5,
+        },
+    },
+    {
+        name: "point",
+        type: "audio",
+        path: "sound/point.mp3",
+        options: {
             volume: 0.5,
         },
     },

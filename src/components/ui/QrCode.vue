@@ -16,7 +16,12 @@ export default {
 
     onMounted(() => {
       const id = colyseus.currentRoom.id
-      QRCode.toDataURL(`${location.protocol}//${location.host}/room/${id}`)
+      QRCode.toDataURL(`${location.protocol}//${location.host}/room/${id}`, {
+        color: {
+          dark: '#3C365A',  // Blue dots
+          light: '#0000' // Transparent background
+        }
+      })
           .then(url => {
             src.value = url
           })
@@ -35,5 +40,6 @@ img {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  border-radius: 4px;
 }
 </style>

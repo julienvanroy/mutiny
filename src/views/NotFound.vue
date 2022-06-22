@@ -1,10 +1,18 @@
 <template>
-  <div>404</div>
+  <div>
+    <h1>404</h1>
+    <TheButton link="/" :label="$t('ui.back')" color="secondary" />
+  </div>
 </template>
 
 <script>
+import TheButton from "@/components/ui/TheButton";
+
 export default {
   name: 'NotFound',
+  components: {
+    TheButton
+  }
 }
 </script>
 
@@ -15,6 +23,13 @@ div {
   left: 50%;
   transform: translate(-50%, -50%);
   font-weight: $ft-w-bold;
-  font-size: $ft-s-large;
+
+  h1 {
+    font-size: 10rem;
+  }
+
+  .btn {
+    margin: auto;
+  }
 }
 </style>

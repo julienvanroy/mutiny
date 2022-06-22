@@ -1,24 +1,31 @@
 <template>
   <transition name="fade">
     <div :class="`loader ${ended ? 'ended' : ''}`" v-if="show">
-      <div class="loader-bar" :style="{transform : !ended ? `scaleX(${progress})` : ''}"/>
+      <img src="images/loader/logo.png" />
+      <!-- <p>{{ Math.round(progress) * 100 }}%</p> -->
+      <div class="skulls">
+        <img class="skull" src="images/loader/skull.png" />
+        <img class="skull" src="images/loader/skull.png" />
+        <img class="skull" src="images/loader/skull.png" />
+      </div>
+      <!-- <div class="loader-bar" :style="{transform : !ended ? `scaleX(${progress})` : ''}"/> -->
     </div>
   </transition>
 </template>
 
 <script>
-import {mapState} from 'pinia'
+import { mapState } from "pinia";
 import useWebglStore from "@/store/webgl";
 
 export default {
   name: "TheLoader",
   data() {
     return {
-      show: true
-    }
+      show: true,
+    };
   },
   computed: {
-    ...mapState(useWebglStore, {progress: 'progressLoading'}),
+    ...mapState(useWebglStore, { progress: "progressLoading" }),
     ended() {
       return this.progress === 1
     }
@@ -32,8 +39,7 @@ export default {
       }
     }
   }
-
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -43,11 +49,58 @@ export default {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: black;
+  background-color: $purple;
+  color: $loader;
   z-index: 20;
   opacity: 1;
   transition: 0.5s opacity ease;
-  &-bar {
+
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  img {
+    max-width: 680px;
+  }
+  /* p {
+    font-weight: $ft-w-bold;
+    font-size: 5rem;
+    margin: 80px 0 40px;
+  } */
+  .skulls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 80px;
+    .skull {
+      animation: pulse 1.6s infinite linear;
+      width: 36px;
+      height: auto;
+      &:nth-child(2) {
+        animation-delay: 0.3s;
+      }
+      &:nth-child(3) {
+        animation-delay: 0.6s;
+      }
+      & + .skull {
+        margin-left: 40px;
+      }
+    }
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: translateY(-10px) scale(0);
+    }
+    30% {
+      transform: translateY(-10px) scale(1);
+    }
+    60%,
+    100% {
+      transform: translateY(-10px) scale(0);
+    }
+  }
+  /* &-bar {
     position: absolute;
     top: 50%;
     width: 100%;
@@ -56,7 +109,7 @@ export default {
     transform: scaleX(0);
     transform-origin: top left;
     transition: transform 0.5s ease;
-  }
+  } */
 
   &.ended {
     opacity: 0;

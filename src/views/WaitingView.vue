@@ -61,7 +61,9 @@ export default {
 
     this.colyseus.currentRoom.onMessage("updatePlayerTarget", () => {});
 
-    this.colyseus.currentRoom.onMessage("leaveRoom", () => {
+    this.colyseus.currentRoom.onMessage("leaveRoom", (playerId) => {
+      console.log(this.colyseus.currentRoom.sessionId, playerId)
+      if(this.colyseus.currentRoom.sessionId !== playerId) return;
       this.colyseus.currentRoom.leave();
       this.ejected = true;
     });

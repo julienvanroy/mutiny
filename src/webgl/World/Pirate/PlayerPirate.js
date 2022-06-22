@@ -1,8 +1,8 @@
 import { component } from "bidello";
-import { Box3, Line3, Matrix4, Quaternion, Vector2, Vector3 } from "three";
+import { Quaternion, Vector2, Vector3 } from "three";
 import Experience from "../../Experience";
 import Pirate from "./Pirate";
-import { mapToArray, sample } from "@/utils";
+import { clamp, flatten, mapToArray, sample } from "@/utils";
 import configs from "@/configs";
 import BotPirate from "./BotPirate";
 import useColyseusStore from "@/store/colyseus";
@@ -20,7 +20,7 @@ export default class PlayerPirate extends component(Pirate) {
         this._debug = experience.debug;
         this._controls = experience.controls;
 
-        this._bots = experience.world.bots;
+        this._bots = experience.world.steeringBots.bots;
         this._players = experience.world.players;
 
         this._vectorControls = new Vector2();
@@ -28,24 +28,11 @@ export default class PlayerPirate extends component(Pirate) {
         this._speedMove = configs.character.speed;
         this._targetQuaternion = new Quaternion();
         this._speedRotation = 10;
-
-        this.isOnGround = false;
-        this._velocity = new Vector3();
-        this._gravity = -32;
-        this._capsuleInfo = {
-            radius: 1,
-            segment: new Line3(new Vector3(), new Vector3(0.0, 0.0, 0.0)),
-        };
-
-        this._temp = {
-            box: new Box3(),
-            mat: new Matrix4(),
-            segment: new Line3(),
-            vector: new Vector3(),
-            vector2: new Vector3(),
-        };
+        this._debugRunning = false;
 
         this._useKeyboard = this.id === "debug";
+
+        this.mesh.position.set(2,0,6)
 
         this.onDebug();
     }
@@ -75,16 +62,28 @@ export default class PlayerPirate extends component(Pirate) {
         return this._vectorControls.x !== 0 || this._vectorControls.y !== 0;
     }
 
+    get isRunning() {
+        return this._vectorControls.length() > (this._debug.active ? 1 : 0.5);
+    }
+
     _move(delta) {
         if (this.isMoving) {
-            const boostRun = this._vectorControls.length() > 0.5 ? this._speedRun : 1;
-            this.mesh.position.z -= this._vectorControls.y * delta * this._speedMove * boostRun;
-            this.mesh.position.x += this._vectorControls.x * delta * this._speedMove * boostRun;
+            const boostRun = this.isRunning || this._debugRunning ? this._speedRun : 1;
+            this.mesh.position.z = clamp(
+                this.mesh.position.z - this._vectorControls.y * delta * this._speedMove * boostRun,
+                -this._collider.z / 2,
+                this._collider.z / 2
+            );
+            this.mesh.position.x = clamp(
+                this.mesh.position.x + this._vectorControls.x * delta * this._speedMove * boostRun,
+                -this._collider.x / 2,
+                this._collider.x / 2
+            );
         }
     }
 
     _rotation(delta) {
-        if (this.isMoving) this._targetQuaternion.setFromAxisAngle(new Vector3(0, 1, 0), this._vectorControls.angle());
+        if (this.isMoving) this._targetQuaternion.setFromAxisAngle(new Vector3(0, 1, 0), new Vector2(-this._vectorControls.y, this._vectorControls.x).angle());
 
         if (this.mesh && !this.mesh.quaternion.equals(this._targetQuaternion)) {
             const step = this._speedRotation * delta;
@@ -92,89 +91,21 @@ export default class PlayerPirate extends component(Pirate) {
         }
     }
 
-    _updateCollision(delta) {
-        this._velocity.y += this.isOnGround ? 0 : delta * this._gravity;
-        this.mesh.position.addScaledVector(this._velocity, delta);
-
-        this.mesh.updateMatrixWorld();
-
-        // adjust player position based on collisions
-        const capsuleInfo = this._capsuleInfo;
-        this._temp.box.makeEmpty();
-        this._temp.mat.copy(this._collider.matrixWorld).invert();
-        this._temp.segment.copy(capsuleInfo.segment);
-
-        // get the position of the capsule in the local space of the collider
-        this._temp.segment.start.applyMatrix4(this.mesh.matrixWorld).applyMatrix4(this._temp.mat);
-        this._temp.segment.end.applyMatrix4(this.mesh.matrixWorld).applyMatrix4(this._temp.mat);
-
-        // get the axis aligned bounding box of the capsule
-        this._temp.box.expandByPoint(this._temp.segment.start);
-        this._temp.box.expandByPoint(this._temp.segment.end);
-
-        this._temp.box.min.addScalar(-capsuleInfo.radius);
-        this._temp.box.max.addScalar(capsuleInfo.radius);
-
-        this._collider.geometry.boundsTree.shapecast({
-            intersectsBounds: (box) => box.intersectsBox(this._temp.box),
-            intersectsTriangle: (tri) => {
-                // check if the triangle is intersecting the capsule and adjust the
-                // capsule position if it is.
-                const triPoint = this._temp.vector;
-                const capsulePoint = this._temp.vector2;
-                const distance = tri.closestPointToSegment(this._temp.segment, triPoint, capsulePoint);
-                if (distance < capsuleInfo.radius) {
-                    const depth = capsuleInfo.radius - distance;
-                    const direction = capsulePoint.sub(triPoint).normalize();
-
-                    this._temp.segment.start.addScaledVector(direction, depth);
-                    this._temp.segment.end.addScaledVector(direction, depth);
-                }
-            },
-        });
-
-        // get the adjusted position of the capsule collider in world space after checking
-        // triangle collisions and moving it. capsuleInfo.segment.start is assumed to be
-        // the origin of the player model.
-        const newPosition = this._temp.vector;
-        newPosition.copy(this._temp.segment.start).applyMatrix4(this._collider.matrixWorld);
-
-        // check how much the collider was moved
-        const deltaVector = this._temp.vector2;
-        deltaVector.subVectors(newPosition, this.mesh.position);
-
-        // if the player was primarily adjusted vertically we assume it's on something we should consider ground
-        this.isOnGround = deltaVector.y > Math.abs(delta * this._velocity.y * 0.25);
-
-        const offset = Math.max(0.0, deltaVector.length() - 1e-5);
-        deltaVector.normalize().multiplyScalar(offset);
-
-        // adjust the player model
-        this.mesh.position.add(deltaVector);
-
-        if (!this.isOnGround) {
-            deltaVector.normalize();
-            this._velocity.addScaledVector(deltaVector, -deltaVector.dot(this._velocity));
-        } else {
-            this._velocity.set(0, 0, 0);
-        }
-
-        // if the player has fallen too far below the level reset their position to 0
-        if (this.mesh.position.y < 0) {
-            this.mesh.position.y = 0;
-        }
-    }
-
-    _setBot() {
+    setBot() {
         if (this.bot) {
             this.bot.isPlayer = false;
             this.bot = null;
         }
 
-        this.bot = sample(Object.values(this._bots).filter((bot) => !bot.isPlayer && bot.id !== this.target.id));
+        // this.bot = sample(
+        //     Object.values(flatten(this._bots)).filter((bot) => !bot.isPlayer && bot.id !== this.target.id)
+        // );
+        this.bot = sample(Object.values(this._bots[0]).filter((bot) => !bot.isPlayer && bot.id !== this.target.id));
 
         this.bot.isPlayer = true;
+        this.bot.playerId = this.id;
         this.mesh = this.bot.mesh;
+        this.animation = this.bot.animation
     }
 
     onRaf({ delta }) {
@@ -182,25 +113,42 @@ export default class PlayerPirate extends component(Pirate) {
         this._move(delta);
         this._rotation(delta);
 
-        /**
-         * Todo: Need Low model navmesh and collison ( Only cube )
-         */
-        //this._updateCollision(delta)
-
-        if (!this.isMoving && this.animation.actions.current !== this.animation.actions.idle)
-            this.animation.play("idle");
-        else if (this.animation.actions.current !== this.animation.actions.walk) this.animation.play("walk");
+        if (this.mesh) {
+            if (!this.isMoving) {
+                if (!this.animation.isCurrent("idle")) this.animation.play("idle");
+            } else if (!this.animation.isCurrent("walk")) {
+                this.animation.play("walk");
+                if (this.isRunning || this._debugRunning)
+                    this.animation.actions.current.setEffectiveTimeScale(
+                        configs.character.animation.active.runningTimeScale
+                    );
+                else
+                    this.animation.actions.current.setEffectiveTimeScale(
+                        configs.character.animation.active.walkingTimeScale
+                    );
+            }
+        }
     }
 
     onAttack({ playerId }) {
+        let position, targetPosition, directionVect, playerFacing, isInFront;
         if (playerId === this.id) {
             this.animation.play("attack");
+
+            position = new Vector3();
+            this.mesh.matrixWorld.decompose(position, new Quaternion(), new Vector3());
+
+            targetPosition = new Vector3();
+            this.target.mesh.matrixWorld.decompose(targetPosition, new Quaternion(), new Vector3());
+
+            directionVect = targetPosition.clone().sub(position).normalize();
+            playerFacing = this.mesh.getWorldDirection(new Vector3());
+            isInFront = playerFacing.dot(directionVect) > 0;
         }
 
-        if (
-            playerId === this.id &&
-            this.mesh.position.distanceTo(this.target.mesh.position) <= configs.character.range
-        ) {
+        if (playerId === this.id && position.distanceTo(targetPosition) <= configs.character.range && isInFront) {
+            this.triggerDead(this.target)
+
             console.log(`player ${this.id} killed their target ${this.target.id}`);
 
             useColyseusStore().sendData("kill", { player: playerId, target: this.target.id });
@@ -219,6 +167,36 @@ export default class PlayerPirate extends component(Pirate) {
         }
     }
 
+    triggerDead(target=null) {
+        const player = target || this
+        this._tickDead = 0
+        const interval = setInterval(() => {
+            player.mesh.visible = !player.mesh.visible
+            ++this._tickDead
+            if(this._tickDead > 13) clearInterval(interval)
+        }, 250)
+        player.animation.play("dead");
+    }
+
+    getTargetData() {
+        if (this.target) {
+            let bodyData;
+
+            if (this.target.bot) bodyData = this.target.bot.bodyData;
+            else bodyData = this.target.bodyData;
+
+            return {
+                id: this.target.id,
+                stalkersCount: mapToArray(this._players, true).filter((p) => p.target.id === this.id).length,
+                info: bodyData.map(({ tag, name, color, show }) => ({
+                    tag,
+                    img: tag !== "weapon" ? `${name}_${color}` : name,
+                    show,
+                })),
+            };
+        } else return undefined;
+    }
+
     addPoints() {
         useColyseusStore().sendData("addPoint", { playerId: this.id });
     }
@@ -226,7 +204,9 @@ export default class PlayerPirate extends component(Pirate) {
     respawn(targetPlayer) {
         console.log(`player ${this.id} has old target ${this.target.id}, old bot ${this.bot.id}`);
 
-        const selectedBot = sample(Object.values(this._bots).filter((bot) => !bot.isPlayer && bot.id !== this.bot.id));
+        const selectedBot = sample(
+            Object.values(this._bots[0]).filter((bot) => !bot.isPlayer && bot.id !== this.bot.id)
+        );
         selectedBot.isPlayer = true;
 
         this.bot.isPlayer = false;
@@ -236,7 +216,8 @@ export default class PlayerPirate extends component(Pirate) {
         this.mesh = this.bot.mesh;
 
         this.target = targetPlayer;
-        useColyseusStore().updatePlayerTarget(this.id, this._getTargetData());
+
+        useColyseusStore().updatePlayerTarget(this.id, this.getTargetData());
 
         console.log(
             `player ${this.id} has new target ${this.target.id} ${
@@ -248,7 +229,7 @@ export default class PlayerPirate extends component(Pirate) {
     switchTarget(targetGotStolen = false, onGameStart = false) {
         if (this.target instanceof BotPirate) {
             this.target = sample(
-                Object.values(this._bots).filter((bot) => bot.id !== this.target.id && bot.id !== this.bot.id)
+                Object.values(flatten(this._bots)).filter((bot) => bot.id !== this.target.id && bot.id !== this.bot.id)
             );
         } else if (this.target instanceof PlayerPirate) {
             this.target = sample(
@@ -258,7 +239,7 @@ export default class PlayerPirate extends component(Pirate) {
             );
         }
 
-        useColyseusStore().updatePlayerTarget(this.id, this._getTargetData(), targetGotStolen, onGameStart);
+        useColyseusStore().updatePlayerTarget(this.id, this.getTargetData(), targetGotStolen, onGameStart);
 
         console.log(
             `player ${this.id} has new target ${this.target.id} ${
@@ -277,6 +258,10 @@ export default class PlayerPirate extends component(Pirate) {
 
         folderDebug.addInput(this, "_useKeyboard", {
             label: "Use Keyboard",
+        });
+
+        folderDebug.addInput(this, "_debugRunning", {
+            label: "Run",
         });
 
         folderDebug.addInput(this, "_speedMove", {
@@ -300,11 +285,12 @@ export default class PlayerPirate extends component(Pirate) {
             max: 30,
         });
 
-        folderDebug.addInput(this, "_gravity", {
-            label: "Gravity",
-            step: 0.01,
-            min: -100,
-            max: 0,
+
+        const btnAddPlayer = folderDebug.addButton({
+            title: "dead Player",
+        });
+        btnAddPlayer.on("click", () => {
+            this.triggerDead(this);
         });
     }
 }

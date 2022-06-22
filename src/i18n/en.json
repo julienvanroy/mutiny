@@ -11,7 +11,7 @@
     "back": "Back",
     "close": "Close",
     "start": "On boooaard!",
-    "continue": "Continue",
+    "continue": "Resume",
     "restart": "Restart",
     "replay": "Replay",
     "changeMode": "Change mode",
@@ -23,7 +23,7 @@
   "homepage": {
     "credits": "Credits",
     "createRoom": "Create a vessel",
-    "homePhraseDesktop": "One phone per player is required to control their sailor",
+    "homePhraseMobile": "Join a vessel from a computer screen",
     "infosPlayers": "3 to 8 players",
     "infosEquipments1": "1 phone per player",
     "infosEquipments2": "+ 1 computer",
@@ -58,8 +58,8 @@
     }
   },
   "setup": {
-    "playersTitle": "The crew",
-    "playersPlaceholder1": "No sailor on deck...",
+    "playersTitle": "Sailors",
+    "playersPlaceholder1": "No sailors on deck...",
     "playersPlaceholder2": "*lapping waves*",
     "infos1": "To join the crew, go to ",
     "infos2": "mutinyparty.com",

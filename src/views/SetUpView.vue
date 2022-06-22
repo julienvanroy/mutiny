@@ -6,10 +6,7 @@
 
     <div :class="`setup__under ${null !== selected ? 'details-open' : ''}`">
       <div class="background">
-        <img
-          class="sky bottom"
-          src="images/setup/sky_5.jpg"
-        />
+        <img class="sky bottom full" src="images/setup/sky_5.jpg" />
         <img
           class="sky bottom parallax"
           data-parallax="1"
@@ -42,25 +39,27 @@
         />
       </div>
 
-      <div class="modes">
-        <div
-          v-for="(mode, idx) in modes"
-          :key="`mode-${idx}`"
-          :class="`mode ${!mode.isAvailable ? 'unavailable' : ''}`"
-          @mouseover="() => mouseHover(mode.isAvailable, idx)"
-          @mouseleave="() => mouseHover(mode.isAvailable, null)"
-          @click="() => setSelected(mode)"
-        >
-          <div class="boat-container parallax" :data-parallax="`${4 - idx}`">
-            <div :class="`boat ${idx === hovered ? 'boat-hover' : ''}`"></div>
+      <transition name="fade">
+        <div v-if="!!isMounted" class="modes">
+          <div
+            v-for="(mode, idx) in modes"
+            :key="`mode-${idx}`"
+            :class="`mode ${!mode.isAvailable ? 'unavailable' : ''}`"
+            @mouseover="() => mouseHover(mode.isAvailable, idx)"
+            @mouseleave="() => mouseHover(mode.isAvailable, null)"
+            @click="() => setSelected(mode)"
+          >
+            <div class="boat-container parallax" :data-parallax="`${4 - idx}`">
+              <div :class="`boat ${idx === hovered ? 'boat-hover' : ''}`"></div>
+            </div>
+            <img
+              class="wave parallax"
+              :data-parallax="`${3 - idx + 0.5}`"
+              :src="`images/setup/wave_${idx + 1}.png`"
+            />
           </div>
-          <img
-            class="wave parallax"
-            :data-parallax="`${3 - idx + .5}`"
-            :src="`images/setup/wave_${idx + 1}.png`"
-          />
         </div>
-      </div>
+      </transition>
 
       <div class="front">
         <img
@@ -71,24 +70,31 @@
       </div>
 
       <div class="catch-phrase">
-        <p v-if="hovered !== null">{{ $t(modes[hovered].shortDescription) }}</p>
+        <p v-if="hovered !== null">
+          {{ $t(modes[hovered].shortDescription) }}
+        </p>
       </div>
     </div>
 
-    <div class="setup__over">
-      <SetUpPlayers />
-      <SetUpConnection />
-    </div>
+    <transition name="fade">
+      <div v-if="!!isMounted" class="setup__over">
+        <SetUpPlayers />
+        <SetUpConnection />
+      </div>
+    </transition>
 
-    <SetUpModeDetails
-      v-if="null !== selected"
-      v-on:set-selected="setSelected"
-      :mode="selected"
-    />
+    <SetUpModeDetails v-on:set-selected="setSelected" :mode="selected" />
 
-    <ModalJoin v-if="'join' === modalShown" :roomId="colyseus.currentRoom.id" />
+    <transition name="fade">
+      <ModalJoin
+        v-if="'join' === modalShown"
+        :roomId="colyseus.currentRoom.id"
+      />
+    </transition>
 
-    <ModalQrCode v-if="'qrcode' === modalShown" />
+    <transition name="fade">
+      <ModalQrCode v-if="'qrcode' === modalShown" />
+    </transition>
   </div>
 </template>
 
@@ -121,11 +127,10 @@ export default {
   },
   data() {
     return {
-      showModalJoin: true,
-      showModalQRCode: false,
       modes: Modes,
       hovered: null,
       selected: null,
+      isMounted: false,
     };
   },
   mounted() {
@@ -137,6 +142,8 @@ export default {
     );
 
     this.modalShown = "join";
+
+    this.isMounted = true;
 
     document.addEventListener("mousemove", (e) => this.parallax(e));
   },
@@ -202,19 +209,24 @@ export default {
     width: 100%;
     height: 100%;
     overflow: hidden;
+    &:before {
+      content: "";
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      z-index: 1;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      transition: 0.3s all ease-in-out;
+    }
     &.details-open {
       &:before {
-        content: "";
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        z-index: 1;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
         background-color: rgba($purple, 0.4);
         backdrop-filter: blur(4px);
+        transition: 0.3s all ease-in-out;
       }
     }
 
@@ -226,7 +238,7 @@ export default {
     .background {
       position: absolute;
       top: 0;
-      left: 0;
+      left: -6%;
       right: 0;
       bottom: 0;
       width: 106%;
@@ -235,7 +247,6 @@ export default {
       .sky,
       .sea {
         position: absolute;
-        left: -3%;
         width: 100%;
         &.top {
           bottom: unset;
@@ -247,6 +258,14 @@ export default {
         }
         &.height {
           min-height: 116%;
+        }
+        &.full {
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
         }
       }
     }
@@ -334,7 +353,7 @@ export default {
     }
     .front {
       position: absolute;
-      left: 0;
+      left: -6%;
       right: 0;
       bottom: 0;
       width: 106%;
@@ -342,7 +361,6 @@ export default {
       .sea {
         position: absolute;
         width: 100%;
-        left: -6%;
         bottom: 0;
       }
     }
@@ -350,9 +368,10 @@ export default {
     .catch-phrase {
       position: absolute;
       right: 0;
-      bottom: 12%;
+      bottom: 10%;
       width: calc(100% - 420px);
       height: 100px;
+      z-index: 8;
       p {
         max-width: 600px;
         margin: auto;

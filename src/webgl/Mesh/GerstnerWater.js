@@ -22,7 +22,7 @@ export default class GerstnerWater extends component() {
 
         this._params = {
             sunColor: "#ffffff",
-            waterColor: "#06063c",
+            waterColor: "#000026",
         }
 
         this.water = new Water(waterGeometry, {
@@ -59,7 +59,7 @@ export default class GerstnerWater extends component() {
             setupWave("waveC", 2)
             shader.vertexShader = vertexShader
             shader.fragmentShader = fragmentShader
-            shader.uniforms.size.value = 10.0
+            shader.uniforms.size.value = 1.0
         }
 
         this._scene.add(this.water)

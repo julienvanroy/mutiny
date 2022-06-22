@@ -32,8 +32,18 @@
           </ul>
           <ul>
             <li><h2>Design</h2></li>
-            <li><a href="" target="_blank">Marie-Liesse Prunier-Duparge</a></li>
-            <li><a href="" target="_blank">Vincent Calas</a></li>
+            <li>
+              <a
+                href="https://www.linkedin.com/in/marie-liesse-de-solages-90038315a"
+                target="_blank"
+                >Marie-Liesse Prunier-Duparge</a
+              >
+            </li>
+            <li>
+              <a href="https://www.instagram.com/vincent_calas/" target="_blank"
+                >Vincent Calas</a
+              >
+            </li>
           </ul>
         </div>
         <TheButton

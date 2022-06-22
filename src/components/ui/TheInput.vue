@@ -7,6 +7,7 @@
       :value="modelValue"
       :placeholder="placeholder"
       :readonly="readonly"
+      :maxlength="maxlength"
       @input="$emit('update:modelValue', $event.target.value)"
       @focus="$event.target.select()"
     />
@@ -50,6 +51,11 @@ export default {
       type: String,
       default: "",
     },
+    maxlength: {
+      type: Number,
+      required: false,
+      default: null
+    }
   },
   computed: {
     cssProps() {

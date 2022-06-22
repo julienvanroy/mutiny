@@ -71,25 +71,9 @@ export default {
       this.targetDead = target;
     });
 
-    this.colyseus.currentRoom.onMessage("updatePlayerTarget", ({ target }) => (this.targetStolen = target));
+    this.colyseus.currentRoom.onMessage("updatePlayerTarget", ({ player }) => (this.player = player));
 
     this.colyseus.currentRoom.onMessage("endGame", () => this.$router.push("/end-game"));
   },
-  unmounted() {
-    this.colyseus.currentRoom?.leave();
-    window.removeEventListener("resize", this.resize, false);
-  },
 };
 </script>
-
-<style lang="scss" scoped>
-.v-enter-active,
-.v-leave-active {
-  transition: opacity 0.64s ease;
-}
-
-.v-enter-from,
-.v-leave-to {
-  opacity: 0;
-}
-</style>

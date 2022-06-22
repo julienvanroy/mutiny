@@ -8,10 +8,14 @@ import { mapState } from "pinia/dist/pinia.esm-browser";
 import useGlobalStore from "@/store/global";
 import EndViewDesktop from "@/components/EndViewDesktop.vue";
 import EndViewMobile from "@/components/EndViewMobile.vue";
+import bidello from "bidello";
 
 export default {
   components: { EndViewDesktop, EndViewMobile },
   name: "EndGameView",
+  mounted() {
+    bidello.trigger({ name: "pause" });
+  },
   computed: {
     ...mapState(useGlobalStore, ["isMobile"]),
   },

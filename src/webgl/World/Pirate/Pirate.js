@@ -1,9 +1,9 @@
 import { Mesh, Color, CircleGeometry, MeshBasicMaterial, MeshStandardMaterial, LoopOnce } from "three";
 import Experience from "../../Experience";
-import configs from "@/configs";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils";
-import { sample } from "@/utils";
 import Animation from "@/webgl/Animation";
+import configs from "@/configs";
+import { sample } from "@/utils";
 
 export default class Pirate {
     constructor(body = null) {
@@ -12,21 +12,30 @@ export default class Pirate {
         this._resources = experience.resources.items;
         this.charaResource = experience.resources.items.characterModel;
 
-        this.body = body;
+        if (!body) {
+            this.body = this._generateBody();
+        } else this.body = body;
 
-        if (!this.body) this.generateBody();
-        this._initModel();
-        this._initAnimation();
+        if (this.body) {
+            this._initModel();
+            this._initAnimation();
+        }
     }
 
-    generateBody() {
-        this.body = {};
+    _generateBody() {
+        let body = {};
+
+        const items = [];
+
         for (const [key, value] of Object.entries(configs.character.body)) {
-            this.body[key] = {
+            if (key.includes("item")) items.push(key);
+            body[key] = {
                 tag: key,
                 alphaTexture: value.alphaTexture,
                 shuffleMesh: value.shuffleMesh,
                 addColor: value.addColor,
+                refColor: value.refColor,
+                toHideArray: value.toHideArray,
                 meshes: value.meshes,
                 mesh: value.shuffleMesh
                     ? sample(
@@ -39,6 +48,10 @@ export default class Pirate {
                     : undefined,
             };
         }
+
+        body.item = sample(items);
+
+        return body;
     }
 
     _initModel() {
@@ -52,26 +65,25 @@ export default class Pirate {
 
         this.mesh.children[0].traverse((child) => {
             if (child instanceof Mesh) {
+                child.layers.set(1);
+
                 const bodyPart = Object.values(this.body).find(({ meshes }) =>
                     Object.values(meshes)
                         .map(({ name }) => name)
                         .includes(child.name)
                 );
 
+                if (bodyPart.tag.includes("item") && bodyPart.tag !== this.body.item) child.visible = false;
+
+                child.material = child.material.clone();
+
                 if (bodyPart.shuffleMesh) {
                     if (bodyPart.mesh.name !== child.name) child.visible = false;
 
                     child.material = new MeshStandardMaterial();
+                    child.material.metalness = 0.0;
 
                     child.material.map = this._resources[bodyPart.mesh.texture];
-                    if (bodyPart.addColor) {
-                        child.material.color = new Color(bodyPart.mesh.color).convertSRGBToLinear();
-                    }
-
-                    if (bodyPart.alphaTexture) {
-                        child.material.transparent = true;
-                        child.material.alphaMap = this._resources[bodyPart.alphaTexture];
-                    }
                 } else {
                     const mesh = bodyPart.meshes.find(({ name }) => name === child.name);
                     if (mesh.texture) {
@@ -79,7 +91,22 @@ export default class Pirate {
                     }
                 }
 
-                if (child.name === "Tonneau") rangeColor = bodyPart.mesh.color;
+                if (bodyPart.addColor) {
+                    child.material.color = new Color(
+                        bodyPart.refColor
+                            ? typeof bodyPart.refColor === "string"
+                                ? configs.character.colors[this.body[bodyPart.refColor].mesh.color]
+                                : configs.character.colors[bodyPart.mesh.color]
+                            : bodyPart.mesh.color
+                    ).convertSRGBToLinear();
+                }
+
+                if (bodyPart.alphaTexture) {
+                    child.material.transparent = true;
+                    child.material.alphaMap = this._resources[bodyPart.alphaTexture];
+                }
+
+                if (child.name === "Tonneau") rangeColor = configs.character.colors[bodyPart.mesh.color];
 
                 if (child.name === "Barbe")
                     this.mesh.children[0].getObjectByName("Sourcil").material = child.material.clone();
@@ -89,9 +116,11 @@ export default class Pirate {
             }
         });
 
+        this.range = configs.character.range;
+
         // Attack range
         const rangeCircle = new Mesh(
-            new CircleGeometry(configs.character.range / 2, 32),
+            new CircleGeometry(this.range / 2, 32),
             new MeshBasicMaterial({
                 color: new Color(rangeColor).convertSRGBToLinear(),
                 opacity: 0.32,
@@ -101,7 +130,7 @@ export default class Pirate {
         );
         rangeCircle.geometry.rotateX(-Math.PI / 2);
         rangeCircle.position.y = 0.32;
-        this.mesh.add(rangeCircle);
+        // this.mesh.add(rangeCircle);
 
         // Body data (to send to gamepad)
         this.bodyData = Object.values(this.body)
@@ -131,25 +160,7 @@ export default class Pirate {
         this.animation.actions.dead.setLoop(LoopOnce);
         this.animation.actions.dead.clampWhenFinished = true;
 
-        this.animation.actions.current = this.animation.actions.walk;
-        this.animation.play("walk");
-    }
-
-    _getTargetData() {
-        if (this.target) {
-            let bodyData;
-
-            if (this.target.bot) bodyData = this.target.bot.bodyData;
-            else bodyData = this.target.bodyData;
-
-            return {
-                id: this.target.id,
-                info: bodyData.map(({ tag, name, color, show }) => ({
-                    tag,
-                    img: tag !== "weapon" ? `${name}_${color.replace("#", "")}` : name,
-                    show,
-                })),
-            };
-        } else return undefined;
+        this.animation.actions.current = this.animation.actions.idle;
+        this.animation.play("idle");
     }
 }

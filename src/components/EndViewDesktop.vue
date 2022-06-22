@@ -4,14 +4,10 @@
       <img src="images/end-desktop/background.jpg" />
     </div>
     <div class="end-game__over">
-      <div class="left">
+      <div :class="`left ${!!isMounted ? 'appear' : ''}`">
         <div class="winner">
           <h1>1. {{ $t("end.desktop.0") }}</h1>
-          <ThePlayer
-            :player="colyseus.rankedPlayers[0]"
-            :large="true"
-            :showMedal="true"
-          />
+          <the-player :player="colyseus.rankedPlayers[0]" large show-medal dont-update-state />
         </div>
         <img class="separator" src="images/end-desktop/separator.png" />
         <div class="players-list">
@@ -22,7 +18,7 @@
                   <span class="index">{{ index + 1 }}.</span>
                   <span class="status">{{ $t(`end.desktop[${index}]`) }}</span>
                 </p>
-                <ThePlayer :player="player" />
+                <the-player :player="player" dont-update-state />
               </div>
             </li>
           </ul>
@@ -36,11 +32,7 @@
       <div class="right">
         <!-- TODO: replay btn -->
         <TheButton :label="$t('ui.replay')" color="primary" link="/" />
-        <TheButton
-          :label="$t('ui.changeMode')"
-          color="secondary"
-          link="/setup"
-        />
+        <TheButton :label="$t('ui.changeMode')" color="secondary" link="/setup" />
         <TheButton :label="$t('ui.quitVessel')" color="secondary" link="/" />
       </div>
     </div>
@@ -59,6 +51,14 @@ export default {
     const colyseus = useColyseusStore();
 
     return { colyseus };
+  },
+  data() {
+    return {
+      isMounted: false,
+    };
+  },
+  mounted() {
+    this.isMounted = true;
   },
 };
 </script>
@@ -92,6 +92,12 @@ export default {
       background-image: url("../assets/end-desktop/background.png");
       background-repeat: no-repeat;
       background-size: 100% 100%;
+      transform: translateX(-100%);
+      transition: 0.6s all ease-in-out;
+      &.appear {
+        transform: translateX(0);
+        transition: 0.6s all ease-in-out;
+      }
       .winner {
         display: flex;
         justify-content: center;
