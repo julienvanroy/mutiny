@@ -96,8 +96,8 @@ const configs = {
                     },
                 ],
             },
-            weapon: {
-                shuffleMesh: true,
+            item1: {
+                shuffleMesh: false,
                 addColor: false,
                 refColor: false,
                 meshes: [
@@ -107,6 +107,43 @@ const configs = {
                     },
                 ],
             },
+            item2: {
+                shuffleMesh: false,
+                addColor: false,
+                refColor: false,
+                meshes: [
+                    {
+                        name: "Crocher",
+                    },
+                ],
+            },
+            item3: {
+                shuffleMesh: false,
+                addColor: false,
+                refColor: false,
+                meshes: [
+                    {
+                        name: "Longue_vue_2",
+                    },
+                    {
+                        name: "Longue_vue_1",
+                    },
+                ],
+            },
+            item4: {
+                shuffleMesh: false,
+                addColor: false,
+                refColor: false,
+                meshes: [
+                    {
+                        name: "Bouteille_1",
+                    },
+                    {
+                        name: "Bouteille_2",
+                    },
+                ],
+            },
+
             belt: {
                 shuffleMesh: false,
                 addColor: false,
@@ -128,17 +165,10 @@ const configs = {
                     { name: "Bras" },
                     { name: "Bras_d_details" },
                     { name: "Bras_g_details" },
-                    { name: "Crocher" },
                     { name: "Nez" },
                     { name: "Pied" },
                     { name: "Pied_details" },
                     { name: "Sourcil" },
-                    { name: "Bouteille" },
-                    { name: "Longue_vue" },
-                    { name: "Cylinder" },
-                    { name: "Cylinder_1" },
-                    { name: "Cylinder002" },
-                    { name: "Cylinder002_1" },
                     { name: "Tete_1" },
                 ],
             },

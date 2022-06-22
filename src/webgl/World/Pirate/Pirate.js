@@ -24,13 +24,18 @@ export default class Pirate {
 
     _generateBody() {
         let body = {};
+
+        const items = [];
+
         for (const [key, value] of Object.entries(configs.character.body)) {
+            if (key.includes("item")) items.push(key);
             body[key] = {
                 tag: key,
                 alphaTexture: value.alphaTexture,
                 shuffleMesh: value.shuffleMesh,
                 addColor: value.addColor,
                 refColor: value.refColor,
+                toHideArray: value.toHideArray,
                 meshes: value.meshes,
                 mesh: value.shuffleMesh
                     ? sample(
@@ -43,6 +48,9 @@ export default class Pirate {
                     : undefined,
             };
         }
+
+        body.item = sample(items);
+
         return body;
     }
 
@@ -57,6 +65,7 @@ export default class Pirate {
 
         this.mesh.children[0].traverse((child) => {
             if (child instanceof Mesh) {
+                console.log(child.name);
                 child.layers.set(1);
 
                 const bodyPart = Object.values(this.body).find(({ meshes }) =>
@@ -65,7 +74,10 @@ export default class Pirate {
                         .includes(child.name)
                 );
 
+                if (bodyPart.tag.includes("item") && bodyPart.tag !== this.body.item) child.visible = false;
+
                 if (bodyPart.shuffleMesh) {
+                    console.log(child.name, bodyPart.mesh.name);
                     if (bodyPart.mesh.name !== child.name) child.visible = false;
 
                     child.material = new MeshStandardMaterial();

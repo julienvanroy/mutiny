@@ -138,13 +138,18 @@ export default class SteeringBots extends component() {
 
     _generateBody() {
         let body = {};
+
+        const items = [];
+
         for (const [key, value] of Object.entries(configs.character.body)) {
+            if (key.includes("item")) items.push(key);
             body[key] = {
                 tag: key,
                 alphaTexture: value.alphaTexture,
                 shuffleMesh: value.shuffleMesh,
                 addColor: value.addColor,
                 refColor: value.refColor,
+                toHideArray: value.toHideArray,
                 meshes: value.meshes,
                 mesh: value.shuffleMesh
                     ? sample(
@@ -157,6 +162,9 @@ export default class SteeringBots extends component() {
                     : undefined,
             };
         }
+
+        body.item = sample(items);
+
         return body;
     }
 
