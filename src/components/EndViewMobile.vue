@@ -15,7 +15,7 @@
     </div>
     <div class="end-game__over">
       <h1>{{ $t(`end.mobile.title.${isWinner ? "win" : "lose"}`) }}</h1>
-      <p>{{ $t(`end.mobile.description[${isLast ? 7 : rank}]`) }}</p>
+      <p>{{ $t(`end.mobile.description[${isWinner ? 0 : isLast ? 7 : rank}]`) }}</p>
     </div>
   </div>
 </template>

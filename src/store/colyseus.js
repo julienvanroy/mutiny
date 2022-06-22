@@ -40,7 +40,7 @@ const useColyseusStore = defineStore("colyseus", {
 
             return {
                 rank: rank,
-                isWinner: rank === 0 && state.player.points !== 0,
+                isWinner: rankedPlayers.find((p) => p.id === state.player.id).isFirst,
                 isLast: rankedPlayers.find((p) => p.id === state.player.id).isLast,
             };
         },
