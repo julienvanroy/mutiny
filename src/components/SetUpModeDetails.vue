@@ -39,22 +39,9 @@
         </div>
       </div>
       <div class="actions">
-        <TheButton
-          :label="$t('ui.back')"
-          color="secondary"
-          @click="() => $emit('setSelected', null)"
-        />
-        <TheButton
-          label="A l'abordaaaaage !"
-          color="primary"
-          @click="startGame()"
-          :disabled="!colyseus.roomReadyToPlay"
-        />
-        <TheButton
-          :label="$t('ui.tutorial')"
-          color="secondary"
-          :disabled="true"
-        />
+        <TheButton :label="$t('ui.back')" color="secondary" @click="() => $emit('setSelected', null)" />
+        <TheButton :label="$t('ui.start')" color="primary" @click="startGame()" :disabled="!colyseus.roomReadyToPlay" />
+        <TheButton :label="$t('ui.tutorial')" color="secondary" :disabled="true" />
       </div>
     </div>
   </div>
