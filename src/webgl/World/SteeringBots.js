@@ -149,7 +149,7 @@ export default class SteeringBots extends component() {
                 shuffleMesh: value.shuffleMesh,
                 addColor: value.addColor,
                 refColor: value.refColor,
-                toHideArray: value.toHideArray,
+                assetName: value.assetName,
                 meshes: value.meshes,
                 mesh: sample(
                     value.meshes.map(({ name, texture, color: colors }) => ({

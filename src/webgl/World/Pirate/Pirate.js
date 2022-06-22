@@ -35,17 +35,15 @@ export default class Pirate {
                 shuffleMesh: value.shuffleMesh,
                 addColor: value.addColor,
                 refColor: value.refColor,
-                toHideArray: value.toHideArray,
+                assetName: value.assetName,
                 meshes: value.meshes,
-                mesh: value.shuffleMesh
-                    ? sample(
-                          value.meshes.map(({ name, texture, color: colors }) => ({
-                              name,
-                              texture,
-                              color: colors ? sample(colors) : undefined,
-                          }))
-                      )
-                    : undefined,
+                mesh: sample(
+                    value.meshes.map(({ name, texture, color: colors }) => ({
+                        name,
+                        texture,
+                        color: colors ? sample(colors) : undefined,
+                    }))
+                ),
             };
         }
 
@@ -134,11 +132,15 @@ export default class Pirate {
 
         // Body data (to send to gamepad)
         this.bodyData = Object.values(this.body)
-            .filter((bodyPart) => bodyPart.shuffleMesh)
+            .filter(
+                (bodyPart) =>
+                    bodyPart.shuffleMesh || (bodyPart.tag?.includes("item") && bodyPart.tag === this.body.item)
+            )
             .map((bodyPartData, index) => ({
                 ...bodyPartData,
                 name: bodyPartData.mesh.name,
-                color: bodyPartData.mesh.color || "#FFF",
+                assetName: bodyPartData.assetName,
+                color: bodyPartData.mesh.color,
                 show: index === 0,
             }));
     }
