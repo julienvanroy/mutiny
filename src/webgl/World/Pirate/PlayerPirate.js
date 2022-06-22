@@ -108,7 +108,7 @@ export default class PlayerPirate extends component(Pirate) {
 
         this.bot.isPlayer = true;
         this.bot.playerId = this.id;
-        this.mesh = this.bot.mesh;
+        this.mesh = this.bot.entity;
         this.animation = this.bot.animation;
     }
 

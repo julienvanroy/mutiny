@@ -1,7 +1,7 @@
 const configs = {
     character: {
         speed: 1.2, //1.2
-        range: 3.2, //3.2
+        range: 32, //3.2
         animation: {
             idle: {
                 chance(amt = 0.2) {
@@ -22,6 +22,7 @@ const configs = {
             noir: "#44397c",
             jaune: "#FFBE4C",
             bleu: "#5186FF",
+            violet: "#A35DFC",
             rose: "#FF8AEA",
             blanc: "#FFF8F6",
             longueVueCorps: "#d26b4a",
