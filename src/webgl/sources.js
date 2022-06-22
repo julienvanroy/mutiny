@@ -146,7 +146,7 @@ export default [
         type: "audio",
         path: "sound/music-game.mp3",
         options: {
-            volume: 0.5,
+            volume: 0.3,
         },
     },
     {
@@ -154,7 +154,7 @@ export default [
         type: "audio",
         path: "sound/theme.mp3",
         options: {
-            volume: 0.5,
+            volume: 0.4,
             loop: true,
         },
     },
