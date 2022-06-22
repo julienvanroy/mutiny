@@ -27,7 +27,7 @@
         <stalkers-counter :count="stalkerCount" :state-change="stalkerCountStateChange" />
         <span>{{ $t("gamepad.stalkersCounterRight") }}</span>
       </p>
-      <button ref="attack" class="attack" @click="colyseus.sendData('attack')">
+      <button ref="attack" class="attack">
         <btn-attack @click="attack" :attack="isAttack" />
       </button>
       <!-- <button ref="power" @click="colyseus.sendData('power', true)">{{$t("gamepad.power")}}</button> -->
@@ -70,13 +70,10 @@ export default {
     };
   },
   watch: {
-    cluesHide() {
-      this.setIntervalClues();
-    },
-    targetInfo() {
-      this.nextClueIndex = 1;
-      this.countdown = configs.game.cluesTime[this.nextClueIndex];
-      this.setIntervalClues();
+    cluesHide(newValue, prevValue) {
+      if (JSON.stringify(newValue) !== JSON.stringify(prevValue)) {
+        this.resetClues();
+      }
     },
     stalkerCount() {
       this.stalkerCountStateChange = true;
@@ -111,13 +108,23 @@ export default {
   },
   methods: {
     attack() {
+      this.colyseus.sendData("attack");
+
       this.isAttack = true;
-      const timeout = setTimeout(() => {
+
+      const timeout2 = setTimeout(() => {
         this.isAttack = false;
-        clearTimeout(timeout);
+        clearTimeout(timeout2);
       }, 600);
     },
+    resetClues() {
+      this.nextClueIndex = 1;
+      this.countdown = configs.game.cluesTime[this.nextClueIndex];
+      this.setIntervalClues();
+    },
     setIntervalClues() {
+      this.countdown = configs.game.cluesTime[this.nextClueIndex];
+
       if (this.interval) clearInterval(this.interval);
       if (this.countdownInterval) {
         clearInterval(this.countdownInterval);
@@ -137,7 +144,7 @@ export default {
         this.clues[this.nextClueIndex].show = true;
         this.nextClueIndex++;
         this.countdown = configs.game.cluesTime[this.nextClueIndex];
-        this.setIntervalClues();
+        // this.setIntervalClues();
       }
     },
   },
@@ -157,7 +164,7 @@ export default {
       this.colyseus.sendData("joystick", { x: 0, y: 0 });
     });
 
-    this.setIntervalClues();
+    this.resetClues();
   },
   unmounted() {
     this.joystick.destroy();
@@ -265,7 +272,6 @@ export default {
         position: relative;
         width: 160px;
         height: 56px;
-        padding-top: 14px;
         background-image: url("../assets/gamepad/bg-pirate-name.png");
         background-size: contain;
         background-position: center;
@@ -274,6 +280,10 @@ export default {
         font-size: 15px;
         color: $white-beige;
         text-align: center;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
         &::after {
           content: "";

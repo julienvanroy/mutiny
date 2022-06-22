@@ -164,7 +164,7 @@ export default class PlayerPirate extends component(Pirate) {
                     (player) => player.target.id === this.target.id && player.id !== this.id
                 );
 
-                playersWithSameTarget.forEach((player) => player.switchTarget(true));
+                playersWithSameTarget.forEach((player) => player.switchTarget(playerId));
             }
             this.addPoints();
             this.switchTarget();
@@ -230,7 +230,7 @@ export default class PlayerPirate extends component(Pirate) {
         );
     }
 
-    switchTarget(targetGotStolen = false, onGameStart = false) {
+    switchTarget(playerStealer = false, onGameStart = false) {
         if (this.target instanceof BotPirate) {
             this.target = sample(
                 Object.values(flatten(this._bots)).filter((bot) => bot.id !== this.target.id && bot.id !== this.bot.id)
@@ -243,7 +243,7 @@ export default class PlayerPirate extends component(Pirate) {
             );
         }
 
-        useColyseusStore().updatePlayerTarget(this.id, this.getTargetData(), targetGotStolen, onGameStart);
+        useColyseusStore().updatePlayerTarget(this.id, this.getTargetData(), playerStealer, onGameStart);
 
         console.log(
             `player ${this.id} has new target ${this.target.id} ${
