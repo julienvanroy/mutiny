@@ -16,7 +16,7 @@
               <div v-if="0 !== index" class="player-container">
                 <p>
                   <span class="index">{{ index + 1 }}.</span>
-                  <span class="status">{{ $t(`end.desktop[${index}]`) }}</span>
+                  <span class="status">{{ $t(`end.desktop[${player.isLast ? 7 : index}]`) }}</span>
                 </p>
                 <the-player :player="player" dont-update-state />
               </div>
@@ -148,7 +148,7 @@ export default {
                 }
                 .status {
                   display: block;
-                  font-size: $ft-s-medium;
+                  font-size: 1.2rem; //$ft-s-medium;
                   margin-left: 8px;
                 }
               }
