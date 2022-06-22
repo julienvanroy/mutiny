@@ -100,7 +100,7 @@ export default class Pirate {
                         color = configs.character.colors[key];
                     } else color = bodyPart.mesh.color;
 
-                    child.material.color = new Color(color).convertSRGBToLinear();
+                    if (color) child.material.color = new Color(color).convertSRGBToLinear();
                 }
 
                 if (bodyPart.alphaTexture) {
