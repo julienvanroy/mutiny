@@ -76,28 +76,28 @@ export default class Pirate {
                 if (bodyPart.tag.includes("item") && bodyPart.tag !== this.body.item) child.visible = false;
 
                 if (bodyPart.shuffleMesh) {
-                    console.log(child.name, bodyPart.mesh.name);
                     if (bodyPart.mesh.name !== child.name) child.visible = false;
 
                     child.material = new MeshStandardMaterial();
                     child.material.metalness = 0.0;
 
                     child.material.map = this._resources[bodyPart.mesh.texture];
-                    if (bodyPart.addColor) {
-                        child.material.color = new Color(
-                            bodyPart.refColor ? configs.character.colors[bodyPart.mesh.color] : bodyPart.mesh.color
-                        ).convertSRGBToLinear();
-                    }
-
-                    if (bodyPart.alphaTexture) {
-                        child.material.transparent = true;
-                        child.material.alphaMap = this._resources[bodyPart.alphaTexture];
-                    }
                 } else {
                     const mesh = bodyPart.meshes.find(({ name }) => name === child.name);
                     if (mesh.texture) {
                         child.material.map = this._resources[mesh.texture];
                     }
+                }
+
+                if (bodyPart.addColor) {
+                    child.material.color = new Color(
+                        bodyPart.refColor ? configs.character.colors[bodyPart.mesh.color] : bodyPart.mesh.color
+                    ).convertSRGBToLinear();
+                }
+
+                if (bodyPart.alphaTexture) {
+                    child.material.transparent = true;
+                    child.material.alphaMap = this._resources[bodyPart.alphaTexture];
                 }
 
                 if (child.name === "Tonneau") rangeColor = configs.character.colors[bodyPart.mesh.color];

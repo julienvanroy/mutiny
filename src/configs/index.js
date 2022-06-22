@@ -20,6 +20,11 @@ const configs = {
         colors: {
             orange: "#9C73FF",
             noir: "#3C365A",
+            longueVueCorps: "#FFBE4C",
+            longueVueBouchon: "#FFBE4C",
+            bouteilleCorps: "#9C73FF",
+            bouteilleBouchon: "#CFCCFF",
+            crocher: "#CFCCFF",
         },
         body: {
             hat: {
@@ -109,37 +114,42 @@ const configs = {
             },
             item2: {
                 shuffleMesh: false,
-                addColor: false,
-                refColor: false,
+                addColor: true,
+                refColor: true,
                 meshes: [
                     {
                         name: "Crocher",
+                        color: ["crocher"],
                     },
                 ],
             },
             item3: {
                 shuffleMesh: false,
-                addColor: false,
-                refColor: false,
+                addColor: true,
+                refColor: true,
                 meshes: [
                     {
-                        name: "Longue_vue_2",
+                        name: "Longue_vue_1",
+                        color: ["longueVueBouchon"],
                     },
                     {
-                        name: "Longue_vue_1",
+                        name: "Longue_vue_2",
+                        color: ["longueVueCorps"],
                     },
                 ],
             },
             item4: {
                 shuffleMesh: false,
-                addColor: false,
-                refColor: false,
+                addColor: true,
+                refColor: true,
                 meshes: [
                     {
                         name: "Bouteille_1",
+                        color: ["bouteilleBouchon"],
                     },
                     {
                         name: "Bouteille_2",
+                        color: ["bouteilleCorps"],
                     },
                 ],
             },
