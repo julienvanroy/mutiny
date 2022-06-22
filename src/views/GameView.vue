@@ -52,7 +52,7 @@ export default {
         this.audios?.musicGame?.rate(1.2);
       }
 
-      if(newValue <= 30 && newValue % 3 === 0) {
+      if(newValue <= 30 && newValue % 4 === 0) {
         bidello.trigger({ name: "explodeDrunk" });
       }
     },

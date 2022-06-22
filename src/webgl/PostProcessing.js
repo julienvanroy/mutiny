@@ -79,20 +79,20 @@ export default class PostProcessing extends component() {
 
         this.shockWaveEffect.position.x = 0
         this.shockWaveEffect.epicenter.x = 19.0
-        this.shockWaveEffect.speed = 3.9
-        this.shockWaveEffect.maxRadius = 20
-        this.shockWaveEffect.waveSize = 6.74
-        this.shockWaveEffect.amplitude = 0.48
+        this.shockWaveEffect.speed = 1.080
+        this.shockWaveEffect.maxRadius = 3
+        this.shockWaveEffect.waveSize = 2
+        this.shockWaveEffect.amplitude = 0.035
 
-        /*
-        setInterval(this.explodeDrunk,6000)
-         */
+        this.stepAmplitude = 1
 
         this.onDebug()
     }
 
     onExplodeDrunk() {
-        this.shockWaveEffect.position = new Vector3(Math.random() * 20, Math.random() * 20, Math.random() * 20)
+        this.shockWaveEffect.position = new Vector3(Math.random() * 18, Math.random() * 18, Math.random() * 18)
+        this.shockWaveEffect.amplitude = 0.035 * this.stepAmplitude
+        this.stepAmplitude += 1
         this.shockWaveEffect.explode()
     }
 
