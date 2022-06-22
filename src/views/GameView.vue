@@ -10,7 +10,10 @@
     ><button class="end-btn">END GAME</button></router-link
   > -->
   <transition name="fade">
-    <div v-if="!!isMounted" :class="`timer-container ${!!panickMode ? 'panick-mode' : ''}`">
+    <div
+      v-if="!!isMounted"
+      :class="`timer-container ${!!panickMode ? 'panick-mode' : ''}`"
+    >
       <TheTimer />
     </div>
   </transition>
@@ -43,8 +46,14 @@ export default {
   },
   watch: {
     time(newValue) {
-      if(10 > newValue) {
-        this.panickMode = true
+      if (10 === newValue) {
+        this.panickMode = true;
+      }
+      if (30 === newValue) {
+        this.audios?.musicGame?.rate(1.5);
+      }
+      if (60 === newValue) {
+        this.audios?.musicGame?.rate(1.2);
       }
     },
   },
