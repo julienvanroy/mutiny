@@ -84,21 +84,24 @@ export default class Pirate {
                     child.material.metalness = 0.0;
 
                     child.material.map = this._resources[bodyPart.mesh.texture];
-
-                    if (bodyPart.addColor) {
-                        child.material.color = new Color(
-                            bodyPart.refColor
-                                ? typeof bodyPart.refColor === "string"
-                                    ? configs.character.colors[this.body[bodyPart.refColor].mesh.color]
-                                    : configs.character.colors[bodyPart.mesh.color]
-                                : bodyPart.mesh.color
-                        ).convertSRGBToLinear();
-                    }
                 } else {
                     const mesh = bodyPart.meshes.find(({ name }) => name === child.name);
                     if (mesh.texture) {
                         child.material.map = this._resources[mesh.texture];
                     }
+                }
+
+                if (bodyPart.addColor) {
+                    let key, color;
+                    if (bodyPart.refColor) {
+                        console.log(this.body[bodyPart.refColor]);
+                        if (typeof bodyPart.refColor === "string") key = this.body[bodyPart.refColor]?.mesh?.color;
+                        else key = bodyPart?.mesh?.color;
+
+                        color = configs.character.colors[key];
+                    } else color = bodyPart.mesh.color;
+
+                    child.material.color = new Color(color).convertSRGBToLinear();
                 }
 
                 if (bodyPart.alphaTexture) {
