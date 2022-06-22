@@ -1,11 +1,12 @@
 import { defineStore } from "pinia";
 
-const useAudioStore = defineStore("audio", {
+const useAudioStore = defineStore("audios", {
     state: () => {
         return {
             audios: {},
-            musicVolume: 0.5,
-            effectVolume: 0.5
+            musicVolume: 0.2,
+            effectVolume: 0.6,
+            muted: false,
         };
     },
     actions: {
@@ -19,6 +20,15 @@ const useAudioStore = defineStore("audio", {
             this.audios.click.volume(value)
             this.audios.newPlayer.volume(value)
             this.audios.attack.volume(value)
+        },
+        setMute(value) {
+            this.audios.theme.mute(value)
+            this.audios.musicGame.mute(value)
+            this.audios.click.mute(value)
+            this.audios.newPlayer.mute(value)
+            this.audios.attack.mute(value)
+
+            this.muted = value
         }
     }
 });

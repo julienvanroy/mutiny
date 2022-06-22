@@ -146,7 +146,8 @@ export default [
         type: "audio",
         path: "sound/music-game.mp3",
         options: {
-            volume: 0.5,
+            volume: 0.3,
+            loop: true,
         },
     },
     {
@@ -154,7 +155,7 @@ export default [
         type: "audio",
         path: "sound/theme.mp3",
         options: {
-            volume: 0.5,
+            volume: 0.3,
             loop: true,
         },
     },
@@ -178,6 +179,22 @@ export default [
         name: "attack",
         type: "audio",
         path: "sound/attack.mp3",
+        options: {
+            volume: 0.5,
+        },
+    },
+    {
+        name: "killed",
+        type: "audio",
+        path: "sound/killed.mp3",
+        options: {
+            volume: 0.5,
+        },
+    },
+    {
+        name: "point",
+        type: "audio",
+        path: "sound/point.mp3",
         options: {
             volume: 0.5,
         },

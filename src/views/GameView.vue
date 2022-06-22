@@ -8,7 +8,10 @@
   </transition>
   <router-link to="end-game"><button class="end-btn">END GAME</button></router-link>
   <transition name="fade">
-    <div v-if="!!isMounted" class="timer-container">
+    <div
+      v-if="!!isMounted"
+      :class="`timer-container ${!!panickMode ? 'panick-mode' : ''}`"
+    >
       <TheTimer />
     </div>
   </transition>
@@ -36,10 +39,25 @@ export default {
     return {
       players: {},
       isMounted: false,
+      panickMode: false,
     };
   },
+  watch: {
+    time(newValue) {
+      if (10 === newValue) {
+        this.panickMode = true;
+      }
+      if (30 === newValue) {
+        this.audios?.musicGame?.rate(1.5);
+      }
+      if (60 === newValue) {
+        this.audios?.musicGame?.rate(1.2);
+      }
+    },
+  },
   computed: {
-    ...mapState(useAudioStore, ["audios"]),
+    ...mapState(useAudioStore, ["audios", "musicVolume"]),
+    ...mapState(useTimerStore, ["time"]),
   },
   mounted() {
     if (!this.colyseus.currentRoom) return;
@@ -51,7 +69,16 @@ export default {
 
     this.colyseus.sendData("getAllPlayers");
 
-    this.colyseus.currentRoom.onMessage("endGame", () => this.$router.push("/end-game"));
+    this.colyseus.currentRoom.onMessage("endGame", () => {
+      this.audios?.musicGame?.fade(this.musicVolume, 0, 2000);
+      let timeout = setTimeout(() => {
+        this.audios?.musicGame?.stop();
+        clearTimeout(timeout);
+      }, 2000);
+      this.audios?.theme?.play();
+      this.audios?.theme?.fade(0, this.musicVolume, 2000);
+      this.$router.push("/end-game");
+    });
 
     this.colyseus.currentRoom.onMessage("joystick", ({ playerSessionId, playerPosition }) => {
       bidello.trigger({ name: "movePlayer" }, { playerId: playerSessionId, vector2: playerPosition });
@@ -63,7 +90,13 @@ export default {
       this.colyseus.sendData("getAllPlayers");
     });
 
-    this.colyseus.currentRoom.onMessage("kill", () => {});
+    this.colyseus.currentRoom.onMessage("kill", () => {
+      this.audios?.killed?.play();
+      let timeout = setTimeout(() => {
+        this.audios?.point?.play();
+        clearTimeout(timeout);
+      }, 1500);
+    });
 
     this.colyseus.currentRoom.onMessage("updatePlayerTarget", () => {});
 
@@ -97,6 +130,7 @@ export default {
   position: absolute;
   top: 80px;
   right: 20px;
+  z-index: 30;
 }
 
 .timer-container {
@@ -114,5 +148,29 @@ export default {
   width: 126px;
   height: 80px;
   padding-bottom: 12px;
+  &.panick-mode {
+    animation: shake 0.5s infinite;
+    color: $red-dead;
+  }
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translateX(calc(-50% + 0px)) rotate(0deg) scale(1.1);
+  }
+  20%,
+  80% {
+    transform: translateX(calc(-50% + -2px)) rotate(-2deg);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translateX(calc(-50% + 0px)) rotate(0deg);
+  }
+  40%,
+  60% {
+    transform: translateX(calc(-50% + 2px)) rotate(2deg);
+  }
 }
 </style>

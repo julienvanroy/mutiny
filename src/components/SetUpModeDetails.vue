@@ -86,19 +86,18 @@ export default {
     startGame() {
       bidello.trigger({ name: "assignTargets" });
       this.colyseus.sendData("startGame");
-      if (this.audios?.theme?.playing()) {
-        this.audios?.theme?.fade(1, 0, 2000);
-        let timeout = setTimeout(() => {
-          this.audios?.musicGame?.play();
-          this.audios?.musicGame?.fade(0, 1, 2000);
-          return clearTimeout(timeout);
-        }, 1000);
-      }
+      this.audios?.theme?.fade(this.musicVolume, 0, 2000);
+      let timeout = setTimeout(() => {
+        this.audios?.theme?.pause();
+        clearTimeout(timeout);
+      }, 2000);
+      this.audios?.musicGame?.play();
+      this.audios?.musicGame?.fade(0, this.musicVolume, 2000);
       router.push("/game");
     },
   },
   computed: {
-    ...mapState(useAudioStore, ["audios"]),
+    ...mapState(useAudioStore, ["audios", "musicVolume"]),
   },
 };
 </script>

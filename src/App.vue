@@ -13,10 +13,8 @@
     </div>
 
     <div class="btn-parameters" v-if="!isMobile && !is404">
-      <button @click="setTheme()">
-        <img
-          :src="`images/icons/sound-${!!this.themeIsPlaying ? 'on' : 'off'}.png`"
-        />
+      <button @click="audios.setMute(!this.muted)">
+        <img :src="`images/icons/sound-${!this.muted ? 'on' : 'off'}.png`" />
       </button>
       <button v-show="!isGamePath" @click="() => (modalShown = 'options')">
         <img src="images/icons/parameters.png" />
@@ -84,26 +82,52 @@ export default {
   setup() {
     const route = useRoute();
     const colyseus = useColyseusStore();
-    const timer = useTimerStore()
-
-    console.log(timer)
+    const timer = useTimerStore();
+    const audios = useAudioStore();
 
     const path = computed(() => route.path);
 
-    return { path, colyseus, timer };
+    return { path, colyseus, timer, audios };
+  },
+  data() {
+    return {
+      musicHasStarted: false,
+    };
   },
   mounted() {
     this.resize();
     window.addEventListener("resize", this.resize, false);
-    window.addEventListener("click", () => this.audios?.click?.play(), false);
+    window.addEventListener(
+      "click",
+      () => {
+        if (!this.musicHasStarted) {
+          this.audios.audios?.theme.play();
+          this.audios.muted = false
+          this.musicHasStarted = true;
+        }
+        this.audios.audios?.click?.play();
+      },
+      false
+    );
   },
   beforeUnmount() {
     window.removeEventListener("resize", this.resize, false);
-    window.removeEventListener("click", () => this.audios?.click?.play(), false);
+    window.removeEventListener(
+      "click",
+      () => {
+        if (!this.musicHasStarted) {
+          this.audios.audios.theme.play();
+          this.audios.muted = false
+          this.musicHasStarted = true;
+        }
+        this.audios.audios?.click?.play();
+      },
+      false
+    );
   },
   watch: {
     isLandscape(newValue) {
-      if(this.colyseus.currentRoom && this.isMobile) {
+      if (this.colyseus.currentRoom && this.isMobile) {
         this.colyseus.sendData("orientationChange", {
           orientationReady: newValue,
         });
@@ -113,7 +137,7 @@ export default {
       if (newValue === "pause") {
         bidello.trigger({ name: "pause" });
         this.timer.stop();
-      } else if(oldValue === 'pause' && newValue !== 'pause') {
+      } else if (oldValue === "pause" && newValue !== "pause") {
         bidello.trigger({ name: "start" });
         this.timer.start();
       }
@@ -132,19 +156,14 @@ export default {
         this.isFullscreen = true;
       }
     },
-    setTheme() {
-      !!this.themeIsPlaying && !!this.audios?.theme?.playing() ? this.audios?.theme?.pause() : this.audios?.theme?.play()
-      this.themeIsPlaying = !this.themeIsPlaying;
-    },
   },
   computed: {
-    ...mapState(useAudioStore, ["audios"]),
+    ...mapState(useAudioStore, ["audios", "muted"]),
     ...mapState(useGlobalStore, ["isMobile", "showFullscreenBtn"]),
     ...mapWritableState(useGlobalStore, [
       "isFullscreen",
       "isLandscape",
       "modalShown",
-      "themeIsPlaying",
     ]),
     isGamePath() {
       return this.path === "/game" || this.path === "/debug";
