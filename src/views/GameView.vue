@@ -6,9 +6,9 @@
       </li>
     </ul>
   </transition>
-  <router-link to="end-game"
+  <!-- <router-link to="end-game"
     ><button class="end-btn">END GAME</button></router-link
-  >
+  > -->
   <transition name="fade">
     <div v-if="!!isMounted" class="timer-container">
       <TheTimer />
@@ -30,7 +30,7 @@ export default {
   components: { TheTimer, ThePlayer },
   setup() {
     const colyseus = useColyseusStore();
-    const timer = useTimerStore()
+    const timer = useTimerStore();
 
     return { colyseus, timer };
   },
@@ -41,7 +41,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(useAudioStore, ["audios"]),
+    ...mapState(useAudioStore, ["audios", "musicVolume"]),
   },
   mounted() {
     if (!this.colyseus.currentRoom) return;
@@ -53,7 +53,16 @@ export default {
 
     this.colyseus.sendData("getAllPlayers");
 
-    this.colyseus.currentRoom.onMessage("endGame", () => this.$router.push("/end-game"));
+    this.colyseus.currentRoom.onMessage("endGame", () => {
+      this.audios?.musicGame?.fade(this.musicVolume, 0, 2000);
+      let timeout = setTimeout(() => {
+        this.audios?.musicGame?.stop();
+        clearTimeout(timeout);
+      }, 2000);
+      this.audios?.theme?.play();
+      this.audios?.theme?.fade(0, this.musicVolume, 2000);
+      this.$router.push("/end-game");
+    });
 
     this.colyseus.currentRoom.onMessage(
       "joystick",
@@ -67,7 +76,7 @@ export default {
 
     this.colyseus.currentRoom.onMessage("attack", ({ playerSessionId }) => {
       bidello.trigger({ name: "attack" }, { playerId: playerSessionId });
-      this.audios?.attack?.play()
+      this.audios?.attack?.play();
       this.colyseus.sendData("getAllPlayers");
     });
 
@@ -109,6 +118,7 @@ export default {
   position: absolute;
   top: 80px;
   right: 20px;
+  z-index: 30;
 }
 
 .timer-container {

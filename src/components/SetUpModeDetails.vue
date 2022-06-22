@@ -87,6 +87,10 @@ export default {
       bidello.trigger({ name: "assignTargets" });
       this.colyseus.sendData("startGame");
       this.audios?.theme?.fade(this.musicVolume, 0, 2000);
+      let timeout = setTimeout(() => {
+        this.audios?.theme?.pause();
+        clearTimeout(timeout);
+      }, 2000);
       this.audios?.musicGame?.play();
       this.audios?.musicGame?.fade(0, this.musicVolume, 2000);
       router.push("/game");
