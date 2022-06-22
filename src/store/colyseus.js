@@ -23,10 +23,12 @@ const useColyseusStore = defineStore("colyseus", {
             const lastPlayers = sortedPlayers.filter(
                 (player) => player.points === sortedPlayers[sortedPlayers.length - 1].points
             );
+            const firstPlayers = sortedPlayers.filter((player) => player.points === sortedPlayers[0].points);
 
             return sortedPlayers.map((player) => ({
                 ...player,
                 isLast: player.points === 0 || lastPlayers.find((p) => p.id === player.id),
+                isFirst: player.points !== 0 && firstPlayers.find((p) => p.id === player.id),
             }));
         },
         roomReadyToPlay(state) {
