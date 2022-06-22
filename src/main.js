@@ -5,8 +5,7 @@ import App from "./App.vue";
 import router from "./router";
 import { createMetaManager, plugin as metaPlugin } from 'vue-meta'
 import { createPinia } from "pinia";
-// TODO: Delete comments... Just for prototype
-//import './registerServiceWorker'
+import './registerServiceWorker'
 import en from './i18n/en.json'
 import fr from './i18n/fr.json'
 
