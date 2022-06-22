@@ -1,5 +1,5 @@
 import { component } from "bidello";
-import { Box3, Line3, Matrix4, Quaternion, Vector2, Vector3 } from "three";
+import { Quaternion, Vector2, Vector3 } from "three";
 import Experience from "../../Experience";
 import Pirate from "./Pirate";
 import { clamp, flatten, mapToArray, sample } from "@/utils";
@@ -16,8 +16,6 @@ export default class PlayerPirate extends component(Pirate) {
         this.id = this._args[1];
         this._collider = this._args[2];
 
-        console.log(this._collider);
-
         const experience = new Experience();
         this._debug = experience.debug;
         this._controls = experience.controls;
@@ -32,23 +30,9 @@ export default class PlayerPirate extends component(Pirate) {
         this._speedRotation = 10;
         this._debugRunning = false;
 
-        this.isOnGround = false;
-        this._velocity = new Vector3();
-        this._gravity = -32;
-        this._capsuleInfo = {
-            radius: 1,
-            segment: new Line3(new Vector3(), new Vector3(0.0, 0.0, 0.0)),
-        };
-
-        this._temp = {
-            box: new Box3(),
-            mat: new Matrix4(),
-            segment: new Line3(),
-            vector: new Vector3(),
-            vector2: new Vector3(),
-        };
-
         this._useKeyboard = this.id === "debug";
+
+        this.mesh.position.set(2,0,6)
 
         this.onDebug();
     }
@@ -99,7 +83,7 @@ export default class PlayerPirate extends component(Pirate) {
     }
 
     _rotation(delta) {
-        if (this.isMoving) this._targetQuaternion.setFromAxisAngle(new Vector3(0, 1, 0), this._vectorControls.angle());
+        if (this.isMoving) this._targetQuaternion.setFromAxisAngle(new Vector3(0, 1, 0), new Vector2(-this._vectorControls.y, this._vectorControls.x).angle());
 
         if (this.mesh && !this.mesh.quaternion.equals(this._targetQuaternion)) {
             const step = this._speedRotation * delta;
@@ -288,13 +272,6 @@ export default class PlayerPirate extends component(Pirate) {
             step: 0.01,
             min: 0,
             max: 30,
-        });
-
-        folderDebug.addInput(this, "_gravity", {
-            label: "Gravity",
-            step: 0.01,
-            min: -100,
-            max: 0,
         });
     }
 }
