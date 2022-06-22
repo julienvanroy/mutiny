@@ -69,7 +69,6 @@ export default {
       return this.colyseus.rankedPlayers.filter(({ isFirst }) => isFirst);
     },
     losers() {
-      console.log(this.colyseus.rankedPlayers.filter(({ isFirst }) => !isFirst));
       return this.colyseus.rankedPlayers.filter(({ isFirst }) => !isFirst);
     },
   },
