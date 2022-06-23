@@ -7,7 +7,7 @@ import fragmentShader from "@/shaders/water/water.frag"
 
 export default class GerstnerWater extends component() {
     init() {
-        const waterGeometry = new PlaneGeometry(4096, 4096, 256, 256)
+        const waterGeometry = new PlaneGeometry(256, 256, 256, 256)
         const experience = new Experience()
         this._debug = experience.debug
         this._scene = experience.scene
@@ -15,22 +15,27 @@ export default class GerstnerWater extends component() {
         this.texture.wrapS = this.texture.wrapT = RepeatWrapping
 
         this.waves = [
-            {direction: 0, steepness: 0.15, wavelength: 100},
-            {direction: 30, steepness: 0.15, wavelength: 50},
-            {direction: 60, steepness: 0.15, wavelength: 25},
+            {direction: 0, steepness: 0.05, wavelength: 100},
+            {direction: 30, steepness: 0.05, wavelength: 50},
+            {direction: 60, steepness: 0.05, wavelength: 25},
         ]
+
+        this._params = {
+            sunColor: "#ffffff",
+            waterColor: "#000026",
+        }
 
         this.water = new Water(waterGeometry, {
             textureWidth: 512,
             textureHeight: 512,
             waterNormals: this.texture,
             sunDirection: new Vector3(),
-            sunColor: 0xffffff,
-            waterColor: 0x001e0f,
-            distortionScale: 8,
+            sunColor: this._params.sunColor,
+            waterColor: this._params.waterColor,
+            distortionScale: 2,
             fog: true,
         })
-        
+
         this.water.material.wireframe = false
         this.water.rotation.x = -Math.PI / 2
         this.water.material.onBeforeCompile = (
@@ -54,7 +59,7 @@ export default class GerstnerWater extends component() {
             setupWave("waveC", 2)
             shader.vertexShader = vertexShader
             shader.fragmentShader = fragmentShader
-            shader.uniforms.size.value = 10.0
+            shader.uniforms.size.value = 1.0
         }
 
         this._scene.add(this.water)
@@ -97,6 +102,26 @@ export default class GerstnerWater extends component() {
         if (!this._debug.active) return
         const waterUniforms = this.water.material.uniforms
 
+        const configDebug = {
+            waterColor: this._params.waterColor,
+            waterSunColor: this._params.sunColor,
+            waterDistortionScale: waterUniforms.distortionScale.value,
+            waterSize: waterUniforms.size.value,
+            waterWireframe: this.water.material.wireframe,
+            //waveA
+            wave0Direction: this.waves[0].direction,
+            wave0Steepness: this.waves[0].steepness,
+            wave0Length: this.waves[0].wavelength,
+            //waveB
+            wave1Direction: this.waves[1].direction,
+            wave1Steepness: this.waves[1].steepness,
+            wave1Length: this.waves[1].wavelength,
+            //waveC
+            wave2Direction: this.waves[2].direction,
+            wave2Steepness: this.waves[2].steepness,
+            wave2Length: this.waves[2].wavelength,
+        }
+
         // TweakPane
         const folderDebug = this._debug.pane.addFolder({
             title: "Gerstner Water",
@@ -105,70 +130,74 @@ export default class GerstnerWater extends component() {
         const folderWater = folderDebug.addFolder({
             title: "Water",
             expanded: false,
-        });
+        })
 
-
-        folderWater.addInput(waterUniforms.waterColor, 'value', {
+        folderWater.addInput(configDebug, 'waterColor', {
             label: "Color",
-        }).on('change', (ev) => {
-            waterUniforms.waterColor.value = new Color(ev.value)
+        }).on('change', ({value}) => {
+            waterUniforms.waterColor.value = new Color(value)
         });
 
-        folderWater.addInput(waterUniforms.sunColor, 'value', {
+        folderWater.addInput(configDebug, 'waterSunColor', {
             label: "Sun Color",
-        }).on('change', (ev) => {
-            waterUniforms.sunColor.value = new Color(ev.value)
+        }).on('change', ({value}) => {
+            waterUniforms.sunColor.value = new Color(value)
         });
 
-        folderWater.addInput(waterUniforms.distortionScale, 'value', {
+        folderWater.addInput(configDebug, 'waterDistortionScale', {
             label: "distortionScale",
             step: 0.1,
             min: 0,
             max: 8,
-        }).on('change', (ev) => {
-            waterUniforms.distortionScale.value = ev.value
+        }).on('change', ({value}) => {
+            waterUniforms.distortionScale.value = value
         });
 
-        folderWater.addInput(waterUniforms.size, 'value', {
+        folderWater.addInput(configDebug, 'waterSize', {
             label: "size",
             step: 0.1,
             min: 0.1,
             max: 10,
-        }).on('change', (ev) => {
-            waterUniforms.size.value = ev.value
+        }).on('change', ({value}) => {
+            waterUniforms.size.value = value
         });
 
-        folderWater.addInput(this.water.material, 'wireframe')
+        folderWater.addInput(configDebug, 'waterWireframe').on('change', ({value}) => {
+            this.water.material.wireframe = value
+        });
 
         const setupWave = (waveFolder, uniform, index) => {
-            waveFolder.addInput(this.waves[index], 'direction', {
+            waveFolder.addInput(configDebug, `wave${index}Direction`, {
                 label: "Direction",
                 step: 1,
                 min: 0,
                 max: 359,
-            }).on('change', (ev) => {
-                const v = ev.value
-                const x = (v * Math.PI) / 180
+            }).on('change', ({value}) => {
+                const x = (value * Math.PI) / 180
                 waterUniforms[uniform].value[0] = Math.sin(x)
                 waterUniforms[uniform].value[1] = Math.cos(x)
+
+                this.waves[index].direction = value
             });
 
-            waveFolder.addInput(this.waves[index], 'steepness', {
+            waveFolder.addInput(configDebug, `wave${index}Steepness`, {
                 label: "Steepness",
                 step: 0.01,
                 min: 0,
                 max: 1,
-            }).on('change', (ev) => {
-                waterUniforms[uniform].value[2] = ev.value
+            }).on('change', ({value}) => {
+                waterUniforms[uniform].value[2] = value
+                this.waves[index].steepness = value
             });
 
-            waveFolder.addInput(this.waves[index], 'wavelength', {
+            waveFolder.addInput(configDebug, `wave${index}Length`, {
                 label: "Wavelength",
                 step: 1,
                 min: 1,
                 max: 100,
-            }).on('change', (ev) => {
-                waterUniforms[uniform].value[3] = ev.value
+            }).on('change', ({value}) => {
+                waterUniforms[uniform].value[3] = value
+                this.waves[index].wavelength = value
             });
         }
 

@@ -1,23 +1,27 @@
 <template>
-  <transition name="fade">
-    <ModalContainer
-      :title="$t('modals.modalJoin.title')"
-      :btnLabel="$t('modals.modalJoin.btnLabel')"
-    >
-      <div class="modal__join">
-        <p v-html="$t('modals.modalJoin.description')" />
-        <div class="connection">
-          <div class="connection__code">
-            <CopyCode :code="roomId" />
-          </div>
-          <span>{{ $t("modals.modalJoin.or") }}</span>
-          <div class="connection__qrcode">
-            <div class="connection__qrcode_inner"><QrCode /></div>
-          </div>
+  <ModalContainer
+    :title="$t('modals.modalJoin.title')"
+    :btnLabel="$t('modals.modalJoin.btnLabel')"
+  >
+    <div class="modal__join">
+      <p>
+        {{ $t("modals.modalJoin.description1") }}
+        <strong>{{ $t("modals.modalJoin.description2") }}</strong>
+        {{ $t("modals.modalJoin.description3") }}
+        <strong>{{ $t("modals.modalJoin.description4") }}</strong>
+        {{ $t("modals.modalJoin.description5") }}
+      </p>
+      <div class="connection">
+        <div class="connection__code">
+          <CopyCode :code="roomId" />
+        </div>
+        <span>{{ $t("modals.modalJoin.or") }}</span>
+        <div class="connection__qrcode">
+          <div class="connection__qrcode_inner"><QrCode /></div>
         </div>
       </div>
-    </ModalContainer>
-  </transition>
+    </div>
+  </ModalContainer>
 </template>
 
 <script>
@@ -47,7 +51,7 @@ export default {
   justify-content: space-evenly;
   align-items: center;
   p {
-    max-width: 560px;
+    max-width: 520px;
     text-align: center;
     font-size: $ft-s-medium;
   }
@@ -58,13 +62,13 @@ export default {
     align-items: stretch;
     .connection__code,
     .connection__qrcode {
-      min-width: 200px;
+      width: 300px;
       display: flex;
       justify-content: center;
       align-items: center;
       box-shadow: inset 0px 0px 16px rgba(222, 197, 204, 0.8);
       border-radius: 4px;
-      padding: 50px;
+      padding: 40px 50px;
       .qrcode_inner {
         width: 100px;
       }

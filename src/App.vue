@@ -1,14 +1,20 @@
 <template>
+  <metainfo>
+    <template v-slot:title="{ content }">{{ content }}</template>
+    <template v-slot:description="{ content }">{{ content }}</template>
+  </metainfo>
   <div class="main-container" ref="fullscreenContainer">
-    <div v-if="!isMobile" class="fullscreen">
+    <div v-if="!isMobile && !is404" class="fullscreen">
       <button v-if="showFullscreenBtn" @click="setFullscreen()">
-        <img src="images/icons/fullscreen-on.png" />
+        <img
+          :src="`images/icons/fullscreen-${isFullscreen ? 'off' : 'on'}.png`"
+        />
       </button>
     </div>
 
-    <div class="btn-parameters">
-      <button @click="playMusic">
-        <img src="images/icons/sound-on.png" />
+    <div class="btn-parameters" v-if="!isMobile && !is404">
+      <button @click="audios.setMute(!this.muted)">
+        <img :src="`images/icons/sound-${!this.muted ? 'on' : 'off'}.png`" />
       </button>
       <button v-show="!isGamePath" @click="() => (modalShown = 'options')">
         <img src="images/icons/parameters.png" />
@@ -18,19 +24,24 @@
       </button>
     </div>
 
-    <ModalOptions
-      v-if="'options' === modalShown"
-      :setFullscreen="setFullscreen"
-    />
+    <transition name="fade">
+      <ModalOptions
+        v-if="'options' === modalShown"
+        :setFullscreen="setFullscreen"
+      />
+    </transition>
 
-    <ModalPause v-if="'pause' === modalShown" :setFullscreen="setFullscreen" />
+    <transition name="fade">
+      <ModalPause
+        v-if="'pause' === modalShown"
+        :setFullscreen="setFullscreen"
+      />
+    </transition>
 
     <div id="view">
       <router-view />
       <WebGl v-if="!isMobile" v-show="isGamePath" />
     </div>
-
-    <!-- <ModalLandscape /> -->
 
     <TheLoader v-if="!isMobile" />
   </div>
@@ -43,33 +54,94 @@ import { computed } from "vue";
 import TheLoader from "@/components/ui/TheLoader";
 import { mapState } from "pinia";
 import { mapWritableState } from "pinia";
-import useWebglStore from "@/store/webgl";
-// import ModalLandscape from "@/components/modals/ModalLandscape";
+import useAudioStore from "@/store/audio";
 import ModalOptions from "@/components/modals/ModalOptions";
 import ModalPause from "@/components/modals/ModalPause";
 import useGlobalStore from "@/store/global";
+import useTimerStore from "@/store/timer";
+import useColyseusStore from "./store/colyseus";
+import bidello from "bidello";
 
 export default {
   name: "App",
   components: {
-    // ModalLandscape,
     ModalOptions,
     ModalPause,
     TheLoader,
     WebGl,
   },
+  metaInfo() {
+    return {
+      title: this.$t("meta.title"),
+      description: this.$t("meta.description"),
+      htmlAttrs: {
+        lang: this.$i18n.locale,
+      },
+    };
+  },
   setup() {
     const route = useRoute();
+    const colyseus = useColyseusStore();
+    const timer = useTimerStore();
+    const audios = useAudioStore();
 
     const path = computed(() => route.path);
-    return { path };
+
+    return { path, colyseus, timer, audios };
+  },
+  data() {
+    return {
+      musicHasStarted: false,
+    };
   },
   mounted() {
     this.resize();
     window.addEventListener("resize", this.resize, false);
+    window.addEventListener(
+      "click",
+      () => {
+        if (!this.musicHasStarted) {
+          this.audios.audios?.theme?.play();
+          this.audios.muted = false
+          this.musicHasStarted = true;
+        }
+        this.audios.audios?.click?.play();
+      },
+      false
+    );
   },
   beforeUnmount() {
     window.removeEventListener("resize", this.resize, false);
+    window.removeEventListener(
+      "click",
+      () => {
+        if (!this.musicHasStarted) {
+          this.audios.audios?.theme?.play();
+          this.audios.muted = false
+          this.musicHasStarted = true;
+        }
+        this.audios.audios?.click?.play();
+      },
+      false
+    );
+  },
+  watch: {
+    isLandscape(newValue) {
+      if (this.colyseus.currentRoom && this.isMobile) {
+        this.colyseus.sendData("orientationChange", {
+          orientationReady: newValue,
+        });
+      }
+    },
+    modalShown(newValue, oldValue) {
+      if (newValue === "pause") {
+        bidello.trigger({ name: "pause" });
+        this.timer.stop();
+      } else if (oldValue === "pause" && newValue !== "pause") {
+        bidello.trigger({ name: "start" });
+        this.timer.start();
+      }
+    },
   },
   methods: {
     resize() {
@@ -84,23 +156,20 @@ export default {
         this.isFullscreen = true;
       }
     },
-    playMusic() {
-      this.music.play();
-    },
   },
   computed: {
-    ...mapState(useWebglStore, ["audio"]),
+    ...mapState(useAudioStore, ["audios", "muted"]),
     ...mapState(useGlobalStore, ["isMobile", "showFullscreenBtn"]),
     ...mapWritableState(useGlobalStore, [
       "isFullscreen",
       "isLandscape",
       "modalShown",
     ]),
-    music() {
-      return this.audio.musicGame;
-    },
     isGamePath() {
       return this.path === "/game" || this.path === "/debug";
+    },
+    is404() {
+      return this.path === "/404";
     },
   },
 };
@@ -108,6 +177,7 @@ export default {
 
 <style lang="scss">
 #app {
+  background-color: $white-beige;
   color: $purple;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

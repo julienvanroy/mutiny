@@ -7,6 +7,7 @@
       :value="modelValue"
       :placeholder="placeholder"
       :readonly="readonly"
+      :maxlength="maxlength"
       @input="$emit('update:modelValue', $event.target.value)"
       @focus="$event.target.select()"
     />
@@ -50,6 +51,11 @@ export default {
       type: String,
       default: "",
     },
+    maxlength: {
+      type: Number,
+      required: false,
+      default: null
+    }
   },
   computed: {
     cssProps() {
@@ -70,7 +76,7 @@ export default {
   background-size: 100% 100%;
   width: var(--input-width);
   height: var(--input-height);
-  padding: 0 0 0 16px;
+  padding: 0 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -80,7 +86,7 @@ export default {
     }
   }
   input {
-    width: calc(100% - 52px);
+    width: 100%;
     height: 100%;
     background-color: transparent;
     padding: 0;
@@ -89,6 +95,9 @@ export default {
     font-size: $ft-s-xsmall;
     &:focus {
       outline: none;
+    }
+    &::placeholder {
+      color: rgba($white, .3);
     }
   }
 }

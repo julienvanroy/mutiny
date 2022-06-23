@@ -5,7 +5,7 @@
         <img src="../assets/mobile/header-w-logo.svg" alt="" />
       </header>
       <h2>{{ $t("waiting.portrait.title") }}</h2>
-      <player-card :name="colyseus.playerName" :color="colyseus.playerColor" large :showPoints="false" />
+      <ThePlayer v-if="colyseus.hasPlayer" :player="colyseus.player" large dont-update-state hide-points />
       <div class="waiting__instruction">
         <p>{{ $t("waiting.portrait.instruction") }}</p>
         <img src="../assets/mobile/icon-rotate.svg" alt="" />
@@ -16,52 +16,57 @@
     </template>
     <template v-else>
       <header>
-        <img src="../assets/mobile/header.svg" alt="" />
+        <img src="../assets/mobile/header-w-logo.svg" alt="" />
       </header>
+      <ThePlayer v-if="colyseus.hasPlayer" :player="colyseus.player" dont-update-state hide-points />
       <h2>
         {{ $t("waiting.landscape.titleLeft") }}
         <em>{{ $t("waiting.landscape.titleMiddle") }}</em>
         {{ $t("waiting.landscape.titleRight") }}
       </h2>
+
       <p>{{ $t("waiting.landscape.instruction") }}</p>
-      <the-button @click="$router.push('/gamepad')" />
       <footer>
         <img src="../assets/mobile/header.svg" alt="" />
       </footer>
     </template>
   </div>
+  <modal-ejected v-if="ejected" />
 </template>
 
 <script>
 import useColyseusStore from "@/store/colyseus";
-import { mapWritableState } from "pinia";
+import { mapState } from "pinia";
 import useGlobalStore from "@/store/global";
-import PlayerCard from "@/components/ui/PlayerCard.vue";
-import TheButton from "@/components/ui/TheButton.vue";
+import ThePlayer from "@/components/ui/ThePlayer.vue";
+import ModalEjected from "@/components/modals/ModalEjected.vue";
 
 export default {
-  components: { PlayerCard, TheButton },
+  components: { ThePlayer, ModalEjected },
   name: "WaitingView",
   setup() {
     const colyseus = useColyseusStore();
     return { colyseus };
   },
+  data() {
+    return {
+      ejected: false,
+    };
+  },
   computed: {
-    ...mapWritableState(useGlobalStore, ["isLandscape"]),
+    ...mapState(useGlobalStore, ["isLandscape"]),
   },
   mounted() {
-    this.resize();
-    window.addEventListener("resize", this.resize, false);
+    this.colyseus.currentRoom.onMessage("startGame", () => this.$router.push("gamepad"));
 
-    this.colyseus.getPlayer(this.colyseus.currentRoom.sessionId);
-  },
-  beforeUnmount() {
-    window.removeEventListener("resize", this.resize, false);
-  },
-  methods: {
-    resize() {
-      this.isLandscape = window.innerWidth > window.innerHeight;
-    },
+    this.colyseus.currentRoom.onMessage("updatePlayerTarget", () => {});
+
+    this.colyseus.currentRoom.onMessage("leaveRoom", (playerId) => {
+      console.log(this.colyseus.currentRoom.sessionId, playerId)
+      if(this.colyseus.currentRoom.sessionId !== playerId) return;
+      this.colyseus.currentRoom.leave();
+      this.ejected = true;
+    });
   },
 };
 </script>

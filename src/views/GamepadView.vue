@@ -1,23 +1,61 @@
 <template>
-  <game-pad />
-  <modal-dead v-show="showModalDead" />
-  <modal-steal-target v-show="showModalStealTarget" />
+  <game-pad :has-new-target="hasNewTarget" />
+  <modal-dead v-show="showModalDead" :player="killer" />
+  <modal-target-switched v-show="showModalTargetSwitched" />
+  <modal-target-stolen v-show="showModalTargetStolen" :player="stealer" />
+  <modal-lock-gamepad v-if="!isLandscape" />
 </template>
 
 <script>
 import useColyseusStore from "@/store/colyseus";
+import useGlobalStore from "@/store/global";
+import { mapState } from "pinia";
 import GamePad from "@/components/GamePad.vue";
 import ModalDead from "@/components/modals/ModalDead.vue";
-import ModalStealTarget from "@/components/modals/ModalStealTarget.vue";
+import ModalTargetStolen from "@/components/modals/ModalTargetStolen.vue";
+import ModalTargetSwitched from "@/components/modals/ModalTargetSwitched.vue";
+import ModalLockGamepad from "@/components/modals/ModalLockGamepad.vue";
 
 export default {
-  components: { GamePad, ModalDead, ModalStealTarget },
+  components: { GamePad, ModalDead, ModalTargetStolen, ModalTargetSwitched, ModalLockGamepad },
   name: "GamepadView",
   data() {
     return {
-      showModalDead: false,
-      showModalStealTarget: false,
+      hasNewTarget: false,
+      timeout: null,
+      killer: "",
+      stealer: "",
     };
+  },
+  computed: {
+    ...mapState(useGlobalStore, ["isLandscape"]),
+    showModalDead() {
+      return this.colyseus.player.isKilled;
+    },
+    showModalTargetSwitched() {
+      return !this.colyseus.player.isKilled && this.colyseus.player.targetChanged && !this.showModalTargetStolen;
+    },
+    showModalTargetStolen() {
+      return !this.colyseus.player.isKilled && this.colyseus.player.targetGotStolen;
+    },
+  },
+  watch: {
+    showModalDead(newValue) {
+      if (newValue && !this.timeout) this.hasNewTarget = true;
+      this.timeout = setTimeout(() => {
+        this.hasNewTarget = false;
+        clearTimeout(this.timeout);
+        this.timeout = null;
+      }, 4000);
+    },
+    showModalTargetChanged(newValue) {
+      if (newValue && !this.timeout) this.hasNewTarget = true;
+      this.timeout = setTimeout(() => {
+        this.hasNewTarget = false;
+        clearTimeout(this.timeout);
+        this.timeout = null;
+      }, 4000);
+    },
   },
   setup() {
     const colyseus = useColyseusStore();
@@ -27,10 +65,15 @@ export default {
   mounted() {
     this.colyseus.currentRoom.onMessage("joystick", () => {});
 
-    this.colyseus.currentRoom.onMessage("kill", () => {});
-  },
-  unmounted() {
-    this.colyseus.currentRoom?.leave();
+    this.colyseus.currentRoom.onMessage("attack", () => {});
+
+    this.colyseus.currentRoom.onMessage("kill", ({ killer }) => {
+      this.killer = killer;
+    });
+
+    this.colyseus.currentRoom.onMessage("updatePlayerTarget", ({ stealer }) => (this.stealer = stealer));
+
+    this.colyseus.currentRoom.onMessage("endGame", () => this.$router.push("/end-game"));
   },
 };
 </script>

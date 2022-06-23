@@ -10,6 +10,7 @@ const useGlobalStore = defineStore("global", {
             isFullscreen: false,
             isLandscape: true,
             modalShown: null,
+            creditsOpen: false
         };
     },
 });

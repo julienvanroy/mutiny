@@ -1,177 +1,48 @@
 import Environment from "./Environment.js";
 import { component } from "bidello";
 import Experience from "@/webgl/Experience";
-import { Euler, Group, Quaternion, Vector2, Vector3 } from "three";
-import Player from "@/webgl/World/Player";
-//import Item from "@/webgl/World/Item";
-//import BoxCollision from "@/webgl/Collision/BoxCollision";
-import { Pathfinding } from "three-pathfinding";
-import { diffArray, randomIntegerInRange, sample, shuffle, uuid } from "@/utils/index.js";
-import Bot from "./Bot.js";
+import { Euler, Group, Quaternion } from "three";
+import PlayerPirate from "@/webgl/World/Pirate/PlayerPirate";
+import { diffArray, sample, shuffle, flatten } from "@/utils/index.js";
+import BotPirate from "./Pirate/BotPirate.js";
 import MapLevel from "@/webgl/World/MapLevel";
-import configs from "@/configs";
 import useColyseusStore from "@/store/colyseus.js";
 import Fireflies from "@/webgl/Mesh/Fireflies";
 import GerstnerWater from "@/webgl/Mesh/GerstnerWater";
-// import FogCustom from './Fog'
+import Fog from "@/webgl/Mesh/Fog";
+import SteeringBots from "@/webgl/World/SteeringBots";
+import configs from "@/configs/index.js";
+import { Color } from "three";
 
 export default class World extends component() {
     init() {
         const experience = new Experience();
         this._debug = experience.debug;
-        this._renderer = experience.renderer;
         this._scene = experience.scene;
         this._camera = experience.camera;
-        this._controls = experience.controls;
-        this.group = new Group();
 
-        this._isLoaded = false;
+        this.group = new Group();
+        this._scene.add(this.group);
     }
 
     onResourcesIsReady() {
         console.log("world is ready");
         this.environment = new Environment();
-        // this.fog = new FogCustom();
+        this.fog = new Fog(3150, 27, 76, "#0a0042");
+        this.fog.mesh.position.y += 1;
         this.gerstnerWater = new GerstnerWater();
-        this.fireflies = new Fireflies(100);
+        this.fireflies = new Fireflies(325, 29, 21, "#ff4800");
+        this.fireflies.mesh.position.y += 5;
         this.mapLevel = new MapLevel(this.group);
-
         this.players = new Map();
-        /*
-        TODO: For Colllision Items
-        this.item = new Item();
-        this.boxCollision = new BoxCollision();
-        */
-        this._initPathfinding();
-        this._initCharacters();
-        this._initBots();
 
-        this._scene.add(this.group);
+        this.steeringBots = new SteeringBots();
+
         this.onDebug();
-        this._isLoaded = true;
-    }
-
-    _initPathfinding() {
-        this.pathfinding = new Pathfinding();
-        this.pathfinding.zone = "map";
-        this.pathfinding.setZoneData(
-            this.pathfinding.zone,
-            Pathfinding.createZone(this.mapLevel.navMesh.geometry, Number.EPSILON)
-        );
-
-        let tempGroups = [];
-        this.pathfinding.zones.map.groups.forEach((group) => group.length >= 64 && tempGroups.push(group));
-        this.pathfinding.zones.map.groups = tempGroups;
-    }
-
-    _initBots() {
-        this.bots = {};
-        const initialPositions = [];
-        const zonesCount = this.pathfinding.zones.map.groups.length - 1;
-
-        for (let i = 0; i < configs.character.count; i++) {
-            let position = this.pathfinding.getRandomNode(
-                this.pathfinding.zone,
-                randomIntegerInRange(0, zonesCount),
-                new Vector3(),
-                configs.map.nearRange
-            );
-
-            while (
-                !initialPositions.every((pos) => pos.distanceTo(position) > configs.character.range) &&
-                !this.mapLevel.decors.every((mesh) => mesh.position.distanceTo(position) < configs.character.range * 2)
-            ) {
-                position = this.pathfinding.getRandomNode(
-                    this.pathfinding.zone,
-                    randomIntegerInRange(0, zonesCount),
-                    new Vector3(),
-                    32
-                );
-            }
-
-            initialPositions.push(position);
-
-            const botId = uuid();
-            this.bots[botId] = new Bot(botId, position, this.characters[i], this.group);
-        }
-    }
-
-    // Generative chara
-    _initCharacters() {
-        this.characters = [];
-
-        for (let i = 0; i < configs.character.count; i++) {
-            let body = {};
-            for (const [key, value] of Object.entries(configs.character.body)) {
-                body[key] = {
-                    tag: key,
-                    alphaTexture: value.alphaTexture,
-                    shuffleMesh: value.shuffleMesh,
-                    addColor: value.addColor,
-                    meshes: value.meshes,
-                    mesh: value.shuffleMesh
-                        ? sample(
-                              value.meshes.map(({ name, texture, color: colors }) => ({
-                                  name,
-                                  texture,
-                                  color: colors ? sample(colors) : undefined,
-                              }))
-                          )
-                        : undefined,
-                };
-            }
-
-            let duplicataCount = 0;
-            while (this.characters.find((charaBody) => JSON.stringify(charaBody) === JSON.stringify(body))) {
-                duplicataCount++;
-                body = {};
-                for (const [key, value] of Object.entries(configs.character.body)) {
-                    body[key] = {
-                        tag: key,
-                        alphaTexture: value.alphaTexture,
-                        shuffleMesh: value.shuffleMesh,
-                        addColor: value.addColor,
-                        meshes: value.meshes,
-                        mesh: value.shuffleMesh
-                            ? sample(
-                                  value.meshes.map(({ name, texture, color: colors }) => ({
-                                      name,
-                                      texture,
-                                      color: colors ? sample(colors) : undefined,
-                                  }))
-                              )
-                            : undefined,
-                    };
-                }
-            }
-
-            console.log(`Generative characters ${i + 1}: ${duplicataCount} duplicata times`);
-            this.characters.push(body);
-        }
-
-        this.characters = shuffle(this.characters);
-    }
-
-    _keyboard() {
-        const player = this.players.get("debug");
-        if (!this._debug.active || !this._controls.isPressed || !player) return;
-
-        const vectorControls = new Vector2();
-
-        if (this._controls.actions.up && this._controls.actions.down) vectorControls.y = 0;
-        else if (this._controls.actions.up) vectorControls.y = 1;
-        else if (this._controls.actions.down) vectorControls.y = -1;
-        else vectorControls.y = 0;
-
-        if (this._controls.actions.right && this._controls.actions.left) vectorControls.x = 0;
-        else if (this._controls.actions.right) vectorControls.x = 1;
-        else if (this._controls.actions.left) vectorControls.x = -1;
-        else vectorControls.x = 0;
-
-        player.vectorControls = vectorControls;
     }
 
     waveRaf(delta) {
+        if (!this.gerstnerWater) return;
         const waveInfo = this.gerstnerWater.getWaveInfo(
             this.group.position.x,
             this.group.position.z,
@@ -186,21 +57,7 @@ export default class World extends component() {
     }
 
     onRaf({ delta }) {
-        this._renderer.render(this._scene, this._camera);
-
-        if (this._isLoaded) {
-            this._keyboard();
-
-            this.waveRaf(delta);
-
-            /*
-            TODO: Collision Items
-                // Check Collision Items
-                this.players.forEach((player, id) => {
-                    if (this.boxCollision.hit(player.mesh, this.item.mesh)) console.log(id, 'Collision')
-                })
-            */
-        }
+        this.waveRaf(delta);
     }
 
     onAssignTargets() {
@@ -208,7 +65,7 @@ export default class World extends component() {
     }
 
     onAddPlayer({ playerId }) {
-        this.players.set(playerId, new Player(playerId, this.mapLevel.collider));
+        this.players.set(playerId, new PlayerPirate(playerId, this.mapLevel.size));
         console.log(`player ${playerId} added`, this.players.get(playerId));
     }
 
@@ -229,7 +86,64 @@ export default class World extends component() {
         const btnAddPlayer = folderDebug.addButton({
             title: "addPlayer",
         });
-        btnAddPlayer.on("click", () => this.onAddPlayer({ playerId: "debug" }));
+        btnAddPlayer.on("click", () => {
+            this.onAddPlayer({ playerId: "debug" });
+            btnAddPlayer.dispose();
+        });
+
+        folderDebug.addInput(configs.character.colors, "noir").on("change", ({ value }) => {
+            flatten(this.steeringBots.bots).forEach((bot) => {
+                bot.mesh.traverse((child) => {
+                    if (child.name.includes("Chapeau")) child.material.color = new Color(value).convertSRGBToLinear();
+                });
+            });
+        });
+        folderDebug.addInput(configs.character.colors, "orange").on("change", ({ value }) => {
+            flatten(this.steeringBots.bots).forEach((bot) => {
+                bot.mesh.traverse((child) => {
+                    if (child.name.includes("Chapeau")) child.material.color = new Color(value).convertSRGBToLinear();
+                });
+            });
+        });
+        folderDebug.addInput(configs.character.colors, "longueVueBouchon").on("change", ({ value }) => {
+            flatten(this.steeringBots.bots).forEach((bot) => {
+                bot.mesh.traverse((child) => {
+                    if (child.name.includes("Longue_vue_2"))
+                        child.material.color = new Color(value).convertSRGBToLinear();
+                });
+            });
+        });
+        folderDebug.addInput(configs.character.colors, "longueVueCorps").on("change", ({ value }) => {
+            flatten(this.steeringBots.bots).forEach((bot) => {
+                bot.mesh.traverse((child) => {
+                    if (child.name.includes("Longue_vue_1"))
+                        child.material.color = new Color(value).convertSRGBToLinear();
+                });
+            });
+        });
+        folderDebug.addInput(configs.character.colors, "bouteilleBouchon").on("change", ({ value }) => {
+            flatten(this.steeringBots.bots).forEach((bot) => {
+                bot.mesh.traverse((child) => {
+                    if (child.name.includes("Bouteille_1"))
+                        child.material.color = new Color(value).convertSRGBToLinear();
+                });
+            });
+        });
+        folderDebug.addInput(configs.character.colors, "bouteilleCorps").on("change", ({ value }) => {
+            flatten(this.steeringBots.bots).forEach((bot) => {
+                bot.mesh.traverse((child) => {
+                    if (child.name.includes("Bouteille_2"))
+                        child.material.color = new Color(value).convertSRGBToLinear();
+                });
+            });
+        });
+        folderDebug.addInput(configs.character.colors, "crocher").on("change", ({ value }) => {
+            flatten(this.steeringBots.bots).forEach((bot) => {
+                bot.mesh.traverse((child) => {
+                    if (child.name.includes("Crocher")) child.material.color = new Color(value).convertSRGBToLinear();
+                });
+            });
+        });
     }
 
     assignTargets() {
@@ -249,7 +163,7 @@ export default class World extends component() {
 
             case 1:
                 singlePlayer = this.players.values().next().value;
-                bots = Object.values(singlePlayer._bots).filter((bot) => !bot.isPlayer);
+                bots = flatten(Object.values(singlePlayer._bots)).filter((bot) => !bot.isPlayer);
                 singlePlayer.target = sample(bots);
                 break;
 
@@ -264,7 +178,7 @@ export default class World extends component() {
                     console.log(`chosen as targets`, [...chosenAsTargets]);
 
                     targetsToChose = playersIds.filter((pId) => pId !== playerId);
-                    console.log(`targets to chode`, [...targetsToChose]);
+                    console.log(`targets to chose`, [...targetsToChose]);
 
                     playerTarget = sample(diffArray(targetsToChose, chosenAsTargets));
 
@@ -281,12 +195,11 @@ export default class World extends component() {
                 break;
         }
 
-        console.log(this.players);
         this.players.forEach((p) => {
-            if (p.target instanceof Player) p.target._setBot();
-            else if (p.target instanceof Bot) p._setBot();
+            if (p.target instanceof PlayerPirate) p.target.setBot();
+            else if (p.target instanceof BotPirate) p.setBot();
 
-            useColyseusStore().updatePlayerTarget(p.id, p._getTargetData());
+            useColyseusStore().updatePlayerTarget(p.id, p.getTargetData(), false, true);
 
             console.log(`player ${p.id} has target ${p.target.id} ${p.target.bot ? `of bot ${p.target.bot.id}` : ""}`);
         });

@@ -1,15 +1,15 @@
 <template>
   <transition name="fade">
     <div>
-      {{ $t('ui.waiting') }}
+      {{ $t("modals.modalWaiting") }}
     </div>
   </transition>
 </template>
 
 <script>
 export default {
-  name: "ModalWaiting"
-}
+  name: "ModalWaiting",
+};
 </script>
 
 <style lang="scss" scoped>

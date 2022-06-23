@@ -14,6 +14,8 @@
 import useColyseusStore from "@/store/colyseus";
 import CopyCode from "@/components/ui/CopyCode";
 import QrCode from "@/components/ui/QrCode";
+import { mapWritableState } from "pinia";
+import useGlobalStore from "@/store/global";
 
 export default {
   name: "SetUpConnection",
@@ -24,6 +26,9 @@ export default {
   setup() {
     const colyseus = useColyseusStore();
     return { colyseus };
+  },
+    computed: {
+    ...mapWritableState(useGlobalStore, ["modalShown"])
   },
 };
 </script>
@@ -58,10 +63,17 @@ export default {
     .qrcode {
       display: flex;
       justify-content: center;
-      align-items: center;
-      border-left: 2px solid $salmon;
       padding-left: 20px;
+      background-color: $white;
+      position: relative;
+      width: 60px;
+      height: 60px;
+      border-radius: 4px;
+
       img {
+        position: absolute;
+        left: 0;
+        top: 0;
         width: 60px;
       }
       @media (any-hover: hover) {

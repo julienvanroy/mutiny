@@ -1,7 +1,7 @@
 <template>
   <div class="homepage">
     <header class="homepage__header">
-      <img src="../assets/mobile/header.svg" alt="" />
+      <img src="../assets/mobile/header-w-logo.svg" alt="" />
     </header>
     <div class="homepage__content">
       <h1 class="homepage__content__logo">
@@ -13,6 +13,7 @@
           :placeholder="$t('homepage.mobileContent.inputPlaceholder')"
           :width="236"
           :height="48"
+          :maxlength="9"
           v-model="roomId"
           center
         />
@@ -23,26 +24,24 @@
       <div class="btn-container">
         <TheButton
           :label="$t('homepage.mobileContent.cta')"
+          :disabled="!roomId"
           color="primary"
           @click="joinRoom(roomId)"
-        />
-        <TheButton
-          v-for="(room, roomIndex) in colyseus.rooms"
-          :key="roomIndex"
-          @click="joinRoom(room.roomId)"
-          :label="`Join room ` + room.roomId"
-          color="primary"
         />
       </div>
     </div>
     <footer class="homepage__footer">
       <div class="homepage__footer__left">
-        <img src="../assets/mobile/icon-players.svg" />
-        <p v-html="$t('homepage.infosPlayers')"/>
+        <IconPlayers color="#3C365A" />
+        <span>{{ $t("homepage.infosPlayers") }}</span>
       </div>
       <div class="homepage__footer__right">
-        <img src="../assets/mobile/icon-matos.svg" />
-        <p v-html="$t('homepage.infosEquipments')"/>
+        <IconEquipment color="#3C365A" />
+        <span>
+          {{ $t("homepage.infosEquipments1") }}
+          <br />
+          {{ $t("homepage.infosEquipments2") }}
+        </span>
       </div>
     </footer>
   </div>
@@ -50,12 +49,14 @@
 
 <script>
 import useColyseusStore from "@/store/colyseus";
-import TheButton from "@/components/ui/TheButton.vue";
-import TheInput from "@/components/ui/TheInput.vue";
+import TheButton from "@/components/ui/TheButton";
+import TheInput from "@/components/ui/TheInput";
+import IconPlayers from "@/components/svg/IconPlayers";
+import IconEquipment from "@/components/svg/IconEquipment";
 
 export default {
   name: "HomeViewMobile",
-  components: { TheButton, TheInput },
+  components: { TheButton, TheInput, IconPlayers, IconEquipment },
   setup() {
     const colyseus = useColyseusStore();
     return { colyseus };
@@ -125,6 +126,7 @@ export default {
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      margin-bottom: 56px;
       * {
         margin: 8px 0;
       }
@@ -132,15 +134,49 @@ export default {
   }
 
   &__footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     font-size: 12px;
+    padding: 0 32px 20px 32px;
+    text-align: left;
 
-    div {
+    &__left,
+    &__right {
       display: flex;
-
-      img {
+      align-items: center;
+      svg {
         margin-right: 8px;
+      }
+    }
+    &__left {
+      svg {
+        width: 36px;
+      }
+    }
+    &__right {
+      svg {
+        width: 30px;
+      }
+    }
+  }
+
+  @media (orientation: landscape) {
+    &__content {
+      padding: 16px 0;
+
+      &__logo {
+        display: none;
+        visibility: hidden;
+      }
+
+      .content-container {
+        p {
+          padding: 0 16%;
+          margin-bottom: 16px;
+        }
       }
     }
   }

@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import * as Colyseus from "colyseus.js";
 import router from "@/router";
 import { mapToArray, sample } from "@/utils";
+import useGlobalStore from "./global";
 
 const useColyseusStore = defineStore("colyseus", {
     state: () => ({
@@ -9,22 +10,42 @@ const useColyseusStore = defineStore("colyseus", {
         rooms: [],
         currentRoom: null,
         lobbyRoom: null,
-        players: [],
-        player: null,
-        playerTarget: null,
+        players: new Map(),
+        player: {},
+        playersArray: [],
     }),
     getters: {
+        hasPlayer(state) {
+            return Object.keys(state.player).length !== 0;
+        },
         rankedPlayers(state) {
-            return [...state.players].sort((a, b) => (a.points < b.points ? 1 : -1));
+            const sortedPlayers = [...state.playersArray].sort((a, b) => (a.points < b.points ? 1 : -1));
+            const lastPlayers = sortedPlayers.filter(
+                (player) => player.points === sortedPlayers[sortedPlayers.length - 1].points
+            );
+            const firstPlayers = sortedPlayers.filter((player) => player.points === sortedPlayers[0].points);
+
+            return sortedPlayers.map((player) => ({
+                ...player,
+                isLast: player.points === 0 || lastPlayers.find((p) => p.id === player.id),
+                isFirst: player.points !== 0 && firstPlayers.find((p) => p.id === player.id),
+            }));
         },
-        playerPoints(state) {
-            return state.player.points;
+        roomReadyToPlay(state) {
+            return state.playersArray.length > 0 && state.playersArray.every((player) => player.orientationReady);
         },
-        playerName(state) {
-            return state.player.name;
+        playerRanking(state) {
+            let rankedPlayers = this.rankedPlayers;
+            let rank = rankedPlayers.findIndex((p) => p.id === state.player.id);
+
+            return {
+                rank: rank,
+                isWinner: rankedPlayers.find((p) => p.id === state.player.id).isFirst,
+                isLast: rankedPlayers.find((p) => p.id === state.player.id).isLast,
+            };
         },
-        playerColor(state) {
-            return state.player.name;
+        stalkersCount(state) {
+            return state.player.target ? JSON.parse(state.player.target).stalkersCount : undefined;
         },
     },
     actions: {
@@ -69,7 +90,7 @@ const useColyseusStore = defineStore("colyseus", {
                     this.currentRoom = null;
                 }
 
-                newRoom.onStateChange((state) => this.updatePlayers(state.players.$items));
+                this.updatePlayers(newRoom);
 
                 return newRoom;
             } catch (e) {
@@ -82,12 +103,7 @@ const useColyseusStore = defineStore("colyseus", {
                 if (roomId) room = await this.client.joinById(roomId);
                 else room = await this.client.joinById(sample(this.rooms).roomId);
 
-                room.onStateChange((state) => {
-                    this.updateCurrentPlayer(state.players.$items, room.sessionId);
-                    this.updatePlayers(state.players.$items);
-                });
-
-                room.onMessage("getPlayer", (player) => (this.player = player));
+                this.updatePlayers(room);
 
                 this.currentRoom = room;
 
@@ -96,24 +112,24 @@ const useColyseusStore = defineStore("colyseus", {
                 console.error("join error", e);
             }
         },
-        updatePlayers(players) {
-            this.players = mapToArray(players, true).filter((p) => !!p.name);
-        },
-        updateCurrentPlayer(players, playerId) {
-            this.player = players.get(playerId);
-            this.playerTarget = this.player?.target ? JSON.parse(this.player.target) : null;
-        },
-        sendData(type, value) {
-            this.currentRoom.send(type, value);
-        },
-        addPseudo(pseudo) {
-            this.sendData("addPseudo", {
-                playerId: this.currentRoom.sessionId,
-                playerName: pseudo,
+        updatePlayers(room) {
+            room.onMessage("getAllPlayers", (players) => {
+                this.players = new Map(Object.entries(players));
+                this.playersArray = mapToArray(this.players, true).filter((p) => !!p.name);
+
+                const player = players[room.sessionId];
+                if (player) this.player = player;
             });
         },
-        addPlayer() {
-            this.sendData("addPlayer", { playerId: this.currentRoom.sessionId });
+        sendData(type, value) {
+            this.currentRoom?.send(type, value);
+        },
+        addPlayer(pseudo) {
+            this.sendData("addPlayer", {
+                playerId: this.currentRoom.sessionId,
+                playerName: pseudo,
+                orientationReady: useGlobalStore().isLandscape,
+            });
         },
         getPlayer(playerId) {
             this.sendData("getPlayer", playerId);
@@ -121,10 +137,12 @@ const useColyseusStore = defineStore("colyseus", {
         getAllPlayers() {
             this.sendData("getAllPlayers");
         },
-        updatePlayerTarget(playerId, playerTarget) {
+        updatePlayerTarget(playerId, playerTarget, playerStealer = false, onGameStart = false) {
             this.sendData("updatePlayerTarget", {
                 playerId,
                 playerTarget,
+                playerStealer,
+                onGameStart,
             });
         },
     },

@@ -60,6 +60,7 @@ class Water extends Mesh {
         const textureMatrix = new Matrix4();
 
         const mirrorCamera = new PerspectiveCamera();
+        mirrorCamera.layers.disable(1)
 
         const renderTarget = new WebGLRenderTarget( textureWidth, textureHeight );
 

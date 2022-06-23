@@ -23,14 +23,15 @@
     "howler": "^2.2.3",
     "nipplejs": "^0.9.1",
     "pinia": "^2.0.13",
+    "postprocessing": "^6.27.0",
     "qrcode": "^1.5.0",
     "register-service-worker": "^1.7.2",
-    "three": "^0.140.0",
+    "three": "^0.140.2",
     "three-mesh-bvh": "^0.5.10",
-    "three-pathfinding": "^1.1.0",
     "tweakpane": "^3.0.8",
     "vue": "^3.2.13",
     "vue-i18n": "^9.1.10",
+    "vue-meta": "v3.0.0-alpha.10",
     "vue-router": "^4.0.14"
   },
   "devDependencies": {

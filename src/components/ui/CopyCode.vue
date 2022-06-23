@@ -1,7 +1,7 @@
 <template>
-  <the-input class="copy-code" :on-focus="select" ref="input" :model-value="code" readonly>
+  <TheInput class="copy-code" ref="input" :model-value="code" readonly>
     <button @click="copy"></button>
-  </the-input>
+  </TheInput>
 </template>
 
 <script>
@@ -54,7 +54,7 @@ export default {
     background-size: 100% 100%;
     border: none;
     background-color: transparent;
-    width: 52px;
+    width: 64px;
     height: 100%;
     @media (any-hover: hover) {
       &:hover {

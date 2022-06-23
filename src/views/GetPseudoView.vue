@@ -5,8 +5,8 @@
     </header>
     <h2>{{ $t("getPseudo.title") }}</h2>
     <div class="get-pseudo__content">
-      <the-input v-model="pseudo" :placeholder="placeholder" :width="236" :height="48" center />
-      <span v-if="pseudoNotValid">Pseudo is already taken</span>
+      <TheInput v-model="pseudo" :placeholder="placeholder" :width="236" :height="48" :maxlength="18" center />
+      <span v-if="pseudoNotValid">{{ $t("getPseudo.error") }}</span>
       <TheButton
         :label="$t('getPseudo.ctaRandom')"
         icon="images/icons/random.svg"
@@ -45,22 +45,16 @@ export default {
     };
   },
   mounted() {
-    this.colyseus.sendData("getAllPlayers");
-
     this.colyseus.currentRoom.onMessage("getAllPlayers", (players) => {
-      delete players[this.colyseus.currentRoom.sessionId];
-      this.players = players;
-
       this.placeholder = sample(
         diffArray(
           PiratesNames,
-          Object.values(this.players).map(({ name }) => name)
+          Object.values(new Map(Object.entries(players))).map(({ name }) => name)
         )
       );
     });
-    this.colyseus.currentRoom.onMessage("addPlayer", () => {
-      this.colyseus.sendData("getAllPlayers");
-    });
+
+    this.colyseus.sendData("getAllPlayers");
   },
   watch: {
     pseudo(value) {
@@ -74,11 +68,7 @@ export default {
   methods: {
     checkIsPseudoValid(pseudoToCheck) {
       const isValid = !Object.values(this.players).some((player) => player.name === pseudoToCheck);
-      if (!isValid) {
-        this.pseudoNotValid = true;
-      } else {
-        this.pseudoNotValid = false;
-      }
+      this.pseudoNotValid = !isValid;
       return isValid;
     },
     chooseRandomPseudo() {
@@ -93,8 +83,7 @@ export default {
     },
     sendPseudo() {
       if ("" === this.pseudo) this.pseudo = this.placeholder;
-      this.colyseus.addPseudo(this.pseudo);
-      this.colyseus.addPlayer();
+      this.colyseus.addPlayer(this.pseudo);
       router.push(`/waiting`);
     },
   },
@@ -129,8 +118,44 @@ export default {
     justify-content: center;
     align-items: center;
 
+    & > span {
+      margin-top: -16px;
+      font-size: 12px;
+    }
+
     .the-input {
       margin: 32px 0;
+    }
+
+    .btn.btn-tertiary {
+      width: 192px;
+      padding: 10px 5px;
+    }
+  }
+
+  .btn.btn-primary {
+    width: 243px;
+    padding: 0 54px;
+    span {
+      font-size: 20px;
+    }
+  }
+
+  @media (orientation: landscape) {
+    &__content {
+      margin-bottom: 16px;
+
+      .the-input {
+        margin: 16px 0;
+      }
+    }
+    h2 {
+      font-size: 18px;
+    }
+
+    footer {
+      display: none;
+      visibility: hidden;
     }
   }
 }

@@ -49,7 +49,7 @@ export default {
   justify-content: center;
   align-items: center;
   padding: 10px 30px;
-  min-height: 60px;
+  min-height: 56px;
   border: none;
   background-color: transparent;
   color: $white;
@@ -156,7 +156,17 @@ export default {
 
   &.disabled {
     pointer-events: none;
-    opacity: 0.7;
+    &:before {
+      opacity: 0.2;
+      mix-blend-mode: darken;
+    }
+    &:after {
+      background-image: none;
+    }
+    span {
+      opacity: 0.2;
+      color: $disabled;
+    }
     @media (any-hover: hover) {
       &:hover {
         cursor: not-allowed;

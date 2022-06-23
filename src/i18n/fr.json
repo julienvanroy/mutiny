@@ -3,25 +3,30 @@
     "fr": "Français",
     "en": "Anglais"
   },
+  "meta": {
+    "title": "Mutiny Party",
+    "description": "Faufile-toi parmi l’équipage. Trouve tes rivaux et élimine-les pour devenir capitaine. Prends garde, ils te traquent aussi. Sauras-tu être assez discret ? Que la silencieuse mutinerie commence !"
+  },
   "ui": {
     "back": "Retour",
     "close": "Fermer",
+    "start": "À l’abordaaage !",
     "continue": "Continuer",
-    "restart": "Rejouer",
+    "restart": "Recommencer",
+    "replay": "Rejouer",
+    "changeMode": "Changer de mode",
+    "quitVessel": "Quitter le navire",
     "quit": "Quitter",
     "timeLeft": "Temps restant",
-    "tutorial": "Tutoriel",
-    "waiting": "EN ATTENTE...",
-    "dead": "{{player}} vous a évincé.e",
-    "stealTarget": "{{player}} a débusqué.e votre cible"
+    "tutorial": "Tutoriel"
   },
   "homepage": {
     "credits": "Crédits",
     "createRoom": "Créer un navire",
-    "homePhraseDesktop": "Un téléphone par joueur est requis pour contrôler son moussaillon.",
-    "homePhraseMobile": "Rejoignez une partie depuis le jeu sur ordinateur",
+    "homePhraseMobile": "Rejoint un navire depuis le jeu sur ordinateur",
     "infosPlayers": "3 à 8 joueurs",
-    "infosEquipments": "1 téléphone par joueur<br />+ 1 ordinateur",
+    "infosEquipments1": "1 téléphone par joueur",
+    "infosEquipments2": "+ 1 ordinateur",
     "mobileContent": {
       "shipName": "Nom du navire",
       "inputPlaceholder": "Fpdr36",
@@ -29,33 +34,49 @@
       "cta": "Embarquer"
     }
   },
+  "credits": {
+    "p": "Ce jeu a été réalisé dans le cadre du projet de fin d’étude du Master Design et Management de l’Innovation Interactive à Gobelins.",
+    "thanks": "Remerciements",
+    "pThanks": "Un grand merci à Louis-Jean Teitelbaum, Adrien Havet, Olivier Drouet, Marc Petska, Chlovis Lobre, Frédéric Coispeau, Framboise Fronty-Gilles, Nicolas Rouit-Leduc, Rosa Rocca-Serra, Tatiana Vilela dos Santos, Rémy Bourçois, Bastien Robert, Julien Dargelos, Bruno Simon, Nina Chaulet, Mathieu Ehrsam, Adrien Melchior, Lisa Schaeffer pour nous avoir suivis tout au long de ce projet."
+  },
   "getPseudo": {
-    "title": "Qui es-tu moussaillon ?",
+    "title": "Qui es-tu, moussaillon ?",
     "ctaRandom": "Nom aléatoire",
-    "cta": "Monter sur le pont"
+    "cta": "Monte sur le pont !",
+    "error": "Le pseudo a déjà été pris."
   },
   "waiting": {
     "portrait": {
-      "title": "Bienvenue !",
+      "title": "Bienvenue à bord !",
       "instruction": "Pour être fin prêt, tourne ton téléphone."
     },
     "landscape": {
       "titleLeft": "Tu es ",
       "titleMiddle": "prêt.e",
       "titleRight": " !",
-      "instruction": "Pour que la révolte commence, sélectionne un mode de jeu."
+      "instruction": "Pour que la mutinerie commence, sélectionne un mode de jeu."
     }
   },
   "setup": {
-    "playersTitle": "L'équipage",
-    "playersPlaceholder": "Aucun moussaillon sur le pont...<br/>“bruits de criquets”",
-    "infos": "Pour intégrer l’équipage, va sur <strong>Mutiny.com</strong> avec <strong>ton téléphone</strong>.",
-    "codeTitle": "Rejoins le navire"
+    "playersTitle": "Moussaillons",
+    "playersPlaceholder1": "Aucun moussaillon sur le pont...",
+    "playersPlaceholder2": "*clapotis de vagues*",
+    "infos1": "Pour intégrer l’équipage, va sur ",
+    "infos2": "mutinyparty.com",
+    "infos3": " avec ",
+    "infos4": "ton téléphone.",
+    "codeTitle": "Rejoins le navire",
+    "ready": "Prêt.e",
+    "vacancy": "Poste à pourvoir..."
   },
   "modals": {
     "modalJoin": {
       "title": "Rejoins le navire",
-      "description": "Entre le code ci-dessous sur <strong>Mutiny.com</strong> avec <strong>ton téléphone</strong> ou bien flash directement le QR code.",
+      "description1": "Entre le code ci-dessous sur ",
+      "description2": "mutinyparty.com",
+      "description3": " avec ",
+      "description4": "ton téléphone",
+      "description5": " ou bien flash directement le QR code.",
       "or": "Ou",
       "btnLabel": "Hissez oh !"
     },
@@ -64,15 +85,24 @@
     },
     "modalOptions": {
       "btnLabel": "Ohé !"
-    }
+    },
+    "modalLockGamepad": "Tourne ton téléphone pour continuer de jouer.",
+    "modalEjected": {
+      "title": "Tu as été jeté par dessus bord !",
+      "cta": "Retourner sur le quai"
+    },
+    "modalDead": "{player} vous a évincé.e !",
+    "modalTargetStolen": "{player} a débusqué votre cible avant vous !",
+    "modalTargetSwitched": "Quel pirate sanguinolant !",
+    "modalWaiting": "En attente..."
   },
   "gamepad": {
     "youAre": "tu es",
     "clues": "Ta cible",
     "clueInterval": "Indice suivant",
-    "attack": "Attaque",
+    "attack": "Attaquer",
     "power": "Pouvoir",
-    "stalkersCounterLeft": "T’es traqué.e par",
+    "stalkersCounterLeft": "Tu es traqué.e par",
     "stalkersCounterRight": "mousse.s"
   },
   "parameters": {
@@ -98,9 +128,35 @@
   "modes": {
     "1": {
       "name": "Traqueurs Traqués",
-      "shortDescription": "Faufile-toi parmi l’équipage, évince tes rivaux et renverse le cap’taine.<br/>Que la silencieuse mutinerie commence !",
-      "description": "Tu veux devenir le cap’taine du navire ? Gagne le plus de points de terreur en attaquant tes adversaires. Les indices de ta prochaine cible sont sur ton tableau de bord. Bon vent !",
-      "btnGo": "À l’aborrrdage !"
+      "shortDescription": "Faufile-toi parmi l’équipage, évince tes rivaux et renverse le capitaine... Que la silencieuse mutinerie commence !",
+      "description": "Tu veux devenir le capitaine du navire ? Gagne le plus de points de terreur en attaquant tes adversaires. Les indices de ta prochaine cible sont sur ton tableau de bord. Bon vent !"    }
+  },
+  "end": {
+    "mobile": {
+      "title": {
+        "win": "Victoire !",
+        "lose": "Morbleu..."
+      },
+      "description": {
+        "0": "Le Capitaine, c’est toi !",
+        "1": "Second, tu resteras...",
+        "2": "Canonnier, tu resteras...",
+        "3": "Matelot, tu resteras...",
+        "4": "Matelot, tu resteras...",
+        "5": "Mousse, tu resteras...",
+        "6": "Mousse, tu resteras...",
+        "7": "Espèce de marin d’eau douce..."
+      }
+    },
+    "desktop": {
+      "0": "Capitaine",
+      "1": "Second",
+      "2": "Canonnier",
+      "3": "Matelot",
+      "4": "Matelot",
+      "5": "Mousse",
+      "6": "Mousse",
+      "7": "Marin d’eau douce..."
     }
   }
 }

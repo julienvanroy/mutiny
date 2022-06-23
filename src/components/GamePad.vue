@@ -1,30 +1,34 @@
 <template>
   <div class="gamepad">
     <div class="gamepad__left">
-      <player-card :name="name" :color="color" :points="points" />
+      <ThePlayer :player="colyseus.player" dont-update-state />
       <div ref="joystick" class="joystick"></div>
     </div>
-    <div class="gamepad__middle">
+    <div class="gamepad__middle" :class="{ '--new-target': hasNewTarget }">
       <div class="clues-container">
         <h2>{{ $t("gamepad.clues") }}</h2>
         <p>{{ targetName }}</p>
         <div class="clues">
           <div class="clue" v-for="(clue, indexClue) in clues" :key="indexClue">
-            <span v-if="clue.show">{{ clue.tag }}</span>
-            <span v-else-if="nextClueIndex === indexClue">{{ $t("gamepad.clueInterval") }}</span>
+            <span v-if="clue.show"><img :src="`/images/clues/${clue.img}.png`" alt="" /></span>
+            <span v-else-if="nextClueIndex === indexClue">
+              {{ $t("gamepad.clueInterval") }}
+              <br />
+              <em>{{ `${countdown}''` }}</em>
+            </span>
           </div>
         </div>
       </div>
     </div>
     <div class="gamepad__right">
-      <p class="stalkers-counter-container">
+      <p class="stalkers-counter-container" :class="{ '--state-change': stalkerCountStateChange }">
         {{ $t("gamepad.stalkersCounterLeft") }}
         <br />
-        <stalkers-counter :count="stalkersCount" />
+        <stalkers-counter :count="stalkerCount" :state-change="stalkerCountStateChange" />
         <span>{{ $t("gamepad.stalkersCounterRight") }}</span>
       </p>
-      <button ref="attack" class="attack" @click="colyseus.sendData('kill', true)">
-        <img src="/images/gamepad/btn-attack.png" />
+      <button ref="attack" class="attack">
+        <btn-attack @click="attack" :attack="isAttack" />
       </button>
       <!-- <button ref="power" @click="colyseus.sendData('power', true)">{{$t("gamepad.power")}}</button> -->
     </div>
@@ -34,85 +38,113 @@
 <script>
 import useColyseusStore from "@/store/colyseus";
 import nipplejs from "nipplejs";
-import PlayerCard from "./ui/PlayerCard.vue";
-import StalkersCounter from "./ui/StalkersCounter.vue";
+import ThePlayer from "./ui/ThePlayer";
+import StalkersCounter from "./ui/StalkersCounter";
+import configs from "@/configs";
+import BtnAttack from "./svg/BtnAttack.vue";
 
 export default {
-  components: { PlayerCard, StalkersCounter },
+  components: { ThePlayer, StalkersCounter, BtnAttack },
   name: "GamePad",
   setup() {
     const colyseus = useColyseusStore();
 
     return { colyseus };
   },
+  props: {
+    hasNewTarget: {
+      type: Boolean,
+      required: true,
+    },
+  },
   data() {
     return {
       joystick: [],
       interval: null,
-      stalkersCount: 1,
-      targetName: "Captain Blue",
-      nextClueIndex: 0,
+      nextClueIndex: 1,
+      countdown: configs.game.cluesTime[0],
+      countdownInterval: null,
+      isAttack: false,
+      stalkerCountStateChange: false,
+      stalkerCountChanges: 0,
     };
   },
   watch: {
-    cluesHide(newValue) {
-      if (newValue.length === 4) {
-        this.showOneClue();
-        this.setIntervalClues();
+    cluesHide(newValue, prevValue) {
+      if (JSON.stringify(newValue) !== JSON.stringify(prevValue)) {
+        this.resetClues();
       }
+    },
+    stalkerCount() {
+      this.stalkerCountStateChange = true;
+
+      const timeout = setTimeout(
+        () => {
+          this.stalkerCountStateChange = false;
+          clearTimeout(timeout);
+        },
+        this.stalkerCountChanges === 0 ? 0 : 4800
+      );
+
+      this.stalkerCountChanges++;
     },
   },
   computed: {
+    targetInfo() {
+      return this.colyseus.player.target ? JSON.parse(this.colyseus.player.target) : "";
+    },
     clues() {
-      return [
-        {
-          tag: "hat",
-          color: "#1E1D22",
-          show: false,
-        },
-        {
-          tag: "beard",
-          color: "#F86F43",
-          show: false,
-        },
-        {
-          tag: "barrel",
-          color: "#6B8CDB",
-          show: false,
-        },
-        {
-          tag: "weapon",
-          color: "#FFF",
-          show: false,
-        },
-      ]; //this.colyseus.playerTarget?.info;
+      return this.targetInfo?.info || [];
     },
     cluesHide() {
       return this.clues?.filter((clue) => !clue.show);
     },
-    points() {
-      return this.colyseus.playerPoints;
+    targetName() {
+      return this.colyseus.playersArray.find((p) => p.id === this.targetInfo?.id)?.name || "";
     },
-    color() {
-      return this.colyseus.playerColor;
-    },
-    name() {
-      return this.colyseus.playerName;
+    stalkerCount() {
+      return this.colyseus.stalkersCount;
     },
   },
   methods: {
+    attack() {
+      this.colyseus.sendData("attack");
+
+      this.isAttack = true;
+
+      const timeout2 = setTimeout(() => {
+        this.isAttack = false;
+        clearTimeout(timeout2);
+      }, 600);
+    },
+    resetClues() {
+      this.nextClueIndex = 1;
+      this.countdown = configs.game.cluesTime[this.nextClueIndex];
+      this.setIntervalClues();
+    },
     setIntervalClues() {
+      this.countdown = configs.game.cluesTime[this.nextClueIndex];
+
       if (this.interval) clearInterval(this.interval);
-      this.interval = setInterval(this.showOneClue, 10000);
+      if (this.countdownInterval) {
+        clearInterval(this.countdownInterval);
+      }
+      this.interval = setInterval(this.showOneClue, 1000 * configs.game.cluesTime[this.nextClueIndex]);
+      this.countdownInterval = setInterval(() => {
+        this.countdown--;
+      }, 1000);
     },
     showOneClue() {
       if (!this.interval || this.nextClueIndex === this.clues.length) return;
       if (this.cluesHide.length === 0) {
         clearInterval(this.interval);
+        clearInterval(this.countdownInterval);
         return;
       } else {
         this.clues[this.nextClueIndex].show = true;
         this.nextClueIndex++;
+        this.countdown = configs.game.cluesTime[this.nextClueIndex];
+        // this.setIntervalClues();
       }
     },
   },
@@ -132,7 +164,7 @@ export default {
       this.colyseus.sendData("joystick", { x: 0, y: 0 });
     });
 
-    this.setIntervalClues();
+    this.resetClues();
   },
   unmounted() {
     this.joystick.destroy();
@@ -188,6 +220,34 @@ export default {
     justify-content: space-between;
     align-items: center;
 
+    &.--new-target {
+      .clues-container {
+        background-image: url("../assets/gamepad/bg-clues-new.png");
+
+        h2 {
+          color: $white-beige;
+        }
+
+        p {
+          background-image: url("../assets/gamepad/bg-pirate-name-w.png");
+          color: $purple;
+
+          &::after {
+            background-image: url("../assets/gamepad/tag-new.svg");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            opacity: 1;
+          }
+        }
+
+        .clue {
+          background: $violet-clue-bg;
+          box-shadow: inset 0px 0px 5px rgba(222, 197, 204, 0.7);
+        }
+      }
+    }
+
     .clues-container {
       width: 100%;
       height: 100%;
@@ -209,9 +269,9 @@ export default {
       }
 
       p {
+        position: relative;
         width: 160px;
         height: 56px;
-        padding-top: 14px;
         background-image: url("../assets/gamepad/bg-pirate-name.png");
         background-size: contain;
         background-position: center;
@@ -220,6 +280,21 @@ export default {
         font-size: 15px;
         color: $white-beige;
         text-align: center;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &::after {
+          content: "";
+          display: block;
+          position: absolute;
+          top: -10%;
+          right: -10%;
+          width: 34px;
+          height: 34px;
+          opacity: 0;
+        }
       }
 
       .clues {
@@ -241,6 +316,16 @@ export default {
           text-align: center;
           font-weight: $ft-w-regular;
           font-size: 12px;
+
+          img {
+            width: 72px;
+            height: auto;
+          }
+
+          em {
+            font-size: 18px;
+            font-weight: $ft-w-bold;
+          }
         }
       }
     }
@@ -265,6 +350,13 @@ export default {
       font-weight: $ft-w-bold;
       text-align: center;
       padding-top: 11px;
+      transition: all 0.6s ease;
+      color: $purple;
+
+      &.--state-change {
+        background-image: url("../assets/gamepad/bg-stalker-count-r.png");
+        color: $white-beige;
+      }
     }
 
     .stalkers-counter {
@@ -290,9 +382,9 @@ export default {
         transform: scale(0.9);
       }
 
-      img {
+      svg {
         width: 152px;
-        height: auto;
+        height: 152px;
       }
     }
   }

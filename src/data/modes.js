@@ -7,8 +7,7 @@ export const Modes = [
         defaultDIfficulty: "medium",
         defaultDuration: "medium",
         controls: "",
-        tutorialLink: "",
-        btnGo: "modes.1.btnGo"
+        tutorialLink: ""
     },
     {
         isAvailable: false,
@@ -18,8 +17,7 @@ export const Modes = [
         defaultDIfficulty: "medium",
         defaultDuration: "medium",
         controls: "",
-        tutorialLink: "",
-        btnGo: ""
+        tutorialLink: ""
     },
     {
         isAvailable: false,
@@ -29,7 +27,6 @@ export const Modes = [
         defaultDIfficulty: "medium",
         defaultDuration: "medium",
         controls: "",
-        tutorialLink: "",
-        btnGo: ""
+        tutorialLink: ""
     }
 ]

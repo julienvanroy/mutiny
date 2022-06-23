@@ -1,6 +1,18 @@
-import {sRGBEncoding} from "three";
+import { sRGBEncoding } from "three";
 
 export default [
+    {
+        name: "environmentMapTexture",
+        type: "cubeTexture",
+        path: [
+            "textures/environmentMap/px.png",
+            "textures/environmentMap/nx.png",
+            "textures/environmentMap/py.png",
+            "textures/environmentMap/ny.png",
+            "textures/environmentMap/pz.png",
+            "textures/environmentMap/nz.png",
+        ],
+    },
     {
         name: "woodTexture",
         type: "texture",
@@ -12,19 +24,14 @@ export default [
         path: "textures/water/normals.jpeg",
     },
     {
-        name: "mapTutoModel",
-        type: "gltfModel",
-        path: "models/Map/hextile.glb",
-    },
-    {
         name: "mapModel",
         type: "gltfModel",
-        path: "models/Map/pirate-ship-with-navmesh-2.glb",
+        path: "models/Map/pirate-ship.glb",
     },
     {
         name: "characterModel",
         type: "gltfModel",
-        path: "models/Character/personnage02_binary.glb",
+        path: "models/Character/personnage04_binary.glb",
     },
     {
         name: "barbeAlphaTexture",
@@ -32,8 +39,8 @@ export default [
         path: "textures/character/Barbe_alpha.png",
         options: {
             encoding: sRGBEncoding,
-            flipY: false
-        }
+            flipY: false,
+        },
     },
     {
         name: "cintureBas01Texture",
@@ -41,8 +48,8 @@ export default [
         path: "textures/character/Cinture_bas_01.png",
         options: {
             encoding: sRGBEncoding,
-            flipY: false
-        }
+            flipY: false,
+        },
     },
     {
         name: "barbeBlancTexture",
@@ -50,8 +57,8 @@ export default [
         path: "textures/character/Barbe_blanc.jpg",
         options: {
             encoding: sRGBEncoding,
-            flipY: false
-        }
+            flipY: false,
+        },
     },
     {
         name: "barbeJauneTexture",
@@ -59,17 +66,17 @@ export default [
         path: "textures/character/Barbe_jaune.jpg",
         options: {
             encoding: sRGBEncoding,
-            flipY: false
-        }
+            flipY: false,
+        },
     },
     {
-        name: "barbeOrangeTexture",
+        name: "barbeRoseTexture",
         type: "texture",
         path: "textures/character/Barbe_orange.jpg",
         options: {
             encoding: sRGBEncoding,
-            flipY: false
-        }
+            flipY: false,
+        },
     },
     {
         name: "barbeVioletTexture",
@@ -77,8 +84,8 @@ export default [
         path: "textures/character/Barbe_violet.jpg",
         options: {
             encoding: sRGBEncoding,
-            flipY: false
-        }
+            flipY: false,
+        },
     },
     {
         name: "epee01Texture",
@@ -86,8 +93,8 @@ export default [
         path: "textures/character/Epee_01.jpg",
         options: {
             encoding: sRGBEncoding,
-            flipY: false
-        }
+            flipY: false,
+        },
     },
     {
         name: "tonneauBlancTexture",
@@ -95,8 +102,8 @@ export default [
         path: "textures/character/Tonneau_blanc.jpg",
         options: {
             encoding: sRGBEncoding,
-            flipY: false
-        }
+            flipY: false,
+        },
     },
     {
         name: "tonneauBleuTexture",
@@ -104,8 +111,8 @@ export default [
         path: "textures/character/Tonneau_bleu.jpg",
         options: {
             encoding: sRGBEncoding,
-            flipY: false
-        }
+            flipY: false,
+        },
     },
     {
         name: "tonneauJauneTexture",
@@ -113,24 +120,82 @@ export default [
         path: "textures/character/Tonneau_jaune.jpg",
         options: {
             encoding: sRGBEncoding,
-            flipY: false
-        }
+            flipY: false,
+        },
     },
     {
-        name: "tonneauOrangeTexture",
+        name: "tonneauVioletTexture",
         type: "texture",
-        path: "textures/character/Tonneau_orange.jpg",
+        path: "textures/character/Tonneau_violet.jpg",
         options: {
             encoding: sRGBEncoding,
-            flipY: false
-        }
+            flipY: false,
+        },
+    },
+    {
+        name: "fog",
+        type: "texture",
+        path: "textures/fog/blue.png",
+        options: {
+            encoding: sRGBEncoding,
+            flipY: false,
+        },
     },
     {
         name: "musicGame",
         type: "audio",
-        path: "sound/music.mp3",
+        path: "sound/music-game.mp3",
         options: {
+            volume: 0.3,
             loop: true,
+        },
+    },
+    {
+        name: "theme",
+        type: "audio",
+        path: "sound/theme.mp3",
+        options: {
+            volume: 0.3,
+            loop: true,
+        },
+    },
+    {
+        name: "click",
+        type: "audio",
+        path: "sound/click.mp3",
+        options: {
+            volume: 0.5,
+        },
+    },
+    {
+        name: "newPlayer",
+        type: "audio",
+        path: "sound/new-player.mp3",
+        options: {
+            volume: 0.5,
+        },
+    },
+    {
+        name: "attack",
+        type: "audio",
+        path: "sound/attack.mp3",
+        options: {
+            volume: 0.5,
+        },
+    },
+    {
+        name: "killed",
+        type: "audio",
+        path: "sound/killed.mp3",
+        options: {
+            volume: 0.5,
+        },
+    },
+    {
+        name: "point",
+        type: "audio",
+        path: "sound/point.mp3",
+        options: {
             volume: 0.5,
         },
     },
