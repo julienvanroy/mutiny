@@ -1,5 +1,5 @@
 <template>
-  <div class="setup">
+  <div class="setup" @mousemove="parallax">
     <div class="back">
       <TheButton link="/" :label="$t('ui.quit')" color="back" />
     </div>
@@ -137,11 +137,6 @@ export default {
     );
 
     this.modalShown = "join";
-
-    document.addEventListener("mousemove", (e) => this.parallax(e));
-  },
-  beforeUnmount() {
-    document.removeEventListener("mousemove", (e) => this.parallax(e));
   },
   methods: {
     mouseHover(isAvailable, value) {

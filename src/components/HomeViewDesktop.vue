@@ -1,13 +1,28 @@
 <template>
-  <div class="homepage">
-    <div class="credits">
-      <TheButton
-        :label="$t('homepage.credits')"
-        color="tertiary"
-        @click="creditsOpen = true"
-      />
-    </div>
-
+  <div class="homepage" @mousemove="parallax">
+    <transition name="fade">
+      <div v-if="!!isMounted" class="homepage__over">
+        <img src="images/logo.png" />
+        <TheButton
+            @click="createRoom"
+            :label="$t('homepage.createRoom')"
+            color="primary"
+        />
+        <div class="infos">
+          <div>
+            <IconPlayers color="#FDEAD7" />
+            <span>{{ $t("homepage.infosPlayers") }}</span>
+          </div>
+          <div>
+            <IconEquipment color="#FDEAD7" />
+            <span>
+              {{ $t("homepage.infosEquipments1") }}
+              {{ $t("homepage.infosEquipments2") }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </transition>
     <div class="homepage__under">
       <img class="img_16" src="images/home/16_ciel.jpg" />
       <img
@@ -75,29 +90,13 @@
         src="images/home/01_mat.png"
       />
     </div>
-    <transition name="fade">
-      <div v-if="!!isMounted" class="homepage__over">
-        <img src="images/logo.png" />
-        <TheButton
-          @click="createRoom"
-          :label="$t('homepage.createRoom')"
-          color="primary"
-        />
-        <div class="infos">
-          <div>
-            <IconPlayers color="#FDEAD7" />
-            <span>{{ $t("homepage.infosPlayers") }}</span>
-          </div>
-          <div>
-            <IconEquipment color="#FDEAD7" />
-            <span>
-              {{ $t("homepage.infosEquipments1") }}
-              {{ $t("homepage.infosEquipments2") }}
-            </span>
-          </div>
-        </div>
-      </div>
-    </transition>
+    <div class="credits">
+      <TheButton
+          :label="$t('homepage.credits')"
+          color="tertiary"
+          @click="creditsOpen = true"
+      />
+    </div>
   </div>
 
   <CreditsOverlay :isOpen="creditsOpen" />
@@ -127,12 +126,8 @@ export default {
   },
   mounted() {
     this.colyseus.initLobbyRoom();
-    document.addEventListener("mousemove", (e) => this.parallax(e));
 
     this.isMounted = true;
-  },
-  beforeUnmount() {
-    document.removeEventListener("mousemove", (e) => this.parallax(e));
   },
   methods: {
     createRoom(doJoinRoom = true) {
@@ -160,7 +155,7 @@ export default {
   height: 100vh;
   &__over {
     position: absolute;
-    z-index: 14;
+    z-index: 2;
     top: 0;
     bottom: 0;
     left: 0;
@@ -241,7 +236,7 @@ export default {
       transform-origin: center;
       will-change: transform;
     }
-    &.img {
+    .img {
       &_16 {
         z-index: 0;
       }
@@ -296,7 +291,7 @@ export default {
   }
   .credits {
     position: absolute;
-    z-index: 20;
+    z-index: 2;
     bottom: 20px;
     left: 20px;
     a {

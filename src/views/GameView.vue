@@ -6,7 +6,6 @@
       </li>
     </ul>
   </transition>
-  <router-link to="end-game"><button class="end-btn">END GAME</button></router-link>
   <transition name="fade">
     <div
       v-if="!!isMounted"
@@ -126,13 +125,6 @@ export default {
   li {
     margin: 0 20px 30px 0;
   }
-}
-
-.end-btn {
-  position: absolute;
-  top: 80px;
-  right: 20px;
-  z-index: 30;
 }
 
 .timer-container {
