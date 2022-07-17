@@ -1,9 +1,8 @@
-import { TextureLoader, CubeTextureLoader } from "three";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import bidello from "bidello";
 import useWebglStore from "@/store/webgl";
 import useAudioStore from "@/store/audio";
 import { Howl } from "howler";
+import Loaders from "@/webgl/Utils/Loaders";
 
 export default class Resources {
     constructor(sources) {
@@ -17,15 +16,9 @@ export default class Resources {
         this._storeWebgl = useWebglStore();
         this._storeAudio = useAudioStore();
 
-        this.setLoaders();
-        this.startLoading();
-    }
+        this.loaders = new Loaders();
 
-    setLoaders() {
-        this.loaders = {};
-        this.loaders.gltfLoader = new GLTFLoader();
-        this.loaders.textureLoader = new TextureLoader();
-        this.loaders.cubeTextureLoader = new CubeTextureLoader();
+        this.startLoading();
     }
 
     startLoading() {
